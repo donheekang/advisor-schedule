@@ -7,7 +7,7 @@ import {
   SignInParams,
   signIn as firebaseSignIn,
   signOut as firebaseSignOut
-} from '@/lib/auth';
+} from '@/lib/auth-client';
 
 type AuthContextValue = {
   user: User | null;
