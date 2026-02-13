@@ -19,11 +19,18 @@ const firebaseConfig: FirebaseClientConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? ''
 };
 
-const hasFirebaseConfig =
-  firebaseConfig.apiKey.length > 0 &&
-  firebaseConfig.authDomain.length > 0 &&
-  firebaseConfig.projectId.length > 0 &&
-  firebaseConfig.appId.length > 0;
+const requiredConfigEntries: Array<[keyof FirebaseClientConfig, string]> = [
+  ['apiKey', 'NEXT_PUBLIC_FIREBASE_API_KEY'],
+  ['authDomain', 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN'],
+  ['projectId', 'NEXT_PUBLIC_FIREBASE_PROJECT_ID'],
+  ['appId', 'NEXT_PUBLIC_FIREBASE_APP_ID']
+];
+
+export const missingFirebaseConfigKeys = requiredConfigEntries
+  .filter(([key]) => firebaseConfig[key].length === 0)
+  .map(([, envName]) => envName);
+
+const hasFirebaseConfig = missingFirebaseConfigKeys.length === 0;
 
 const app: FirebaseApp | null =
   hasFirebaseConfig && typeof window !== 'undefined'
@@ -33,3 +40,8 @@ const app: FirebaseApp | null =
     : null;
 
 export const auth: Auth | null = app ? getAuth(app) : null;
+
+export const firebaseConfigStatus = {
+  hasFirebaseConfig,
+  missingFirebaseConfigKeys
+} as const;

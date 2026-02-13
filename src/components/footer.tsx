@@ -5,17 +5,17 @@ export default function Footer() {
     <footer className="border-t border-brand-primary/20 bg-brand-navyDark text-white">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-200">
-          <Link href="/about" className="transition hover:text-brand-secondary">
-            서비스 소개
+          <Link href="/pet-talker" className="transition hover:text-brand-secondary">
+            펫토커
           </Link>
-          <Link href="/app-download" className="transition hover:text-brand-secondary">
-            앱 다운로드
+          <Link href="/cost-search" className="transition hover:text-brand-secondary">
+            진료비 검색
           </Link>
-          <Link href="/privacy" className="transition hover:text-brand-secondary">
-            개인정보처리방침
+          <Link href="/mypage" className="transition hover:text-brand-secondary">
+            마이페이지
           </Link>
-          <Link href="/terms" className="transition hover:text-brand-secondary">
-            이용약관
+          <Link href="/premium" className="transition hover:text-brand-secondary">
+            프리미엄
           </Link>
         </div>
 

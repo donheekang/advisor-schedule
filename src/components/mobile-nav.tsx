@@ -11,8 +11,8 @@ type TabItem = {
 
 const tabs: TabItem[] = [
   { href: '/', label: '홈', icon: '🏠' },
-  { href: '/pettalker', label: '펫토커', icon: '💬' },
-  { href: '/search', label: '진료비 검색', icon: '🔎' },
+  { href: '/pet-talker', label: '펫토커', icon: '💬' },
+  { href: '/cost-search', label: '진료비 검색', icon: '🔎' },
   { href: '/mypage', label: '마이페이지', icon: '👤' }
 ];
 

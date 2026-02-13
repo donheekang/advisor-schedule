@@ -24,8 +24,12 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
     try {
       await signIn();
       onClose();
-    } catch {
-      setErrorMessage('로그인 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.');
+    } catch (error) {
+      if (error instanceof Error && error.message.startsWith('Missing Firebase env:')) {
+        setErrorMessage('로그인 설정이 올바르지 않아요. 관리자에게 문의해 주세요.');
+      } else {
+        setErrorMessage('로그인 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.');
+      }
     } finally {
       setIsSigningIn(false);
     }
