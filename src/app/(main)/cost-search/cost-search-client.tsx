@@ -1,5 +1,6 @@
 'use client';
 
+import CostChat from '@/components/cost-chat';
 import { useMemo, useState } from 'react';
 
 type ProcedureData = {
@@ -70,7 +71,6 @@ export default function CostSearchClient() {
   const [query, setQuery] = useState('');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
   const [region, setRegion] = useState('서울');
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const selectedProcedure = useMemo(() => {
     const normalized = query.trim().replace(/\s+/g, '');
@@ -196,34 +196,6 @@ export default function CostSearchClient() {
         <p className="mt-4 text-xs text-slate-500">데이터 출처: 공공데이터 + 사용자 제공 데이터</p>
       </article>
 
-      <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-bold text-slate-900">AI 비용 분석</h2>
-          <button
-            type="button"
-            onClick={() => setIsChatOpen((prev) => !prev)}
-            className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
-          >
-            이 가격이 궁금하세요?
-          </button>
-        </div>
-
-        {isChatOpen ? (
-          <div className="mt-4 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <div className="rounded-xl bg-white p-3 text-sm text-slate-700">
-              {selectedProcedure.label}의 평균 비용은 {toManwon(selectedProcedure.average)}이며, 검사/마취/입원 여부에
-              따라 차이가 큽니다.
-            </div>
-            <div className="rounded-xl bg-blue-600 p-3 text-sm text-white">
-              항목별로 비용이 어떻게 달라지는지 알려줘.
-            </div>
-            <p className="text-xs text-slate-500">
-              의료적 판단은 제공하지 않으며, 가격 비교 및 항목 설명 중심으로 안내해요.
-            </p>
-          </div>
-        ) : null}
-      </article>
-
       {!selectedProcedure.hasEnoughData ? (
         <article className="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
           <h2 className="text-base font-bold text-amber-900">데이터가 아직 충분하지 않아요</h2>
@@ -251,6 +223,23 @@ export default function CostSearchClient() {
           앱 연동하고 영수증 등록하기
         </button>
       </article>
+
+      <CostChat
+        itemName={selectedProcedure.label}
+        region={region}
+        stats={{
+          average: selectedProcedure.average * 10000,
+          min: selectedProcedure.min * 10000,
+          max: selectedProcedure.max * 10000,
+          sampleSize: selectedProcedure.hasEnoughData ? 120 : 24,
+          source: '공공데이터 + 사용자 제공 데이터'
+        }}
+        seedRange={{
+          min: selectedProcedure.min * 10000,
+          max: selectedProcedure.max * 10000,
+          source: '시드 데이터'
+        }}
+      />
     </section>
   );
 }
