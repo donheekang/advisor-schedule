@@ -1,4 +1,4 @@
-import { verifyBearerToken } from '@/lib/auth';
+import { verifyBearerToken } from '@/lib/auth-server';
 import { Database } from '@/types/database';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
