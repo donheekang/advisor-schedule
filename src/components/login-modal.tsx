@@ -22,7 +22,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setIsSigningIn(true);
 
     try {
-      await signIn({ provider: 'google' });
+      await signIn();
       onClose();
     } catch {
       setErrorMessage('로그인 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.');
