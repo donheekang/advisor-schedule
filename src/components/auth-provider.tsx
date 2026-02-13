@@ -1,8 +1,14 @@
 'use client';
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import { User, onIdTokenChanged } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import {
+  SignInParams,
+  signIn as firebaseSignIn,
+  signOut as firebaseSignOut
+} from '@/lib/auth-client';
+import { apiClient } from '@/lib/api-client';
 import { signIn as firebaseSignIn, signOut as firebaseSignOut } from '@/lib/auth-client';
 
 type AuthContextValue = {
@@ -27,6 +33,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const unsubscribe = onIdTokenChanged(auth, async (nextUser) => {
+      const token = nextUser ? await nextUser.getIdToken() : null;
+      apiClient.setToken(token);
     if (!auth) {
       setLoading(false);
       return;
