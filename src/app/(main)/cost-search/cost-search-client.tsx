@@ -1,5 +1,10 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
+
+import Paywall from '@/components/paywall';
+import { useAuth } from '@/components/auth-provider';
+import { isPremium } from '@/lib/subscription';
 import CostChat from '@/components/cost-chat';
 import { useMemo, useState } from 'react';
 
@@ -68,9 +73,40 @@ const regions = ['전국', '서울', '부산', '대구', '인천', '광주', '�
 const toManwon = (value: number) => `${value.toLocaleString('ko-KR')}만원`;
 
 export default function CostSearchClient() {
+  const { user, loading } = useAuth();
   const [query, setQuery] = useState('');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
   const [region, setRegion] = useState('서울');
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isPremiumUser, setIsPremiumUser] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function checkPremium() {
+      if (!user?.uid) {
+        if (isMounted) {
+          setIsPremiumUser(false);
+        }
+
+        return;
+      }
+
+      const premiumStatus = await isPremium(user.uid);
+
+      if (isMounted) {
+        setIsPremiumUser(premiumStatus);
+      }
+    }
+
+    if (!loading) {
+      void checkPremium();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [loading, user?.uid]);
 
   const selectedProcedure = useMemo(() => {
     const normalized = query.trim().replace(/\s+/g, '');
@@ -195,6 +231,57 @@ export default function CostSearchClient() {
 
         <p className="mt-4 text-xs text-slate-500">데이터 출처: 공공데이터 + 사용자 제공 데이터</p>
       </article>
+
+      <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-base font-bold text-slate-900">AI 비용 분석</h2>
+          {isPremiumUser ? (
+            <button
+              type="button"
+              onClick={() => setIsChatOpen((prev) => !prev)}
+              className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+            >
+              이 가격이 궁금하세요?
+            </button>
+          ) : null}
+        </div>
+
+        {loading ? (
+          <p className="mt-3 text-sm text-slate-500">구독 상태를 확인 중입니다...</p>
+        ) : isPremiumUser && isChatOpen ? (
+          <div className="mt-4 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="rounded-xl bg-white p-3 text-sm text-slate-700">
+              {selectedProcedure.label}의 평균 비용은 {toManwon(selectedProcedure.average)}이며, 검사/마취/입원 여부에
+              따라 차이가 큽니다.
+            </div>
+            <div className="rounded-xl bg-blue-600 p-3 text-sm text-white">
+              항목별로 비용이 어떻게 달라지는지 알려줘.
+            </div>
+            <p className="text-xs text-slate-500">
+              의료적 판단은 제공하지 않으며, 가격 비교 및 항목 설명 중심으로 안내해요.
+            </p>
+          </div>
+        ) : !isPremiumUser ? (
+          <div className="mt-4">
+            <Paywall
+              title="AI 비용 분석은 프리미엄 전용 기능입니다"
+              description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한으로 제공돼요."
+              featureName="AI 비용 분석"
+            />
+          </div>
+        ) : null}
+      </article>
+
+      {!loading && !isPremiumUser ? (
+        <article className="rounded-2xl border border-orange-200 bg-orange-50 p-5 shadow-sm">
+          <h2 className="text-base font-bold text-orange-900">프리미엄 전용 분석</h2>
+          <ul className="mt-2 space-y-1 text-sm text-orange-800">
+            <li>• 항목별 가격 분석</li>
+            <li>• 지역/품종별 비교</li>
+            <li>• 연간 진료비 리포트</li>
+          </ul>
+        </article>
+      ) : null}
 
       {!selectedProcedure.hasEnoughData ? (
         <article className="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
