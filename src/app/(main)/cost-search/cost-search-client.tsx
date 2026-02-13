@@ -6,7 +6,6 @@ import Paywall from '@/components/paywall';
 import { useAuth } from '@/components/auth-provider';
 import { isPremium } from '@/lib/subscription';
 import CostChat from '@/components/cost-chat';
-import { useMemo, useState } from 'react';
 
 type ProcedureData = {
   label: string;
