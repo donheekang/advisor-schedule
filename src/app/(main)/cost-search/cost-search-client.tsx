@@ -2,82 +2,117 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import Paywall from '@/components/paywall';
 import { useAuth } from '@/components/auth-provider';
-import { isPremium } from '@/lib/subscription';
 import CostChat from '@/components/cost-chat';
+import Paywall from '@/components/paywall';
+import { apiClient } from '@/lib/api-client';
+import { isPremium } from '@/lib/subscription';
 
-type ProcedureData = {
-  label: string;
-  nationalAverage: number;
-  seoulAverage: number;
-  min: number;
-  max: number;
-  average: number;
-  hasEnoughData: boolean;
+type ApiCostSearchResult = {
+  query: string;
+  matchedItem: string;
+  species: 'dog' | 'cat' | 'etc';
+  region: string | null;
+  priceStats: {
+    min: number;
+    max: number;
+    avg: number;
+    median: number;
+    sampleSize: number;
+    source: 'user_data' | 'seed_data' | 'mixed';
+  };
+  nationalAvg: number;
+  regionalAvg: number;
+  relatedItems: string[];
+  sources: string[];
 };
 
-const procedures: ProcedureData[] = [
-  {
-    label: '혈액검사',
-    nationalAverage: 9,
-    seoulAverage: 11,
-    min: 6,
-    max: 18,
-    average: 9,
-    hasEnoughData: true,
-  },
-  {
-    label: '스케일링',
-    nationalAverage: 24,
-    seoulAverage: 28,
-    min: 17,
-    max: 43,
-    average: 24,
-    hasEnoughData: true,
-  },
-  {
-    label: '슬개골수술',
-    nationalAverage: 180,
-    seoulAverage: 205,
-    min: 140,
-    max: 320,
-    average: 180,
-    hasEnoughData: false,
-  },
-  {
-    label: '중성화수술',
-    nationalAverage: 29,
-    seoulAverage: 33,
-    min: 20,
-    max: 55,
-    average: 29,
-    hasEnoughData: true,
-  },
-  {
-    label: '예방접종',
-    nationalAverage: 5,
-    seoulAverage: 7,
-    min: 3,
-    max: 10,
-    average: 5,
-    hasEnoughData: true,
-  },
-];
+type MyPriceComparison = {
+  item: string;
+  average: number;
+  diffPercent: number;
+  isHigher: boolean;
+  sampleSize: number;
+};
 
-const popularTags = ['혈액검사', '스케일링', '슬개골수술', '중성화수술', '예방접종'];
+const popularTags = ['혈액검사', '스케일링', '슬개골수술', '중성화 암컷', '예방접종', '초음파', 'MRI'];
 const animalTypes = ['강아지', '고양이'] as const;
 const regions = ['전국', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '경기', '강원'];
 
-const toManwon = (value: number) => `${value.toLocaleString('ko-KR')}만원`;
+function toWon(value: number): string {
+  return `${Math.round(value).toLocaleString('ko-KR')}원`;
+}
+
+function normalize(text: string): string {
+  return text.trim().replace(/\s+/g, '').toLowerCase();
+}
+
+function extractMyItemPrices(records: unknown, keyword: string): number[] {
+  if (!Array.isArray(records)) {
+    return [];
+  }
+
+  const normalizedKeyword = normalize(keyword);
+
+  const prices = records.flatMap((record) => {
+    if (!record || typeof record !== 'object') {
+      return [];
+    }
+
+    const typedRecord = record as Record<string, unknown>;
+    const candidates = [typedRecord.items, typedRecord.health_items, typedRecord.healthItems].find((value) =>
+      Array.isArray(value)
+    );
+
+    if (!Array.isArray(candidates)) {
+      return [];
+    }
+
+    return candidates
+      .map((item) => {
+        if (!item || typeof item !== 'object') {
+          return null;
+        }
+
+        const typedItem = item as Record<string, unknown>;
+        const itemName =
+          typeof typedItem.item_name === 'string'
+            ? typedItem.item_name
+            : typeof typedItem.itemName === 'string'
+              ? typedItem.itemName
+              : '';
+
+        const rawPrice =
+          typeof typedItem.price === 'number' || typeof typedItem.price === 'string'
+            ? Number(typedItem.price)
+            : typeof typedItem.amount === 'number' || typeof typedItem.amount === 'string'
+              ? Number(typedItem.amount)
+              : NaN;
+
+        if (!itemName || !Number.isFinite(rawPrice)) {
+          return null;
+        }
+
+        return normalize(itemName).includes(normalizedKeyword) ? rawPrice : null;
+      })
+      .filter((value): value is number => value !== null);
+  });
+
+  return prices;
+}
 
 export default function CostSearchClient() {
-  const { user, loading } = useAuth();
-  const [query, setQuery] = useState('');
+  const { user, loading, token } = useAuth();
+  const [query, setQuery] = useState('혈액검사');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
-  const [region, setRegion] = useState('서울');
+  const [region, setRegion] = useState('전국');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isPremiumUser, setIsPremiumUser] = useState(false);
+  const [costResult, setCostResult] = useState<ApiCostSearchResult | null>(null);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [myComparison, setMyComparison] = useState<MyPriceComparison | null>(null);
+  const [comparingMine, setComparingMine] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -107,27 +142,113 @@ export default function CostSearchClient() {
     };
   }, [loading, user?.uid]);
 
-  const selectedProcedure = useMemo(() => {
-    const normalized = query.trim().replace(/\s+/g, '');
+  useEffect(() => {
+    let cancelled = false;
 
-    return (
-      procedures.find((procedure) => procedure.label.replace(/\s+/g, '').includes(normalized)) ??
-      procedures[0]
-    );
-  }, [query]);
+    async function runSearch() {
+      const trimmed = query.trim();
+      if (!trimmed) {
+        return;
+      }
 
-  const chartRange = selectedProcedure.max - selectedProcedure.min;
-  const averagePosition =
-    chartRange === 0 ? 0 : ((selectedProcedure.average - selectedProcedure.min) / chartRange) * 100;
+      setSearching(true);
+      setSearchError(null);
+      setMyComparison(null);
+
+      try {
+        const species = animalType === '강아지' ? 'dog' : 'cat';
+        const params = new URLSearchParams({ query: trimmed, species, region });
+        const response = await fetch(`/api/cost-search?${params.toString()}`);
+        const data = (await response.json()) as ApiCostSearchResult | { error?: string };
+
+        if (!response.ok || 'error' in data) {
+          throw new Error('error' in data ? data.error : '검색 결과를 가져오지 못했습니다.');
+        }
+
+        if (!cancelled) {
+          setCostResult(data as ApiCostSearchResult);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setSearchError(error instanceof Error ? error.message : '검색 중 오류가 발생했습니다.');
+          setCostResult(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setSearching(false);
+        }
+      }
+    }
+
+    void runSearch();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [animalType, query, region]);
+
+  const averagePosition = useMemo(() => {
+    if (!costResult) {
+      return 0;
+    }
+
+    const range = costResult.priceStats.max - costResult.priceStats.min;
+    if (range === 0) {
+      return 0;
+    }
+
+    return ((costResult.priceStats.avg - costResult.priceStats.min) / range) * 100;
+  }, [costResult]);
+
+  const myPosition = useMemo(() => {
+    if (!costResult || !myComparison) {
+      return null;
+    }
+
+    const range = costResult.priceStats.max - costResult.priceStats.min;
+    if (range <= 0) {
+      return 0;
+    }
+
+    return Math.min(100, Math.max(0, ((myComparison.average - costResult.priceStats.min) / range) * 100));
+  }, [costResult, myComparison]);
+
+  async function handleCompareMine() {
+    if (!user || !costResult || !token) {
+      return;
+    }
+
+    setComparingMine(true);
+    try {
+      apiClient.setToken(token);
+      const records = await apiClient.listRecords(undefined, true);
+      const prices = extractMyItemPrices(records, costResult.query);
+
+      if (prices.length === 0) {
+        setMyComparison(null);
+        return;
+      }
+
+      const myAverage = prices.reduce((sum, value) => sum + value, 0) / prices.length;
+      const diffPercent = ((myAverage - costResult.priceStats.avg) / costResult.priceStats.avg) * 100;
+
+      setMyComparison({
+        item: costResult.matchedItem,
+        average: myAverage,
+        diffPercent,
+        isHigher: diffPercent >= 0,
+        sampleSize: prices.length
+      });
+    } finally {
+      setComparingMine(false);
+    }
+  }
 
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-col gap-5" aria-label="진료비 검색">
       <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between gap-2">
           <h1 className="text-lg font-bold text-[#1B3A4B]">진료비 검색</h1>
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
-            이번 달 0/3회 검색
-          </span>
         </div>
 
         <div className="space-y-3">
@@ -191,44 +312,83 @@ export default function CostSearchClient() {
 
       <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <h2 className="text-base font-bold text-[#1B3A4B]">가격 범위</h2>
-        <p className="mt-1 text-sm text-slate-500">{selectedProcedure.label} 기준 예측 범위</p>
+        <p className="mt-1 text-sm text-slate-500">
+          {costResult?.matchedItem ?? query} 기준 참고 범위 {searching ? '(검색 중...)' : ''}
+        </p>
 
-        <div className="mt-4 rounded-xl bg-slate-50 p-4">
-          <div className="relative h-6">
-            <div className="absolute left-0 top-2 h-2 w-full rounded-full bg-slate-200" />
-            <div
-              className="absolute top-2 h-2 rounded-full bg-blue-200"
-              style={{ width: '100%' }}
-              aria-hidden="true"
-            />
-            <div
-              className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-blue-600"
-              style={{ left: `${averagePosition}%` }}
-              aria-label="평균 가격 위치"
-            />
-          </div>
+        {searchError ? <p className="mt-3 text-sm text-red-500">{searchError}</p> : null}
 
-          <div className="mt-3 flex items-center justify-between text-xs font-medium text-slate-600">
-            <span>최소 {toManwon(selectedProcedure.min)}</span>
-            <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-700">
-              평균 {toManwon(selectedProcedure.average)}
-            </span>
-            <span>최대 {toManwon(selectedProcedure.max)}</span>
-          </div>
-        </div>
+        {costResult ? (
+          <>
+            <div className="mt-4 rounded-xl bg-slate-50 p-4">
+              <div className="relative h-6">
+                <div className="absolute left-0 top-2 h-2 w-full rounded-full bg-slate-200" />
+                <div className="absolute top-2 h-2 w-full rounded-full bg-blue-200" aria-hidden="true" />
+                <div
+                  className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-blue-600"
+                  style={{ left: `${averagePosition}%` }}
+                  aria-label="평균 가격 위치"
+                />
+                {myPosition !== null ? (
+                  <div
+                    className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-violet-600"
+                    style={{ left: `${myPosition}%` }}
+                    aria-label="내 진료비 위치"
+                  />
+                ) : null}
+              </div>
 
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-            <p className="text-xs text-slate-500">전국 평균</p>
-            <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toManwon(selectedProcedure.nationalAverage)}</p>
-          </div>
-          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-            <p className="text-xs text-slate-500">{region} 평균</p>
-            <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toManwon(selectedProcedure.seoulAverage)}</p>
-          </div>
-        </div>
+              <div className="mt-3 flex items-center justify-between text-xs font-medium text-slate-600">
+                <span>최소 {toWon(costResult.priceStats.min)}</span>
+                <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-700">평균 {toWon(costResult.priceStats.avg)}</span>
+                <span>최대 {toWon(costResult.priceStats.max)}</span>
+              </div>
+            </div>
 
-        <p className="mt-4 text-xs text-slate-500">데이터 출처: 공공데이터 + 사용자 제공 데이터</p>
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+                <p className="text-xs text-slate-500">전국 평균</p>
+                <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toWon(costResult.nationalAvg)}</p>
+              </div>
+              <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+                <p className="text-xs text-slate-500">{region} 평균</p>
+                <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toWon(costResult.regionalAvg)}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {costResult.sources.map((source) => (
+                <span key={source} className="rounded-full bg-slate-100 px-2 py-1 text-xs text-slate-600">
+                  {source}
+                </span>
+              ))}
+            </div>
+
+            {user ? (
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={() => void handleCompareMine()}
+                  disabled={comparingMine}
+                  className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+                >
+                  {comparingMine ? '내 진료비 불러오는 중...' : '내 진료비 비교'}
+                </button>
+                {myComparison ? (
+                  <p className="mt-3 text-sm text-slate-700">
+                    내 진료비 평균은 {toWon(myComparison.average)}이며, 전체 평균보다{' '}
+                    <span className="font-semibold text-violet-700">{Math.abs(myComparison.diffPercent).toFixed(1)}%</span>{' '}
+                    {myComparison.isHigher ? '높아요.' : '낮아요.'} (내 기록 {myComparison.sampleSize}건)
+                  </p>
+                ) : (
+                  <p className="mt-3 text-xs text-slate-500">로그인 사용자의 진료 기록에서 항목을 찾아 비교합니다.</p>
+                )}
+              </div>
+            ) : (
+              <p className="mt-4 text-xs text-slate-500">로그인하면 내 진료 기록 기반 비교를 확인할 수 있어요.</p>
+            )}
+          </>
+        ) : null}
       </article>
 
       <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
@@ -250,15 +410,11 @@ export default function CostSearchClient() {
         ) : isPremiumUser && isChatOpen ? (
           <div className="mt-4 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
             <div className="rounded-xl bg-white p-3 text-sm text-slate-700">
-              {selectedProcedure.label}의 평균 비용은 {toManwon(selectedProcedure.average)}이며, 검사/마취/입원 여부에
+              {costResult?.matchedItem ?? query}의 평균 비용은 {toWon(costResult?.priceStats.avg ?? 0)}이며, 검사/마취/입원 여부에
               따라 차이가 큽니다.
             </div>
-            <div className="rounded-xl bg-blue-600 p-3 text-sm text-white">
-              항목별로 비용이 어떻게 달라지는지 알려줘.
-            </div>
-            <p className="text-xs text-slate-500">
-              의료적 판단은 제공하지 않으며, 가격 비교 및 항목 설명 중심으로 안내해요.
-            </p>
+            <div className="rounded-xl bg-blue-600 p-3 text-sm text-white">항목별로 비용이 어떻게 달라지는지 알려줘.</div>
+            <p className="text-xs text-slate-500">의료적 판단은 제공하지 않으며, 가격 비교 및 항목 설명 중심으로 안내해요.</p>
           </div>
         ) : !isPremiumUser ? (
           <div className="mt-4">
@@ -271,61 +427,24 @@ export default function CostSearchClient() {
         ) : null}
       </article>
 
-      {!loading && !isPremiumUser ? (
-        <article className="rounded-2xl border border-[#1B3A4B]/20 bg-[#F8FAFB] p-5 shadow-sm">
-          <h2 className="text-base font-bold text-[#1B3A4B]">프리미엄 전용 분석</h2>
-          <ul className="mt-2 space-y-1 text-sm text-[#1B3A4B]">
-            <li>• 항목별 가격 분석</li>
-            <li>• 지역/품종별 비교</li>
-            <li>• 연간 진료비 리포트</li>
-          </ul>
-        </article>
+      {costResult ? (
+        <CostChat
+          itemName={costResult.matchedItem}
+          region={region}
+          stats={{
+            average: costResult.priceStats.avg,
+            min: costResult.priceStats.min,
+            max: costResult.priceStats.max,
+            sampleSize: costResult.priceStats.sampleSize,
+            source: costResult.sources.join(', ')
+          }}
+          seedRange={{
+            min: costResult.priceStats.min,
+            max: costResult.priceStats.max,
+            source: '공공데이터 기준 참고 범위'
+          }}
+        />
       ) : null}
-
-      {!selectedProcedure.hasEnoughData ? (
-        <article className="rounded-2xl border border-[#1B3A4B]/20 bg-[#F8FAFB] p-5 shadow-sm">
-          <h2 className="text-base font-bold text-[#1B3A4B]">데이터가 아직 충분하지 않아요</h2>
-          <p className="mt-2 text-sm text-[#1B3A4B]">
-            일반적으로 {toManwon(selectedProcedure.min)}~{toManwon(selectedProcedure.max)} 범위입니다 (공공데이터 기준).
-          </p>
-          <p className="mt-2 text-sm text-[#1B3A4B]">
-            영수증을 등록해주시면 더 정확한 비교가 가능해져요!
-          </p>
-          <button
-            type="button"
-            className="mt-4 rounded-xl bg-[#2A9D8F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#238B7E]"
-          >
-            영수증 등록하기
-          </button>
-        </article>
-      ) : null}
-
-      <article className="rounded-2xl border border-blue-100 bg-white p-5 shadow-sm">
-        <p className="text-sm font-semibold text-slate-800">앱에서 영수증을 등록하면 자동 비교 분석돼요</p>
-        <button
-          type="button"
-          className="mt-3 w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
-        >
-          앱 연동하고 영수증 등록하기
-        </button>
-      </article>
-
-      <CostChat
-        itemName={selectedProcedure.label}
-        region={region}
-        stats={{
-          average: selectedProcedure.average * 10000,
-          min: selectedProcedure.min * 10000,
-          max: selectedProcedure.max * 10000,
-          sampleSize: selectedProcedure.hasEnoughData ? 120 : 24,
-          source: '공공데이터 + 사용자 제공 데이터'
-        }}
-        seedRange={{
-          min: selectedProcedure.min * 10000,
-          max: selectedProcedure.max * 10000,
-          source: '시드 데이터'
-        }}
-      />
     </section>
   );
 }
