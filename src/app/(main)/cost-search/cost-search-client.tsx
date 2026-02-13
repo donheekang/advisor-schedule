@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Paywall from '@/components/paywall';
 import { useAuth } from '@/components/auth-provider';
 import { isPremium } from '@/lib/subscription';
+import CostChat from '@/components/cost-chat';
+import { useMemo, useState } from 'react';
 
 type ProcedureData = {
   label: string;
@@ -308,6 +310,23 @@ export default function CostSearchClient() {
           앱 연동하고 영수증 등록하기
         </button>
       </article>
+
+      <CostChat
+        itemName={selectedProcedure.label}
+        region={region}
+        stats={{
+          average: selectedProcedure.average * 10000,
+          min: selectedProcedure.min * 10000,
+          max: selectedProcedure.max * 10000,
+          sampleSize: selectedProcedure.hasEnoughData ? 120 : 24,
+          source: '공공데이터 + 사용자 제공 데이터'
+        }}
+        seedRange={{
+          min: selectedProcedure.min * 10000,
+          max: selectedProcedure.max * 10000,
+          source: '시드 데이터'
+        }}
+      />
     </section>
   );
 }
