@@ -28,11 +28,11 @@ export default function Header() {
   }, [isLoggedIn]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-orange-100 bg-[#FFF8EE]/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-[#1B3A4B]/10 bg-[#F8FAFB]/95 backdrop-blur">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4">
         <Link
           href="/"
-          className="text-xl font-extrabold tracking-tight text-[#E67E22] transition hover:text-[#CF711F]"
+          className="text-xl font-extrabold tracking-tight text-[#1B3A4B] transition hover:text-[#162F3C]"
         >
           PetHealthPlus
         </Link>
@@ -47,8 +47,8 @@ export default function Header() {
                 href={item.href}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                   isActive
-                    ? 'bg-[#E67E22] text-white'
-                    : 'text-slate-700 hover:bg-orange-50 hover:text-[#E67E22]'
+                    ? 'bg-[#1B3A4B] text-white'
+                    : 'text-slate-700 hover:bg-[#F8FAFB] hover:text-[#1B3A4B]'
                 }`}
               >
                 {item.label}
@@ -61,14 +61,14 @@ export default function Header() {
           {isLoggedIn ? (
             <Link
               href="/mypage"
-              className="rounded-full bg-[#2E86C1] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#276F9F]"
+              className="rounded-full bg-[#2A9D8F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#23867A]"
             >
               프로필
             </Link>
           ) : (
             <Link
               href="/login"
-              className="rounded-full bg-[#2E86C1] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#276F9F]"
+              className="rounded-full bg-[#2A9D8F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#23867A]"
             >
               로그인
             </Link>
@@ -78,7 +78,7 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-orange-200 text-[#E67E22] md:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#1B3A4B]/20 text-[#1B3A4B] md:hidden"
           aria-label="모바일 메뉴 열기"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
@@ -88,7 +88,7 @@ export default function Header() {
       </div>
 
       {isMenuOpen ? (
-        <div id="mobile-menu" className="border-t border-orange-100 bg-[#FFF8EE] px-4 py-3 md:hidden">
+        <div id="mobile-menu" className="border-t border-[#1B3A4B]/10 bg-[#F8FAFB] px-4 py-3 md:hidden">
           <nav className="flex flex-col gap-2">
             {navigationItems.map((item) => {
               const isActive = pathname.startsWith(item.href);
@@ -98,7 +98,7 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   className={`rounded-lg px-3 py-2 text-sm font-medium ${
-                    isActive ? 'bg-orange-100 text-[#E67E22]' : 'text-slate-700'
+                    isActive ? 'bg-[#E8EEF1] text-[#1B3A4B]' : 'text-slate-700'
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -108,7 +108,7 @@ export default function Header() {
             })}
             <Link
               href={isLoggedIn ? '/mypage' : '/login'}
-              className="mt-1 rounded-lg bg-[#2E86C1] px-3 py-2 text-center text-sm font-semibold text-white"
+              className="mt-1 rounded-lg bg-[#2A9D8F] px-3 py-2 text-center text-sm font-semibold text-white"
               onClick={() => setIsMenuOpen(false)}
             >
               {isLoggedIn ? '프로필' : '로그인'}

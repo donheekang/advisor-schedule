@@ -60,18 +60,18 @@ export default function PremiumClient() {
   return (
     <section className="mx-auto w-full max-w-5xl space-y-6 px-4 py-8 md:py-12">
       <header className="space-y-3">
-        <p className="inline-flex rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
+        <p className="inline-flex rounded-full bg-[#E8EEF1] px-3 py-1 text-xs font-semibold text-[#1B3A4B]">
           프리미엄 월 4,900원
         </p>
-        <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">우리 아이 건강 데이터, 더 깊게 분석하세요</h1>
+        <h1 className="text-3xl font-bold text-[#1B3A4B] md:text-4xl">우리 아이 건강 데이터, 더 깊게 분석하세요</h1>
         <p className="text-sm text-slate-600 md:text-base">
           무료 플랜으로 가볍게 시작하고, 프리미엄에서 상세 분석과 리포트를 무제한으로 확인해 보세요.
         </p>
       </header>
 
-      <section className="overflow-hidden rounded-3xl border border-orange-100 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-3xl border border-[#1B3A4B]/10 bg-white shadow-sm">
         <table className="w-full border-collapse text-sm">
-          <thead className="bg-orange-50 text-slate-800">
+          <thead className="bg-[#F8FAFB] text-slate-800">
             <tr>
               <th className="px-4 py-3 text-left font-semibold">기능</th>
               <th className="px-4 py-3 text-left font-semibold">무료</th>
@@ -80,10 +80,10 @@ export default function PremiumClient() {
           </thead>
           <tbody>
             {FEATURE_ROWS.map((row) => (
-              <tr key={row.feature} className="border-t border-orange-100">
-                <td className="px-4 py-3 font-medium text-slate-900">{row.feature}</td>
+              <tr key={row.feature} className="border-t border-[#1B3A4B]/10">
+                <td className="px-4 py-3 font-medium text-[#1B3A4B]">{row.feature}</td>
                 <td className="px-4 py-3 text-slate-600">{row.free}</td>
-                <td className="px-4 py-3 font-semibold text-orange-700">{row.premium}</td>
+                <td className="px-4 py-3 font-semibold text-[#1B3A4B]">{row.premium}</td>
               </tr>
             ))}
           </tbody>
@@ -91,7 +91,7 @@ export default function PremiumClient() {
       </section>
 
       {isChecking || loading ? (
-        <section className="rounded-3xl border border-orange-100 bg-white p-6 text-sm text-slate-600 shadow-sm">
+        <section className="rounded-3xl border border-[#1B3A4B]/10 bg-white p-6 text-sm text-slate-600 shadow-sm">
           구독 상태를 확인하고 있어요...
         </section>
       ) : isPremiumUser ? (

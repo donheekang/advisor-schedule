@@ -27,7 +27,7 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
-      <body className="min-h-screen bg-white text-slate-900 antialiased">
+      <body className="min-h-screen bg-[#F8FAFB] text-[#1B3A4B] antialiased">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
