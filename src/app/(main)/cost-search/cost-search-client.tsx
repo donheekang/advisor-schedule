@@ -293,7 +293,7 @@ export default function CostSearchClient() {
           </p>
           <button
             type="button"
-            className="mt-4 rounded-xl bg-[#2A9D8F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#23867A]"
+            className="mt-4 rounded-xl bg-[#2A9D8F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#238B7E]"
           >
             영수증 등록하기
           </button>

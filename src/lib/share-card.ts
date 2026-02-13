@@ -1,10 +1,10 @@
 export const SHARE_CARD_WIDTH = 1080;
 export const SHARE_CARD_HEIGHT = 1080;
 
-const WARM_BACKGROUND = '#FFF6E9';
+const WARM_BACKGROUND = '#F8FAFB';
 const BUBBLE_BACKGROUND = '#FFFFFF';
-const TEXT_COLOR = '#1E293B';
-const WATERMARK_COLOR = '#94A3B8';
+const TEXT_COLOR = '#1B3A4B';
+const WATERMARK_COLOR = '#2A9D8F';
 
 export type ShareCardPayload = {
   petImageUrl: string;
@@ -177,7 +177,7 @@ export const renderShareCard = async (
   context.font = '500 28px Pretendard, Apple SD Gothic Neo, sans-serif';
   context.fillStyle = WATERMARK_COLOR;
   context.textAlign = 'right';
-  context.fillText('PetHealthPlus', SHARE_CARD_WIDTH - 56, SHARE_CARD_HEIGHT - 42);
+  context.fillText('PetHealth+', SHARE_CARD_WIDTH - 56, SHARE_CARD_HEIGHT - 42);
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((result) => {
