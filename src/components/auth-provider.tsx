@@ -2,14 +2,9 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { User, onIdTokenChanged } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import {
-  SignInParams,
-  signIn as firebaseSignIn,
-  signOut as firebaseSignOut
-} from '@/lib/auth-client';
-import { apiClient } from '@/lib/api-client';
 import { signIn as firebaseSignIn, signOut as firebaseSignOut } from '@/lib/auth-client';
+import { auth } from '@/lib/firebase';
+import { apiClient } from '@/lib/api-client';
 
 type AuthContextValue = {
   user: User | null;
@@ -18,8 +13,6 @@ type AuthContextValue = {
   signIn: () => Promise<User>;
   signOut: () => Promise<void>;
 };
-
-const TOKEN_REFRESH_INTERVAL_MS = 60 * 60 * 1000;
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -33,47 +26,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onIdTokenChanged(auth, async (nextUser) => {
-      const token = nextUser ? await nextUser.getIdToken() : null;
-      apiClient.setToken(token);
     if (!auth) {
       setLoading(false);
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, async (nextUser) => {
+    const unsubscribe = onIdTokenChanged(auth, async (nextUser) => {
       setUser(nextUser);
 
       if (!nextUser) {
         setToken(null);
+        apiClient.setToken(null);
         setLoading(false);
         return;
       }
 
       const nextToken = await nextUser.getIdToken();
       setToken(nextToken);
+      apiClient.setToken(nextToken);
       setLoading(false);
     });
 
     return unsubscribe;
   }, []);
-
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    const refreshToken = async () => {
-      const refreshedToken = await user.getIdToken(true);
-      setToken(refreshedToken);
-    };
-
-    const timer = setInterval(() => {
-      void refreshToken();
-    }, TOKEN_REFRESH_INTERVAL_MS);
-
-    return () => clearInterval(timer);
-  }, [user]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -84,12 +59,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const result = await firebaseSignIn();
         setUser(result.user);
         setToken(result.token);
+        apiClient.setToken(result.token);
         return result.user;
       },
       signOut: async () => {
         await firebaseSignOut();
         setUser(null);
         setToken(null);
+        apiClient.setToken(null);
       }
     }),
     [loading, token, user]

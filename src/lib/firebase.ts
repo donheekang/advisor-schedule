@@ -19,6 +19,17 @@ const firebaseConfig: FirebaseClientConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? ''
 };
 
-const app: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]!;
+const hasFirebaseConfig =
+  firebaseConfig.apiKey.length > 0 &&
+  firebaseConfig.authDomain.length > 0 &&
+  firebaseConfig.projectId.length > 0 &&
+  firebaseConfig.appId.length > 0;
 
-export const auth: Auth | null = typeof window === 'undefined' ? null : getAuth(app);
+const app: FirebaseApp | null =
+  hasFirebaseConfig && typeof window !== 'undefined'
+    ? getApps().length === 0
+      ? initializeApp(firebaseConfig)
+      : getApps()[0] ?? null
+    : null;
+
+export const auth: Auth | null = app ? getAuth(app) : null;
