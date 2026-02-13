@@ -124,7 +124,7 @@ export default function CostSearchClient() {
     <section className="mx-auto flex w-full max-w-4xl flex-col gap-5" aria-label="진료비 검색">
       <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between gap-2">
-          <h1 className="text-lg font-bold text-slate-900">진료비 검색</h1>
+          <h1 className="text-lg font-bold text-[#1B3A4B]">진료비 검색</h1>
           <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
             이번 달 0/3회 검색
           </span>
@@ -139,7 +139,7 @@ export default function CostSearchClient() {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="예: 혈액검사, 스케일링, 슬개골 수술"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none ring-blue-200 transition focus:ring"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
           />
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -148,7 +148,7 @@ export default function CostSearchClient() {
               <select
                 value={animalType}
                 onChange={(event) => setAnimalType(event.target.value as (typeof animalTypes)[number])}
-                className="rounded-xl border border-slate-200 px-3 py-3 text-sm text-slate-900 outline-none ring-blue-200 transition focus:ring"
+                className="rounded-xl border border-slate-200 px-3 py-3 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
               >
                 {animalTypes.map((type) => (
                   <option key={type} value={type}>
@@ -163,7 +163,7 @@ export default function CostSearchClient() {
               <select
                 value={region}
                 onChange={(event) => setRegion(event.target.value)}
-                className="rounded-xl border border-slate-200 px-3 py-3 text-sm text-slate-900 outline-none ring-blue-200 transition focus:ring"
+                className="rounded-xl border border-slate-200 px-3 py-3 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
               >
                 {regions.map((area) => (
                   <option key={area} value={area}>
@@ -190,7 +190,7 @@ export default function CostSearchClient() {
       </article>
 
       <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-        <h2 className="text-base font-bold text-slate-900">가격 범위</h2>
+        <h2 className="text-base font-bold text-[#1B3A4B]">가격 범위</h2>
         <p className="mt-1 text-sm text-slate-500">{selectedProcedure.label} 기준 예측 범위</p>
 
         <div className="mt-4 rounded-xl bg-slate-50 p-4">
@@ -220,11 +220,11 @@ export default function CostSearchClient() {
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
             <p className="text-xs text-slate-500">전국 평균</p>
-            <p className="mt-1 text-xl font-bold text-slate-900">{toManwon(selectedProcedure.nationalAverage)}</p>
+            <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toManwon(selectedProcedure.nationalAverage)}</p>
           </div>
           <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
             <p className="text-xs text-slate-500">{region} 평균</p>
-            <p className="mt-1 text-xl font-bold text-slate-900">{toManwon(selectedProcedure.seoulAverage)}</p>
+            <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toManwon(selectedProcedure.seoulAverage)}</p>
           </div>
         </div>
 
@@ -233,7 +233,7 @@ export default function CostSearchClient() {
 
       <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-bold text-slate-900">AI 비용 분석</h2>
+          <h2 className="text-base font-bold text-[#1B3A4B]">AI 비용 분석</h2>
           {isPremiumUser ? (
             <button
               type="button"
@@ -272,9 +272,9 @@ export default function CostSearchClient() {
       </article>
 
       {!loading && !isPremiumUser ? (
-        <article className="rounded-2xl border border-orange-200 bg-orange-50 p-5 shadow-sm">
-          <h2 className="text-base font-bold text-orange-900">프리미엄 전용 분석</h2>
-          <ul className="mt-2 space-y-1 text-sm text-orange-800">
+        <article className="rounded-2xl border border-[#1B3A4B]/20 bg-[#F8FAFB] p-5 shadow-sm">
+          <h2 className="text-base font-bold text-[#1B3A4B]">프리미엄 전용 분석</h2>
+          <ul className="mt-2 space-y-1 text-sm text-[#1B3A4B]">
             <li>• 항목별 가격 분석</li>
             <li>• 지역/품종별 비교</li>
             <li>• 연간 진료비 리포트</li>
@@ -283,17 +283,17 @@ export default function CostSearchClient() {
       ) : null}
 
       {!selectedProcedure.hasEnoughData ? (
-        <article className="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
-          <h2 className="text-base font-bold text-amber-900">데이터가 아직 충분하지 않아요</h2>
-          <p className="mt-2 text-sm text-amber-900">
+        <article className="rounded-2xl border border-[#1B3A4B]/20 bg-[#F8FAFB] p-5 shadow-sm">
+          <h2 className="text-base font-bold text-[#1B3A4B]">데이터가 아직 충분하지 않아요</h2>
+          <p className="mt-2 text-sm text-[#1B3A4B]">
             일반적으로 {toManwon(selectedProcedure.min)}~{toManwon(selectedProcedure.max)} 범위입니다 (공공데이터 기준).
           </p>
-          <p className="mt-2 text-sm text-amber-800">
+          <p className="mt-2 text-sm text-[#1B3A4B]">
             영수증을 등록해주시면 더 정확한 비교가 가능해져요!
           </p>
           <button
             type="button"
-            className="mt-4 rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
+            className="mt-4 rounded-xl bg-[#2A9D8F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#23867A]"
           >
             영수증 등록하기
           </button>

@@ -101,14 +101,14 @@ export default function PetTalkerPage() {
   };
 
   return (
-    <main className="min-h-screen bg-amber-50 px-4 py-8 text-amber-950 md:py-12">
+    <main className="min-h-screen bg-[#F8FAFB] px-4 py-8 text-[#1B3A4B] md:py-12">
       <section className="mx-auto flex w-full max-w-md flex-col gap-6">
         <header className="space-y-3 text-center">
-          <p className="inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm">
+          <p className="inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#1B3A4B] shadow-sm">
             {usageText}
           </p>
           <h1 className="text-3xl font-extrabold leading-tight">우리 아이가 말을 한다면 🐾</h1>
-          <p className="text-sm leading-relaxed text-amber-800">
+          <p className="text-sm leading-relaxed text-[#1B3A4B]">
             사진 한 장으로 우리 아이 시점의 귀여운 한마디를 만들어 보세요. SNS에 바로 공유할 수 있는 정사각형
             카드로 보여드려요.
           </p>
@@ -131,7 +131,7 @@ export default function PetTalkerPage() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           className={`cursor-pointer rounded-3xl border-2 border-dashed bg-white p-5 shadow-sm transition ${
-            isDragging ? "border-amber-500" : "border-amber-200"
+            isDragging ? "border-[#2A9D8F]" : "border-[#1B3A4B]/20"
           }`}
           aria-label="사진 업로드"
         >
@@ -145,16 +145,16 @@ export default function PetTalkerPage() {
 
           {previewUrl ? (
             <div className="space-y-3">
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-amber-100">
+              <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#E8EEF1]">
                 <Image src={previewUrl} alt="업로드한 반려동물 사진 미리보기" fill className="object-cover" unoptimized />
               </div>
-              <p className="text-center text-xs text-amber-700">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
+              <p className="text-center text-xs text-[#1B3A4B]">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
             </div>
           ) : (
-            <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl bg-amber-100/60 text-center">
+            <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl bg-[#E8EEF1]/60 text-center">
               <span className="text-4xl">📷</span>
               <p className="text-base font-bold">드래그하거나 눌러서 사진 올리기</p>
-              <p className="text-xs text-amber-700">최대 5MB · jpg/png/webp</p>
+              <p className="text-xs text-[#1B3A4B]">최대 5MB · jpg/png/webp</p>
             </div>
           )}
         </div>
@@ -162,19 +162,19 @@ export default function PetTalkerPage() {
         <section className="rounded-3xl bg-white p-5 shadow-sm">
           {status === "loading" && (
             <div className="animate-pulse space-y-4">
-              <div className="h-56 rounded-2xl bg-amber-100" />
-              <div className="h-4 w-4/5 rounded-full bg-amber-100" />
-              <div className="h-4 w-3/5 rounded-full bg-amber-100" />
+              <div className="h-56 rounded-2xl bg-[#E8EEF1]" />
+              <div className="h-4 w-4/5 rounded-full bg-[#E8EEF1]" />
+              <div className="h-4 w-3/5 rounded-full bg-[#E8EEF1]" />
             </div>
           )}
 
           {status === "success" && previewUrl && (
             <div className="space-y-4">
-              <div className="rounded-2xl bg-amber-100 p-3">
+              <div className="rounded-2xl bg-[#E8EEF1] p-3">
                 <div className="relative mx-auto aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border-4 border-white shadow-sm">
                   <Image src={previewUrl} alt="반려동물 공유 카드" fill className="object-cover" unoptimized />
                 </div>
-                <div className="relative mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold leading-relaxed text-amber-900 shadow-sm">
+                <div className="relative mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold leading-relaxed text-[#1B3A4B] shadow-sm">
                   <span className="absolute -top-2 left-5 h-4 w-4 rotate-45 bg-white" aria-hidden />
                   “{speech}”
                 </div>
@@ -184,13 +184,13 @@ export default function PetTalkerPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="rounded-xl border border-amber-200 bg-white px-3 py-2 text-sm font-semibold text-amber-800"
+                  className="rounded-xl border border-[#1B3A4B]/20 bg-white px-3 py-2 text-sm font-semibold text-[#1B3A4B]"
                 >
                   다시 해보기
                 </button>
                 <button
                   type="button"
-                  className="rounded-xl bg-amber-500 px-3 py-2 text-sm font-semibold text-white"
+                  className="rounded-xl bg-[#2A9D8F] px-3 py-2 text-sm font-semibold text-white"
                 >
                   공유하기 (카카오톡/인스타)
                 </button>
@@ -199,7 +199,7 @@ export default function PetTalkerPage() {
           )}
 
           {(status === "idle" || status === "error") && (
-            <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4 text-center text-sm text-amber-700">
+            <div className="rounded-2xl border border-[#1B3A4B]/10 bg-[#F8FAFB] p-4 text-center text-sm text-[#1B3A4B]">
               {status === "error"
                 ? errorMessage
                 : "사진을 업로드하면 여기에 우리 아이의 1인칭 대사가 나타나요!"}
@@ -207,11 +207,11 @@ export default function PetTalkerPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-amber-100 p-5 text-center shadow-sm">
-          <p className="text-sm font-semibold text-amber-900">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
+        <section className="rounded-3xl bg-[#E8EEF1] p-5 text-center shadow-sm">
+          <p className="text-sm font-semibold text-[#1B3A4B]">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
           <button
             type="button"
-            className="mt-3 w-full rounded-xl bg-amber-600 px-4 py-3 text-sm font-bold text-white shadow-sm"
+            className="mt-3 w-full rounded-xl bg-[#23867A] px-4 py-3 text-sm font-bold text-white shadow-sm"
           >
             앱 다운로드
           </button>

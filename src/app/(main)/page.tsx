@@ -52,14 +52,14 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-100 via-amber-50 to-sky-100 px-6 py-16 md:px-12 md:py-20">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-orange-300/40 blur-3xl" />
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#E8EEF1] via-[#F8FAFB] to-sky-100 px-6 py-16 md:px-12 md:py-20">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#2A9D8F]/25 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-12 h-56 w-56 rounded-full bg-sky-300/40 blur-3xl" />
         <div className="relative max-w-3xl">
-          <p className="mb-3 inline-flex rounded-full bg-white/70 px-4 py-1 text-sm font-semibold text-orange-700">
+          <p className="mb-3 inline-flex rounded-full bg-white/70 px-4 py-1 text-sm font-semibold text-[#1B3A4B]">
             반려동물 진료비 데이터 플랫폼
           </p>
-          <h1 className="text-3xl font-extrabold leading-tight text-slate-900 md:text-5xl">
+          <h1 className="text-3xl font-extrabold leading-tight text-[#1B3A4B] md:text-5xl">
             우리 아이 진료비, 적정한 걸까?
           </h1>
           <p className="mt-5 text-lg text-slate-700 md:text-xl">
@@ -68,7 +68,7 @@ export default function HomePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/cost-search"
-              className="rounded-xl bg-orange-500 px-6 py-3 text-base font-bold text-white transition hover:bg-orange-600"
+              className="rounded-xl bg-[#2A9D8F] px-6 py-3 text-base font-bold text-white transition hover:bg-[#23867A]"
             >
               진료비 검색하기
             </Link>
@@ -83,7 +83,7 @@ export default function HomePage() {
       </section>
 
       <section className="mt-14" aria-labelledby="features-heading">
-        <h2 id="features-heading" className="text-2xl font-bold text-slate-900 md:text-3xl">
+        <h2 id="features-heading" className="text-2xl font-bold text-[#1B3A4B] md:text-3xl">
           핵심 기능
         </h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -102,7 +102,7 @@ export default function HomePage() {
             }
           ].map((feature) => (
             <article key={feature.title} className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-              <h3 className="text-xl font-bold text-slate-900">{feature.title}</h3>
+              <h3 className="text-xl font-bold text-[#1B3A4B]">{feature.title}</h3>
               <p className="mt-3 text-slate-600">{feature.description}</p>
             </article>
           ))}
@@ -110,7 +110,7 @@ export default function HomePage() {
       </section>
 
       <section className="mt-14" aria-labelledby="steps-heading">
-        <h2 id="steps-heading" className="text-2xl font-bold text-slate-900 md:text-3xl">
+        <h2 id="steps-heading" className="text-2xl font-bold text-[#1B3A4B] md:text-3xl">
           사용 방법
         </h2>
         <ol className="mt-6 grid gap-4 md:grid-cols-3">
@@ -120,7 +120,7 @@ export default function HomePage() {
             '앱에서 기록하면 더 정확해져요'
           ].map((step, index) => (
             <li key={step} className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-              <p className="text-sm font-bold text-orange-600">Step {index + 1}</p>
+              <p className="text-sm font-bold text-[#1B3A4B]">Step {index + 1}</p>
               <p className="mt-2 font-semibold text-slate-800">{step}</p>
             </li>
           ))}
@@ -128,7 +128,7 @@ export default function HomePage() {
       </section>
 
       <section className="mt-14" aria-labelledby="trust-heading">
-        <h2 id="trust-heading" className="text-2xl font-bold text-slate-900 md:text-3xl">
+        <h2 id="trust-heading" className="text-2xl font-bold text-[#1B3A4B] md:text-3xl">
           신뢰 데이터 & 보호자 후기
         </h2>
         <div className="mt-6 rounded-2xl bg-slate-900 px-6 py-8 text-white">
@@ -154,19 +154,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-14 rounded-3xl bg-orange-500 px-6 py-10 text-center text-white md:px-10">
+      <section className="mt-14 rounded-3xl bg-[#2A9D8F] px-6 py-10 text-center text-white md:px-10">
         <h2 className="text-2xl font-bold md:text-3xl">앱과 함께 더 정확한 진료비 관리를 시작하세요</h2>
-        <p className="mt-3 text-orange-50">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
+        <p className="mt-3 text-[#EAF6F4]">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="https://apps.apple.com"
-            className="rounded-xl bg-white px-5 py-3 font-bold text-orange-600 transition hover:bg-orange-50"
+            className="rounded-xl bg-white px-5 py-3 font-bold text-[#1B3A4B] transition hover:bg-[#F8FAFB]"
           >
             App Store 다운로드
           </Link>
           <Link
             href="https://play.google.com/store"
-            className="rounded-xl border border-white/60 px-5 py-3 font-bold text-white transition hover:bg-orange-400"
+            className="rounded-xl border border-white/60 px-5 py-3 font-bold text-white transition hover:bg-[#23867A]"
           >
             Google Play 다운로드
           </Link>

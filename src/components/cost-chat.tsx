@@ -131,7 +131,7 @@ export default function CostChat({ itemName, region, stats, seedRange }: CostCha
           onClick={() => setIsOpen((prev) => !prev)}
           className="flex w-full items-center justify-between px-4 py-3 text-left"
         >
-          <span className="text-sm font-bold text-slate-900">진료비 AI 분석 채팅</span>
+          <span className="text-sm font-bold text-[#1B3A4B]">진료비 AI 분석 채팅</span>
           <span className="text-xs font-medium text-slate-500">{isOpen ? '접기' : '열기'}</span>
         </button>
 
@@ -170,7 +170,7 @@ export default function CostChat({ itemName, region, stats, seedRange }: CostCha
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="진료비에 대해 궁금한 점을 입력해주세요"
                 rows={2}
-                className="min-h-[56px] flex-1 resize-none rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none ring-blue-200 transition focus:ring"
+                className="min-h-[56px] flex-1 resize-none rounded-xl border border-slate-200 px-3 py-2 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
               />
               <button
                 type="button"
