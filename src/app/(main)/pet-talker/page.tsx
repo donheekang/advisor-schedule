@@ -207,11 +207,11 @@ export default function PetTalkerPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-[#E8EEF1] p-5 text-center shadow-sm">
+        <section className="rounded-3xl bg-amber-50 p-5 text-center shadow-sm">
           <p className="text-sm font-semibold text-[#1B3A4B]">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
           <button
             type="button"
-            className="mt-3 w-full rounded-xl bg-[#23867A] px-4 py-3 text-sm font-bold text-white shadow-sm"
+            className="mt-3 w-full rounded-xl bg-brand-secondary hover:bg-brand-ctaHover px-4 py-3 text-sm font-bold text-white shadow-sm"
           >
             앱 다운로드
           </button>

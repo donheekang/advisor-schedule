@@ -184,8 +184,8 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
   };
 
   return (
-    <section className="space-y-4 rounded-3xl bg-[#F8FAFB] p-6">
-      <h2 className="text-xl font-bold text-[#1B3A4B]">SNS 공유 카드</h2>
+    <section className="space-y-4 rounded-3xl bg-brand-background p-6">
+      <h2 className="text-xl font-bold text-brand-primary">SNS 공유 카드</h2>
       <p className="text-sm text-slate-600">인스타그램/카카오톡에 바로 공유할 수 있는 정사각형 카드예요.</p>
 
       <div className="overflow-hidden rounded-2xl bg-white">
@@ -202,7 +202,7 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
 
       <div className="grid gap-3 sm:grid-cols-3">
         <button
-          className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white disabled:opacity-60"
+          className="rounded-xl bg-brand-primary px-4 py-3 text-sm font-semibold text-white disabled:opacity-60"
           disabled={isGenerating}
           onClick={() => void handleDownload()}
           type="button"
@@ -210,7 +210,7 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
           이미지 다운로드
         </button>
         <button
-          className="rounded-xl bg-yellow-300 px-4 py-3 text-sm font-semibold text-[#1B3A4B] disabled:opacity-60"
+          className="rounded-xl bg-brand-secondary px-4 py-3 text-sm font-semibold text-white disabled:opacity-60"
           disabled={isGenerating || !kakaoJavaScriptKey}
           onClick={() => void handleKakaoShare()}
           type="button"
@@ -218,7 +218,7 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
           카카오톡 공유
         </button>
         <button
-          className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#1B3A4B] ring-1 ring-slate-200 disabled:opacity-60"
+          className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-brand-primary ring-1 ring-slate-200 disabled:opacity-60"
           disabled={isGenerating}
           onClick={() => void handleShare()}
           type="button"
