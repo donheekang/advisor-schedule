@@ -1,92 +1,59 @@
+import Anthropic from '@anthropic-ai/sdk';
 import { verifyBearerToken } from '@/lib/auth-server';
-import { Database } from '@/types/database';
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 type PetTalkerRequestBody = {
-  imageBase64?: string;
+  image?: string;
+  petInfo?: {
+    name?: string;
+    breed?: string;
+    age?: number;
+  };
 };
 
 type UsagePolicy = {
   dailyLimit: number;
-  isPremium: boolean;
   isMember: boolean;
 };
 
-type PetProfile = {
-  id: string;
-  name: string;
-  breed: string | null;
-  age: number | null;
-  weight: number | null;
-};
+type SupportedImageMediaType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
 
 const SYSTEM_PROMPT = `당신은 반려동물의 입장에서 1인칭으로 말하는 AI입니다.
+규칙:
 - 반말 + 귀여운 말투 사용
-- 2~4문장 (너무 길지 않게)
+- 2~4문장
 - 유머러스하고 SNS에 공유하고 싶은 대사
 - 간식, 산책, 병원, 보호자에 대한 불만 등 반려동물 관점의 주제
-- 회원이면 이름/품종/나이/진료기록을 반영한 개인화 대사
-- 의료 조언 절대 금지`;
+- 의료 조언 절대 금지
+- 사진에서 보이는 반려동물의 외형, 표정, 자세를 반영`;
 
 const GUEST_MODEL = 'claude-haiku-4-5-20251001';
 const MEMBER_MODEL = 'claude-sonnet-4-5-20250929';
 
 const usageStore = new Map<string, number>();
 
-function getSupabaseServerClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Missing Supabase environment variables');
-  }
-
-  return createClient<Database>(supabaseUrl, supabaseKey, {
-    auth: {
-      persistSession: false
-    }
-  });
+function isSupportedMediaType(mediaType: string): mediaType is SupportedImageMediaType {
+  return ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(mediaType);
 }
 
-function parseBase64Image(imageBase64: string): { mediaType: string; data: string } {
+function parseBase64Image(imageBase64: string): { mediaType: SupportedImageMediaType; data: string } {
   const trimmed = imageBase64.trim();
   const dataUrlMatch = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/.exec(trimmed);
 
   if (dataUrlMatch) {
     const [, mediaType, data] = dataUrlMatch;
+    if (!isSupportedMediaType(mediaType)) {
+      throw new Error('INVALID_IMAGE_FORMAT');
+    }
     return { mediaType, data };
   }
 
   const bareBase64Pattern = /^[A-Za-z0-9+/]+={0,2}$/;
   if (!bareBase64Pattern.test(trimmed)) {
-    throw new Error('Invalid image format');
+    throw new Error('INVALID_IMAGE_FORMAT');
   }
 
   return { mediaType: 'image/jpeg', data: trimmed };
-}
-
-function calculateAgeInYears(birthday: string | null): number | null {
-  if (!birthday) {
-    return null;
-  }
-
-  const birthDate = new Date(birthday);
-  if (Number.isNaN(birthDate.getTime())) {
-    return null;
-  }
-
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const beforeBirthday =
-    today.getMonth() < birthDate.getMonth() ||
-    (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate());
-
-  if (beforeBirthday) {
-    age -= 1;
-  }
-
-  return Math.max(age, 0);
 }
 
 function getUsageKey(identifier: string): string {
@@ -94,173 +61,38 @@ function getUsageKey(identifier: string): string {
   return `${dateKey}:${identifier}`;
 }
 
-function getUsagePolicy(isMember: boolean, isPremium: boolean): UsagePolicy {
-  if (isMember && isPremium) {
-    return { dailyLimit: Number.POSITIVE_INFINITY, isPremium: true, isMember: true };
-  }
-
+function getUsagePolicy(isMember: boolean): UsagePolicy {
   if (isMember) {
-    return { dailyLimit: 5, isPremium: false, isMember: true };
+    return { dailyLimit: 5, isMember: true };
   }
 
-  return { dailyLimit: 2, isPremium: false, isMember: false };
+  return { dailyLimit: 2, isMember: false };
 }
 
-function enforceUsageLimit(identifier: string, policy: UsagePolicy): number {
+function getCurrentUsage(identifier: string): number {
+  const key = getUsageKey(identifier);
+  return usageStore.get(key) ?? 0;
+}
+
+function incrementUsage(identifier: string): number {
   const key = getUsageKey(identifier);
   const currentUsage = usageStore.get(key) ?? 0;
-
-  if (currentUsage >= policy.dailyLimit) {
-    throw new Error('USAGE_LIMIT_EXCEEDED');
-  }
-
   const nextUsage = currentUsage + 1;
   usageStore.set(key, nextUsage);
-
   return nextUsage;
 }
 
-async function getMemberContext(firebaseUid: string): Promise<{
-  isMember: boolean;
-  isPremium: boolean;
-  petProfile: PetProfile | null;
-  recentRecord: string | null;
-}> {
-  const supabase = getSupabaseServerClient();
-
-  const userResult = await supabase
-    .from('users')
-    .select('id')
-    .eq('firebase_uid', firebaseUid)
-    .maybeSingle();
-
-  if (userResult.error || !userResult.data) {
-    return { isMember: false, isPremium: false, petProfile: null, recentRecord: null };
-  }
-
-  const appUserId = userResult.data.id;
-
-  const [petResult, membershipResult] = await Promise.all([
-    supabase
-      .from('pets')
-      .select('id, name, breed, birthday, weight')
-      .eq('user_id', appUserId)
-      .eq('is_deleted', false)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    supabase.from('users').select('is_premium').eq('id', appUserId).maybeSingle()
-  ]);
-
-  const isPremium = Boolean((membershipResult.data as { is_premium?: boolean } | null)?.is_premium);
-
-  if (petResult.error || !petResult.data) {
-    return { isMember: true, isPremium, petProfile: null, recentRecord: null };
-  }
-
-  const petProfile: PetProfile = {
-    id: petResult.data.id,
-    name: petResult.data.name,
-    breed: petResult.data.breed,
-    age: calculateAgeInYears(petResult.data.birthday),
-    weight: petResult.data.weight
-  };
-
-  const recentRecordResult = await supabase
-    .from('health_records')
-    .select('visit_date, memo, total_amount')
-    .eq('pet_id', petProfile.id)
-    .eq('is_deleted', false)
-    .order('visit_date', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  const recentRecord = recentRecordResult.data
-    ? `방문일 ${recentRecordResult.data.visit_date}, 메모 ${recentRecordResult.data.memo ?? '없음'}, 진료비 ${recentRecordResult.data.total_amount}원`
-    : null;
-
-  return {
-    isMember: true,
-    isPremium,
-    petProfile,
-    recentRecord
-  };
-}
-
-async function streamClaudeDialogue(params: {
-  imageData: string;
-  mediaType: string;
-  isMember: boolean;
-  petProfile: PetProfile | null;
-  recentRecord: string | null;
-}): Promise<string> {
-  const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-  if (!anthropicApiKey) {
-    throw new Error('Missing Anthropic API key');
-  }
-
-  const profileText =
-    params.isMember && params.petProfile
-      ? `
-이 아이 정보: 이름=${params.petProfile.name}, 품종=${params.petProfile.breed ?? '알 수 없음'}, 나이=${params.petProfile.age ?? '알 수 없음'}세, 체중=${params.petProfile.weight ?? '알 수 없음'}kg
-최근 진료: ${params.recentRecord ?? '기록 없음'}`
-      : '';
-
-  const userPrompt = `[이미지 첨부]${profileText}
-이 아이가 지금 무슨 생각을 하고 있을지 1인칭으로 말해줘.`;
-
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': anthropicApiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: params.isMember ? MEMBER_MODEL : GUEST_MODEL,
-      max_tokens: 220,
-      system: SYSTEM_PROMPT,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: {
-                type: 'base64',
-                media_type: params.mediaType,
-                data: params.imageData
-              }
-            },
-            {
-              type: 'text',
-              text: userPrompt
-            }
-          ]
-        }
-      ]
-    })
-  });
-
-  if (!response.ok) {
-    throw new Error(`Anthropic API request failed (${response.status})`);
-  }
-
-  const payload = (await response.json()) as {
-    content?: Array<{ type?: string; text?: string }>;
-  };
-
-  const dialogue =
-    payload.content
-      ?.filter((block) => block.type === 'text' && typeof block.text === 'string')
-      .map((block) => block.text?.trim() ?? '')
-      .join('\n') ?? '';
-
-  return dialogue.trim();
-}
-
-
 function getClientIp(request: NextRequest): string {
+  const cookieIp = request.cookies.get('pet_talker_ip')?.value;
+  if (cookieIp) {
+    return cookieIp;
+  }
+
+  const connectingIp = request.headers.get('cf-connecting-ip');
+  if (connectingIp) {
+    return connectingIp.trim();
+  }
+
   const forwardedFor = request.headers.get('x-forwarded-for');
   if (forwardedFor) {
     return forwardedFor.split(',')[0]?.trim() ?? 'unknown';
@@ -270,71 +102,161 @@ function getClientIp(request: NextRequest): string {
   return realIp?.trim() || 'unknown';
 }
 
+function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo']): string {
+  if (!petInfo) {
+    return '이 아이가 지금 무슨 생각을 하고 있을지 1인칭으로 말해줘.';
+  }
+
+  const name = petInfo.name?.trim() || '알 수 없음';
+  const breed = petInfo.breed?.trim() || '알 수 없음';
+  const age = typeof petInfo.age === 'number' && Number.isFinite(petInfo.age) ? petInfo.age : '알 수 없음';
+
+  return `이 아이가 지금 무슨 생각을 하고 있을지 1인칭으로 말해줘.\n이 아이 정보: 이름=${name}, 품종=${breed}, 나이=${age}세.\n이름과 특성을 자연스럽게 반영해줘.`;
+}
+
+async function createAnthropicMessageStream(params: {
+  client: Anthropic;
+  imageData: string;
+  mediaType: SupportedImageMediaType;
+  model: string;
+  userPrompt: string;
+}) {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await params.client.messages.create({
+        model: params.model,
+        max_tokens: 300,
+        system: SYSTEM_PROMPT,
+        stream: true,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: {
+                  type: 'base64',
+                  media_type: params.mediaType,
+                  data: params.imageData
+                }
+              },
+              {
+                type: 'text',
+                text: params.userPrompt
+              }
+            ]
+          }
+        ]
+      });
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError;
+}
+
 export async function POST(request: NextRequest) {
+  const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+  if (!anthropicApiKey) {
+    return NextResponse.json({ error: '서비스 준비 중' }, { status: 503 });
+  }
+
   try {
     const body = (await request.json()) as PetTalkerRequestBody;
-    const imageBase64 = body.imageBase64;
 
-    if (!imageBase64) {
+    if (!body.image) {
       return NextResponse.json({ error: '이미지(base64)가 필요합니다.' }, { status: 400 });
     }
 
-    let image: { mediaType: string; data: string };
+    let image: { mediaType: SupportedImageMediaType; data: string };
     try {
-      image = parseBase64Image(imageBase64);
+      image = parseBase64Image(body.image);
     } catch {
       return NextResponse.json({ error: '이미지 형식이 올바르지 않습니다.' }, { status: 400 });
     }
 
     const authorizationHeader = request.headers.get('authorization') ?? undefined;
 
-    let firebaseUid: string | null = null;
+    let isMember = false;
+    let userId: string | null = null;
     if (authorizationHeader) {
       try {
         const decoded = await verifyBearerToken(authorizationHeader);
-        firebaseUid = decoded.uid;
+        userId = decoded.uid;
+        isMember = true;
       } catch {
-        firebaseUid = null;
+        isMember = false;
       }
     }
 
-    const memberContext = firebaseUid
-      ? await getMemberContext(firebaseUid)
-      : { isMember: false, isPremium: false, petProfile: null, recentRecord: null };
+    const usagePolicy = getUsagePolicy(isMember);
+    const usageIdentifier = isMember ? `user:${userId}` : `ip:${getClientIp(request)}`;
+    const currentUsage = getCurrentUsage(usageIdentifier);
 
-    const usagePolicy = getUsagePolicy(memberContext.isMember, memberContext.isPremium);
-    const usageIdentifier = memberContext.isMember ? `user:${firebaseUid}` : `ip:${getClientIp(request)}`;
-
-    let usageCount = 0;
-    try {
-      usageCount = enforceUsageLimit(usageIdentifier, usagePolicy);
-    } catch (error) {
-      if (error instanceof Error && error.message === 'USAGE_LIMIT_EXCEEDED') {
-        return NextResponse.json({ error: '일일 사용량을 초과했습니다.' }, { status: 429 });
-      }
-      throw error;
+    if (currentUsage >= usagePolicy.dailyLimit) {
+      return NextResponse.json(
+        {
+          error: 'limit_exceeded',
+          message: '오늘 사용 횟수를 다 썼어요',
+          limit: usagePolicy.dailyLimit,
+          used: currentUsage
+        },
+        { status: 429 }
+      );
     }
 
-    const dialogue = await streamClaudeDialogue({
+    incrementUsage(usageIdentifier);
+
+    const model = isMember ? MEMBER_MODEL : GUEST_MODEL;
+    const userPrompt = isMember ? buildUserPrompt(body.petInfo) : buildUserPrompt();
+
+    const anthropicClient = new Anthropic({ apiKey: anthropicApiKey });
+    const claudeStream = await createAnthropicMessageStream({
+      client: anthropicClient,
       imageData: image.data,
       mediaType: image.mediaType,
-      isMember: memberContext.isMember,
-      petProfile: memberContext.petProfile,
-      recentRecord: memberContext.recentRecord
+      model,
+      userPrompt
     });
 
-    if (!dialogue) {
-      return NextResponse.json({ error: '대사 생성에 실패했습니다.' }, { status: 502 });
-    }
+    const encoder = new TextEncoder();
 
-    const characterLevel = memberContext.isPremium ? 10 : Math.min(memberContext.isMember ? 8 : 5, usageCount + 1);
+    const responseStream = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        try {
+          for await (const event of claudeStream) {
+            if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ type: 'text_delta', text: event.delta.text })}\n\n`)
+              );
+            }
+          }
 
-    return NextResponse.json({ dialogue, characterLevel });
-  } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json({ error: `펫토커 처리 중 오류가 발생했습니다: ${error.message}` }, { status: 500 });
-    }
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'done' })}\n\n`));
+          controller.close();
+        } catch {
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({ type: 'error', error: '대사 생성에 실패했습니다. 잠시 후 다시 시도해줘.' })}\n\n`
+            )
+          );
+          controller.close();
+        }
+      }
+    });
 
-    return NextResponse.json({ error: '펫토커 처리 중 알 수 없는 오류가 발생했습니다.' }, { status: 500 });
+    return new Response(responseStream, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        Connection: 'keep-alive'
+      }
+    });
+  } catch {
+    return NextResponse.json({ error: '펫토커 처리 중 오류가 발생했습니다.' }, { status: 500 });
   }
 }
