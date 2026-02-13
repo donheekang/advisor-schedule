@@ -1,4 +1,4 @@
-import { auth } from '@/lib/firebase';
+import { auth, firebaseConfigStatus } from '@/lib/firebase';
 import { GoogleAuthProvider, User, signInWithPopup } from 'firebase/auth';
 
 export type SignInResult = {
@@ -8,6 +8,12 @@ export type SignInResult = {
 
 function getClientAuth() {
   if (!auth) {
+    if (firebaseConfigStatus.missingFirebaseConfigKeys.length > 0) {
+      throw new Error(
+        `Missing Firebase env: ${firebaseConfigStatus.missingFirebaseConfigKeys.join(', ')}`
+      );
+    }
+
     throw new Error('Firebase auth is only available in the browser.');
   }
 
