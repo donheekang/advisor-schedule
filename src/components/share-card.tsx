@@ -104,7 +104,7 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
       const generated = await renderShareCard({ petImageUrl, dialogue, petName });
       setCard(generated);
       return generated;
-    } catch (error) {
+    } catch {
       setErrorMessage('공유 이미지를 만드는 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.');
       return null;
     } finally {

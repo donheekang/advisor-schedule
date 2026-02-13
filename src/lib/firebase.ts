@@ -13,10 +13,16 @@ const firebaseConfig: FirebaseClientConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? ''
 };
 
-if (Object.values(firebaseConfig).some((value) => value.length === 0)) {
-  throw new Error('Missing Firebase client environment variables');
-}
+const hasFirebaseConfig = Object.values(firebaseConfig).every((value) => value.length > 0);
 
-const app: FirebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const fallbackFirebaseConfig: FirebaseClientConfig = {
+  apiKey: 'demo-api-key',
+  authDomain: 'demo-project.firebaseapp.com',
+  projectId: 'demo-project'
+};
+
+const appConfig = hasFirebaseConfig ? firebaseConfig : fallbackFirebaseConfig;
+
+const app: FirebaseApp = getApps().length > 0 ? getApp() : initializeApp(appConfig);
 
 export const auth: Auth = getAuth(app);
