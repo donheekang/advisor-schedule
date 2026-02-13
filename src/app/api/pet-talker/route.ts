@@ -3,34 +3,6 @@ import { Database } from '@/types/database';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-type AnthropicClient = {
-  messages: {
-    create: (params: {
-      model: string;
-      max_tokens: number;
-      system: string;
-      stream: true;
-      messages: Array<{
-        role: 'user';
-        content: Array<
-          | {
-              type: 'image';
-              source: {
-                type: 'base64';
-                media_type: string;
-                data: string;
-              };
-            }
-          | {
-              type: 'text';
-              text: string;
-            }
-        >;
-      }>;
-    }) => Promise<AsyncIterable<{ type: string; delta?: { type: string; text: string } }>>;
-  };
-};
-
 type PetTalkerRequestBody = {
   imageBase64?: string;
 };
@@ -227,55 +199,66 @@ async function streamClaudeDialogue(params: {
     throw new Error('Missing Anthropic API key');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { default: Anthropic } = require('@anthropic-ai/sdk') as {
-    default: new (options: { apiKey: string }) => AnthropicClient;
-  };
-
-  const anthropic = new Anthropic({ apiKey: anthropicApiKey });
-
   const profileText =
     params.isMember && params.petProfile
-      ? `\n이 아이 정보: 이름=${params.petProfile.name}, 품종=${params.petProfile.breed ?? '알 수 없음'}, 나이=${params.petProfile.age ?? '알 수 없음'}세, 체중=${params.petProfile.weight ?? '알 수 없음'}kg\n최근 진료: ${params.recentRecord ?? '기록 없음'}`
+      ? `
+이 아이 정보: 이름=${params.petProfile.name}, 품종=${params.petProfile.breed ?? '알 수 없음'}, 나이=${params.petProfile.age ?? '알 수 없음'}세, 체중=${params.petProfile.weight ?? '알 수 없음'}kg
+최근 진료: ${params.recentRecord ?? '기록 없음'}`
       : '';
 
-  const userPrompt = `[이미지 첨부]${profileText}\n이 아이가 지금 무슨 생각을 하고 있을지 1인칭으로 말해줘.`;
+  const userPrompt = `[이미지 첨부]${profileText}
+이 아이가 지금 무슨 생각을 하고 있을지 1인칭으로 말해줘.`;
 
-  const stream = await anthropic.messages.create({
-    model: params.isMember ? MEMBER_MODEL : GUEST_MODEL,
-    max_tokens: 220,
-    system: SYSTEM_PROMPT,
-    stream: true,
-    messages: [
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'image',
-            source: {
-              type: 'base64',
-              media_type: params.mediaType,
-              data: params.imageData
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': anthropicApiKey,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: params.isMember ? MEMBER_MODEL : GUEST_MODEL,
+      max_tokens: 220,
+      system: SYSTEM_PROMPT,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: {
+                type: 'base64',
+                media_type: params.mediaType,
+                data: params.imageData
+              }
+            },
+            {
+              type: 'text',
+              text: userPrompt
             }
-          },
-          {
-            type: 'text',
-            text: userPrompt
-          }
-        ]
-      }
-    ]
+          ]
+        }
+      ]
+    })
   });
 
-  let dialogue = '';
-  for await (const event of stream) {
-    if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-      dialogue += event.delta.text;
-    }
+  if (!response.ok) {
+    throw new Error(`Anthropic API request failed (${response.status})`);
   }
+
+  const payload = (await response.json()) as {
+    content?: Array<{ type?: string; text?: string }>;
+  };
+
+  const dialogue =
+    payload.content
+      ?.filter((block) => block.type === 'text' && typeof block.text === 'string')
+      .map((block) => block.text?.trim() ?? '')
+      .join('\n') ?? '';
 
   return dialogue.trim();
 }
+
 
 function getClientIp(request: NextRequest): string {
   const forwardedFor = request.headers.get('x-forwarded-for');

@@ -191,7 +191,7 @@ async function getUserMembership(firebaseUid: string): Promise<{ appUserId: stri
     return { appUserId: null, isPremium: false };
   }
 
-  const typedUser = userResult.data as { id: string; is_premium?: boolean };
+  const typedUser = userResult.data as unknown as { id: string; is_premium?: boolean };
   return { appUserId: typedUser.id, isPremium: Boolean(typedUser.is_premium) };
 }
 
