@@ -1,0 +1,48 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+type TabItem = {
+  href: string;
+  label: string;
+  icon: string;
+};
+
+const tabs: TabItem[] = [
+  { href: '/', label: '홈', icon: '🏠' },
+  { href: '/pettalker', label: '펫토커', icon: '💬' },
+  { href: '/search', label: '진료비 검색', icon: '🔎' },
+  { href: '/mypage', label: '마이페이지', icon: '👤' }
+];
+
+export default function MobileNav() {
+  const pathname = usePathname();
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-orange-100 bg-[#FFF8EE]/95 backdrop-blur md:hidden">
+      <ul className="mx-auto grid w-full max-w-7xl grid-cols-4">
+        {tabs.map((tab) => {
+          const isActive = tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
+
+          return (
+            <li key={tab.href}>
+              <Link
+                href={tab.href}
+                className={`flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium transition ${
+                  isActive ? 'text-[#E67E22]' : 'text-slate-500'
+                }`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <span aria-hidden="true" className="text-base leading-none">
+                  {tab.icon}
+                </span>
+                <span>{tab.label}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
