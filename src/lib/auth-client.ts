@@ -1,29 +1,30 @@
 import { auth } from '@/lib/firebase';
-import { User, GoogleAuthProvider, signInWithCustomToken, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, User, signInWithPopup } from 'firebase/auth';
 
-export type SignInParams =
-  | { provider: 'google' }
-  | {
-      provider: 'kakao';
-      customToken: string;
-    };
+export type SignInResult = {
+  user: User;
+  token: string;
+};
 
-export async function signIn(params: SignInParams): Promise<User> {
-  if (params.provider === 'google') {
-    const provider = new GoogleAuthProvider();
-    const credential = await signInWithPopup(auth, provider);
-
-    return credential.user;
+function getClientAuth() {
+  if (!auth) {
+    throw new Error('Firebase auth is only available in the browser.');
   }
 
-  const credential = await signInWithCustomToken(auth, params.customToken);
-  return credential.user;
+  return auth;
+}
+
+export async function signIn(): Promise<SignInResult> {
+  const provider = new GoogleAuthProvider();
+  const credential = await signInWithPopup(getClientAuth(), provider);
+  const token = await credential.user.getIdToken();
+
+  return {
+    user: credential.user,
+    token
+  };
 }
 
 export async function signOut(): Promise<void> {
-  await auth.signOut();
-}
-
-export async function getIdToken(user: User): Promise<string> {
-  return user.getIdToken();
+  await getClientAuth().signOut();
 }
