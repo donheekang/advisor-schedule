@@ -13,6 +13,7 @@ const tabs: TabItem[] = [
   { href: '/', label: '홈', icon: '🏠' },
   { href: '/pet-talker', label: '펫토커', icon: '💬' },
   { href: '/cost-search', label: '진료비 검색', icon: '🔎' },
+  { href: '/blog', label: '블로그', icon: '📝' },
   { href: '/mypage', label: '마이페이지', icon: '👤' }
 ];
 
@@ -21,7 +22,7 @@ export default function MobileNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#1B3A4B]/10 bg-[#F8FAFB]/95 backdrop-blur md:hidden">
-      <ul className="mx-auto grid w-full max-w-7xl grid-cols-4">
+      <ul className="mx-auto grid w-full max-w-7xl grid-cols-5">
         {tabs.map((tab) => {
           const isActive = tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
 

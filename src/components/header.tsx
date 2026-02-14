@@ -22,7 +22,8 @@ export default function Header() {
   const navigationItems = useMemo<NavigationItem[]>(() => {
     const items: NavigationItem[] = [
       { href: '/pet-talker', label: '펫토커' },
-      { href: '/cost-search', label: '진료비 검색' }
+      { href: '/cost-search', label: '진료비 검색' },
+      { href: '/blog', label: '블로그' }
     ];
 
     if (isLoggedIn) {
