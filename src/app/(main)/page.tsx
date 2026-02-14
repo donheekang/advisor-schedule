@@ -52,17 +52,17 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-primary via-brand-primary to-brand-secondary px-6 py-16 md:px-12 md:py-20">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-brand-secondary/25 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 left-12 h-56 w-56 rounded-full bg-brand-secondary/30 blur-3xl" />
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF3E6] via-[#FDE3C4] to-[#F7CFA0] px-6 py-16 md:px-12 md:py-20">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-brand-secondary/30 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 left-12 h-56 w-56 rounded-full bg-[#F2B372]/40 blur-3xl" />
         <div className="relative max-w-3xl">
           <p className="mb-3 inline-flex rounded-full bg-white/70 px-4 py-1 text-sm font-semibold text-brand-primary">
             반려동물 진료비 데이터 플랫폼
           </p>
-          <h1 className="text-3xl font-extrabold leading-tight text-white md:text-5xl">
+          <h1 className="text-3xl font-extrabold leading-tight text-brand-primary md:text-5xl">
             우리 아이 진료비, 적정한 걸까?
           </h1>
-          <p className="mt-5 text-lg text-slate-100 md:text-xl">
+          <p className="mt-5 text-lg text-[#754D27] md:text-xl">
             반려동물 진료비를 비교하고, AI로 분석받으세요
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -156,7 +156,7 @@ export default function HomePage() {
 
       <section className="mt-14 rounded-3xl bg-brand-secondary px-6 py-10 text-center text-white md:px-10">
         <h2 className="text-2xl font-bold md:text-3xl">앱과 함께 더 정확한 진료비 관리를 시작하세요</h2>
-        <p className="mt-3 text-[#EAF6F4]">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
+        <p className="mt-3 text-[#FFF3E6]">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="https://apps.apple.com"

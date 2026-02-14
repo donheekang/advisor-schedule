@@ -11,10 +11,10 @@ const config: Config = {
       colors: {
         brand: {
           primary: '#1B3A4B',
-          secondary: '#2A9D8F',
+          secondary: '#E67E22',
           background: '#F8FAFB',
           card: '#FFFFFF',
-          ctaHover: '#238B7E',
+          ctaHover: '#CF6D17',
           textSecondary: '#6B7280',
           warning: '#F59E0B',
           error: '#EF4444',
