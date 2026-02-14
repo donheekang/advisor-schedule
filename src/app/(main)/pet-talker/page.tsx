@@ -1,47 +1,8 @@
-import type { Metadata } from 'next';
+"use client";
 
-import PetTalkerClient from '@/app/(main)/pet-talker/pet-talker-client';
-
-const pageTitle = '펫토커 | 우리 아이가 말을 한다면, AI 한마디 생성';
-const pageDescription =
-  '반려동물 사진 한 장으로 우리 아이의 1인칭 대사를 생성해보세요. 공유 가능한 카드로 쉽고 재미있게 펫토커를 즐길 수 있어요.';
-
-const websiteJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'PetHealth+',
-  url: 'https://pethealthplus.kr',
-  inLanguage: 'ko-KR'
-};
-
-export const metadata: Metadata = {
-  title: pageTitle,
-  description: pageDescription,
-  alternates: {
-    canonical: '/pet-talker'
-  },
-  openGraph: {
-    title: pageTitle,
-    description: pageDescription,
-    url: 'https://pethealthplus.kr/pet-talker',
-    siteName: 'PetHealth+',
-    locale: 'ko_KR',
-    type: 'website',
-    images: [
-      {
-        url: 'https://pethealthplus.kr/og/pet-talker.png',
-        width: 1200,
-        height: 630,
-        alt: '펫토커 - 반려동물 AI 한마디 생성 서비스'
-'use client';
-
-import Image from 'next/image';
-import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { ShareCard } from '@/components/share-card';
-
-type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
-import { apiClient, ApiError } from "@/lib/api-client";
 import { useAuth } from "@/components/auth-provider";
+import { ShareCard } from "@/components/share-card";
+import { apiClient, ApiError } from "@/lib/api-client";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from "react";
@@ -61,7 +22,7 @@ type PetsApiResponse = {
 };
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 const ERROR_MESSAGE_BY_TYPE: Record<ErrorType, string> = {
   missing_api_key: "서비스 준비 중이에요. 곧 만나요! 🐶",
@@ -113,10 +74,6 @@ export default function PetTalkerPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [speech, setSpeech] = useState('');
-  const [petName, setPetName] = useState('');
-  const [status, setStatus] = useState<RequestStatus>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
   const [speech, setSpeech] = useState("");
   const [status, setStatus] = useState<RequestStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -198,23 +155,13 @@ export default function PetTalkerPage() {
     setErrorMessage(ERROR_MESSAGE_BY_TYPE[type]);
   };
 
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-
   const handleFileValidation = (file: File) => {
     if (!ACCEPTED_TYPES.includes(file.type)) {
-      setErrorMessage('jpg, png, webp 파일만 업로드할 수 있어요.');
       setError("invalid_format");
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      setErrorMessage('파일 크기는 최대 5MB까지 가능해요.');
       setError("file_too_large");
       return false;
     }
@@ -243,7 +190,6 @@ export default function PetTalkerPage() {
   };
 
   const processFile = async (file: File) => {
-    setErrorMessage('');
     setErrorType(null);
     setErrorMessage("");
 
@@ -257,29 +203,10 @@ export default function PetTalkerPage() {
 
     const nextPreviewUrl = URL.createObjectURL(file);
     setPreviewUrl(nextPreviewUrl);
-    setStatus('loading');
-    setSpeech('');
+    setStatus("loading");
+    setSpeech("");
 
     try {
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const response = await fetch('/api/pet-talker', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error('failed');
-      }
-
-      const data = (await response.json()) as { speech?: string };
-      setSpeech(data.speech ?? '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!');
-      setStatus('success');
-      setUsageCount((prev) => Math.min(prev + 1, 2));
-    } catch {
-      setStatus('error');
-      setErrorMessage('대사를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.');
       const image = await toDataUrl(file);
       const response = await fetch("/api/pet-talker", {
         method: "POST",
@@ -319,16 +246,7 @@ export default function PetTalkerPage() {
 
         throw new Error(errorData?.message ?? "request_failed");
       }
-    ]
-  }
-};
 
-export default function PetTalkerPage() {
-  return (
-    <>
-      <PetTalkerClient />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
-    </>
       const reader = response.body?.getReader();
       if (!reader) {
         throw new Error("stream_unavailable");
@@ -398,7 +316,7 @@ export default function PetTalkerPage() {
     }
 
     await processFile(file);
-    event.target.value = '';
+    event.target.value = "";
   };
 
   const handleDrop = async (event: DragEvent<HTMLDivElement>) => {
@@ -414,9 +332,6 @@ export default function PetTalkerPage() {
   };
 
   const handleReset = () => {
-    setStatus('idle');
-    setSpeech('');
-    setErrorMessage('');
     setStatus("idle");
     setSpeech("");
     setErrorMessage("");
@@ -436,14 +351,6 @@ export default function PetTalkerPage() {
           </p>
         </header>
 
-        <input
-          value={petName}
-          onChange={(event) => setPetName(event.target.value)}
-          maxLength={12}
-          className="w-full rounded-2xl border border-[#1B3A4B]/20 bg-white px-4 py-3 text-sm font-semibold outline-none ring-brand-secondary/30 focus:ring"
-          placeholder="반려동물 이름 (선택)"
-          aria-label="반려동물 이름"
-        />
         {user && pets.length > 0 ? (
           <section className="rounded-2xl bg-white p-4 shadow-sm">
             <label htmlFor="pet-selector" className="mb-2 block text-sm font-semibold text-[#1B3A4B]">
@@ -470,7 +377,7 @@ export default function PetTalkerPage() {
           tabIndex={0}
           onClick={() => fileInputRef.current?.click()}
           onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
+            if (event.key === "Enter" || event.key === " ") {
               event.preventDefault();
               fileInputRef.current?.click();
             }
@@ -482,7 +389,7 @@ export default function PetTalkerPage() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           className={`cursor-pointer rounded-3xl border-2 border-dashed bg-white p-5 shadow-sm transition ${
-            isDragging ? 'border-[#2A9D8F]' : 'border-[#1B3A4B]/20'
+            isDragging ? "border-[#2A9D8F]" : "border-[#1B3A4B]/20"
           }`}
           aria-label="사진 업로드"
         >
@@ -511,11 +418,6 @@ export default function PetTalkerPage() {
         </div>
 
         <section className="rounded-3xl bg-white p-5 shadow-sm">
-          {status === 'loading' && (
-            <div className="animate-pulse space-y-4">
-              <div className="h-56 rounded-2xl bg-[#E8EEF1]" />
-              <div className="h-4 w-4/5 rounded-full bg-[#E8EEF1]" />
-              <div className="h-4 w-3/5 rounded-full bg-[#E8EEF1]" />
           {status === "loading" && (
             <div className="space-y-4">
               <div className="rounded-2xl bg-[#E8EEF1] p-4">
@@ -541,18 +443,19 @@ export default function PetTalkerPage() {
             </div>
           )}
 
-          {status === 'success' && previewUrl && (
+          {status === "success" && previewUrl && (
             <div className="space-y-4">
               <div className="rounded-2xl bg-[#E8EEF1] p-3">
                 <div className="relative mx-auto aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border-4 border-white shadow-sm">
                   <Image src={previewUrl} alt="반려동물 공유 카드" fill className="object-cover" unoptimized />
                 </div>
                 <div className="relative mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold leading-relaxed text-[#1B3A4B] shadow-sm">
-                  <span className="absolute -top-2 left-5 h-4 w-4 rotate-45 bg-white" aria-hidden />“{speech}”
+                  <span className="absolute -top-2 left-5 h-4 w-4 rotate-45 bg-white" aria-hidden />
+                  “{speech}”
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={handleReset}
@@ -560,19 +463,15 @@ export default function PetTalkerPage() {
                 >
                   다시 해보기
                 </button>
-                <button
-                  type="button"
-                  className="rounded-xl bg-[#2A9D8F] px-3 py-2 text-sm font-semibold text-white"
-                >
+                <button type="button" className="rounded-xl bg-[#2A9D8F] px-3 py-2 text-sm font-semibold text-white">
                   공유하기
                 </button>
               </div>
             </div>
           )}
 
-          {(status === 'idle' || status === 'error') && (
+          {(status === "idle" || status === "error") && (
             <div className="rounded-2xl border border-[#1B3A4B]/10 bg-[#F8FAFB] p-4 text-center text-sm text-[#1B3A4B]">
-              {status === 'error' ? errorMessage : '사진을 업로드하면 여기에 우리 아이의 1인칭 대사가 나타나요!'}
               {status === "error" ? (
                 <div className="space-y-3">
                   <p>{errorMessage}</p>
@@ -592,11 +491,11 @@ export default function PetTalkerPage() {
           )}
         </section>
 
-        {status === 'success' && previewUrl ? (
+        {status === "success" && previewUrl ? (
           <ShareCard
             petImageUrl={previewUrl}
             dialogue={speech}
-            petName={petName}
+            petName={selectedPet?.name ?? ""}
             kakaoJavaScriptKey={process.env.NEXT_PUBLIC_KAKAO_JS_KEY}
           />
         ) : null}
@@ -611,7 +510,6 @@ export default function PetTalkerPage() {
           </button>
         </section>
 
-        {errorMessage && status !== 'error' && <p className="text-center text-xs font-medium text-rose-500">{errorMessage}</p>}
         {errorMessage && status !== "error" ? <p className="text-center text-xs font-medium text-rose-500">{errorMessage}</p> : null}
       </section>
     </main>
