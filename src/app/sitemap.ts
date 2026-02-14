@@ -7,21 +7,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllBlogPosts();
 
   const staticRoutes: MetadataRoute.Sitemap = [
+import { blogPosts } from '@/lib/blog-posts';
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = 'https://pethealthplus.kr';
+  const now = new Date();
+
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'weekly',
       priority: 1
     },
     {
       url: `${baseUrl}/cost-search`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.9
     },
     {
       url: `${baseUrl}/pet-talker`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.8
     },
@@ -36,9 +43,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),
+  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt),
     changeFrequency: 'monthly',
     priority: 0.7
   }));
 
   return [...staticRoutes, ...blogRoutes];
+  return [...staticPages, ...blogPages];
 }
