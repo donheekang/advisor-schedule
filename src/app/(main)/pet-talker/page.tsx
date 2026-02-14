@@ -1,32 +1,42 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { ChangeEvent, DragEvent, useMemo, useRef, useState } from "react";
+import Image from 'next/image';
+import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { ShareCard } from '@/components/share-card';
 
-type RequestStatus = "idle" | "loading" | "success" | "error";
+type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export default function PetTalkerPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [speech, setSpeech] = useState("");
-  const [status, setStatus] = useState<RequestStatus>("idle");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [speech, setSpeech] = useState('');
+  const [petName, setPetName] = useState('');
+  const [status, setStatus] = useState<RequestStatus>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
   const [usageCount, setUsageCount] = useState(0);
 
   const usageText = useMemo(() => `오늘 ${usageCount}/2회 사용`, [usageCount]);
 
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   const handleFileValidation = (file: File) => {
     if (!ACCEPTED_TYPES.includes(file.type)) {
-      setErrorMessage("jpg, png, webp 파일만 업로드할 수 있어요.");
+      setErrorMessage('jpg, png, webp 파일만 업로드할 수 있어요.');
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      setErrorMessage("파일 크기는 최대 5MB까지 가능해요.");
+      setErrorMessage('파일 크기는 최대 5MB까지 가능해요.');
       return false;
     }
 
@@ -34,7 +44,7 @@ export default function PetTalkerPage() {
   };
 
   const processFile = async (file: File) => {
-    setErrorMessage("");
+    setErrorMessage('');
 
     if (!handleFileValidation(file)) {
       return;
@@ -46,29 +56,29 @@ export default function PetTalkerPage() {
 
     const nextPreviewUrl = URL.createObjectURL(file);
     setPreviewUrl(nextPreviewUrl);
-    setStatus("loading");
-    setSpeech("");
+    setStatus('loading');
+    setSpeech('');
 
     try {
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append('image', file);
 
-      const response = await fetch("/api/pet-talker", {
-        method: "POST",
-        body: formData,
+      const response = await fetch('/api/pet-talker', {
+        method: 'POST',
+        body: formData
       });
 
       if (!response.ok) {
-        throw new Error("failed");
+        throw new Error('failed');
       }
 
       const data = (await response.json()) as { speech?: string };
-      setSpeech(data.speech ?? "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!");
-      setStatus("success");
+      setSpeech(data.speech ?? '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!');
+      setStatus('success');
       setUsageCount((prev) => Math.min(prev + 1, 2));
     } catch {
-      setStatus("error");
-      setErrorMessage("대사를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.");
+      setStatus('error');
+      setErrorMessage('대사를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.');
     }
   };
 
@@ -79,7 +89,7 @@ export default function PetTalkerPage() {
     }
 
     await processFile(file);
-    event.target.value = "";
+    event.target.value = '';
   };
 
   const handleDrop = async (event: DragEvent<HTMLDivElement>) => {
@@ -95,9 +105,9 @@ export default function PetTalkerPage() {
   };
 
   const handleReset = () => {
-    setStatus("idle");
-    setSpeech("");
-    setErrorMessage("");
+    setStatus('idle');
+    setSpeech('');
+    setErrorMessage('');
   };
 
   return (
@@ -114,12 +124,21 @@ export default function PetTalkerPage() {
           </p>
         </header>
 
+        <input
+          value={petName}
+          onChange={(event) => setPetName(event.target.value)}
+          maxLength={12}
+          className="w-full rounded-2xl border border-[#1B3A4B]/20 bg-white px-4 py-3 text-sm font-semibold outline-none ring-brand-secondary/30 focus:ring"
+          placeholder="반려동물 이름 (선택)"
+          aria-label="반려동물 이름"
+        />
+
         <div
           role="button"
           tabIndex={0}
           onClick={() => fileInputRef.current?.click()}
           onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
+            if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault();
               fileInputRef.current?.click();
             }
@@ -131,7 +150,7 @@ export default function PetTalkerPage() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           className={`cursor-pointer rounded-3xl border-2 border-dashed bg-white p-5 shadow-sm transition ${
-            isDragging ? "border-[#2A9D8F]" : "border-[#1B3A4B]/20"
+            isDragging ? 'border-[#2A9D8F]' : 'border-[#1B3A4B]/20'
           }`}
           aria-label="사진 업로드"
         >
@@ -160,7 +179,7 @@ export default function PetTalkerPage() {
         </div>
 
         <section className="rounded-3xl bg-white p-5 shadow-sm">
-          {status === "loading" && (
+          {status === 'loading' && (
             <div className="animate-pulse space-y-4">
               <div className="h-56 rounded-2xl bg-[#E8EEF1]" />
               <div className="h-4 w-4/5 rounded-full bg-[#E8EEF1]" />
@@ -168,19 +187,18 @@ export default function PetTalkerPage() {
             </div>
           )}
 
-          {status === "success" && previewUrl && (
+          {status === 'success' && previewUrl && (
             <div className="space-y-4">
               <div className="rounded-2xl bg-[#E8EEF1] p-3">
                 <div className="relative mx-auto aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border-4 border-white shadow-sm">
                   <Image src={previewUrl} alt="반려동물 공유 카드" fill className="object-cover" unoptimized />
                 </div>
                 <div className="relative mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold leading-relaxed text-[#1B3A4B] shadow-sm">
-                  <span className="absolute -top-2 left-5 h-4 w-4 rotate-45 bg-white" aria-hidden />
-                  “{speech}”
+                  <span className="absolute -top-2 left-5 h-4 w-4 rotate-45 bg-white" aria-hidden />“{speech}”
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2">
                 <button
                   type="button"
                   onClick={handleReset}
@@ -188,38 +206,37 @@ export default function PetTalkerPage() {
                 >
                   다시 해보기
                 </button>
-                <button
-                  type="button"
-                  className="rounded-xl bg-[#2A9D8F] px-3 py-2 text-sm font-semibold text-white"
-                >
-                  공유하기 (카카오톡/인스타)
-                </button>
               </div>
             </div>
           )}
 
-          {(status === "idle" || status === "error") && (
+          {(status === 'idle' || status === 'error') && (
             <div className="rounded-2xl border border-[#1B3A4B]/10 bg-[#F8FAFB] p-4 text-center text-sm text-[#1B3A4B]">
-              {status === "error"
-                ? errorMessage
-                : "사진을 업로드하면 여기에 우리 아이의 1인칭 대사가 나타나요!"}
+              {status === 'error' ? errorMessage : '사진을 업로드하면 여기에 우리 아이의 1인칭 대사가 나타나요!'}
             </div>
           )}
         </section>
+
+        {status === 'success' && previewUrl ? (
+          <ShareCard
+            petImageUrl={previewUrl}
+            dialogue={speech}
+            petName={petName}
+            kakaoJavaScriptKey={process.env.NEXT_PUBLIC_KAKAO_JS_KEY}
+          />
+        ) : null}
 
         <section className="rounded-3xl bg-amber-50 p-5 text-center shadow-sm">
           <p className="text-sm font-semibold text-[#1B3A4B]">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
           <button
             type="button"
-            className="mt-3 w-full rounded-xl bg-brand-secondary hover:bg-brand-ctaHover px-4 py-3 text-sm font-bold text-white shadow-sm"
+            className="mt-3 w-full rounded-xl bg-brand-secondary px-4 py-3 text-sm font-bold text-white shadow-sm hover:bg-brand-ctaHover"
           >
             앱 다운로드
           </button>
         </section>
 
-        {errorMessage && status !== "error" && (
-          <p className="text-center text-xs font-medium text-rose-500">{errorMessage}</p>
-        )}
+        {errorMessage && status !== 'error' && <p className="text-center text-xs font-medium text-rose-500">{errorMessage}</p>}
       </section>
     </main>
   );
