@@ -17,6 +17,10 @@ const FAQ_ITEMS = [
   }
 ] as const;
 
+const pageTitle = 'PetHealth+ - 반려동물 진료비 비교 | 강아지 고양이 진료비 적정가 검색';
+const pageDescription =
+  '강아지·고양이 진료비를 전국 평균 데이터와 비교하고, 영수증 기반 AI 분석으로 우리 아이 진료비의 적정가를 확인해보세요.';
+
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -44,9 +48,27 @@ const faqJsonLd = {
 };
 
 export const metadata: Metadata = {
-  title: 'PetHealth+ - 반려동물 진료비 비교 | 강아지 고양이 진료비 적정가 검색',
-  description:
-    '강아지·고양이 진료비를 전국 평균 데이터와 비교하고, 영수증 기반 AI 분석으로 우리 아이 진료비의 적정가를 확인해보세요.'
+  title: pageTitle,
+  description: pageDescription,
+  alternates: {
+    canonical: '/'
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: 'https://pethealthplus.kr',
+    siteName: 'PetHealth+',
+    locale: 'ko_KR',
+    type: 'website',
+    images: [
+      {
+        url: 'https://pethealthplus.kr/og/home.png',
+        width: 1200,
+        height: 630,
+        alt: 'PetHealth+ 반려동물 진료비 데이터 플랫폼'
+      }
+    ]
+  }
 };
 
 export default function HomePage() {
@@ -114,11 +136,7 @@ export default function HomePage() {
           사용 방법
         </h2>
         <ol className="mt-6 grid gap-4 md:grid-cols-3">
-          {[
-            '진료비를 검색하세요',
-            'AI가 분석해드려요',
-            '앱에서 기록하면 더 정확해져요'
-          ].map((step, index) => (
+          {['진료비를 검색하세요', 'AI가 분석해드려요', '앱에서 기록하면 더 정확해져요'].map((step, index) => (
             <li key={step} className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
               <p className="text-sm font-bold text-brand-primary">Step {index + 1}</p>
               <p className="mt-2 font-semibold text-slate-800">{step}</p>
