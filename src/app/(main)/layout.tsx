@@ -8,7 +8,7 @@ type MainLayoutProps = Readonly<{
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-[#F8FAFB] text-[#1B3A4B] [font-family:Pretendard,system-ui,sans-serif]">
+    <div className="min-h-screen bg-[#FFF9F2] text-[#1B3A4B] [font-family:Pretendard,system-ui,sans-serif]">
       <Header />
       <main className="mx-auto w-full max-w-7xl px-4 py-8 pb-24 md:pb-8">{children}</main>
       <Footer />
