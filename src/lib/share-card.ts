@@ -1,10 +1,10 @@
 export const SHARE_CARD_WIDTH = 1080;
 export const SHARE_CARD_HEIGHT = 1080;
 
-const WARM_BACKGROUND = '#F8FAFB';
+const NAVY_BACKGROUND = '#12344A';
+const TEAL_ACCENT = '#2A9D8F';
 const BUBBLE_BACKGROUND = '#FFFFFF';
 const TEXT_COLOR = '#1B3A4B';
-const WATERMARK_COLOR = '#2A9D8F';
 
 export type ShareCardPayload = {
   petImageUrl: string;
@@ -115,48 +115,64 @@ export const renderShareCard = async (
   await document.fonts.load('700 50px Pretendard');
   await document.fonts.load('500 40px Pretendard');
 
-  context.fillStyle = WARM_BACKGROUND;
+  context.fillStyle = NAVY_BACKGROUND;
   context.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
 
+  const gradient = context.createLinearGradient(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
+  gradient.addColorStop(0, '#1B4B67');
+  gradient.addColorStop(1, '#12344A');
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
+
+  context.fillStyle = TEAL_ACCENT;
+  context.globalAlpha = 0.2;
+  context.beginPath();
+  context.ellipse(220, 180, 260, 180, 0, 0, Math.PI * 2);
+  context.fill();
+  context.beginPath();
+  context.ellipse(900, 860, 240, 160, 0, 0, Math.PI * 2);
+  context.fill();
+  context.globalAlpha = 1;
+
   const petImage = await loadImage(payload.petImageUrl);
-  const topAreaHeight = Math.floor(SHARE_CARD_HEIGHT * 0.6);
+  const imageSize = 320;
+  const imageX = (SHARE_CARD_WIDTH - imageSize) / 2;
+  const imageY = 96;
 
-  const sourceRatio = petImage.width / petImage.height;
-  const targetRatio = SHARE_CARD_WIDTH / topAreaHeight;
+  context.save();
+  context.beginPath();
+  context.arc(SHARE_CARD_WIDTH / 2, imageY + imageSize / 2, imageSize / 2, 0, Math.PI * 2);
+  context.closePath();
+  context.clip();
 
-  let sourceWidth = petImage.width;
-  let sourceHeight = petImage.height;
-  let sourceX = 0;
-  let sourceY = 0;
+  const sourceSize = Math.min(petImage.width, petImage.height);
+  const sourceX = (petImage.width - sourceSize) / 2;
+  const sourceY = (petImage.height - sourceSize) / 2;
+  context.drawImage(petImage, sourceX, sourceY, sourceSize, sourceSize, imageX, imageY, imageSize, imageSize);
+  context.restore();
 
-  if (sourceRatio > targetRatio) {
-    sourceWidth = petImage.height * targetRatio;
-    sourceX = (petImage.width - sourceWidth) / 2;
-  } else {
-    sourceHeight = petImage.width / targetRatio;
-    sourceY = (petImage.height - sourceHeight) / 2;
-  }
+  context.lineWidth = 14;
+  context.strokeStyle = '#FFFFFF';
+  context.beginPath();
+  context.arc(SHARE_CARD_WIDTH / 2, imageY + imageSize / 2, imageSize / 2, 0, Math.PI * 2);
+  context.stroke();
 
-  context.drawImage(
-    petImage,
-    sourceX,
-    sourceY,
-    sourceWidth,
-    sourceHeight,
-    0,
-    0,
-    SHARE_CARD_WIDTH,
-    topAreaHeight
-  );
-
-  const bubbleTop = topAreaHeight + 40;
-  const bubbleHeight = SHARE_CARD_HEIGHT - bubbleTop - 60;
-  const bubbleX = 48;
+  const bubbleTop = imageY + imageSize + 72;
+  const bubbleHeight = 350;
+  const bubbleX = 80;
   const bubbleWidth = SHARE_CARD_WIDTH - bubbleX * 2;
 
   context.fillStyle = BUBBLE_BACKGROUND;
   context.beginPath();
   context.roundRect(bubbleX, bubbleTop, bubbleWidth, bubbleHeight, 40);
+  context.fill();
+
+  context.fillStyle = BUBBLE_BACKGROUND;
+  context.beginPath();
+  context.moveTo(SHARE_CARD_WIDTH / 2 - 28, bubbleTop);
+  context.lineTo(SHARE_CARD_WIDTH / 2 + 28, bubbleTop);
+  context.lineTo(SHARE_CARD_WIDTH / 2, bubbleTop - 34);
+  context.closePath();
   context.fill();
 
   context.fillStyle = TEXT_COLOR;
@@ -169,15 +185,28 @@ export const renderShareCard = async (
 
   context.font = '500 42px Pretendard, Apple SD Gothic Neo, sans-serif';
   const textMaxWidth = bubbleWidth - 96;
-  const lines = wrapText(context, `“${payload.dialogue}”`, textMaxWidth, 4);
+  const lines = wrapText(context, `“${payload.dialogue}”`, textMaxWidth, 3);
   lines.forEach((line, index) => {
     context.fillText(line, bubbleX + 48, bubbleTop + 140 + index * 60);
   });
 
+  context.fillStyle = '#FFFFFF';
+  context.globalAlpha = 0.95;
+  context.beginPath();
+  context.roundRect(80, SHARE_CARD_HEIGHT - 170, SHARE_CARD_WIDTH - 160, 92, 28);
+  context.fill();
+  context.globalAlpha = 1;
+
+  context.font = '700 42px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.fillStyle = TEAL_ACCENT;
+  context.textAlign = 'left';
+  context.textBaseline = 'middle';
+  context.fillText('PetHealth+', 120, SHARE_CARD_HEIGHT - 124);
+
   context.font = '500 28px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.fillStyle = WATERMARK_COLOR;
+  context.fillStyle = '#1B3A4B';
   context.textAlign = 'right';
-  context.fillText('PetHealth+', SHARE_CARD_WIDTH - 56, SHARE_CARD_HEIGHT - 42);
+  context.fillText('pethealthplus.co.kr/pet-talker', SHARE_CARD_WIDTH - 120, SHARE_CARD_HEIGHT - 124);
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((result) => {

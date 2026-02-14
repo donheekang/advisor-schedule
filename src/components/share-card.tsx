@@ -1,22 +1,16 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  downloadShareCard,
-  getPetTalkerResultUrl,
-  renderShareCard,
-  type ShareCardRenderResult
-} from '@/lib/share-card';
+import { downloadShareCard, renderShareCard, type ShareCardRenderResult } from '@/lib/share-card';
 
 type ShareCardProps = {
-  resultId: string;
   petImageUrl: string;
   dialogue: string;
   petName?: string;
   kakaoJavaScriptKey?: string;
 };
 
-type KakaoLinkPayload = {
+type KakaoSharePayload = {
   objectType: 'feed';
   content: {
     title: string;
@@ -27,7 +21,7 @@ type KakaoLinkPayload = {
       webUrl: string;
     };
   };
-  buttons?: Array<{
+  buttons: Array<{
     title: string;
     link: {
       mobileWebUrl: string;
@@ -39,8 +33,8 @@ type KakaoLinkPayload = {
 type KakaoApi = {
   isInitialized: () => boolean;
   init: (appKey: string) => void;
-  Link: {
-    sendDefault: (payload: KakaoLinkPayload) => void;
+  Share: {
+    sendDefault: (payload: KakaoSharePayload) => void;
   };
 };
 
@@ -50,51 +44,19 @@ declare global {
   }
 }
 
-const KAKAO_SDK_URL = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js';
-
-const useKakaoSdk = (appKey?: string) => {
-  useEffect(() => {
-    if (!appKey) {
-      return;
-    }
-
-    const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${KAKAO_SDK_URL}"]`);
-
-    const initialize = () => {
-      if (!window.Kakao) {
-        return;
-      }
-
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(appKey);
-      }
-    };
-
-    if (existingScript) {
-      initialize();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = KAKAO_SDK_URL;
-    script.async = true;
-    script.onload = initialize;
-    document.body.appendChild(script);
-
-    return () => {
-      script.onload = null;
-    };
-  }, [appKey]);
-};
-
-export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaScriptKey }: ShareCardProps) {
+export function ShareCard({ petImageUrl, dialogue, petName, kakaoJavaScriptKey }: ShareCardProps) {
   const [card, setCard] = useState<ShareCardRenderResult | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  useKakaoSdk(kakaoJavaScriptKey);
+  const resultUrl = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return '/pet-talker';
+    }
 
-  const resultUrl = useMemo(() => getPetTalkerResultUrl(resultId), [resultId]);
+    return `${window.location.origin}/pet-talker`;
+  }, []);
 
   const generateCard = useCallback(async () => {
     setIsGenerating(true);
@@ -113,8 +75,27 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
   }, [dialogue, petImageUrl, petName]);
 
   useEffect(() => {
+    if (!kakaoJavaScriptKey || !window.Kakao) {
+      return;
+    }
+
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(kakaoJavaScriptKey);
+    }
+  }, [kakaoJavaScriptKey]);
+
+  useEffect(() => {
     void generateCard();
   }, [generateCard]);
+
+  useEffect(() => {
+    if (!toastMessage) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => setToastMessage(null), 1800);
+    return () => window.clearTimeout(timer);
+  }, [toastMessage]);
 
   const handleDownload = async () => {
     const currentCard = card ?? (await generateCard());
@@ -125,46 +106,19 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
     downloadShareCard(currentCard.blob);
   };
 
-  const handleShare = async () => {
-    const currentCard = card ?? (await generateCard());
-    if (!currentCard) {
-      return;
-    }
-
-    if (navigator.share && navigator.canShare) {
-      const file = new File([currentCard.blob], 'pet-talker-share-card.png', {
-        type: 'image/png'
-      });
-
-      if (navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: '우리 강아지가 이렇게 말한대 😂',
-          text: '펫토커 결과를 공유해보세요!',
-          url: resultUrl,
-          files: [file]
-        });
-        return;
-      }
-    }
-
-    await navigator.clipboard.write([
-      new ClipboardItem({
-        'image/png': currentCard.blob
-      })
-    ]);
-  };
-
   const handleKakaoShare = async () => {
     const currentCard = card ?? (await generateCard());
     if (!currentCard || !window.Kakao) {
       return;
     }
 
-    window.Kakao.Link.sendDefault({
+    const titlePetName = petName ? `${petName}이(가)` : '우리 아이가';
+
+    window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '우리 강아지가 이렇게 말한대 😂',
-        description: '펫토커 결과를 확인해보세요.',
+        title: `우리 ${titlePetName} 이렇게 말한대 😂`,
+        description: dialogue,
         imageUrl: currentCard.dataUrl,
         link: {
           mobileWebUrl: resultUrl,
@@ -173,7 +127,7 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
       },
       buttons: [
         {
-          title: '결과 보기',
+          title: '나도 해보기',
           link: {
             mobileWebUrl: resultUrl,
             webUrl: resultUrl
@@ -183,10 +137,15 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
     });
   };
 
+  const handleCopyLink = async () => {
+    await navigator.clipboard.writeText(resultUrl);
+    setToastMessage('링크가 복사되었어요!');
+  };
+
   return (
     <section className="space-y-4 rounded-3xl bg-brand-background p-6">
       <h2 className="text-xl font-bold text-brand-primary">SNS 공유 카드</h2>
-      <p className="text-sm text-slate-600">인스타그램/카카오톡에 바로 공유할 수 있는 정사각형 카드예요.</p>
+      <p className="text-sm text-slate-600">다운로드, 카카오톡 공유, 링크 복사를 한 번에 할 수 있어요.</p>
 
       <div className="overflow-hidden rounded-2xl bg-white">
         {card ? (
@@ -199,6 +158,7 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
       </div>
 
       {errorMessage ? <p className="text-sm text-rose-500">{errorMessage}</p> : null}
+      {toastMessage ? <p className="text-sm font-semibold text-brand-secondary">{toastMessage}</p> : null}
 
       <div className="grid gap-3 sm:grid-cols-3">
         <button
@@ -220,10 +180,10 @@ export function ShareCard({ resultId, petImageUrl, dialogue, petName, kakaoJavaS
         <button
           className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-brand-primary ring-1 ring-slate-200 disabled:opacity-60"
           disabled={isGenerating}
-          onClick={() => void handleShare()}
+          onClick={() => void handleCopyLink()}
           type="button"
         >
-          클립보드/공유
+          링크 복사
         </button>
       </div>
     </section>
