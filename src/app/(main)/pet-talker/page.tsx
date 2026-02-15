@@ -17,6 +17,8 @@ type PetInfo = {
   birth_date: string | null;
 };
 
+type TalkStyle = "funny" | "touching" | "tsundere";
+
 type PetsApiResponse = {
   pets?: PetInfo[];
 };
@@ -31,6 +33,18 @@ const ERROR_MESSAGE_BY_TYPE: Record<ErrorType, string> = {
   invalid_format: "jpg, png, webp 형식만 올릴 수 있어요",
   file_too_large: "5MB 이하 사진만 올릴 수 있어요",
   unknown: "대사를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요."
+};
+
+const STYLE_OPTIONS: Array<{ value: TalkStyle; label: string; emoji: string; description: string }> = [
+  { value: "funny", label: "웃긴 버전", emoji: "😂", description: "드라마틱한 과장과 유머" },
+  { value: "touching", label: "감동 버전", emoji: "🥺", description: "울컥하는 진심 한마디" },
+  { value: "tsundere", label: "츤데레 버전", emoji: "😤", description: "도도한 척, 속은 따뜻" }
+];
+
+const STYLE_BADGE_LABEL: Record<TalkStyle, string> = {
+  funny: "😂 웃긴 버전",
+  touching: "🥺 감동 버전",
+  tsundere: "😤 츤데레 버전"
 };
 
 function toDataUrl(file: File): Promise<string> {
@@ -83,9 +97,12 @@ export default function PetTalkerPage() {
   const [selectedPetId, setSelectedPetId] = useState<string>("");
   const [typingDots, setTypingDots] = useState(1);
   const [isResultVisible, setIsResultVisible] = useState(false);
+  const [style, setStyle] = useState<TalkStyle>("funny");
+  const [uploadedImageData, setUploadedImageData] = useState<string | null>(null);
 
   const animationFrameRef = useRef<number | null>(null);
   const targetSpeechRef = useRef("");
+  const styleSectionRef = useRef<HTMLElement | null>(null);
 
   const usageText = useMemo(() => `오늘 ${usageCount}/2회 사용`, [usageCount]);
   const selectedPet = useMemo(() => pets.find((pet) => pet.id === selectedPetId) ?? null, [pets, selectedPetId]);
@@ -200,6 +217,29 @@ export default function PetTalkerPage() {
     }, 28);
   };
 
+  const requestSpeech = async (image: string) => {
+    const response = await fetch("/api/pet-talker", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({
+        image,
+        style,
+        petInfo: selectedPet
+          ? {
+              name: selectedPet.name,
+              breed: selectedPet.breed ?? undefined,
+              age: getPetAge(selectedPet.birth_date) ?? undefined
+            }
+          : undefined
+      })
+    });
+
+    return response;
+  };
+
   const processFile = async (file: File) => {
     setErrorType(null);
     setErrorMessage("");
@@ -219,23 +259,8 @@ export default function PetTalkerPage() {
 
     try {
       const image = await toDataUrl(file);
-      const response = await fetch("/api/pet-talker", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify({
-          image,
-          petInfo: selectedPet
-            ? {
-                name: selectedPet.name,
-                breed: selectedPet.breed ?? undefined,
-                age: getPetAge(selectedPet.birth_date) ?? undefined
-              }
-            : undefined
-        })
-      });
+      setUploadedImageData(image);
+      const response = await requestSpeech(image);
 
       if (!response.ok) {
         const errorData = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
@@ -320,6 +345,84 @@ export default function PetTalkerPage() {
     }
   };
 
+  const handleRegenerateWithStyle = async () => {
+    if (!uploadedImageData) {
+      setErrorMessage("먼저 사진을 올려주세요.");
+      return;
+    }
+
+    setStatus("loading");
+    setSpeech("");
+    setErrorType(null);
+    setErrorMessage("");
+
+    try {
+      const response = await requestSpeech(uploadedImageData);
+
+      if (!response.ok) {
+        const errorData = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
+
+        if (response.status === 429 || errorData?.error === "limit_exceeded") {
+          setError("usage_exceeded");
+          return;
+        }
+
+        if (response.status === 503) {
+          setError("missing_api_key");
+          return;
+        }
+
+        throw new Error(errorData?.message ?? "request_failed");
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error("stream_unavailable");
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let finalSpeech = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const chunks = buffer.split("\n\n");
+        buffer = chunks.pop() ?? "";
+
+        for (const chunk of chunks) {
+          if (!chunk.startsWith("data:")) {
+            continue;
+          }
+
+          const json = chunk.slice(5).trim();
+          if (!json) {
+            continue;
+          }
+
+          const payload = JSON.parse(json) as { type?: string; text?: string; error?: string };
+          if (payload.type === "text_delta" && payload.text) {
+            finalSpeech += payload.text;
+          }
+        }
+      }
+
+      startStreamingText(finalSpeech || "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!");
+      setStatus("success");
+    } catch (error) {
+      if (error instanceof TypeError) {
+        setError("network");
+        return;
+      }
+
+      setError("unknown");
+    }
+  };
+
   const handleFileInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -383,6 +486,40 @@ export default function PetTalkerPage() {
             </select>
           </section>
         ) : null}
+
+        <section ref={styleSectionRef} className="space-y-3 rounded-2xl bg-white p-4 shadow-sm">
+          <p className="text-sm font-semibold text-[#1B3A4B]">대사 스타일을 골라줘</p>
+          <div className="grid grid-cols-3 gap-2">
+            {STYLE_OPTIONS.map((option) => {
+              const isSelected = style === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setStyle(option.value)}
+                  className={`rounded-2xl border px-2 py-3 text-center text-sm font-bold transition ${
+                    isSelected ? "border-[#E67E22] bg-[#E67E22] text-white" : "border-[#D1D5DB] bg-white text-[#1B3A4B]"
+                  }`}
+                >
+                  <span className="block">{option.emoji}</span>
+                  <span className="mt-1 block">{option.label}</span>
+                  <span className={`mt-2 block text-[11px] font-medium ${isSelected ? "text-white/90" : "text-[#6B7280]"}`}>
+                    {option.description}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {uploadedImageData ? (
+            <button
+              type="button"
+              onClick={handleRegenerateWithStyle}
+              className="w-full rounded-xl bg-[#1B3A4B] px-3 py-2 text-sm font-semibold text-white"
+            >
+              선택한 스타일로 다시 생성하기
+            </button>
+          ) : null}
+        </section>
 
         {status !== "success" ? (
           <div
@@ -459,6 +596,7 @@ export default function PetTalkerPage() {
 
           {status === "success" && previewUrl && (
             <div className={`space-y-5 transition-all duration-500 ${isResultVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}>
+              <p className="inline-flex rounded-full bg-[#FFF4E8] px-3 py-1 text-xs font-semibold text-[#E67E22]">{STYLE_BADGE_LABEL[style]}</p>
               <div className="relative rounded-3xl bg-gradient-to-br from-[#2A9D8F] to-[#1B6F78] px-6 py-5 text-xl font-extrabold leading-relaxed text-white shadow-lg">
                 <span className="absolute -bottom-2 left-10 h-5 w-5 rotate-45 bg-[#1B6F78]" aria-hidden />
                 “{speech}”
@@ -498,6 +636,13 @@ export default function PetTalkerPage() {
                   공유하기
                 </button>
               </div>
+              <button
+                type="button"
+                onClick={() => styleSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="w-full rounded-2xl border border-[#E67E22]/40 bg-[#FFF4E8] px-4 py-3 text-sm font-bold text-[#C96C1E]"
+              >
+                다른 스타일로 다시 해보기
+              </button>
             </div>
           )}
 
