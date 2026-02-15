@@ -40,7 +40,7 @@ const EMOTION_META: Record<EmotionCode, EmotionMeta> = {
   proud: { emoji: "😏", label: "도도", background: "#F3E8FF", border: "#8B5CF6", animationClassName: "emotion-animate-shake" },
   love: { emoji: "🥰", label: "사랑", background: "#FCE7F3", border: "#EC4899", animationClassName: "emotion-animate-heartbeat" },
   sleepy: { emoji: "😴", label: "나른", background: "#E0E7FF", border: "#6366F1", animationClassName: "emotion-animate-breathe" },
-  hungry: { emoji: "🤤", label: "배고픔", background: "#FFEDD5", border: "#F97316", animationClassName: "emotion-animate-wiggle" }
+  hungry: { emoji: "🤤", label: "배고픔", background: "#FFEDD5", border: "#F97316", animationClassName: "emotion-animate-bounce" }
 };
 
 const ERROR_MESSAGE_BY_TYPE: Record<ErrorType, string> = {
@@ -570,12 +570,14 @@ export default function PetTalkerPage() {
           }
         }
         @keyframes tilt {
-          0%,
-          100% {
-            transform: rotate(0deg);
+          0% {
+            transform: rotate(-3deg);
           }
           50% {
             transform: rotate(3deg);
+          }
+          100% {
+            transform: rotate(-3deg);
           }
         }
         @keyframes shake {
@@ -599,18 +601,6 @@ export default function PetTalkerPage() {
             transform: scale(1.03);
           }
         }
-        @keyframes wiggle {
-          0%,
-          100% {
-            transform: rotate(0deg);
-          }
-          25% {
-            transform: rotate(-2deg);
-          }
-          75% {
-            transform: rotate(2deg);
-          }
-        }
         .emotion-animate-bounce {
           animation: bounce 1.5s ease-in-out infinite;
         }
@@ -626,16 +616,12 @@ export default function PetTalkerPage() {
         .emotion-animate-heartbeat {
           animation: heartbeat 1.2s ease-in-out infinite;
         }
-        .emotion-animate-wiggle {
-          animation: wiggle 1s ease-in-out infinite;
-        }
         @media (prefers-reduced-motion: reduce) {
           .emotion-animate-bounce,
           .emotion-animate-breathe,
           .emotion-animate-tilt,
           .emotion-animate-shake,
-          .emotion-animate-heartbeat,
-          .emotion-animate-wiggle {
+          .emotion-animate-heartbeat {
             animation: none;
           }
         }
