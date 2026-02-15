@@ -48,12 +48,13 @@ function parseBase64Image(imageBase64: string): { mediaType: SupportedImageMedia
     return { mediaType, data };
   }
 
+  const normalized = trimmed.replace(/\s/g, '');
   const bareBase64Pattern = /^[A-Za-z0-9+/]+={0,2}$/;
-  if (!bareBase64Pattern.test(trimmed)) {
+  if (!bareBase64Pattern.test(normalized)) {
     throw new Error('INVALID_IMAGE_FORMAT');
   }
 
-  return { mediaType: 'image/jpeg', data: trimmed };
+  return { mediaType: 'image/jpeg', data: normalized };
 }
 
 function getUsageKey(identifier: string): string {
@@ -161,7 +162,11 @@ async function createAnthropicMessageStream(params: {
 export async function POST(request: NextRequest) {
   const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
   if (!anthropicApiKey) {
-    return NextResponse.json({ error: '서비스 준비 중' }, { status: 503 });
+    console.error('[pet-talker] Missing ANTHROPIC_API_KEY');
+    return NextResponse.json(
+      { error: '서비스 준비 중', message: 'ANTHROPIC_API_KEY가 설정되지 않았습니다.' },
+      { status: 503 }
+    );
   }
 
   try {
@@ -174,7 +179,12 @@ export async function POST(request: NextRequest) {
     let image: { mediaType: SupportedImageMediaType; data: string };
     try {
       image = parseBase64Image(body.image);
-    } catch {
+    } catch (parseError) {
+      console.error('[pet-talker] Invalid image payload', {
+        error: parseError,
+        hasPrefix: body.image.startsWith('data:'),
+        length: body.image.length
+      });
       return NextResponse.json({ error: '이미지 형식이 올바르지 않습니다.' }, { status: 400 });
     }
 
@@ -237,10 +247,11 @@ export async function POST(request: NextRequest) {
 
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'done' })}\n\n`));
           controller.close();
-        } catch {
+        } catch (streamError) {
+          console.error('[pet-talker] Claude stream error', streamError);
           controller.enqueue(
             encoder.encode(
-              `data: ${JSON.stringify({ type: 'error', error: '대사 생성에 실패했습니다. 잠시 후 다시 시도해줘.' })}\n\n`
+              `data: ${JSON.stringify({ type: 'error', error: '대사 생성에 실패했습니다. 잠시 후 다시 시도해줘.', detail: streamError instanceof Error ? streamError.message : 'UNKNOWN_STREAM_ERROR' })}\n\n`
             )
           );
           controller.close();
@@ -256,7 +267,14 @@ export async function POST(request: NextRequest) {
         Connection: 'keep-alive'
       }
     });
-  } catch {
-    return NextResponse.json({ error: '펫토커 처리 중 오류가 발생했습니다.' }, { status: 500 });
+  } catch (error) {
+    console.error('[pet-talker] POST handler error', error);
+    return NextResponse.json(
+      {
+        error: '펫토커 처리 중 오류가 발생했습니다.',
+        message: error instanceof Error ? error.message : 'UNKNOWN_ERROR'
+      },
+      { status: 500 }
+    );
   }
 }
