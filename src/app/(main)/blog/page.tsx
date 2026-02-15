@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { getAllBlogPosts } from '@/lib/blog';
@@ -26,16 +25,6 @@ export default async function BlogListPage() {
               key={post.slug}
               className="overflow-hidden rounded-3xl bg-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="relative h-48 w-full">
-                {post.thumbnail ? (
-                  <Image src={post.thumbnail} alt={`${post.title} 썸네일`} fill className="object-cover" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FFE6D0] via-[#FFD7C2] to-[#FFD1E8]">
-                    <span className="text-lg font-semibold text-[#8A5A44]">PetHealth+ Blog</span>
-                  </div>
-                )}
-              </div>
-
               <div className="space-y-3 p-6">
                 <p className="text-sm text-[#8A6A58]">{post.date}</p>
                 <h2 className="text-xl font-bold text-[#4F2A1D]">{post.title}</h2>

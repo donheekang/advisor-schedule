@@ -50,22 +50,24 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
   }
 
   return (
-    <article className="mx-auto max-w-2xl space-y-8 px-4 py-10 md:px-0">
-      <header className="space-y-3 border-b border-[#E9D3C2] pb-6">
-        <h1 className="text-3xl font-extrabold text-[#4F2A1D]">{post.title}</h1>
-        <p className="text-sm text-[#8A6A58]">{new Date(post.date).toLocaleDateString('ko-KR')}</p>
-      </header>
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+      <article className="mx-auto max-w-2xl space-y-8">
+        <header className="space-y-3 border-b border-[#E9D3C2] pb-6">
+          <h1 className="text-3xl font-extrabold text-[#4F2A1D]">{post.title}</h1>
+          <p className="text-sm text-[#8A6A58]">{new Date(post.date).toLocaleDateString('ko-KR')}</p>
+        </header>
 
-      <section
-        className="prose prose-lg max-w-none text-[#2D2D2D] leading-relaxed prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D]"
-        dangerouslySetInnerHTML={{ __html: post.html }}
-      />
+        <section
+          className="prose prose-lg max-w-none text-[#2D2D2D] leading-relaxed prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D]"
+          dangerouslySetInnerHTML={{ __html: post.html }}
+        />
 
-      <footer className="border-t border-[#E9D3C2] pt-5">
-        <Link href="/blog" className="font-semibold text-[#B1643A] hover:text-[#8C4725]">
-          다른 글 보기
-        </Link>
-      </footer>
-    </article>
+        <footer className="border-t border-[#E9D3C2] pt-5">
+          <Link href="/blog" className="font-semibold text-[#B1643A] hover:text-[#8C4725]">
+            다른 글 보기
+          </Link>
+        </footer>
+      </article>
+    </section>
   );
 }
