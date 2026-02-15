@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-brand-primary text-white">
+    <footer className="border-t border-white/10 bg-[#1B3A4B] text-white">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-200">
           <Link href="/pet-talker" className="transition hover:text-brand-secondary">

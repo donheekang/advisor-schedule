@@ -35,11 +35,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-brand-primary/10 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-brand-primary/10 bg-white backdrop-blur">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4">
           <Link
             href="/"
-            className="text-xl font-extrabold tracking-tight text-brand-primary transition hover:text-brand-navyDark"
+            className="text-xl font-extrabold tracking-tight text-[#1B3A4B] transition hover:text-brand-navyDark"
           >
             PetHealth+
           </Link>
@@ -73,7 +73,7 @@ export default function Header() {
                   onClick={() => {
                     void signOut();
                   }}
-                  className="rounded-full bg-brand-secondary px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover"
+                  className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover"
                 >
                   로그아웃
                 </button>
@@ -82,7 +82,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setIsLoginModalOpen(true)}
-                className="rounded-full bg-brand-secondary px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover"
+                className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover"
               >
                 로그인
               </button>
@@ -124,7 +124,7 @@ export default function Header() {
               {isLoggedIn ? (
                 <button
                   type="button"
-                  className="mt-1 rounded-lg bg-brand-secondary px-3 py-2 text-sm font-semibold text-white"
+                  className="mt-1 rounded-lg bg-[#E67E22] px-3 py-2 text-sm font-semibold text-white"
                   onClick={() => {
                     void signOut();
                     setIsMenuOpen(false);
@@ -135,7 +135,7 @@ export default function Header() {
               ) : (
                 <button
                   type="button"
-                  className="mt-1 rounded-lg bg-brand-secondary px-3 py-2 text-sm font-semibold text-white"
+                  className="mt-1 rounded-lg bg-[#E67E22] px-3 py-2 text-sm font-semibold text-white"
                   onClick={() => {
                     setIsLoginModalOpen(true);
                     setIsMenuOpen(false);

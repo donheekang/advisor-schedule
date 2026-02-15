@@ -74,7 +74,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF3E6] via-[#FDE3C4] to-[#F7CFA0] px-6 py-16 md:px-12 md:py-20">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFE8CF] via-[#F7DFC2] to-[#F2D9B9] px-6 py-16 md:px-12 md:py-20">
         <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-brand-secondary/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-12 h-56 w-56 rounded-full bg-[#F2B372]/40 blur-3xl" />
         <div className="relative max-w-3xl">
@@ -90,7 +90,7 @@ export default function HomePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/cost-search"
-              className="rounded-xl bg-brand-secondary px-6 py-3 text-base font-bold text-white transition hover:bg-brand-ctaHover"
+              className="rounded-xl bg-[#E67E22] px-6 py-3 text-base font-bold text-white transition hover:bg-brand-ctaHover"
             >
               진료비 검색하기
             </Link>
@@ -149,7 +149,7 @@ export default function HomePage() {
         <h2 id="trust-heading" className="text-2xl font-bold text-brand-primary md:text-3xl">
           신뢰 데이터 & 보호자 후기
         </h2>
-        <div className="mt-6 rounded-2xl bg-slate-900 px-6 py-8 text-white">
+        <div className="mt-6 rounded-2xl bg-brand-navyDark px-6 py-8 text-white">
           <p className="text-sm text-slate-200">진료비 데이터</p>
           <p className="mt-2 text-3xl font-extrabold md:text-4xl">128,540건 분석 완료</p>
         </div>
@@ -172,7 +172,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-14 rounded-3xl bg-brand-secondary px-6 py-10 text-center text-white md:px-10">
+      <section className="mt-14 rounded-3xl bg-[#E67E22] px-6 py-10 text-center text-white md:px-10">
         <h2 className="text-2xl font-bold md:text-3xl">앱과 함께 더 정확한 진료비 관리를 시작하세요</h2>
         <p className="mt-3 text-[#FFF3E6]">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
