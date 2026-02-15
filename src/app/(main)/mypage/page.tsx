@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { useAuth } from '@/components/auth-provider';
 import { LoginModal } from '@/components/login-modal';
 import { apiClient } from '@/lib/api-client';
@@ -32,20 +31,6 @@ type RecordTimelineItem = {
   itemName: string;
   totalAmount: number;
 };
-
-type ApiClaim = {
-  id?: string;
-  claim_type?: string;
-  status?: string;
-  created_at?: string;
-};
-
-type DocumentItem = {
-  id: string;
-  title: string;
-  subtitle: string;
-};
-
 const currencyFormatter = new Intl.NumberFormat('ko-KR');
 
 function getAgeLabel(birthDate: string | null): string {
@@ -107,30 +92,12 @@ function normalizeRecordTimeline(records: ApiRecord[]): RecordTimelineItem[] {
     .slice(0, 5);
 }
 
-function normalizeDocuments(claims: ApiClaim[], docCount: number): DocumentItem[] {
-  if (claims.length > 0) {
-    return claims.slice(0, 4).map((claim, index) => ({
-      id: claim.id ?? `claim-${index}`,
-      title: claim.claim_type ? `${claim.claim_type} 문서` : '보험 청구 문서',
-      subtitle: `${claim.status ?? '상태 확인 중'} · ${formatVisitDate(claim.created_at ?? '')}`
-    }));
-  }
-
-  return Array.from({ length: Math.min(docCount, 3) }, (_, index) => ({
-    id: `doc-${index}`,
-    title: `업로드 문서 ${index + 1}`,
-    subtitle: '앱에서 확인 가능'
-  }));
-}
-
 export default function MyPage() {
   const { user, loading, signOut } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [pets, setPets] = useState<PetData[]>([]);
   const [records, setRecords] = useState<RecordTimelineItem[]>([]);
-  const [documents, setDocuments] = useState<DocumentItem[]>([]);
-  const [expandedPetId, setExpandedPetId] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -139,7 +106,6 @@ export default function MyPage() {
       setSummary(null);
       setPets([]);
       setRecords([]);
-      setDocuments([]);
       return;
     }
 
@@ -150,11 +116,10 @@ export default function MyPage() {
       setErrorMessage(null);
 
       try {
-        const [summaryResponse, petsResponse, recordsResponse, claimsResponse] = await Promise.all([
+        const [summaryResponse, petsResponse, recordsResponse] = await Promise.all([
           apiClient.getMeSummary() as Promise<SummaryData>,
           apiClient.listPets() as Promise<PetsApiResponse | PetData[]>,
-          apiClient.listRecords(undefined, true) as Promise<ApiRecord[]>,
-          apiClient.listClaims() as Promise<ApiClaim[]>
+          apiClient.listRecords(undefined, true) as Promise<ApiRecord[]>
         ]);
 
         if (!isMounted) {
@@ -163,12 +128,10 @@ export default function MyPage() {
 
         const petList = Array.isArray(petsResponse) ? petsResponse : (petsResponse.pets ?? []);
         const recordList = Array.isArray(recordsResponse) ? recordsResponse : [];
-        const claimList = Array.isArray(claimsResponse) ? claimsResponse : [];
 
         setSummary(summaryResponse);
         setPets(petList);
         setRecords(normalizeRecordTimeline(recordList));
-        setDocuments(normalizeDocuments(claimList, summaryResponse.doc_count));
       } catch {
         if (!isMounted) {
           return;
@@ -219,8 +182,8 @@ export default function MyPage() {
 
   return (
     <>
-      <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-7">
-        <header className="rounded-3xl bg-white p-6 shadow-lg sm:p-7">
+      <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8">
+        <header className="rounded-3xl bg-white p-6 shadow-lg sm:p-8">
           <div className="flex flex-wrap items-center gap-5">
             <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#FB923C] bg-[#FFF7ED] text-3xl shadow-inner">
               {user.displayName?.[0] ?? user.email?.[0]?.toUpperCase() ?? 'U'}
@@ -240,57 +203,22 @@ export default function MyPage() {
         {isFetching ? <p className="text-sm text-slate-600">데이터를 불러오는 중이에요...</p> : null}
         {errorMessage ? <p className="rounded-xl bg-rose-50 p-3 text-sm text-rose-600">{errorMessage}</p> : null}
 
-        <section className="rounded-3xl bg-white/90 p-5 shadow-sm ring-1 ring-[#FED7AA]/50">
+        <section className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#FED7AA]/40 sm:p-6">
           <h2 className="text-xl font-bold text-[#7C2D12]">🐾 우리 아이들</h2>
           <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-            {pets.map((pet) => {
-              const isExpanded = expandedPetId === pet.id;
-
-              return (
-                <article key={pet.id} className="rounded-2xl border border-[#FED7AA] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                  <button
-                    type="button"
-                    onClick={() => setExpandedPetId(isExpanded ? null : pet.id)}
-                    className="flex w-full items-start justify-between text-left"
-                  >
-                    <div>
-                      <p className="text-xl">{getPetIcon(pet.species)}</p>
-                      <h3 className="mt-1 text-base font-bold text-[#9A3412]">{pet.name}</h3>
-                      <p className="text-sm text-slate-600">
-                        {pet.breed ?? pet.species} · {getAgeLabel(pet.birth_date)}
-                      </p>
-                    </div>
-                    <span className="text-sm text-[#C2410C]">{isExpanded ? '접기' : '자세히 보기'}</span>
-                  </button>
-
-                  {isExpanded ? (
-                    <dl className="mt-3 space-y-1 rounded-xl bg-[#FFF7ED] p-3 text-sm text-slate-700">
-                      <div className="flex items-center justify-between">
-                        <dt>품종</dt>
-                        <dd>{pet.breed ?? '정보 없음'}</dd>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <dt>체중</dt>
-                        <dd>{pet.weight_kg ? `${pet.weight_kg}kg` : '정보 없음'}</dd>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <dt>기록 보기</dt>
-                        <dd>
-                          <Link className="font-semibold text-[#EA580C]" href={`/mypage/records?petId=${encodeURIComponent(pet.id)}`}>
-                            이동
-                          </Link>
-                        </dd>
-                      </div>
-                    </dl>
-                  ) : null}
-                </article>
-              );
-            })}
+            {pets.map((pet) => (
+              <article key={pet.id} className="rounded-2xl border border-[#FED7AA] bg-[#FFFBF7] p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <p className="text-xl">{getPetIcon(pet.species)}</p>
+                <h3 className="mt-1 text-lg font-bold text-[#9A3412]">{pet.name}</h3>
+                <p className="mt-1 text-sm text-slate-600">품종: {pet.breed ?? pet.species}</p>
+                <p className="text-sm text-slate-600">나이: {getAgeLabel(pet.birth_date)}</p>
+              </article>
+            ))}
           </div>
           {pets.length === 0 ? <p className="mt-4 text-sm text-slate-500">등록된 반려동물이 없어요.</p> : null}
         </section>
 
-        <section className="rounded-3xl bg-white/90 p-5 shadow-sm ring-1 ring-[#FED7AA]/50">
+        <section className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#FED7AA]/40 sm:p-6">
           <h2 className="text-xl font-bold text-[#7C2D12]">📋 진료 기록</h2>
           <div className="relative mt-4 space-y-4 pl-6 before:absolute before:bottom-2 before:left-[0.45rem] before:top-2 before:w-0.5 before:bg-[#FDBA74]/60 before:content-['']">
             {records.map((record) => (
@@ -304,19 +232,6 @@ export default function MyPage() {
             ))}
           </div>
           {records.length === 0 ? <p className="mt-4 text-sm text-slate-500">최근 진료 기록이 없어요.</p> : null}
-        </section>
-
-        <section className="rounded-3xl bg-white/90 p-5 shadow-sm ring-1 ring-[#FED7AA]/50">
-          <h2 className="text-xl font-bold text-[#7C2D12]">📄 문서 보관함</h2>
-          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-            {documents.map((document) => (
-              <article key={document.id} className="rounded-2xl border border-[#FFEDD5] bg-white p-4 shadow-sm">
-                <p className="font-semibold text-slate-800">{document.title}</p>
-                <p className="mt-1 text-sm text-slate-500">{document.subtitle}</p>
-              </article>
-            ))}
-          </div>
-          {documents.length === 0 ? <p className="mt-4 text-sm text-slate-500">보관된 문서가 없어요.</p> : null}
         </section>
 
         <button
