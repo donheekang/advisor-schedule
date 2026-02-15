@@ -193,7 +193,7 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <section className="mx-auto w-full max-w-5xl rounded-2xl bg-white p-8 text-center shadow-sm">
+      <section className="mx-auto w-full max-w-5xl rounded-3xl bg-white p-8 text-center shadow-sm">
         <p className="text-sm text-slate-600">로그인 상태를 확인하고 있어요...</p>
       </section>
     );
@@ -220,16 +220,16 @@ export default function MyPage() {
   return (
     <>
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-7">
-        <header className="rounded-3xl bg-white p-6 shadow-lg">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#F97316]/70 bg-[#FFF7ED] text-3xl">
+        <header className="rounded-3xl bg-white p-6 shadow-lg sm:p-7">
+          <div className="flex flex-wrap items-center gap-5">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#FB923C] bg-[#FFF7ED] text-3xl shadow-inner">
               {user.displayName?.[0] ?? user.email?.[0]?.toUpperCase() ?? 'U'}
             </div>
-            <div>
-              <h1 className="text-2xl font-extrabold text-[#7C2D12]">{user.displayName ?? '보호자님'}</h1>
+            <div className="space-y-1">
+              <h1 className="text-2xl font-extrabold text-[#7C2D12] sm:text-3xl">{user.displayName ?? '보호자님'}</h1>
               <p className="mt-1 text-sm text-slate-500">{user.email}</p>
               {!isPremium ? (
-                <span className="mt-3 inline-flex rounded-full bg-[#FFEDD5] px-3 py-1 text-xs font-bold text-[#C2410C]">
+                <span className="mt-3 inline-flex rounded-full border border-[#FDBA74] bg-[#FFF1DE] px-3 py-1 text-xs font-bold text-[#C2410C]">
                   프리미엄으로 업그레이드
                 </span>
               ) : null}
@@ -240,14 +240,14 @@ export default function MyPage() {
         {isFetching ? <p className="text-sm text-slate-600">데이터를 불러오는 중이에요...</p> : null}
         {errorMessage ? <p className="rounded-xl bg-rose-50 p-3 text-sm text-rose-600">{errorMessage}</p> : null}
 
-        <section className="rounded-3xl bg-white/90 p-5 shadow-sm">
+        <section className="rounded-3xl bg-white/90 p-5 shadow-sm ring-1 ring-[#FED7AA]/50">
           <h2 className="text-xl font-bold text-[#7C2D12]">🐾 우리 아이들</h2>
           <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
             {pets.map((pet) => {
               const isExpanded = expandedPetId === pet.id;
 
               return (
-                <article key={pet.id} className="rounded-2xl border border-[#FED7AA] bg-white p-4">
+                <article key={pet.id} className="rounded-2xl border border-[#FED7AA] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                   <button
                     type="button"
                     onClick={() => setExpandedPetId(isExpanded ? null : pet.id)}
@@ -290,12 +290,12 @@ export default function MyPage() {
           {pets.length === 0 ? <p className="mt-4 text-sm text-slate-500">등록된 반려동물이 없어요.</p> : null}
         </section>
 
-        <section className="rounded-3xl bg-white/90 p-5 shadow-sm">
+        <section className="rounded-3xl bg-white/90 p-5 shadow-sm ring-1 ring-[#FED7AA]/50">
           <h2 className="text-xl font-bold text-[#7C2D12]">📋 진료 기록</h2>
-          <div className="mt-4 space-y-4">
+          <div className="relative mt-4 space-y-4 pl-6 before:absolute before:bottom-2 before:left-[0.45rem] before:top-2 before:w-0.5 before:bg-[#FDBA74]/60 before:content-['']">
             {records.map((record) => (
-              <article key={record.id} className="relative rounded-2xl border border-[#FED7AA] bg-white p-4 pl-8">
-                <span className="absolute left-3 top-5 h-2.5 w-2.5 rounded-full bg-[#FB923C]" />
+              <article key={record.id} className="relative rounded-2xl border border-[#FED7AA] bg-white p-4 shadow-sm">
+                <span className="absolute -left-[1.05rem] top-5 h-3 w-3 rounded-full border-2 border-white bg-[#FB923C]" />
                 <p className="text-xs text-slate-500">{formatVisitDate(record.visitDate)}</p>
                 <p className="mt-1 font-semibold text-slate-800">{record.hospitalName}</p>
                 <p className="text-sm text-slate-600">{record.itemName}</p>
@@ -306,11 +306,11 @@ export default function MyPage() {
           {records.length === 0 ? <p className="mt-4 text-sm text-slate-500">최근 진료 기록이 없어요.</p> : null}
         </section>
 
-        <section className="rounded-3xl bg-white/90 p-5 shadow-sm">
+        <section className="rounded-3xl bg-white/90 p-5 shadow-sm ring-1 ring-[#FED7AA]/50">
           <h2 className="text-xl font-bold text-[#7C2D12]">📄 문서 보관함</h2>
           <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
             {documents.map((document) => (
-              <article key={document.id} className="rounded-2xl border border-[#FFEDD5] bg-white p-4">
+              <article key={document.id} className="rounded-2xl border border-[#FFEDD5] bg-white p-4 shadow-sm">
                 <p className="font-semibold text-slate-800">{document.title}</p>
                 <p className="mt-1 text-sm text-slate-500">{document.subtitle}</p>
               </article>
