@@ -275,12 +275,38 @@ export default function PetTalkerPage() {
       const data = (await response.json()) as { speech?: string; emotion?: EmotionCode; emotionScore?: number };
       const validEmotionCodes: EmotionCode[] = ["happy", "peaceful", "curious", "grumpy", "proud", "love", "sleepy", "hungry"];
 
-      setSpeech(typeof data.speech === "string" && data.speech.trim() ? data.speech.trim() : "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!");
-      setEmotion(validEmotionCodes.includes(data.emotion as EmotionCode) ? (data.emotion as EmotionCode) : "happy");
+      let finalSpeech = data.speech ?? "";
+      let finalEmotion: EmotionCode = "happy";
+      let finalScore = 80;
+
+      // speech 안에 JSON이 들어있는 경우 한번 더 파싱
+      if (finalSpeech.includes('"speech"') || finalSpeech.includes('```json')) {
+        try {
+          const cleaned = finalSpeech.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").trim();
+          const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]) as { speech?: string; emotion?: string; emotionScore?: number };
+            if (parsed.speech) finalSpeech = parsed.speech;
+            if (parsed.emotion && validEmotionCodes.includes(parsed.emotion as EmotionCode)) {
+              finalEmotion = parsed.emotion as EmotionCode;
+            }
+            if (typeof parsed.emotionScore === "number") finalScore = parsed.emotionScore;
+          }
+        } catch {
+          // 파싱 실패시 원본 사용
+        }
+      }
+
+      // 혹시 남아있는 JSON 잔여물 제거
+      finalSpeech = finalSpeech.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").replace(/^\s*\{[\s\S]*"speech"\s*:\s*"/i, "").trim();
+      if (!finalSpeech) finalSpeech = "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!";
+
+      setSpeech(finalSpeech);
+      setEmotion(validEmotionCodes.includes(data.emotion as EmotionCode) ? (data.emotion as EmotionCode) : finalEmotion);
       setEmotionScore(
         typeof data.emotionScore === "number" && Number.isInteger(data.emotionScore)
           ? Math.min(99, Math.max(50, data.emotionScore))
-          : 80
+          : finalScore
       );
       setStatus("success");
       setUsageCount((prev) => Math.min(prev + 1, 2));
