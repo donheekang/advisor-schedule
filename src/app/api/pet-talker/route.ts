@@ -11,14 +11,6 @@ type PetTalkerRequestBody = {
   };
 };
 
-type EmotionCode = 'happy' | 'peaceful' | 'curious' | 'grumpy' | 'proud' | 'love' | 'sleepy' | 'hungry';
-
-type PetTalkerResponse = {
-  speech: string;
-  emotion: EmotionCode;
-  emotionScore: number;
-};
-
 type UsagePolicy = {
   dailyLimit: number;
   isMember: boolean;
@@ -283,35 +275,6 @@ function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo']): string {
   return `${basePrompt}\n\n${petInfoLines.join('\n')}`;
 }
 
-function extractResponse(raw: string): PetTalkerResponse {
-  const fallbackSpeech = raw.trim() || '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!';
-  const fallback: PetTalkerResponse = { speech: fallbackSpeech, emotion: 'happy', emotionScore: 80 };
-
-  try {
-    const cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
-    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      return fallback;
-    }
-
-    const parsed = JSON.parse(jsonMatch[0]) as Partial<PetTalkerResponse>;
-    const validEmotionCodes: EmotionCode[] = ['happy', 'peaceful', 'curious', 'grumpy', 'proud', 'love', 'sleepy', 'hungry'];
-    const emotion = validEmotionCodes.includes(parsed.emotion as EmotionCode) ? (parsed.emotion as EmotionCode) : 'happy';
-    const emotionScore =
-      typeof parsed.emotionScore === 'number' && Number.isInteger(parsed.emotionScore)
-        ? Math.min(99, Math.max(50, parsed.emotionScore))
-        : 80;
-
-    return {
-      speech: typeof parsed.speech === 'string' && parsed.speech.trim() ? parsed.speech.trim() : fallbackSpeech,
-      emotion,
-      emotionScore
-    };
-  } catch {
-    return fallback;
-  }
-}
-
 async function createAnthropicMessage(params: {
   client: Anthropic;
   imageData: string;
@@ -437,9 +400,30 @@ export async function POST(request: NextRequest) {
     });
 
     const rawText = claudeMessage.content[0]?.type === 'text' ? claudeMessage.content[0].text : '';
-    const result = extractResponse(rawText);
+    let speech = rawText;
+    let emotion = 'happy';
+    let emotionScore = 80;
 
-    return NextResponse.json(result);
+    try {
+      const cleaned = rawText.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
+      const match = cleaned.match(/\{[\s\S]*\}/);
+      if (match) {
+        const obj = JSON.parse(match[0]) as { speech?: string; emotion?: string; emotionScore?: number };
+        if (obj.speech) {
+          speech = obj.speech;
+        }
+        if (obj.emotion) {
+          emotion = obj.emotion;
+        }
+        if (obj.emotionScore) {
+          emotionScore = obj.emotionScore;
+        }
+      }
+    } catch {
+      // parsing failure falls back to rawText
+    }
+
+    return Response.json({ speech, emotion, emotionScore });
   } catch (error) {
     console.error('[pet-talker] POST handler error', error);
     return NextResponse.json(

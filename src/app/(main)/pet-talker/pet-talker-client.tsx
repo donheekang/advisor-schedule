@@ -28,6 +28,8 @@ export default function PetTalkerPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [speech, setSpeech] = useState("");
+  const [emotion, setEmotion] = useState("happy");
+  const [emotionScore, setEmotionScore] = useState(80);
   const [status, setStatus] = useState<RequestStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [usageCount, setUsageCount] = useState(0);
@@ -82,8 +84,10 @@ export default function PetTalkerPage() {
         throw new Error("failed");
       }
 
-      const data = (await response.json()) as { speech?: string };
+      const data = (await response.json()) as { speech?: string; emotion?: string; emotionScore?: number };
       setSpeech(data.speech ?? "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!");
+      setEmotion(data.emotion ?? "happy");
+      setEmotionScore(data.emotionScore ?? 80);
       setStatus("success");
       setUsageCount((prev) => Math.min(prev + 1, 2));
     } catch {
@@ -191,6 +195,9 @@ export default function PetTalkerPage() {
           {status === "success" && previewUrl && (
             <div className="space-y-4">
               <div className="rounded-2xl bg-[#E8EEF1] p-3">
+                <p className="mb-3 text-center text-xs font-semibold text-[#1B3A4B]">
+                  감정: {emotion} · 공감도 {emotionScore}
+                </p>
                 <div className="relative mx-auto aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border-4 border-white shadow-sm">
                   <Image src={previewUrl} alt="반려동물 공유 카드" fill className="object-cover" unoptimized />
                 </div>
