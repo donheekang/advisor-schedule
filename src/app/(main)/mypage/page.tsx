@@ -31,6 +31,7 @@ type RecordTimelineItem = {
   itemName: string;
   totalAmount: number;
 };
+
 const currencyFormatter = new Intl.NumberFormat('ko-KR');
 
 function getAgeLabel(birthDate: string | null): string {
@@ -156,8 +157,8 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <section className="mx-auto w-full max-w-5xl rounded-3xl bg-white p-8 text-center shadow-sm">
-        <p className="text-sm text-slate-600">로그인 상태를 확인하고 있어요...</p>
+      <section className="mx-auto w-full max-w-5xl rounded-3xl bg-white p-10 text-center shadow-lg">
+        <p className="text-sm text-[#A36241]">로그인 상태를 확인하고 있어요...</p>
       </section>
     );
   }
@@ -165,12 +166,14 @@ export default function MyPage() {
   if (!user) {
     return (
       <>
-        <section className="mx-auto flex w-full max-w-3xl flex-col items-center rounded-3xl bg-gradient-to-br from-[#1B3A4B] to-[#163242] px-6 py-12 text-center text-white shadow-xl">
-          <p className="text-lg font-semibold">로그인하면 앱 데이터를 웹에서도 볼 수 있어요</p>
+        <section className="mx-auto flex w-full max-w-3xl flex-col items-center rounded-3xl bg-gradient-to-br from-[#4F2A1D] to-[#2D1B0E] px-6 py-14 text-center text-white shadow-xl">
+          <p className="text-5xl">🐾</p>
+          <p className="mt-5 text-xl font-extrabold">로그인하면 앱 데이터를 웹에서도 볼 수 있어요</p>
+          <p className="mt-2 text-sm text-white/70">진료 기록, 반려동물 정보를 한 눈에 확인하세요</p>
           <button
             type="button"
             onClick={() => setIsLoginModalOpen(true)}
-            className="mt-6 rounded-xl bg-[#E67E22] px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-ctaHover"
+            className="mt-8 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
           >
             로그인
           </button>
@@ -183,55 +186,75 @@ export default function MyPage() {
   return (
     <>
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8">
-        <header className="rounded-3xl bg-white p-6 shadow-lg sm:p-8">
+        <header className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/30 sm:p-8">
           <div className="flex flex-wrap items-center gap-5">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#FB923C] bg-[#FFF7ED] text-3xl shadow-inner">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F97316] to-[#FB923C] text-3xl font-bold text-white shadow-lg">
               {user.displayName?.[0] ?? user.email?.[0]?.toUpperCase() ?? 'U'}
             </div>
             <div className="space-y-1">
-              <h1 className="text-2xl font-extrabold text-[#7C2D12] sm:text-3xl">{user.displayName ?? '보호자님'}</h1>
-              <p className="mt-1 text-sm text-slate-500">{user.email}</p>
-              {!isPremium ? (
-                <span className="mt-3 inline-flex rounded-full border border-[#FDBA74] bg-[#FFF1DE] px-3 py-1 text-xs font-bold text-[#C2410C]">
+              <h1 className="text-2xl font-extrabold text-[#4F2A1D] sm:text-3xl">
+                {user.displayName ?? '보호자'}님
+              </h1>
+              <p className="text-sm text-[#A36241]">{user.email}</p>
+              {isPremium ? (
+                <span className="mt-2 inline-flex rounded-full bg-gradient-to-r from-[#F97316] to-[#FB923C] px-3 py-1 text-xs font-bold text-white shadow-sm">
+                  프리미엄
+                </span>
+              ) : (
+                <span className="mt-2 inline-flex rounded-full bg-[#FFF8F0] px-3 py-1 text-xs font-bold text-[#F97316] ring-1 ring-[#F8C79F]">
                   프리미엄으로 업그레이드
                 </span>
-              ) : null}
+              )}
             </div>
           </div>
         </header>
 
-        {isFetching ? <p className="text-sm text-slate-600">데이터를 불러오는 중이에요...</p> : null}
-        {errorMessage ? <p className="rounded-xl bg-rose-50 p-3 text-sm text-rose-600">{errorMessage}</p> : null}
+        {isFetching ? <p className="text-sm text-[#A36241]">데이터를 불러오는 중이에요...</p> : null}
+        {errorMessage ? (
+          <p className="rounded-2xl bg-rose-50 p-4 text-sm font-medium text-rose-600">{errorMessage}</p>
+        ) : null}
 
-        <section className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#FED7AA]/40 sm:p-6">
-          <h2 className="text-xl font-bold text-[#7C2D12]">🐾 우리 아이들</h2>
-          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+        <section className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20 sm:p-7">
+          <h2 className="text-xl font-extrabold text-[#4F2A1D]">🐾 우리 아이들</h2>
+          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
             {pets.map((pet) => (
-              <article key={pet.id} className="rounded-2xl border border-[#FED7AA] bg-[#FFFBF7] p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                <p className="text-xl">{getPetIcon(pet.species)}</p>
-                <h3 className="mt-1 text-lg font-bold text-[#9A3412]">{pet.name}</h3>
-                <p className="mt-1 text-sm text-slate-600">품종: {pet.breed ?? pet.species}</p>
-                <p className="text-sm text-slate-600">나이: {getAgeLabel(pet.birth_date)}</p>
+              <article
+                key={pet.id}
+                className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30 transition hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <p className="text-2xl">{getPetIcon(pet.species)}</p>
+                <h3 className="mt-2 text-lg font-extrabold text-[#4F2A1D]">{pet.name}</h3>
+                <p className="mt-1 text-sm text-[#7C4A2D]">품종: {pet.breed ?? pet.species}</p>
+                <p className="text-sm text-[#7C4A2D]">나이: {getAgeLabel(pet.birth_date)}</p>
               </article>
             ))}
           </div>
-          {pets.length === 0 ? <p className="mt-4 text-sm text-slate-500">등록된 반려동물이 없어요.</p> : null}
+          {pets.length === 0 ? (
+            <p className="mt-5 text-sm text-[#A36241]">등록된 반려동물이 없어요.</p>
+          ) : null}
         </section>
 
-        <section className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#FED7AA]/40 sm:p-6">
-          <h2 className="text-xl font-bold text-[#7C2D12]">📋 진료 기록</h2>
-          <div className="relative mt-4 space-y-4 pl-6 before:absolute before:bottom-2 before:left-[0.45rem] before:top-2 before:w-0.5 before:bg-[#FDBA74]/60 before:content-['']">
+        <section className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20 sm:p-7">
+          <h2 className="text-xl font-extrabold text-[#4F2A1D]">📋 진료 기록</h2>
+          <div className="relative mt-5 space-y-4 pl-6 before:absolute before:bottom-2 before:left-[0.45rem] before:top-2 before:w-0.5 before:bg-[#F97316]/20 before:content-['']">
             {records.map((record) => (
-              <article key={record.id} className="relative rounded-2xl border border-[#FED7AA] bg-white p-4 shadow-sm">
-                <span className="absolute -left-[1.05rem] top-5 h-3 w-3 rounded-full border-2 border-white bg-[#FB923C]" />
-                <p className="text-xs text-slate-500">{formatVisitDate(record.visitDate)}</p>
-                <p className="mt-1 font-semibold text-slate-800">{record.hospitalName}</p>
-                <p className="text-sm text-slate-600">{record.itemName}</p>
-                <p className="mt-2 text-lg font-bold text-[#F97316]">{currencyFormatter.format(record.totalAmount)}원</p>
+              <article
+                key={record.id}
+                className="relative rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-white p-5 ring-1 ring-[#F8C79F]/20 shadow-sm"
+              >
+                <span className="absolute -left-[1.05rem] top-5 h-3 w-3 rounded-full border-2 border-white bg-[#F97316] shadow-sm" />
+                <p className="text-xs font-medium text-[#A36241]">{formatVisitDate(record.visitDate)}</p>
+                <p className="mt-1 font-bold text-[#4F2A1D]">{record.hospitalName}</p>
+                <p className="text-sm text-[#7C4A2D]">{record.itemName}</p>
+                <p className="mt-2 text-xl font-extrabold text-[#F97316]">
+                  {currencyFormatter.format(record.totalAmount)}원
+                </p>
               </article>
             ))}
           </div>
-          {records.length === 0 ? <p className="mt-4 text-sm text-slate-500">최근 진료 기록이 없어요.</p> : null}
+          {records.length === 0 ? (
+            <p className="mt-5 text-sm text-[#A36241]">최근 진료 기록이 없어요.</p>
+          ) : null}
         </section>
 
         <button
@@ -239,7 +262,7 @@ export default function MyPage() {
           onClick={() => {
             void signOut();
           }}
-          className="mt-2 rounded-2xl bg-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-300"
+          className="mt-2 rounded-2xl bg-[#FFF8F0] px-5 py-3.5 text-sm font-bold text-[#7C4A2D] ring-1 ring-[#F8C79F]/30 transition hover:bg-[#FFEEDC]"
         >
           로그아웃
         </button>
