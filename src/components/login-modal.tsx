@@ -36,35 +36,40 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-        <h2 className="text-xl font-semibold text-brand-primary">로그인</h2>
-        <p className="mt-2 text-sm text-slate-600">로그인하면 더 많은 기능을 사용할 수 있어요</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#4F2A1D]/40 px-4 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-2xl ring-1 ring-[#F8C79F]/30">
+        <div className="text-center">
+          <p className="text-4xl">🐾</p>
+          <h2 className="mt-3 text-xl font-extrabold text-[#4F2A1D]">로그인</h2>
+          <p className="mt-2 text-sm text-[#7C4A2D]">로그인하면 더 많은 기능을 사용할 수 있어요</p>
+        </div>
 
         <div className="mt-6 space-y-3">
           <button
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isSigningIn}
-            className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-brand-primary transition hover:bg-brand-background disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-2xl border border-[#F8C79F] bg-white px-4 py-3.5 text-sm font-bold text-[#4F2A1D] transition hover:bg-[#FFF8F0] disabled:cursor-not-allowed disabled:opacity-60"
           >
             구글로 로그인
           </button>
           <button
             type="button"
             disabled
-            className="w-full rounded-lg bg-brand-secondary px-4 py-3 text-sm font-medium text-white opacity-80"
+            className="w-full rounded-2xl bg-[#FEE500] px-4 py-3.5 text-sm font-bold text-[#3C1E1E] opacity-70"
           >
             카카오로 로그인 (준비 중)
           </button>
         </div>
 
-        {errorMessage ? <p className="mt-3 text-sm text-rose-600">{errorMessage}</p> : null}
+        {errorMessage ? (
+          <p className="mt-3 rounded-2xl bg-rose-50 p-3 text-sm font-medium text-rose-600">{errorMessage}</p>
+        ) : null}
 
         <button
           type="button"
           onClick={onClose}
-          className="mt-5 w-full rounded-lg px-4 py-3 text-sm text-slate-500 hover:bg-slate-100"
+          className="mt-5 w-full rounded-2xl px-4 py-3 text-sm font-medium text-[#A36241] transition hover:bg-[#FFF8F0]"
         >
           닫기
         </button>
