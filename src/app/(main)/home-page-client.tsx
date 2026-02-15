@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type FaqItem = {
   question: string;
@@ -136,7 +136,7 @@ function CountUpNumber({ target }: { target: number }) {
       return;
     }
 
-    const duration = 1300;
+    const duration = 1200;
     const startTime = performance.now();
 
     const frame = (time: number) => {
@@ -153,29 +153,22 @@ function CountUpNumber({ target }: { target: number }) {
   }, [started, target]);
 
   return (
-    <p ref={ref} className="mt-2 text-4xl font-extrabold text-[#FB923C] md:text-5xl">
-      {count.toLocaleString('ko-KR')}건 분석 완료
+    <p ref={ref} className="mt-2 text-5xl font-extrabold tracking-tight text-[#F97316] md:text-6xl">
+      {count.toLocaleString('ko-KR')}건
     </p>
   );
 }
 
 export default function HomePageClient({ faqItems }: HomePageClientProps) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-  const miniCards = useMemo(
-    () => [
-      { title: '오늘의 한마디', description: '"오늘은 산책 더 가고 싶어요!"' },
-      { title: '감정 분석', description: '행복 지수 92% 🧡' }
-    ],
-    []
-  );
 
   return (
-    <div className="space-y-14 rounded-3xl bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 md:p-8">
-      <Section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFE6CC] via-[#FFD6B0] to-[#FFC892] px-6 py-16 md:px-12 md:py-20">
+    <div className="space-y-16 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 md:p-8">
+      <Section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#FFE9D2] via-[#FFD5AE] to-[#FFC38A] px-6 py-16 md:px-12 md:py-20">
         <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#FDBA74]/45 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-12 h-56 w-56 rounded-full bg-[#FB923C]/30 blur-3xl" />
         <div className="relative max-w-3xl">
-          <p className="mb-3 inline-flex rounded-full bg-white/70 px-4 py-1 text-sm font-semibold text-[#9A3412]">
+          <p className="mb-3 inline-flex rounded-full bg-white/75 px-4 py-1 text-sm font-semibold text-[#9A3412]">
             🐾 반려동물 보호자를 위한 AI 플랫폼
           </p>
           <h1 className="text-3xl font-extrabold leading-tight text-[#7C2D12] md:text-5xl">우리 아이 진료비, 적정한 걸까?</h1>
@@ -189,7 +182,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             </Link>
             <Link
               href="/cost-search"
-              className="rounded-xl border border-[#F97316] bg-white px-6 py-3 text-base font-bold text-[#C2410C] transition hover:bg-[#FFF7ED]"
+              className="rounded-xl border-2 border-[#F97316] bg-white px-6 py-3 text-base font-bold text-[#C2410C] transition hover:bg-[#FFF7ED]"
             >
               💰 진료비 검색
             </Link>
@@ -210,16 +203,6 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
               <p className="text-4xl">{feature.emoji}</p>
               <h3 className="mt-4 text-xl font-bold text-[#7C2D12]">{feature.title}</h3>
               <p className="mt-3 text-[#7C2D12]/75">{feature.description}</p>
-              {feature.title === '펫토커' && (
-                <div className="mt-4 rounded-2xl bg-[#FFF7ED] p-3">
-                  {miniCards.map((card) => (
-                    <div key={card.title} className="mb-2 rounded-xl bg-white p-2 last:mb-0">
-                      <p className="text-xs font-semibold text-[#C2410C]">{card.title}</p>
-                      <p className="text-xs text-[#7C2D12]/75">{card.description}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
               <Link href={feature.href} className="mt-5 inline-flex text-sm font-semibold text-[#EA580C]">
                 {feature.cta}
               </Link>
@@ -252,13 +235,13 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
           신뢰 데이터 & 보호자 후기
         </h2>
         <div className="mt-6 rounded-3xl bg-brand-navyDark px-6 py-8 text-white">
-          <p className="text-sm text-slate-200">진료비 데이터</p>
+          <p className="text-sm text-slate-200">누적 진료비 데이터</p>
           <CountUpNumber target={128540} />
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {reviews.map((item) => (
             <blockquote key={item.author} className="rounded-3xl bg-white p-6 shadow-lg">
-              <p className="text-[#F59E0B]">★★★★★</p>
+              <p className="text-[#F59E0B]">⭐⭐⭐⭐⭐</p>
               <p className="mt-3 text-brand-textSecondary">“{item.review}”</p>
               <footer className="mt-3 text-sm font-semibold text-slate-500">{item.author}</footer>
             </blockquote>
@@ -266,7 +249,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         </div>
       </Section>
 
-      <Section className="rounded-3xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-12 text-center text-white md:px-10">
+      <Section className="rounded-3xl bg-gradient-to-r from-[#F97316] via-[#FB923C] to-[#FDBA74] px-6 py-12 text-center text-white md:px-10">
         <h2 className="text-2xl font-bold md:text-3xl">우리 아이 건강 관리, 지금 시작하세요 🐾</h2>
         <p className="mt-3 text-[#FFF3E6]">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
