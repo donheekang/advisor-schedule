@@ -10,12 +10,12 @@ const footerLinks = [
 export default function Footer() {
   return (
     <footer className="border-t border-[#7C4A2D]/10 bg-[#FFF0E6]">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-8 text-[#7C4A2D]">
-        <Link href="/" className="w-fit text-lg font-extrabold tracking-tight text-[#4F2A1D] transition hover:text-[#7C4A2D]">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-10 text-[#7C4A2D]">
+        <Link href="/" className="w-fit text-xl font-extrabold tracking-tight text-[#4F2A1D] transition hover:text-[#7C4A2D]">
           PetHealth+
         </Link>
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#7C4A2D]/90">
           {footerLinks.map((link) => (
             <Link key={link.href} href={link.href} className="transition hover:text-[#F97316]">
               {link.label}
@@ -23,7 +23,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <p className="text-sm text-[#7C4A2D]/80">© 2026 PetHealth+</p>
+        <p className="text-sm text-[#7C4A2D]/75">© 2026 PetHealth+</p>
       </div>
     </footer>
   );

@@ -35,13 +35,13 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[#7C4A2D]/10 bg-white/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-[#7C4A2D]/10 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4">
           <Link href="/" className="text-xl font-extrabold tracking-tight text-[#4F2A1D] transition hover:text-[#7C4A2D]">
             PetHealth+
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 rounded-full border border-[#7C4A2D]/10 bg-white/70 p-1 md:flex">
             {navigationItems.map((item) => {
               const isActive = pathname.startsWith(item.href);
 
@@ -89,7 +89,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#7C4A2D]/25 text-[#7C4A2D] md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#7C4A2D]/25 bg-white/80 text-[#7C4A2D] md:hidden"
             aria-label="모바일 메뉴 열기"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -100,7 +100,7 @@ export default function Header() {
 
         <div
           id="mobile-menu"
-          className={`overflow-hidden border-t border-[#7C4A2D]/10 bg-white/95 transition-all duration-300 ease-out md:hidden ${
+          className={`overflow-hidden border-t border-[#7C4A2D]/10 bg-white/95 shadow-[0_10px_20px_rgba(124,74,45,0.08)] transition-all duration-300 ease-out md:hidden ${
             isMenuOpen ? 'max-h-96 py-3 opacity-100' : 'max-h-0 py-0 opacity-0'
           }`}
         >
