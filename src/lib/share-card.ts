@@ -10,6 +10,8 @@ export type ShareCardPayload = {
   petImageUrl: string;
   dialogue: string;
   petName?: string;
+  emotion: 'happy' | 'peaceful' | 'curious' | 'grumpy' | 'proud' | 'love' | 'sleepy' | 'hungry';
+  emotionScore: number;
 };
 
 export type ShareCardRenderResult = {
@@ -22,6 +24,17 @@ const createCanvas = () => {
   canvas.width = SHARE_CARD_WIDTH;
   canvas.height = SHARE_CARD_HEIGHT;
   return canvas;
+};
+
+const EMOTION_TEXT: Record<ShareCardPayload['emotion'], { emoji: string; label: string; background: string }> = {
+  happy: { emoji: '😆', label: '신남', background: '#FEF3C7' },
+  peaceful: { emoji: '😌', label: '평화', background: '#D1FAE5' },
+  curious: { emoji: '🤔', label: '호기심', background: '#DBEAFE' },
+  grumpy: { emoji: '😤', label: '투정', background: '#FEE2E2' },
+  proud: { emoji: '😏', label: '도도', background: '#F3E8FF' },
+  love: { emoji: '🥰', label: '사랑', background: '#FCE7F3' },
+  sleepy: { emoji: '😴', label: '나른', background: '#E0E7FF' },
+  hungry: { emoji: '🤤', label: '배고픔', background: '#FFEDD5' }
 };
 
 const loadImage = async (src: string): Promise<HTMLImageElement> => {
@@ -157,8 +170,8 @@ export const renderShareCard = async (
   context.arc(SHARE_CARD_WIDTH / 2, imageY + imageSize / 2, imageSize / 2, 0, Math.PI * 2);
   context.stroke();
 
-  const bubbleTop = imageY + imageSize + 72;
-  const bubbleHeight = 350;
+  const bubbleTop = imageY + imageSize + 82;
+  const bubbleHeight = 380;
   const bubbleX = 80;
   const bubbleWidth = SHARE_CARD_WIDTH - bubbleX * 2;
 
@@ -183,30 +196,44 @@ export const renderShareCard = async (
   const speaker = payload.petName ? `${payload.petName}의 한마디` : '우리 아이의 한마디';
   context.fillText(speaker, bubbleX + 48, bubbleTop + 40);
 
+  const emotionMeta = EMOTION_TEXT[payload.emotion];
+  context.fillStyle = emotionMeta.background;
+  context.beginPath();
+  context.roundRect(bubbleX + 48, bubbleTop + 112, 300, 62, 999);
+  context.fill();
+
+  context.font = '700 32px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.fillStyle = TEXT_COLOR;
+  context.textAlign = 'left';
+  context.fillText(`${emotionMeta.emoji} ${emotionMeta.label} ${payload.emotionScore}%`, bubbleX + 72, bubbleTop + 128);
+
   context.font = '500 42px Pretendard, Apple SD Gothic Neo, sans-serif';
   const textMaxWidth = bubbleWidth - 96;
   const lines = wrapText(context, `“${payload.dialogue}”`, textMaxWidth, 3);
   lines.forEach((line, index) => {
-    context.fillText(line, bubbleX + 48, bubbleTop + 140 + index * 60);
+    context.fillText(line, bubbleX + 48, bubbleTop + 206 + index * 56);
   });
 
   context.fillStyle = '#FFFFFF';
   context.globalAlpha = 0.95;
   context.beginPath();
-  context.roundRect(80, SHARE_CARD_HEIGHT - 170, SHARE_CARD_WIDTH - 160, 92, 28);
+  context.roundRect(80, SHARE_CARD_HEIGHT - 190, SHARE_CARD_WIDTH - 160, 112, 28);
   context.fill();
   context.globalAlpha = 1;
 
-  context.font = '700 42px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.font = '700 40px Pretendard, Apple SD Gothic Neo, sans-serif';
   context.fillStyle = TEAL_ACCENT;
   context.textAlign = 'left';
-  context.textBaseline = 'middle';
-  context.fillText('PetHealth+', 120, SHARE_CARD_HEIGHT - 124);
+  context.textBaseline = 'alphabetic';
+  context.fillText('🐾 PetHealth+', 120, SHARE_CARD_HEIGHT - 132);
+
+  context.font = '600 26px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.fillStyle = '#1B3A4B';
+  context.fillText('2026년 2월 15일', 120, SHARE_CARD_HEIGHT - 98);
 
   context.font = '500 28px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.fillStyle = '#1B3A4B';
   context.textAlign = 'right';
-  context.fillText('pethealthplus.co.kr/pet-talker', SHARE_CARD_WIDTH - 120, SHARE_CARD_HEIGHT - 124);
+  context.fillText('pethealthplus.co.kr/pet-talker', SHARE_CARD_WIDTH - 120, SHARE_CARD_HEIGHT - 110);
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((result) => {
