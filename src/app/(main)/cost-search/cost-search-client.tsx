@@ -310,9 +310,9 @@ export default function CostSearchClient() {
         </div>
       </article>
 
-      <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-        <h2 className="text-base font-bold text-[#1B3A4B]">가격 범위</h2>
-        <p className="mt-1 text-sm text-slate-500">
+      <article className="rounded-2xl border border-[#1B3A4B]/20 bg-brand-navyDark p-5 text-white shadow-sm">
+        <h2 className="text-base font-bold text-white">가격 범위</h2>
+        <p className="mt-1 text-sm text-slate-200">
           {costResult?.matchedItem ?? query} 기준 참고 범위 {searching ? '(검색 중...)' : ''}
         </p>
 
@@ -320,45 +320,45 @@ export default function CostSearchClient() {
 
         {costResult ? (
           <>
-            <div className="mt-4 rounded-xl bg-slate-50 p-4">
+            <div className="mt-4 rounded-xl bg-white/10 p-4">
               <div className="relative h-6">
-                <div className="absolute left-0 top-2 h-2 w-full rounded-full bg-slate-200" />
-                <div className="absolute top-2 h-2 w-full rounded-full bg-blue-200" aria-hidden="true" />
+                <div className="absolute left-0 top-2 h-2 w-full rounded-full bg-white/20" />
+                <div className="absolute top-2 h-2 w-full rounded-full bg-[#E67E22]/30" aria-hidden="true" />
                 <div
-                  className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-blue-600"
+                  className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-[#E67E22]"
                   style={{ left: `${averagePosition}%` }}
                   aria-label="평균 가격 위치"
                 />
                 {myPosition !== null ? (
                   <div
-                    className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-violet-600"
+                    className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-[#F8B26A]"
                     style={{ left: `${myPosition}%` }}
                     aria-label="내 진료비 위치"
                   />
                 ) : null}
               </div>
 
-              <div className="mt-3 flex items-center justify-between text-xs font-medium text-slate-600">
+              <div className="mt-3 flex items-center justify-between text-xs font-medium text-slate-200">
                 <span>최소 {toWon(costResult.priceStats.min)}</span>
-                <span className="rounded-full bg-blue-100 px-2 py-1 text-blue-700">평균 {toWon(costResult.priceStats.avg)}</span>
+                <span className="rounded-full bg-[#E67E22]/20 px-2 py-1 text-[#FFDAB3]">평균 {toWon(costResult.priceStats.avg)}</span>
                 <span>최대 {toWon(costResult.priceStats.max)}</span>
               </div>
             </div>
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">전국 평균</p>
-                <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toWon(costResult.nationalAvg)}</p>
+              <div className="rounded-xl border border-white/20 bg-white/10 p-4">
+                <p className="text-xs text-slate-300">전국 평균</p>
+                <p className="mt-1 text-xl font-bold text-white">{toWon(costResult.nationalAvg)}</p>
               </div>
-              <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">{region} 평균</p>
-                <p className="mt-1 text-xl font-bold text-[#1B3A4B]">{toWon(costResult.regionalAvg)}</p>
+              <div className="rounded-xl border border-white/20 bg-white/10 p-4">
+                <p className="text-xs text-slate-300">{region} 평균</p>
+                <p className="mt-1 text-xl font-bold text-white">{toWon(costResult.regionalAvg)}</p>
               </div>
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
               {costResult.sources.map((source) => (
-                <span key={source} className="rounded-full bg-slate-100 px-2 py-1 text-xs text-slate-600">
+                <span key={source} className="rounded-full bg-white/15 px-2 py-1 text-xs text-slate-100">
                   {source}
                 </span>
               ))}
@@ -370,22 +370,22 @@ export default function CostSearchClient() {
                   type="button"
                   onClick={() => void handleCompareMine()}
                   disabled={comparingMine}
-                  className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
+                  className="rounded-xl bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover disabled:opacity-50"
                 >
                   {comparingMine ? '내 진료비 불러오는 중...' : '내 진료비 비교'}
                 </button>
                 {myComparison ? (
-                  <p className="mt-3 text-sm text-slate-700">
+                  <p className="mt-3 text-sm text-slate-100">
                     내 진료비 평균은 {toWon(myComparison.average)}이며, 전체 평균보다{' '}
-                    <span className="font-semibold text-violet-700">{Math.abs(myComparison.diffPercent).toFixed(1)}%</span>{' '}
+                    <span className="font-semibold text-[#FFDAB3]">{Math.abs(myComparison.diffPercent).toFixed(1)}%</span>{' '}
                     {myComparison.isHigher ? '높아요.' : '낮아요.'} (내 기록 {myComparison.sampleSize}건)
                   </p>
                 ) : (
-                  <p className="mt-3 text-xs text-slate-500">로그인 사용자의 진료 기록에서 항목을 찾아 비교합니다.</p>
+                  <p className="mt-3 text-xs text-slate-300">로그인 사용자의 진료 기록에서 항목을 찾아 비교합니다.</p>
                 )}
               </div>
             ) : (
-              <p className="mt-4 text-xs text-slate-500">로그인하면 내 진료 기록 기반 비교를 확인할 수 있어요.</p>
+              <p className="mt-4 text-xs text-slate-300">로그인하면 내 진료 기록 기반 비교를 확인할 수 있어요.</p>
             )}
           </>
         ) : null}

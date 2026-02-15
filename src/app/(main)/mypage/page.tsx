@@ -83,7 +83,7 @@ export default function MyPage() {
           <button
             type="button"
             onClick={() => setIsLoginModalOpen(true)}
-            className="mt-6 rounded-xl bg-[#2A9D8F] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#238478]"
+            className="mt-6 rounded-xl bg-[#E67E22] px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-ctaHover"
           >
             로그인
           </button>
