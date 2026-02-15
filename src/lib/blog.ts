@@ -7,6 +7,7 @@ export type BlogFrontmatter = {
   date: string;
   tags: string[];
   slug: string;
+  thumbnail?: string;
 };
 
 export type BlogPost = BlogFrontmatter & {
@@ -58,6 +59,7 @@ const parseFrontmatter = (fileContent: string): { frontmatter: BlogFrontmatter; 
     description: (record.description ?? '').replace(/^"|"$/g, ''),
     date: (record.date ?? '').replace(/^"|"$/g, ''),
     slug: (record.slug ?? '').replace(/^"|"$/g, ''),
+    thumbnail: (record.thumbnail ?? '').replace(/^"|"$/g, '') || undefined,
     tags
   };
 
@@ -81,9 +83,33 @@ const renderMarkdownToHtml = (markdown: string): string => {
   const lines = markdown.split('\n');
   const html: string[] = [];
   let isListOpen = false;
+  let isCodeBlockOpen = false;
+  const codeBlock: string[] = [];
 
   lines.forEach((line) => {
     const trimmed = line.trim();
+
+    if (trimmed.startsWith('```')) {
+      if (isCodeBlockOpen) {
+        html.push(
+          `<pre class="mt-6 overflow-x-auto rounded-2xl bg-[#FFF5E9] p-4 text-sm leading-7 text-[#5C4033]"><code>${escapeHtml(codeBlock.join('\n'))}</code></pre>`
+        );
+        codeBlock.length = 0;
+        isCodeBlockOpen = false;
+      } else {
+        if (isListOpen) {
+          html.push('</ul>');
+          isListOpen = false;
+        }
+        isCodeBlockOpen = true;
+      }
+      return;
+    }
+
+    if (isCodeBlockOpen) {
+      codeBlock.push(line);
+      return;
+    }
 
     if (!trimmed) {
       if (isListOpen) {
@@ -98,7 +124,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
         html.push('</ul>');
         isListOpen = false;
       }
-      html.push(`<h3 class="mt-8 text-xl font-bold text-brand-primary">${renderInlineMarkdown(trimmed.slice(4))}</h3>`);
+      html.push(`<h3 class="mt-8 text-xl font-bold text-[#4F2A1D]">${renderInlineMarkdown(trimmed.slice(4))}</h3>`);
       return;
     }
 
@@ -107,7 +133,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
         html.push('</ul>');
         isListOpen = false;
       }
-      html.push(`<h2 class="mt-10 text-2xl font-bold text-brand-primary">${renderInlineMarkdown(trimmed.slice(3))}</h2>`);
+      html.push(`<h2 class="mt-10 text-2xl font-bold text-[#4F2A1D]">${renderInlineMarkdown(trimmed.slice(3))}</h2>`);
       return;
     }
 
@@ -116,16 +142,27 @@ const renderMarkdownToHtml = (markdown: string): string => {
         html.push('</ul>');
         isListOpen = false;
       }
-      html.push(`<h1 class="mt-10 text-3xl font-bold text-brand-primary">${renderInlineMarkdown(trimmed.slice(2))}</h1>`);
+      html.push(`<h1 class="mt-10 text-3xl font-bold text-[#4F2A1D]">${renderInlineMarkdown(trimmed.slice(2))}</h1>`);
       return;
     }
 
     if (trimmed.startsWith('- ')) {
       if (!isListOpen) {
-        html.push('<ul class="ml-6 list-disc space-y-2">');
+        html.push('<ul class="ml-6 list-disc space-y-2 text-[#2D2D2D]">');
         isListOpen = true;
       }
       html.push(`<li>${renderInlineMarkdown(trimmed.slice(2))}</li>`);
+      return;
+    }
+
+    if (trimmed.startsWith('> ')) {
+      if (isListOpen) {
+        html.push('</ul>');
+        isListOpen = false;
+      }
+      html.push(
+        `<blockquote class="mt-6 rounded-2xl border-l-4 border-[#E8B788] bg-[#FFF5E9] px-4 py-3 text-[#5C4033]">${renderInlineMarkdown(trimmed.slice(2))}</blockquote>`
+      );
       return;
     }
 
@@ -134,11 +171,17 @@ const renderMarkdownToHtml = (markdown: string): string => {
       isListOpen = false;
     }
 
-    html.push(`<p class="mt-4 leading-8 text-slate-700">${renderInlineMarkdown(trimmed)}</p>`);
+    html.push(`<p class="mt-4 leading-relaxed text-[#2D2D2D]">${renderInlineMarkdown(trimmed)}</p>`);
   });
 
   if (isListOpen) {
     html.push('</ul>');
+  }
+
+  if (isCodeBlockOpen && codeBlock.length > 0) {
+    html.push(
+      `<pre class="mt-6 overflow-x-auto rounded-2xl bg-[#FFF5E9] p-4 text-sm leading-7 text-[#5C4033]"><code>${escapeHtml(codeBlock.join('\n'))}</code></pre>`
+    );
   }
 
   return html.join('');
