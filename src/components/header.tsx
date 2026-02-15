@@ -35,12 +35,9 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-brand-primary/10 bg-white backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-[#7C4A2D]/10 bg-white/85 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4">
-          <Link
-            href="/"
-            className="text-xl font-extrabold tracking-tight text-[#1B3A4B] transition hover:text-brand-navyDark"
-          >
+          <Link href="/" className="text-xl font-extrabold tracking-tight text-[#4F2A1D] transition hover:text-[#7C4A2D]">
             PetHealth+
           </Link>
 
@@ -52,10 +49,10 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                  className={`rounded-full px-4 py-2 text-sm transition ${
                     isActive
-                      ? 'bg-brand-primary text-white'
-                      : 'text-brand-textSecondary hover:bg-[#FFF3E6] hover:text-brand-primary'
+                      ? 'font-bold text-[#F97316]'
+                      : 'font-medium text-[#7C4A2D] hover:bg-[#FFF0E6] hover:text-[#4F2A1D]'
                   }`}
                 >
                   {item.label}
@@ -67,13 +64,13 @@ export default function Header() {
           <div className="hidden items-center gap-2 md:flex">
             {isLoggedIn ? (
               <>
-                <span className="text-sm font-medium text-brand-textSecondary">{user?.displayName ?? '사용자'}님</span>
+                <span className="text-sm font-medium text-[#7C4A2D]">{user?.displayName ?? '사용자'}님</span>
                 <button
                   type="button"
                   onClick={() => {
                     void signOut();
                   }}
-                  className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover"
+                  className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#F97316]"
                 >
                   로그아웃
                 </button>
@@ -82,7 +79,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setIsLoginModalOpen(true)}
-                className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover"
+                className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#F97316]"
               >
                 로그인
               </button>
@@ -92,7 +89,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-brand-primary/20 text-brand-primary md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#7C4A2D]/25 text-[#7C4A2D] md:hidden"
             aria-label="모바일 메뉴 열기"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -101,52 +98,55 @@ export default function Header() {
           </button>
         </div>
 
-        {isMenuOpen ? (
-          <div id="mobile-menu" className="border-t border-brand-primary/10 bg-white px-4 py-3 md:hidden">
-            <nav className="flex flex-col gap-2">
-              {navigationItems.map((item) => {
-                const isActive = pathname.startsWith(item.href);
+        <div
+          id="mobile-menu"
+          className={`overflow-hidden border-t border-[#7C4A2D]/10 bg-white/95 transition-all duration-300 ease-out md:hidden ${
+            isMenuOpen ? 'max-h-96 py-3 opacity-100' : 'max-h-0 py-0 opacity-0'
+          }`}
+        >
+          <nav className="flex flex-col gap-2 px-4">
+            {navigationItems.map((item) => {
+              const isActive = pathname.startsWith(item.href);
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`rounded-lg px-3 py-2 text-sm font-medium ${
-                      isActive ? 'bg-brand-primary/10 text-brand-primary' : 'text-brand-textSecondary'
-                    }`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`rounded-lg px-3 py-2 text-sm ${
+                    isActive ? 'font-bold text-[#F97316]' : 'font-medium text-[#7C4A2D]'
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
 
-              {isLoggedIn ? (
-                <button
-                  type="button"
-                  className="mt-1 rounded-lg bg-[#E67E22] px-3 py-2 text-sm font-semibold text-white"
-                  onClick={() => {
-                    void signOut();
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  로그아웃
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="mt-1 rounded-lg bg-[#E67E22] px-3 py-2 text-sm font-semibold text-white"
-                  onClick={() => {
-                    setIsLoginModalOpen(true);
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  로그인
-                </button>
-              )}
-            </nav>
-          </div>
-        ) : null}
+            {isLoggedIn ? (
+              <button
+                type="button"
+                className="mt-1 rounded-lg bg-[#E67E22] px-3 py-2 text-sm font-semibold text-white"
+                onClick={() => {
+                  void signOut();
+                  setIsMenuOpen(false);
+                }}
+              >
+                로그아웃
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="mt-1 rounded-lg bg-[#E67E22] px-3 py-2 text-sm font-semibold text-white"
+                onClick={() => {
+                  setIsLoginModalOpen(true);
+                  setIsMenuOpen(false);
+                }}
+              >
+                로그인
+              </button>
+            )}
+          </nav>
+        </div>
       </header>
 
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
