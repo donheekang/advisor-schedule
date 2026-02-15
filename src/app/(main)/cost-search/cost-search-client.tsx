@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAuth } from '@/components/auth-provider';
 import AffiliateProducts from '@/components/affiliate-products';
@@ -112,6 +112,7 @@ export default function CostSearchClient() {
   const [costResult, setCostResult] = useState<ApiCostSearchResult | null>(null);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
   const [myComparison, setMyComparison] = useState<MyPriceComparison | null>(null);
   const [comparingMine, setComparingMine] = useState(false);
 
@@ -143,76 +144,76 @@ export default function CostSearchClient() {
     };
   }, [loading, user?.uid]);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function runSearch() {
-      const trimmed = query.trim();
-      if (!trimmed) {
-        return;
-      }
-
-      setSearching(true);
-      setSearchError(null);
-      setMyComparison(null);
-
-      try {
-        const species = animalType === '강아지' ? 'dog' : 'cat';
-        const params = new URLSearchParams({ query: trimmed, species, region });
-        const response = await fetch(`/api/cost-search?${params.toString()}`);
-        const data = (await response.json()) as ApiCostSearchResult | { error?: string };
-
-        if (!response.ok || 'error' in data) {
-          throw new Error('error' in data ? data.error : '검색 결과를 가져오지 못했습니다.');
-        }
-
-        if (!cancelled) {
-          setCostResult(data as ApiCostSearchResult);
-        }
-      } catch (error) {
-        if (!cancelled) {
-          setSearchError(error instanceof Error ? error.message : '검색 중 오류가 발생했습니다.');
-          setCostResult(null);
-        }
-      } finally {
-        if (!cancelled) {
-          setSearching(false);
-        }
-      }
+  async function runSearch(searchQuery: string) {
+    const trimmed = searchQuery.trim();
+    if (!trimmed) {
+      setSearchError('검색어를 입력해 주세요.');
+      setCostResult(null);
+      return;
     }
 
-    void runSearch();
+    setSearching(true);
+    setSearchError(null);
+    setMyComparison(null);
+    setHasSearched(true);
 
-    return () => {
-      cancelled = true;
-    };
-  }, [animalType, query, region]);
+    try {
+      const species = animalType === '강아지' ? 'dog' : 'cat';
+      const params = new URLSearchParams({ query: trimmed, species, region });
+      const response = await fetch(`/api/cost-search?${params.toString()}`);
+      const data = (await response.json()) as ApiCostSearchResult | { error?: string };
 
-  const averagePosition = useMemo(() => {
+      if (!response.ok || 'error' in data) {
+        throw new Error('error' in data ? data.error : '검색 결과를 가져오지 못했습니다.');
+      }
+
+      setCostResult(data as ApiCostSearchResult);
+    } catch (error) {
+      setSearchError(error instanceof Error ? error.message : '검색 중 오류가 발생했습니다.');
+      setCostResult(null);
+    } finally {
+      setSearching(false);
+    }
+  }
+
+  function getPriceBadge() {
     if (!costResult) {
-      return 0;
-    }
-
-    const range = costResult.priceStats.max - costResult.priceStats.min;
-    if (range === 0) {
-      return 0;
-    }
-
-    return ((costResult.priceStats.avg - costResult.priceStats.min) / range) * 100;
-  }, [costResult]);
-
-  const myPosition = useMemo(() => {
-    if (!costResult || !myComparison) {
       return null;
     }
 
-    const range = costResult.priceStats.max - costResult.priceStats.min;
-    if (range <= 0) {
-      return 0;
+    const ratio = (costResult.priceStats.avg - costResult.nationalAvg) / costResult.nationalAvg;
+
+    if (ratio <= -0.05) {
+      return {
+        label: '평균보다 저렴해요 😊',
+        className: 'bg-emerald-100 text-emerald-700'
+      };
     }
 
-    return Math.min(100, Math.max(0, ((myComparison.average - costResult.priceStats.min) / range) * 100));
-  }, [costResult, myComparison]);
+    if (ratio >= 0.05) {
+      return {
+        label: '평균보다 높아요 😮',
+        className: 'bg-rose-100 text-rose-700'
+      };
+    }
+
+    return {
+      label: '적정 가격이에요 👍',
+      className: 'bg-amber-100 text-amber-700'
+    };
+  }
+
+  const priceBadge = getPriceBadge();
+
+  const maxChartValue = costResult ? Math.max(costResult.priceStats.max, costResult.nationalAvg, costResult.regionalAvg) : 0;
+
+  function getChartWidth(value: number) {
+    if (!maxChartValue) {
+      return '0%';
+    }
+
+    return `${Math.max(8, (value / maxChartValue) * 100)}%`;
+  }
 
   async function handleCompareMine() {
     if (!user || !costResult || !token) {
@@ -246,13 +247,23 @@ export default function CostSearchClient() {
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-4xl flex-col gap-5" aria-label="진료비 검색">
-      <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-        <div className="mb-4 flex items-center justify-between gap-2">
-          <h1 className="text-lg font-bold text-[#1B3A4B]">진료비 검색</h1>
-        </div>
+    <section
+      className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-6 bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-4 py-8"
+      aria-label="진료비 검색"
+    >
+      <header className="space-y-2 text-center text-[#4F2A1D]">
+        <h1 className="text-3xl font-extrabold">💰 우리 아이 진료비, 비싼 걸까?</h1>
+        <p className="text-sm font-medium">전국 평균 데이터와 비교해보세요</p>
+      </header>
 
-        <div className="space-y-3">
+      <article className="rounded-3xl bg-white p-6 shadow-lg">
+        <form
+          className="space-y-4"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void runSearch(query);
+          }}
+        >
           <label htmlFor="cost-search-input" className="block text-sm font-semibold text-slate-700">
             어떤 진료를 받으셨나요?
           </label>
@@ -261,7 +272,7 @@ export default function CostSearchClient() {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="예: 혈액검사, 스케일링, 슬개골 수술"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
+            className="w-full rounded-2xl border border-[#F8C79F] px-4 py-3 text-sm text-[#4F2A1D] outline-none transition focus:border-[#F97316]"
           />
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -270,7 +281,7 @@ export default function CostSearchClient() {
               <select
                 value={animalType}
                 onChange={(event) => setAnimalType(event.target.value as (typeof animalTypes)[number])}
-                className="rounded-xl border border-slate-200 px-3 py-3 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
+                className="rounded-2xl border border-[#F8C79F] px-3 py-3 text-sm text-[#4F2A1D] outline-none transition focus:border-[#F97316]"
               >
                 {animalTypes.map((type) => (
                   <option key={type} value={type}>
@@ -285,7 +296,7 @@ export default function CostSearchClient() {
               <select
                 value={region}
                 onChange={(event) => setRegion(event.target.value)}
-                className="rounded-xl border border-slate-200 px-3 py-3 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
+                className="rounded-2xl border border-[#F8C79F] px-3 py-3 text-sm text-[#4F2A1D] outline-none transition focus:border-[#F97316]"
               >
                 {regions.map((area) => (
                   <option key={area} value={area}>
@@ -301,134 +312,158 @@ export default function CostSearchClient() {
               <button
                 key={tag}
                 type="button"
-                onClick={() => setQuery(tag)}
-                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100"
+                onClick={() => {
+                  setQuery(tag);
+                  void runSearch(tag);
+                }}
+                className="rounded-full border border-[#F8C79F] bg-[#FFF8F0] px-3 py-1.5 text-xs font-medium text-[#7A4A36] transition hover:bg-[#FFEEDC]"
               >
                 #{tag}
               </button>
             ))}
           </div>
-        </div>
+
+          <button
+            type="submit"
+            disabled={searching}
+            className="w-full rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:opacity-95 disabled:opacity-60"
+          >
+            {searching ? '검색 중...' : '진료비 검색하기'}
+          </button>
+        </form>
       </article>
 
-      <article className="rounded-2xl border border-[#1B3A4B]/20 bg-brand-navyDark p-5 text-white shadow-sm">
-        <h2 className="text-base font-bold text-white">가격 범위</h2>
-        <p className="mt-1 text-sm text-slate-200">
-          {costResult?.matchedItem ?? query} 기준 참고 범위 {searching ? '(검색 중...)' : ''}
-        </p>
+      {!hasSearched ? (
+        <article className="rounded-2xl bg-white p-8 text-center shadow-md">
+          <p className="text-4xl">🔍</p>
+          <p className="mt-3 text-base font-semibold text-[#7A4A36]">진료 항목을 검색해보세요</p>
+        </article>
+      ) : null}
 
-        {searchError ? <p className="mt-3 text-sm text-red-500">{searchError}</p> : null}
+      {searchError && !costResult ? (
+        <article className="rounded-2xl bg-white p-8 text-center shadow-md">
+          <p className="text-4xl">😢</p>
+          <p className="mt-3 text-base font-semibold text-[#7A4A36]">해당 항목의 데이터가 아직 없어요</p>
+          <p className="mt-2 text-xs text-slate-500">{searchError}</p>
+        </article>
+      ) : null}
 
-        {costResult ? (
-          <>
-            <div className="mt-4 rounded-xl bg-white/10 p-4">
-              <div className="relative h-6">
-                <div className="absolute left-0 top-2 h-2 w-full rounded-full bg-white/20" />
-                <div className="absolute top-2 h-2 w-full rounded-full bg-[#E67E22]/30" aria-hidden="true" />
-                <div
-                  className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-[#E67E22]"
-                  style={{ left: `${averagePosition}%` }}
-                  aria-label="평균 가격 위치"
-                />
-                {myPosition !== null ? (
-                  <div
-                    className="absolute top-0 h-6 w-1 -translate-x-1/2 rounded-full bg-[#F8B26A]"
-                    style={{ left: `${myPosition}%` }}
-                    aria-label="내 진료비 위치"
-                  />
-                ) : null}
-              </div>
+      {costResult ? (
+        <article className="space-y-4 rounded-2xl bg-white p-5 shadow-md">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-bold text-[#4F2A1D]">{costResult.matchedItem}</h2>
+            {priceBadge ? <span className={`rounded-full px-3 py-1 text-xs font-semibold ${priceBadge.className}`}>{priceBadge.label}</span> : null}
+          </div>
 
-              <div className="mt-3 flex items-center justify-between text-xs font-medium text-slate-200">
-                <span>최소 {toWon(costResult.priceStats.min)}</span>
-                <span className="rounded-full bg-[#E67E22]/20 px-2 py-1 text-[#FFDAB3]">평균 {toWon(costResult.priceStats.avg)}</span>
-                <span>최대 {toWon(costResult.priceStats.max)}</span>
-              </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl bg-[#FFF8F0] p-4">
+              <p className="text-xs text-[#7A4A36]">검색 결과 평균</p>
+              <p className="mt-1 text-2xl font-bold text-[#F97316]">{toWon(costResult.priceStats.avg)}</p>
             </div>
-
-            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="rounded-xl border border-white/20 bg-white/10 p-4">
-                <p className="text-xs text-slate-300">전국 평균</p>
-                <p className="mt-1 text-xl font-bold text-white">{toWon(costResult.nationalAvg)}</p>
-              </div>
-              <div className="rounded-xl border border-white/20 bg-white/10 p-4">
-                <p className="text-xs text-slate-300">{region} 평균</p>
-                <p className="mt-1 text-xl font-bold text-white">{toWon(costResult.regionalAvg)}</p>
-              </div>
+            <div className="rounded-2xl bg-[#FFF8F0] p-4">
+              <p className="text-xs text-[#7A4A36]">전국 평균</p>
+              <p className="mt-1 text-xl font-bold text-[#4F2A1D]">{toWon(costResult.nationalAvg)}</p>
             </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {costResult.sources.map((source) => (
-                <span key={source} className="rounded-full bg-white/15 px-2 py-1 text-xs text-slate-100">
-                  {source}
-                </span>
-              ))}
+            <div className="rounded-2xl bg-[#FFF8F0] p-4">
+              <p className="text-xs text-[#7A4A36]">{region} 평균</p>
+              <p className="mt-1 text-xl font-bold text-[#4F2A1D]">{toWon(costResult.regionalAvg)}</p>
             </div>
+          </div>
 
-            {user ? (
-              <div className="mt-4">
-                <button
-                  type="button"
-                  onClick={() => void handleCompareMine()}
-                  disabled={comparingMine}
-                  className="rounded-xl bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-ctaHover disabled:opacity-50"
-                >
-                  {comparingMine ? '내 진료비 불러오는 중...' : '내 진료비 비교'}
-                </button>
-                {myComparison ? (
-                  <p className="mt-3 text-sm text-slate-100">
-                    내 진료비 평균은 {toWon(myComparison.average)}이며, 전체 평균보다{' '}
-                    <span className="font-semibold text-[#FFDAB3]">{Math.abs(myComparison.diffPercent).toFixed(1)}%</span>{' '}
-                    {myComparison.isHigher ? '높아요.' : '낮아요.'} (내 기록 {myComparison.sampleSize}건)
-                  </p>
-                ) : (
-                  <p className="mt-3 text-xs text-slate-300">로그인 사용자의 진료 기록에서 항목을 찾아 비교합니다.</p>
-                )}
+          <div className="space-y-3 rounded-2xl bg-[#FFF8F0] p-4">
+            <h3 className="text-sm font-semibold text-[#7A4A36]">평균 비교 차트</h3>
+            {[
+              { label: '최소', value: costResult.priceStats.min, color: 'bg-amber-300' },
+              { label: '평균', value: costResult.priceStats.avg, color: 'bg-orange-400' },
+              { label: '최대', value: costResult.priceStats.max, color: 'bg-orange-500' }
+            ].map((item) => (
+              <div key={item.label} className="space-y-1">
+                <div className="flex items-center justify-between text-xs text-[#7A4A36]">
+                  <span>{item.label}</span>
+                  <span>{toWon(item.value)}</span>
+                </div>
+                <div className="h-3 w-full rounded-full bg-[#FFE7CF]">
+                  <div className={`h-3 rounded-full ${item.color}`} style={{ width: getChartWidth(item.value) }} />
+                </div>
               </div>
-            ) : (
-              <p className="mt-4 text-xs text-slate-300">로그인하면 내 진료 기록 기반 비교를 확인할 수 있어요.</p>
-            )}
-          </>
-        ) : null}
-      </article>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {costResult.sources.map((source) => (
+              <span key={source} className="rounded-full bg-[#FFEEDC] px-2 py-1 text-xs text-[#7A4A36]">
+                {source}
+              </span>
+            ))}
+          </div>
+
+          {user ? (
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => void handleCompareMine()}
+                disabled={comparingMine}
+                className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-95 disabled:opacity-60"
+              >
+                {comparingMine ? '내 진료비 불러오는 중...' : '내 진료비 비교'}
+              </button>
+              {myComparison ? (
+                <p className="mt-3 text-sm text-[#7A4A36]">
+                  내 평균은 {toWon(myComparison.average)}이며, 전체 평균보다{' '}
+                  <span className="font-semibold text-[#F97316]">{Math.abs(myComparison.diffPercent).toFixed(1)}%</span>{' '}
+                  {myComparison.isHigher ? '높아요.' : '낮아요.'}
+                </p>
+              ) : (
+                <p className="mt-3 text-xs text-[#9A6A52]">로그인 기록 기반으로 같은 항목을 비교합니다.</p>
+              )}
+            </div>
+          ) : (
+            <p className="text-xs text-[#9A6A52]">로그인하면 내 기록과의 비교도 확인할 수 있어요.</p>
+          )}
+        </article>
+      ) : null}
 
       {costResult ? <AffiliateProducts itemName={costResult.matchedItem} /> : null}
 
-      <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-bold text-[#1B3A4B]">AI 비용 분석</h2>
-          {isPremiumUser ? (
-            <button
-              type="button"
-              onClick={() => setIsChatOpen((prev) => !prev)}
-              className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
-            >
-              이 가격이 궁금하세요?
-            </button>
-          ) : null}
-        </div>
+      {costResult ? (
+        <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-base font-bold text-[#1B3A4B]">AI 비용 분석</h2>
+            {isPremiumUser ? (
+              <button
+                type="button"
+                onClick={() => setIsChatOpen((prev) => !prev)}
+                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+              >
+                이 가격이 궁금하세요?
+              </button>
+            ) : null}
+          </div>
 
-        {loading ? (
-          <p className="mt-3 text-sm text-slate-500">구독 상태를 확인 중입니다...</p>
-        ) : isPremiumUser && isChatOpen ? (
-          <div className="mt-4 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <div className="rounded-xl bg-white p-3 text-sm text-slate-700">
-              {costResult?.matchedItem ?? query}의 평균 비용은 {toWon(costResult?.priceStats.avg ?? 0)}이며, 검사/마취/입원 여부에
-              따라 차이가 큽니다.
+          {loading ? (
+            <p className="mt-3 text-sm text-slate-500">구독 상태를 확인 중입니다...</p>
+          ) : isPremiumUser && isChatOpen ? (
+            <>
+              <div className="mt-4 space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div className="rounded-xl bg-white p-3 text-sm text-slate-700">
+                  {costResult?.matchedItem ?? query}의 평균 비용은 {toWon(costResult?.priceStats.avg ?? 0)}이며, 검사/마취/입원 여부에
+                  따라 차이가 큽니다.
+                </div>
+                <div className="rounded-xl bg-blue-600 p-3 text-sm text-white">항목별로 비용이 어떻게 달라지는지 알려줘.</div>
+                <p className="text-xs text-slate-500">의료적 판단은 제공하지 않으며, 가격 비교 및 항목 설명 중심으로 안내해요.</p>
+              </div>
+            </>
+          ) : !isPremiumUser ? (
+            <div className="mt-4">
+              <Paywall
+                title="AI 비용 분석은 프리미엄 전용 기능입니다"
+                description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한으로 제공돼요."
+                featureName="AI 비용 분석"
+              />
             </div>
-            <div className="rounded-xl bg-blue-600 p-3 text-sm text-white">항목별로 비용이 어떻게 달라지는지 알려줘.</div>
-            <p className="text-xs text-slate-500">의료적 판단은 제공하지 않으며, 가격 비교 및 항목 설명 중심으로 안내해요.</p>
-          </div>
-        ) : !isPremiumUser ? (
-          <div className="mt-4">
-            <Paywall
-              title="AI 비용 분석은 프리미엄 전용 기능입니다"
-              description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한으로 제공돼요."
-              featureName="AI 비용 분석"
-            />
-          </div>
-        ) : null}
-      </article>
+          ) : null}
+        </article>
+      ) : null}
 
       {costResult ? (
         <CostChat
