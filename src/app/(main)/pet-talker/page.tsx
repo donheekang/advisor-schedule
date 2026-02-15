@@ -82,6 +82,7 @@ export default function PetTalkerPage() {
   const [pets, setPets] = useState<PetInfo[]>([]);
   const [selectedPetId, setSelectedPetId] = useState<string>("");
   const [typingDots, setTypingDots] = useState(1);
+  const [isResultVisible, setIsResultVisible] = useState(false);
 
   const animationFrameRef = useRef<number | null>(null);
   const targetSpeechRef = useRef("");
@@ -110,6 +111,16 @@ export default function PetTalkerPage() {
     }, 350);
 
     return () => window.clearInterval(timer);
+  }, [status]);
+
+  useEffect(() => {
+    if (status !== "success") {
+      setIsResultVisible(false);
+      return;
+    }
+
+    const timer = window.setTimeout(() => setIsResultVisible(true), 20);
+    return () => window.clearTimeout(timer);
   }, [status]);
 
   useEffect(() => {
@@ -336,6 +347,7 @@ export default function PetTalkerPage() {
     setSpeech("");
     setErrorMessage("");
     setErrorType(null);
+    setIsResultVisible(false);
   };
 
   return (
@@ -372,50 +384,52 @@ export default function PetTalkerPage() {
           </section>
         ) : null}
 
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={() => fileInputRef.current?.click()}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
+        {status !== "success" ? (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => fileInputRef.current?.click()}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                fileInputRef.current?.click();
+              }
+            }}
+            onDragOver={(event) => {
               event.preventDefault();
-              fileInputRef.current?.click();
-            }
-          }}
-          onDragOver={(event) => {
-            event.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-          className={`cursor-pointer rounded-3xl border-2 border-dashed bg-white p-5 shadow-sm transition ${
-            isDragging ? "border-[#2A9D8F]" : "border-[#1B3A4B]/20"
-          }`}
-          aria-label="사진 업로드"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="hidden"
-            onChange={handleFileInputChange}
-          />
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+            className={`cursor-pointer rounded-3xl border-2 border-dashed bg-white p-5 shadow-sm transition ${
+              isDragging ? "border-[#2A9D8F]" : "border-[#1B3A4B]/20"
+            }`}
+            aria-label="사진 업로드"
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={handleFileInputChange}
+            />
 
-          {previewUrl ? (
-            <div className="space-y-3">
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#E8EEF1]">
-                <Image src={previewUrl} alt="업로드한 반려동물 사진 미리보기" fill className="object-cover" unoptimized />
+            {previewUrl ? (
+              <div className="space-y-3">
+                <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#E8EEF1]">
+                  <Image src={previewUrl} alt="업로드한 반려동물 사진 미리보기" fill className="object-cover" unoptimized />
+                </div>
+                <p className="text-center text-xs text-[#1B3A4B]">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
               </div>
-              <p className="text-center text-xs text-[#1B3A4B]">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
-            </div>
-          ) : (
-            <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl bg-[#E8EEF1]/60 text-center">
-              <span className="text-4xl">📷</span>
-              <p className="text-base font-bold">드래그하거나 눌러서 사진 올리기</p>
-              <p className="text-xs text-[#1B3A4B]">최대 5MB · jpg/png/webp</p>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl bg-[#E8EEF1]/60 text-center">
+                <span className="text-4xl">📷</span>
+                <p className="text-base font-bold">드래그하거나 눌러서 사진 올리기</p>
+                <p className="text-xs text-[#1B3A4B]">최대 5MB · jpg/png/webp</p>
+              </div>
+            )}
+          </div>
+        ) : null}
 
         <section className="rounded-3xl bg-white p-5 shadow-sm">
           {status === "loading" && (
@@ -444,26 +458,43 @@ export default function PetTalkerPage() {
           )}
 
           {status === "success" && previewUrl && (
-            <div className="space-y-4">
-              <div className="rounded-2xl bg-[#E8EEF1] p-3">
-                <div className="relative mx-auto aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border-4 border-white shadow-sm">
-                  <Image src={previewUrl} alt="반려동물 공유 카드" fill className="object-cover" unoptimized />
-                </div>
-                <div className="relative mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold leading-relaxed text-[#1B3A4B] shadow-sm">
-                  <span className="absolute -top-2 left-5 h-4 w-4 rotate-45 bg-white" aria-hidden />
-                  “{speech}”
-                </div>
+            <div className={`space-y-5 transition-all duration-500 ${isResultVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}>
+              <div className="relative rounded-3xl bg-gradient-to-br from-[#2A9D8F] to-[#1B6F78] px-6 py-5 text-xl font-extrabold leading-relaxed text-white shadow-lg">
+                <span className="absolute -bottom-2 left-10 h-5 w-5 rotate-45 bg-[#1B6F78]" aria-hidden />
+                “{speech}”
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <ShareCard
+                petImageUrl={previewUrl}
+                dialogue={speech}
+                petName={selectedPet?.name ?? ""}
+                kakaoJavaScriptKey={process.env.NEXT_PUBLIC_KAKAO_JS_KEY}
+              />
+
+              <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="rounded-xl border border-[#1B3A4B]/20 bg-white px-3 py-2 text-sm font-semibold text-[#1B3A4B]"
+                  className="rounded-2xl border border-[#1B3A4B]/25 bg-white px-4 py-4 text-base font-extrabold text-[#1B3A4B] shadow-sm"
                 >
                   다시 해보기
                 </button>
-                <button type="button" className="rounded-xl bg-[#2A9D8F] px-3 py-2 text-sm font-semibold text-white">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const shareTitle = `${selectedPet?.name ?? "우리 아이"}의 펫토커 결과`;
+                    const shareText = `“${speech}”`;
+
+                    if (navigator.share) {
+                      void navigator.share({ title: shareTitle, text: shareText, url: window.location.href });
+                      return;
+                    }
+
+                    void navigator.clipboard.writeText(`${shareTitle}\n${shareText}\n${window.location.href}`);
+                    setErrorMessage("공유 링크를 복사했어요. 원하는 앱에 붙여넣어 공유해 보세요!");
+                  }}
+                  className="rounded-2xl bg-[#2A9D8F] px-4 py-4 text-base font-extrabold text-white shadow-md shadow-[#2A9D8F]/35"
+                >
                   공유하기
                 </button>
               </div>
@@ -490,15 +521,6 @@ export default function PetTalkerPage() {
             </div>
           )}
         </section>
-
-        {status === "success" && previewUrl ? (
-          <ShareCard
-            petImageUrl={previewUrl}
-            dialogue={speech}
-            petName={selectedPet?.name ?? ""}
-            kakaoJavaScriptKey={process.env.NEXT_PUBLIC_KAKAO_JS_KEY}
-          />
-        ) : null}
 
         <section className="rounded-3xl bg-amber-50 p-5 text-center shadow-sm">
           <p className="text-sm font-semibold text-[#1B3A4B]">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
