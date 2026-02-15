@@ -277,15 +277,21 @@ function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo']): string {
   return `${basePrompt}\n\n${petInfoLines.join('\n')}`;
 }
 
-function parseClaudeJson(content: string): PetTalkerResponse {
+function extractResponse(raw: string): PetTalkerResponse {
   const fallback: PetTalkerResponse = {
-    speech: content.trim() || '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!',
+    speech: raw.trim() || '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!',
     emotion: 'happy',
     emotionScore: 80
   };
 
   try {
-    const parsed = JSON.parse(content) as Partial<PetTalkerResponse>;
+    const cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return fallback;
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]) as Partial<PetTalkerResponse>;
     const validEmotionCodes: EmotionCode[] = ['happy', 'peaceful', 'curious', 'grumpy', 'proud', 'love', 'sleepy', 'hungry'];
     const emotion = validEmotionCodes.includes(parsed.emotion as EmotionCode) ? (parsed.emotion as EmotionCode) : 'happy';
     const emotionScore =
@@ -294,7 +300,7 @@ function parseClaudeJson(content: string): PetTalkerResponse {
         : 80;
 
     return {
-      speech: typeof parsed.speech === 'string' && parsed.speech.trim() ? parsed.speech.trim() : fallback.speech,
+      speech: typeof parsed.speech === 'string' && parsed.speech.trim() ? parsed.speech.trim() : raw,
       emotion,
       emotionScore
     };
@@ -427,13 +433,10 @@ export async function POST(request: NextRequest) {
       userPrompt
     });
 
-    const contentText = claudeMessage.content
-      .filter((block): block is Anthropic.TextBlock => block.type === 'text')
-      .map((block) => block.text)
-      .join('')
-      .trim();
+    const rawText = claudeMessage.content[0]?.type === 'text' ? claudeMessage.content[0].text : '';
+    const result = extractResponse(rawText);
 
-    return NextResponse.json(parseClaudeJson(contentText));
+    return NextResponse.json(result);
   } catch (error) {
     console.error('[pet-talker] POST handler error', error);
     return NextResponse.json(
