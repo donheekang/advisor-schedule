@@ -9,6 +9,14 @@ import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from "re
 
 type RequestStatus = "idle" | "loading" | "success" | "error";
 type ErrorType = "missing_api_key" | "network" | "usage_exceeded" | "invalid_format" | "file_too_large" | "unknown";
+type EmotionCode = "happy" | "peaceful" | "curious" | "grumpy" | "proud" | "love" | "sleepy" | "hungry";
+
+type EmotionMeta = {
+  emoji: string;
+  label: string;
+  background: string;
+  soundFile: string;
+};
 
 type PetInfo = {
   id: string;
@@ -23,6 +31,16 @@ type PetsApiResponse = {
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const EMOTION_META: Record<EmotionCode, EmotionMeta> = {
+  happy: { emoji: "😆", label: "신남", background: "#FEF3C7", soundFile: "happy.mp3" },
+  peaceful: { emoji: "😌", label: "평화", background: "#D1FAE5", soundFile: "peaceful.mp3" },
+  curious: { emoji: "🤔", label: "호기심", background: "#DBEAFE", soundFile: "curious.mp3" },
+  grumpy: { emoji: "😤", label: "투정", background: "#FEE2E2", soundFile: "grumpy.mp3" },
+  proud: { emoji: "😏", label: "도도", background: "#F3E8FF", soundFile: "proud.mp3" },
+  love: { emoji: "🥰", label: "사랑", background: "#FCE7F3", soundFile: "love.mp3" },
+  sleepy: { emoji: "😴", label: "나른", background: "#E0E7FF", soundFile: "sleepy.mp3" },
+  hungry: { emoji: "🤤", label: "배고픔", background: "#FFEDD5", soundFile: "hungry.mp3" }
+};
 
 const ERROR_MESSAGE_BY_TYPE: Record<ErrorType, string> = {
   missing_api_key: "서비스 준비 중이에요. 곧 만나요! 🐶",
@@ -83,6 +101,12 @@ export default function PetTalkerPage() {
   const [selectedPetId, setSelectedPetId] = useState<string>("");
   const [typingDots, setTypingDots] = useState(1);
   const [isResultVisible, setIsResultVisible] = useState(false);
+  const [emotion, setEmotion] = useState<EmotionCode>("happy");
+  const [emotionScore, setEmotionScore] = useState(80);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isSoundMuted, setIsSoundMuted] = useState(false);
+
+  const ttsRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const animationFrameRef = useRef<number | null>(null);
   const targetSpeechRef = useRef("");
@@ -97,6 +121,9 @@ export default function PetTalkerPage() {
       }
       if (animationFrameRef.current) {
         window.clearInterval(animationFrameRef.current);
+      }
+      if (typeof window !== "undefined") {
+        window.speechSynthesis.cancel();
       }
     };
   }, [previewUrl]);
@@ -200,6 +227,41 @@ export default function PetTalkerPage() {
     }, 28);
   };
 
+  const handleSpeechPlayback = () => {
+    if (typeof window === "undefined" || !speech) {
+      return;
+    }
+
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(speech);
+    utterance.lang = "ko-KR";
+    utterance.rate = 0.9;
+    utterance.pitch = 1.3;
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    ttsRef.current = utterance;
+    setIsSpeaking(true);
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const playEmotionSound = (nextEmotion: EmotionCode) => {
+    if (isSoundMuted) {
+      return;
+    }
+
+    const sound = new Audio(`/sounds/${EMOTION_META[nextEmotion].soundFile}`);
+    sound.volume = 0.35;
+    void sound.play().catch(() => {
+      // skip silently when no sound file exists or autoplay is blocked
+    });
+  };
+
   const processFile = async (file: File) => {
     setErrorType(null);
     setErrorMessage("");
@@ -216,6 +278,10 @@ export default function PetTalkerPage() {
     setPreviewUrl(nextPreviewUrl);
     setStatus("loading");
     setSpeech("");
+    setIsSpeaking(false);
+    if (typeof window !== "undefined") {
+      window.speechSynthesis.cancel();
+    }
 
     try {
       const image = await toDataUrl(file);
@@ -258,49 +324,22 @@ export default function PetTalkerPage() {
         throw new Error(errorData?.message ?? "request_failed");
       }
 
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error("stream_unavailable");
-      }
+      const payload = (await response.json().catch(() => null)) as
+        | { speech?: string; emotion?: EmotionCode; emotionScore?: number }
+        | null;
 
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let finalSpeech = "";
+      const validEmotionCodes: EmotionCode[] = ["happy", "peaceful", "curious", "grumpy", "proud", "love", "sleepy", "hungry"];
+      const nextSpeech = typeof payload?.speech === "string" && payload.speech.trim() ? payload.speech.trim() : "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!";
+      const nextEmotion = validEmotionCodes.includes(payload?.emotion as EmotionCode) ? (payload?.emotion as EmotionCode) : "happy";
+      const nextEmotionScore =
+        typeof payload?.emotionScore === "number" && Number.isInteger(payload.emotionScore)
+          ? Math.min(99, Math.max(50, payload.emotionScore))
+          : 80;
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
-
-        buffer += decoder.decode(value, { stream: true });
-        const chunks = buffer.split("\n\n");
-        buffer = chunks.pop() ?? "";
-
-        for (const chunk of chunks) {
-          if (!chunk.startsWith("data:")) {
-            continue;
-          }
-
-          const json = chunk.slice(5).trim();
-          if (!json) {
-            continue;
-          }
-
-          const payload = JSON.parse(json) as { type?: string; text?: string; error?: string };
-
-          if (payload.type === "text_delta" && payload.text) {
-            finalSpeech += payload.text;
-          }
-
-          if (payload.type === "error") {
-            throw new Error(payload.error ?? "stream_failed");
-          }
-        }
-      }
-
-      const fallbackSpeech = "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!";
-      startStreamingText(finalSpeech || fallbackSpeech);
+      setEmotion(nextEmotion);
+      setEmotionScore(nextEmotionScore);
+      playEmotionSound(nextEmotion);
+      startStreamingText(nextSpeech);
       setStatus("success");
       setUsageCount((prev) => Math.min(prev + 1, 2));
     } catch (error) {
@@ -348,7 +387,13 @@ export default function PetTalkerPage() {
     setErrorMessage("");
     setErrorType(null);
     setIsResultVisible(false);
+    setIsSpeaking(false);
+    if (typeof window !== "undefined") {
+      window.speechSynthesis.cancel();
+    }
   };
+
+  const emotionMeta = EMOTION_META[emotion];
 
   return (
     <main className="min-h-screen bg-[#F8FAFB] px-4 py-8 text-[#1B3A4B] md:py-12">
@@ -459,19 +504,70 @@ export default function PetTalkerPage() {
 
           {status === "success" && previewUrl && (
             <div className={`space-y-5 transition-all duration-500 ${isResultVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}>
-              <div className="relative rounded-3xl bg-gradient-to-br from-[#2A9D8F] to-[#1B6F78] px-6 py-5 text-xl font-extrabold leading-relaxed text-white shadow-lg">
+              <div className="overflow-hidden rounded-2xl">
+                <div className="relative aspect-square overflow-hidden rounded-2xl">
+                  <Image
+                    src={previewUrl}
+                    alt="펫토커 결과 반려동물 사진"
+                    fill
+                    unoptimized
+                    className="object-cover motion-safe:animate-[kenBurns_8s_ease-out_forwards] motion-reduce:animate-none"
+                  />
+                </div>
+              </div>
+
+              <div className="relative rounded-3xl bg-gradient-to-br from-[#2A9D8F] to-[#1B6F78] px-6 py-5 text-white shadow-lg motion-safe:animate-[fadeIn_0.5s_ease-out] motion-reduce:animate-none">
+                <button
+                  type="button"
+                  onClick={() => setIsSoundMuted((prev) => !prev)}
+                  className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-sm font-bold text-[#1B3A4B]"
+                >
+                  {isSoundMuted ? "🔇" : "🔊"}
+                </button>
+                <div
+                  style={{ backgroundColor: emotionMeta.background }}
+                  className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-extrabold text-[#1B3A4B] shadow-sm motion-safe:animate-[bounceIn_0.5s_ease-out_0.5s_both] motion-reduce:animate-none"
+                >
+                  <span>{emotionMeta.emoji}</span>
+                  <span>{emotionMeta.label}</span>
+                  <span>{emotionScore}%</span>
+                </div>
+
                 <span className="absolute -bottom-2 left-10 h-5 w-5 rotate-45 bg-[#1B6F78]" aria-hidden />
-                “{speech}”
+                <p className="text-xl font-extrabold leading-relaxed">“{speech}”</p>
+                <div className="mt-3 flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={handleSpeechPlayback}
+                    className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-sm font-bold text-[#1B3A4B]"
+                  >
+                    <span>{isSpeaking ? "🔇" : "🔊"}</span>
+                    <span>{isSpeaking ? "정지" : "음성 재생"}</span>
+                  </button>
+                  {isSpeaking ? (
+                    <div className="flex items-end gap-1" aria-label="음성 재생 중">
+                      {[0, 1, 2].map((bar) => (
+                        <span
+                          key={bar}
+                          className="h-2 w-1 rounded-full bg-white motion-safe:animate-[wave_0.9s_ease-in-out_infinite] motion-reduce:animate-none"
+                          style={{ animationDelay: `${bar * 0.15}s` }}
+                        />
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               </div>
 
               <ShareCard
                 petImageUrl={previewUrl}
                 dialogue={speech}
                 petName={selectedPet?.name ?? ""}
+                emotion={emotion}
+                emotionScore={emotionScore}
                 kakaoJavaScriptKey={process.env.NEXT_PUBLIC_KAKAO_JS_KEY}
               />
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 opacity-0 motion-safe:animate-[fadeInUp_0.5s_ease-out_0.8s_forwards] motion-reduce:animate-none motion-reduce:opacity-100">
                 <button
                   type="button"
                   onClick={handleReset}
@@ -534,6 +630,56 @@ export default function PetTalkerPage() {
 
         {errorMessage && status !== "error" ? <p className="text-center text-xs font-medium text-rose-500">{errorMessage}</p> : null}
       </section>
+      <style jsx global>{`
+        @keyframes kenBurns {
+          from {
+            transform: scale(1);
+          }
+          to {
+            transform: scale(1.05);
+          }
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes bounceIn {
+          0% {
+            transform: scale(0.7);
+            opacity: 0;
+          }
+          60% {
+            transform: scale(1.08);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        @keyframes fadeInUp {
+          from {
+            transform: translateY(10px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        @keyframes wave {
+          0%,
+          100% {
+            transform: scaleY(0.5);
+          }
+          50% {
+            transform: scaleY(1.6);
+          }
+        }
+      `}</style>
     </main>
   );
 }

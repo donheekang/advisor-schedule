@@ -7,6 +7,8 @@ type ShareCardProps = {
   petImageUrl: string;
   dialogue: string;
   petName?: string;
+  emotion: 'happy' | 'peaceful' | 'curious' | 'grumpy' | 'proud' | 'love' | 'sleepy' | 'hungry';
+  emotionScore: number;
   kakaoJavaScriptKey?: string;
 };
 
@@ -44,7 +46,7 @@ declare global {
   }
 }
 
-export function ShareCard({ petImageUrl, dialogue, petName, kakaoJavaScriptKey }: ShareCardProps) {
+export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScore, kakaoJavaScriptKey }: ShareCardProps) {
   const [card, setCard] = useState<ShareCardRenderResult | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export function ShareCard({ petImageUrl, dialogue, petName, kakaoJavaScriptKey }
     setErrorMessage(null);
 
     try {
-      const generated = await renderShareCard({ petImageUrl, dialogue, petName });
+      const generated = await renderShareCard({ petImageUrl, dialogue, petName, emotion, emotionScore });
       setCard(generated);
       return generated;
     } catch {
@@ -72,7 +74,7 @@ export function ShareCard({ petImageUrl, dialogue, petName, kakaoJavaScriptKey }
     } finally {
       setIsGenerating(false);
     }
-  }, [dialogue, petImageUrl, petName]);
+  }, [dialogue, emotion, emotionScore, petImageUrl, petName]);
 
   useEffect(() => {
     if (!kakaoJavaScriptKey || !window.Kakao) {

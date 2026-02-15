@@ -11,6 +11,14 @@ type PetTalkerRequestBody = {
   };
 };
 
+type EmotionCode = 'happy' | 'peaceful' | 'curious' | 'grumpy' | 'proud' | 'love' | 'sleepy' | 'hungry';
+
+type PetTalkerResponse = {
+  speech: string;
+  emotion: EmotionCode;
+  emotionScore: number;
+};
+
 type UsagePolicy = {
   dailyLimit: number;
   isMember: boolean;
@@ -111,6 +119,7 @@ const SYSTEM_PROMPT = `너는 지금 이 사진 속 반려동물 그 자체야.
 - 엄마 또는 아빠로 불러 (기본은 "엄마")
 - 의성어("멍멍", "야옹") 금지. 사람처럼 말해
 - 이모지는 맨 끝에 1~2개만
+- 반드시 3문장 이내, 100자 이내로 작성해
 - 반드시 2~3문장, 최대 80자 이내
 - 짧고 임팩트 있게. 긴 문장 금지
 - 인사/자기소개 절대 금지. 첫 문장부터 바로 감정
@@ -121,7 +130,22 @@ const SYSTEM_PROMPT = `너는 지금 이 사진 속 반려동물 그 자체야.
 - "안녕하세요", "저는 OO입니다"
 - 같은 구조 반복 ("나는 ~인데, ~해서, ~야")
 - 해시태그
-- 설명하는 문장 ("이 사진에서 저는...")`;
+- 설명하는 문장 ("이 사진에서 저는...")
+
+반드시 아래 JSON 형식으로만 응답해. 다른 텍스트 없이 JSON만:
+{"speech": "대사 내용", "emotion": "감정코드", "emotionScore": 점수}
+
+감정코드 목록:
+- happy (행복/신남) 😆
+- peaceful (평화/여유) 😌
+- curious (호기심) 🤔
+- grumpy (불만/투정) 😤
+- proud (자존심/도도) 😏
+- love (사랑/애정) 🥰
+- sleepy (졸림/나른) 😴
+- hungry (배고픔/기대) 🤤
+
+emotionScore는 50~99 사이 정수.`;
 
 const CLAUDE_MODEL = 'claude-sonnet-4-5-20250929';
 
@@ -253,7 +277,33 @@ function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo']): string {
   return `${basePrompt}\n\n${petInfoLines.join('\n')}`;
 }
 
-async function createAnthropicMessageStream(params: {
+function parseClaudeJson(content: string): PetTalkerResponse {
+  const fallback: PetTalkerResponse = {
+    speech: content.trim() || '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!',
+    emotion: 'happy',
+    emotionScore: 80
+  };
+
+  try {
+    const parsed = JSON.parse(content) as Partial<PetTalkerResponse>;
+    const validEmotionCodes: EmotionCode[] = ['happy', 'peaceful', 'curious', 'grumpy', 'proud', 'love', 'sleepy', 'hungry'];
+    const emotion = validEmotionCodes.includes(parsed.emotion as EmotionCode) ? (parsed.emotion as EmotionCode) : 'happy';
+    const emotionScore =
+      typeof parsed.emotionScore === 'number' && Number.isInteger(parsed.emotionScore)
+        ? Math.min(99, Math.max(50, parsed.emotionScore))
+        : 80;
+
+    return {
+      speech: typeof parsed.speech === 'string' && parsed.speech.trim() ? parsed.speech.trim() : fallback.speech,
+      emotion,
+      emotionScore
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+async function createAnthropicMessage(params: {
   client: Anthropic;
   imageData: string;
   mediaType: SupportedImageMediaType;
@@ -266,10 +316,10 @@ async function createAnthropicMessageStream(params: {
     try {
       return await params.client.messages.create({
         model: params.model,
+        max_tokens: 200,
         max_tokens: 150,
         temperature: 0.9,
         system: SYSTEM_PROMPT,
-        stream: true,
         messages: [
           {
             role: 'user',
@@ -370,7 +420,7 @@ export async function POST(request: NextRequest) {
     const userPrompt = buildUserPrompt(body.petInfo);
 
     const anthropicClient = new Anthropic({ apiKey: anthropicApiKey });
-    const claudeStream = await createAnthropicMessageStream({
+    const claudeMessage = await createAnthropicMessage({
       client: anthropicClient,
       imageData: image.data,
       mediaType: image.mediaType,
@@ -378,41 +428,13 @@ export async function POST(request: NextRequest) {
       userPrompt
     });
 
-    const encoder = new TextEncoder();
+    const contentText = claudeMessage.content
+      .filter((block): block is Anthropic.TextBlock => block.type === 'text')
+      .map((block) => block.text)
+      .join('')
+      .trim();
 
-    const responseStream = new ReadableStream<Uint8Array>({
-      async start(controller) {
-        try {
-          for await (const event of claudeStream) {
-            if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-              controller.enqueue(
-                encoder.encode(`data: ${JSON.stringify({ type: 'text_delta', text: event.delta.text })}\n\n`)
-              );
-            }
-          }
-
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'done' })}\n\n`));
-          controller.close();
-        } catch (streamError) {
-          console.error('[pet-talker] Claude stream error', streamError);
-          controller.enqueue(
-            encoder.encode(
-              `data: ${JSON.stringify({ type: 'error', error: '대사 생성에 실패했습니다. 잠시 후 다시 시도해줘.', detail: streamError instanceof Error ? streamError.message : 'UNKNOWN_STREAM_ERROR' })}\n\n`
-            )
-          );
-          controller.close();
-        }
-      }
-    });
-
-    return new Response(responseStream, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/event-stream; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-        Connection: 'keep-alive'
-      }
-    });
+    return NextResponse.json(parseClaudeJson(contentText));
   } catch (error) {
     console.error('[pet-talker] POST handler error', error);
     return NextResponse.json(
