@@ -21,7 +21,7 @@ export default function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#7C4A2D]/10 bg-white shadow-[0_-4px_16px_rgba(124,74,45,0.12)] md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#7C4A2D]/10 bg-white/95 shadow-[0_-8px_24px_rgba(124,74,45,0.14)] backdrop-blur md:hidden">
       <ul className="mx-auto grid w-full max-w-7xl grid-cols-5">
         {tabs.map((tab) => {
           const isActive = tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
@@ -31,7 +31,7 @@ export default function MobileNav() {
               <Link
                 href={tab.href}
                 className={`flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium transition ${
-                  isActive ? 'text-[#F97316]' : 'text-[#7C4A2D]'
+                  isActive ? 'font-bold text-[#F97316]' : 'text-[#7C4A2D]'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
