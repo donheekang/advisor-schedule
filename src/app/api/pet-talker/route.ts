@@ -405,24 +405,45 @@ export async function POST(request: NextRequest) {
     let emotion = 'happy';
     let emotionScore = 80;
 
-    try {
-      const cleaned = rawText.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
-      const match = cleaned.match(/\{[\s\S]*\}/);
-      if (match) {
-        const obj = JSON.parse(match[0]) as { speech?: string; emotion?: string; emotionScore?: number };
-        if (obj.speech) {
-          speech = obj.speech;
-        }
-        if (obj.emotion) {
-          emotion = obj.emotion;
-        }
-        if (obj.emotionScore) {
-          emotionScore = obj.emotionScore;
-        }
+    // 1단계: 마크다운 코드블록 제거
+    const cleaned = rawText.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
+
+    // 2단계: JSON 객체 추출 시도
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try {
+        const obj = JSON.parse(jsonMatch[0]) as { speech?: string; emotion?: string; emotionScore?: number };
+        if (obj.speech) speech = obj.speech;
+        if (obj.emotion) emotion = obj.emotion;
+        if (typeof obj.emotionScore === 'number') emotionScore = obj.emotionScore;
+      } catch {
+        // JSON 파싱 실패 — 3단계로
       }
-    } catch {
-      // parsing failure falls back to rawText
     }
+
+    // 3단계: speech에 여전히 JSON 잔여물이 있으면 정리
+    if (speech.includes('"speech"') || speech.includes('```')) {
+      // "speech": "실제 대사" 패턴에서 대사만 추출
+      const speechValueMatch = speech.match(/"speech"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+      if (speechValueMatch) {
+        speech = speechValueMatch[1].replace(/\\"/g, '"').replace(/\\n/g, '\n');
+      } else {
+        // 모든 JSON 문법 제거
+        speech = speech
+          .replace(/```json\s*/gi, '')
+          .replace(/```\s*/gi, '')
+          .replace(/\{[^}]*"speech"\s*:\s*"/i, '')
+          .replace(/"\s*,\s*"emotion"[\s\S]*/i, '')
+          .replace(/"\s*\}\s*$/i, '')
+          .trim();
+      }
+    }
+
+    // 4단계: 양쪽 따옴표 제거
+    speech = speech.replace(/^["']|["']$/g, '').trim();
+
+    // 5단계: 빈 대사면 기본값
+    if (!speech) speech = rawText.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').replace(/[{}"\n]/g, ' ').trim();
 
     return Response.json({ speech, emotion, emotionScore });
   } catch (error) {
