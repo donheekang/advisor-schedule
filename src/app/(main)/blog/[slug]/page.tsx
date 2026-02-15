@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { blogPosts, getBlogPostBySlug } from '@/lib/blog-posts';
+import { getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog';
 
 type BlogPageProps = {
   params: {
@@ -9,12 +10,13 @@ type BlogPageProps = {
   };
 };
 
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+export async function generateStaticParams() {
+  const posts = await getAllBlogPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
-export function generateMetadata({ params }: BlogPageProps): Metadata {
-  const post = getBlogPostBySlug(params.slug);
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+  const post = await getBlogPostBySlug(params.slug);
 
   if (!post) {
     return {
@@ -35,69 +37,35 @@ export function generateMetadata({ params }: BlogPageProps): Metadata {
       url: `https://pethealthplus.kr/blog/${post.slug}`,
       siteName: 'PetHealth+',
       locale: 'ko_KR',
-      type: 'article',
-      publishedTime: post.publishedAt,
-      modifiedTime: post.updatedAt,
-      authors: [post.authorName],
-      tags: post.tags,
-      images: [
-        {
-          url: `https://pethealthplus.kr/og/blog-${post.slug}.png`,
-          width: 1200,
-          height: 630,
-          alt: `${post.title} 대표 이미지`
-        }
-      ]
+      type: 'article'
     }
   };
 }
 
-export default function BlogPostPage({ params }: BlogPageProps) {
-  const post = getBlogPostBySlug(params.slug);
+export default async function BlogPostPage({ params }: BlogPageProps) {
+  const post = await getBlogPostBySlug(params.slug);
 
   if (!post) {
     notFound();
   }
 
-  const articleJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: post.description,
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt,
-    inLanguage: 'ko-KR',
-    author: {
-      '@type': 'Organization',
-      name: post.authorName
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'PetHealth+'
-    },
-    mainEntityOfPage: `https://pethealthplus.kr/blog/${post.slug}`,
-    image: [`https://pethealthplus.kr/og/blog-${post.slug}.png`]
-  };
-
   return (
-    <article className="mx-auto max-w-3xl space-y-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 md:p-10">
-      <header className="space-y-3 border-b border-slate-200 pb-6">
-        <p className="text-sm font-semibold text-brand-secondary">{post.category}</p>
-        <h1 className="text-3xl font-extrabold leading-tight text-brand-primary">{post.title}</h1>
-        <p className="text-sm text-slate-500">{new Date(post.publishedAt).toLocaleDateString('ko-KR')}</p>
+    <article className="mx-auto max-w-2xl space-y-8 px-4 py-10 md:px-0">
+      <header className="space-y-3 border-b border-[#E9D3C2] pb-6">
+        <h1 className="text-3xl font-extrabold text-[#4F2A1D]">{post.title}</h1>
+        <p className="text-sm text-[#8A6A58]">{new Date(post.date).toLocaleDateString('ko-KR')}</p>
       </header>
 
-      <section className="space-y-4 text-base leading-8 text-slate-700">
-        {post.content.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </section>
+      <section
+        className="prose prose-lg max-w-none text-[#2D2D2D] leading-relaxed prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D]"
+        dangerouslySetInnerHTML={{ __html: post.html }}
+      />
 
-      <footer className="border-t border-slate-200 pt-6">
-        <p className="text-sm text-slate-500">태그: {post.tags.join(', ')}</p>
+      <footer className="border-t border-[#E9D3C2] pt-5">
+        <Link href="/blog" className="font-semibold text-[#B1643A] hover:text-[#8C4725]">
+          다른 글 보기
+        </Link>
       </footer>
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
     </article>
   );
 }
