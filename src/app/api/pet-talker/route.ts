@@ -284,11 +284,8 @@ function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo']): string {
 }
 
 function extractResponse(raw: string): PetTalkerResponse {
-  const fallback: PetTalkerResponse = {
-    speech: raw.trim() || '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!',
-    emotion: 'happy',
-    emotionScore: 80
-  };
+  const fallbackSpeech = raw.trim() || '오늘 산책 2번 가면 세상 제일 행복할 것 같아요!';
+  const fallback: PetTalkerResponse = { speech: fallbackSpeech, emotion: 'happy', emotionScore: 80 };
 
   try {
     const cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
@@ -306,7 +303,7 @@ function extractResponse(raw: string): PetTalkerResponse {
         : 80;
 
     return {
-      speech: typeof parsed.speech === 'string' && parsed.speech.trim() ? parsed.speech.trim() : raw,
+      speech: typeof parsed.speech === 'string' && parsed.speech.trim() ? parsed.speech.trim() : fallbackSpeech,
       emotion,
       emotionScore
     };
