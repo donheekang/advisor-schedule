@@ -1,10 +1,9 @@
 export const SHARE_CARD_WIDTH = 1080;
 export const SHARE_CARD_HEIGHT = 1080;
 
-const NAVY_BACKGROUND = '#12344A';
-const TEAL_ACCENT = '#2A9D8F';
+const CREAM_BACKGROUND = '#FFF8F0';
 const BUBBLE_BACKGROUND = '#FFFFFF';
-const TEXT_COLOR = '#1B3A4B';
+const TEXT_COLOR = '#5A3325';
 
 export type ShareCardPayload = {
   petImageUrl: string;
@@ -50,21 +49,14 @@ const loadImage = async (src: string): Promise<HTMLImageElement> => {
   return image;
 };
 
-const wrapText = (
-  context: CanvasRenderingContext2D,
-  text: string,
-  maxWidth: number,
-  maxLines: number
-) => {
+const wrapText = (context: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines: number) => {
   const words = text.split(' ');
   const lines: string[] = [];
   let current = '';
 
   words.forEach((word) => {
     const candidate = current ? `${current} ${word}` : word;
-    const measured = context.measureText(candidate).width;
-
-    if (measured <= maxWidth) {
+    if (context.measureText(candidate).width <= maxWidth) {
       current = candidate;
       return;
     }
@@ -101,11 +93,9 @@ const blobToDataUrl = (blob: Blob) =>
     reader.readAsDataURL(blob);
   });
 
-export const getPetTalkerResultUrl = (resultId: string, origin = window.location.origin) =>
-  `${origin}/pet-talker/result/${resultId}`;
+export const getPetTalkerResultUrl = (resultId: string, origin = window.location.origin) => `${origin}/pet-talker/result/${resultId}`;
 
-export const getPetTalkerOgImageUrl = (resultId: string, origin = window.location.origin) =>
-  `${origin}/pet-talker/result/${resultId}/og.png`;
+export const getPetTalkerOgImageUrl = (resultId: string, origin = window.location.origin) => `${origin}/pet-talker/result/${resultId}/og.png`;
 
 export const createPetTalkerOgMetadata = (resultId: string, origin = window.location.origin) => ({
   title: '우리 강아지가 이렇게 말한대 😂',
@@ -115,9 +105,7 @@ export const createPetTalkerOgMetadata = (resultId: string, origin = window.loca
   }
 });
 
-export const renderShareCard = async (
-  payload: ShareCardPayload
-): Promise<ShareCardRenderResult> => {
+export const renderShareCard = async (payload: ShareCardPayload): Promise<ShareCardRenderResult> => {
   const canvas = createCanvas();
   const context = canvas.getContext('2d');
 
@@ -128,29 +116,19 @@ export const renderShareCard = async (
   await document.fonts.load('700 50px Pretendard');
   await document.fonts.load('500 40px Pretendard');
 
-  context.fillStyle = NAVY_BACKGROUND;
+  context.fillStyle = CREAM_BACKGROUND;
   context.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
 
-  const gradient = context.createLinearGradient(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
-  gradient.addColorStop(0, '#1B4B67');
-  gradient.addColorStop(1, '#12344A');
-  context.fillStyle = gradient;
+  const warmGradient = context.createLinearGradient(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
+  warmGradient.addColorStop(0, '#FFF8F0');
+  warmGradient.addColorStop(1, '#FFEBD8');
+  context.fillStyle = warmGradient;
   context.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
-
-  context.fillStyle = TEAL_ACCENT;
-  context.globalAlpha = 0.2;
-  context.beginPath();
-  context.ellipse(220, 180, 260, 180, 0, 0, Math.PI * 2);
-  context.fill();
-  context.beginPath();
-  context.ellipse(900, 860, 240, 160, 0, 0, Math.PI * 2);
-  context.fill();
-  context.globalAlpha = 1;
 
   const petImage = await loadImage(payload.petImageUrl);
   const imageSize = 320;
   const imageX = (SHARE_CARD_WIDTH - imageSize) / 2;
-  const imageY = 96;
+  const imageY = 88;
 
   context.save();
   context.beginPath();
@@ -170,70 +148,68 @@ export const renderShareCard = async (
   context.arc(SHARE_CARD_WIDTH / 2, imageY + imageSize / 2, imageSize / 2, 0, Math.PI * 2);
   context.stroke();
 
-  const bubbleTop = imageY + imageSize + 82;
-  const bubbleHeight = 380;
-  const bubbleX = 80;
+  const bubbleTop = imageY + imageSize + 78;
+  const bubbleHeight = 410;
+  const bubbleX = 76;
   const bubbleWidth = SHARE_CARD_WIDTH - bubbleX * 2;
 
   context.fillStyle = BUBBLE_BACKGROUND;
   context.beginPath();
-  context.roundRect(bubbleX, bubbleTop, bubbleWidth, bubbleHeight, 40);
+  context.roundRect(bubbleX, bubbleTop, bubbleWidth, bubbleHeight, 44);
   context.fill();
 
   context.fillStyle = BUBBLE_BACKGROUND;
   context.beginPath();
-  context.moveTo(SHARE_CARD_WIDTH / 2 - 28, bubbleTop);
-  context.lineTo(SHARE_CARD_WIDTH / 2 + 28, bubbleTop);
-  context.lineTo(SHARE_CARD_WIDTH / 2, bubbleTop - 34);
+  context.moveTo(SHARE_CARD_WIDTH / 2 - 26, bubbleTop);
+  context.lineTo(SHARE_CARD_WIDTH / 2 + 26, bubbleTop);
+  context.lineTo(SHARE_CARD_WIDTH / 2, bubbleTop - 32);
   context.closePath();
   context.fill();
 
   context.fillStyle = TEXT_COLOR;
   context.textAlign = 'left';
   context.textBaseline = 'top';
-  context.font = '700 52px Pretendard, Apple SD Gothic Neo, sans-serif';
-
-  const speaker = payload.petName ? `${payload.petName}의 한마디` : '우리 아이의 한마디';
-  context.fillText(speaker, bubbleX + 48, bubbleTop + 40);
+  context.font = '700 56px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.fillText('우리 아이의 한마디', bubbleX + 48, bubbleTop + 42);
 
   const emotionMeta = EMOTION_TEXT[payload.emotion];
   context.fillStyle = emotionMeta.background;
   context.beginPath();
-  context.roundRect(bubbleX + 48, bubbleTop + 112, 300, 62, 999);
+  context.roundRect(bubbleX + 48, bubbleTop + 122, 320, 64, 999);
   context.fill();
 
-  context.font = '700 32px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.font = '700 34px Pretendard, Apple SD Gothic Neo, sans-serif';
   context.fillStyle = TEXT_COLOR;
-  context.textAlign = 'left';
-  context.fillText(`${emotionMeta.emoji} ${emotionMeta.label} ${payload.emotionScore}%`, bubbleX + 72, bubbleTop + 128);
+  context.fillText(`${emotionMeta.emoji} ${emotionMeta.label} ${payload.emotionScore}점`, bubbleX + 72, bubbleTop + 137);
 
-  context.font = '500 42px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.font = '500 44px Pretendard, Apple SD Gothic Neo, sans-serif';
   const textMaxWidth = bubbleWidth - 96;
-  const lines = wrapText(context, `“${payload.dialogue}”`, textMaxWidth, 3);
+  const lines = wrapText(context, payload.dialogue, textMaxWidth, 3);
   lines.forEach((line, index) => {
-    context.fillText(line, bubbleX + 48, bubbleTop + 206 + index * 56);
+    context.fillText(line, bubbleX + 48, bubbleTop + 222 + index * 58);
   });
+
+  context.font = '500 28px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.fillStyle = '#9CA3AF';
+  context.fillText(`— ${payload.petName || '우리 아이'}`, bubbleX + 48, bubbleTop + bubbleHeight - 56);
 
   context.fillStyle = '#FFFFFF';
   context.globalAlpha = 0.95;
   context.beginPath();
-  context.roundRect(80, SHARE_CARD_HEIGHT - 190, SHARE_CARD_WIDTH - 160, 112, 28);
+  context.roundRect(80, SHARE_CARD_HEIGHT - 170, SHARE_CARD_WIDTH - 160, 92, 28);
   context.fill();
   context.globalAlpha = 1;
 
-  context.font = '700 40px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.fillStyle = TEAL_ACCENT;
+  context.font = '700 36px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.fillStyle = '#F97316';
   context.textAlign = 'left';
   context.textBaseline = 'alphabetic';
-  context.fillText('🐾 PetHealth+', 120, SHARE_CARD_HEIGHT - 132);
+  context.fillText('🐾 PetHealth+', 118, SHARE_CARD_HEIGHT - 112);
 
-  context.font = '600 26px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.fillStyle = '#1B3A4B';
-  context.fillText('2026년 2월 15일', 120, SHARE_CARD_HEIGHT - 98);
-
-  context.font = '500 28px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.textAlign = 'right';
-  context.fillText('pethealthplus.co.kr/pet-talker', SHARE_CARD_WIDTH - 120, SHARE_CARD_HEIGHT - 110);
+  context.font = '600 24px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.fillStyle = '#7C4A2D';
+  const dateText = new Date().toLocaleDateString('ko-KR');
+  context.fillText(dateText, 338, SHARE_CARD_HEIGHT - 112);
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((result) => {
