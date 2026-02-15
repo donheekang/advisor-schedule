@@ -104,6 +104,8 @@ export default function PetTalkerPage() {
   const [selectedPetId, setSelectedPetId] = useState<string>("");
   const [typingDots, setTypingDots] = useState(1);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [userMessage, setUserMessage] = useState("");
+  const [showMessageInput, setShowMessageInput] = useState(false);
 
   const usageText = useMemo(() => `오늘 ${usageCount}/2회 사용`, [usageCount]);
   const selectedPet = useMemo(() => pets.find((pet) => pet.id === selectedPetId) ?? null, [pets, selectedPetId]);
@@ -224,14 +226,28 @@ export default function PetTalkerPage() {
 
     const nextPreviewUrl = URL.createObjectURL(file);
     setPreviewUrl(nextPreviewUrl);
-    setStatus("loading");
+    setShowMessageInput(true);
+    setStatus("idle");
     setSpeech("");
+    setUserMessage("");
+    setIsSpeaking(false);
+    if (typeof window !== "undefined") {
+      window.speechSynthesis.cancel();
+    }
+  };
+
+  const generateSpeech = async () => {
+    if (!previewUrl) return;
+    setStatus("loading");
+    setShowMessageInput(false);
     setIsSpeaking(false);
     if (typeof window !== "undefined") {
       window.speechSynthesis.cancel();
     }
 
     try {
+      const blob = await fetch(previewUrl).then((response) => response.blob());
+      const file = new File([blob], "photo.jpg", { type: blob.type || "image/jpeg" });
       const image = await toDataUrl(file);
       const response = await fetch("/api/pet-talker", {
         method: "POST",
@@ -247,7 +263,8 @@ export default function PetTalkerPage() {
                 breed: selectedPet.breed ?? undefined,
                 age: getPetAge(selectedPet.birth_date) ?? undefined
               }
-            : undefined
+            : undefined,
+          userMessage: userMessage.trim() || undefined
         })
       });
 
@@ -276,37 +293,27 @@ export default function PetTalkerPage() {
       const validEmotionCodes: EmotionCode[] = ["happy", "peaceful", "curious", "grumpy", "proud", "love", "sleepy", "hungry"];
 
       let finalSpeech = data.speech ?? "";
-      let finalEmotion: EmotionCode = "happy";
-      let finalScore = 80;
-
-      // speech 안에 JSON이 들어있는 경우 한번 더 파싱
-      if (finalSpeech.includes('"speech"') || finalSpeech.includes('```json')) {
+      if (finalSpeech.includes('"speech"') || finalSpeech.includes('```')) {
         try {
-          const cleaned = finalSpeech.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").trim();
-          const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
-          if (jsonMatch) {
-            const parsed = JSON.parse(jsonMatch[0]) as { speech?: string; emotion?: string; emotionScore?: number };
-            if (parsed.speech) finalSpeech = parsed.speech;
-            if (parsed.emotion && validEmotionCodes.includes(parsed.emotion as EmotionCode)) {
-              finalEmotion = parsed.emotion as EmotionCode;
-            }
-            if (typeof parsed.emotionScore === "number") finalScore = parsed.emotionScore;
+          const cl = finalSpeech.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").trim();
+          const jm = cl.match(/\{[\s\S]*\}/);
+          if (jm) {
+            const p = JSON.parse(jm[0]) as { speech?: string };
+            if (p.speech) finalSpeech = p.speech;
           }
         } catch {
-          // 파싱 실패시 원본 사용
+          // fallback
         }
       }
-
-      // 혹시 남아있는 JSON 잔여물 제거
-      finalSpeech = finalSpeech.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").replace(/^\s*\{[\s\S]*"speech"\s*:\s*"/i, "").trim();
-      if (!finalSpeech) finalSpeech = "오늘 산책 2번 가면 세상 제일 행복할 것 같아요!";
+      finalSpeech = finalSpeech.replace(/^["']|["']$/g, "").trim();
+      if (!finalSpeech) finalSpeech = "엄마, 나 지금 세상에서 제일 행복해 🐾";
 
       setSpeech(finalSpeech);
-      setEmotion(validEmotionCodes.includes(data.emotion as EmotionCode) ? (data.emotion as EmotionCode) : finalEmotion);
+      setEmotion(validEmotionCodes.includes(data.emotion as EmotionCode) ? (data.emotion as EmotionCode) : "happy");
       setEmotionScore(
         typeof data.emotionScore === "number" && Number.isInteger(data.emotionScore)
           ? Math.min(99, Math.max(50, data.emotionScore))
-          : finalScore
+          : 85
       );
       setStatus("success");
       setUsageCount((prev) => Math.min(prev + 1, 2));
@@ -353,6 +360,8 @@ export default function PetTalkerPage() {
     setErrorMessage("");
     setErrorType(null);
     setIsSpeaking(false);
+    setShowMessageInput(false);
+    setUserMessage("");
     if (typeof window !== "undefined") {
       window.speechSynthesis.cancel();
     }
@@ -390,7 +399,7 @@ export default function PetTalkerPage() {
           </section>
         ) : null}
 
-        {status !== "success" ? (
+        {status !== "success" && !showMessageInput ? (
           <div
             role="button"
             tabIndex={0}
@@ -437,6 +446,73 @@ export default function PetTalkerPage() {
           </div>
         ) : null}
 
+        {showMessageInput && status === "idle" && previewUrl && (
+          <div className="space-y-4">
+            <div className="relative overflow-hidden rounded-3xl shadow-xl">
+              <div className="relative aspect-square w-full">
+                <Image src={previewUrl} alt="업로드한 사진" fill className="object-cover" unoptimized />
+              </div>
+            </div>
+
+            <div className="rounded-3xl bg-white/95 p-5 shadow-lg">
+              <p className="mb-1 text-base font-bold text-[#4F2A1D]">우리 아이에게 한마디 💬</p>
+              <p className="mb-3 text-xs text-[#A36241]">말을 걸면 더 재밌는 반응이 나와요!</p>
+
+              <div className="mb-3 flex flex-wrap gap-2">
+                {["사랑해 ❤️", "배고프지? 🍖", "산책 갈까? 🐕", "뭐 생각해? 🤔", "미안해 늦어서 😢", "잘했어! 👏"].map((quick) => (
+                  <button
+                    key={quick}
+                    type="button"
+                    onClick={() => setUserMessage(quick)}
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                      userMessage === quick ? "bg-[#F97316] text-white shadow-md" : "bg-[#FFF0E6] text-[#7C4A2D] hover:bg-[#FFE0CC]"
+                    }`}
+                  >
+                    {quick}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  value={userMessage}
+                  onChange={(event) => setUserMessage(event.target.value.slice(0, 50))}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+                      event.preventDefault();
+                      void generateSpeech();
+                    }
+                  }}
+                  placeholder="직접 입력해도 돼요 (최대 50자)"
+                  maxLength={50}
+                  className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 pr-12 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#C4956E]">{userMessage.length}/50</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => void generateSpeech()}
+              className="w-full rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
+            >
+              🐾 우리 아이의 반응 보기
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setUserMessage("");
+                void generateSpeech();
+              }}
+              className="w-full text-center text-sm text-[#A36241]"
+            >
+              말 없이 사진만으로 해보기
+            </button>
+          </div>
+        )}
+
         <section className="rounded-3xl bg-white/80 p-5 shadow-sm">
           {status === "loading" && (
             <div className="space-y-4 rounded-3xl bg-[#FFF5EB] p-4 motion-safe:animate-pulse">
@@ -469,6 +545,14 @@ export default function PetTalkerPage() {
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
                 </div>
               </div>
+
+              {userMessage && (
+                <div className="flex justify-end">
+                  <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-[#F97316] px-4 py-2.5 text-sm font-medium text-white shadow-md">
+                    {userMessage}
+                  </div>
+                </div>
+              )}
 
               <div className="flex justify-center opacity-0 motion-safe:animate-[fadeInUp_0.4s_ease-out_0.3s_forwards] motion-reduce:opacity-100">
                 <span
