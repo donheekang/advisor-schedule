@@ -247,16 +247,14 @@ export default function CostSearchClient() {
   }
 
   return (
-    <section
-      className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-6 bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-4 py-8"
-      aria-label="진료비 검색"
-    >
-      <header className="space-y-2 text-center text-[#4F2A1D]">
+    <section className="min-h-screen w-full bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-4 py-8" aria-label="진료비 검색">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
+        <header className="space-y-2 text-center text-[#4F2A1D]">
         <h1 className="text-3xl font-extrabold">💰 우리 아이 진료비, 비싼 걸까?</h1>
         <p className="text-sm font-medium">전국 평균 데이터와 비교해보세요</p>
-      </header>
+        </header>
 
-      <article className="rounded-3xl bg-white p-6 shadow-lg">
+        <article className="rounded-3xl bg-white p-6 shadow-lg">
         <form
           className="space-y-4"
           onSubmit={(event) => {
@@ -331,44 +329,44 @@ export default function CostSearchClient() {
             {searching ? '검색 중...' : '진료비 검색하기'}
           </button>
         </form>
-      </article>
-
-      {!hasSearched ? (
-        <article className="rounded-2xl bg-white p-8 text-center shadow-md">
-          <p className="text-4xl">🔍</p>
-          <p className="mt-3 text-base font-semibold text-[#7A4A36]">진료 항목을 검색해보세요</p>
         </article>
-      ) : null}
 
-      {searchError && !costResult ? (
-        <article className="rounded-2xl bg-white p-8 text-center shadow-md">
-          <p className="text-4xl">😢</p>
-          <p className="mt-3 text-base font-semibold text-[#7A4A36]">해당 항목의 데이터가 아직 없어요</p>
-          <p className="mt-2 text-xs text-slate-500">{searchError}</p>
-        </article>
-      ) : null}
+        {!hasSearched ? (
+          <article className="rounded-2xl bg-white p-8 text-center shadow-md">
+            <p className="text-4xl">🔍</p>
+            <p className="mt-3 text-base font-semibold text-[#7A4A36]">진료 항목을 검색해보세요</p>
+          </article>
+        ) : null}
 
-      {costResult ? (
-        <article className="space-y-4 rounded-2xl bg-white p-5 shadow-md">
+        {searchError && !costResult ? (
+          <article className="rounded-2xl bg-white p-8 text-center shadow-md">
+            <p className="text-4xl">😢</p>
+            <p className="mt-3 text-base font-semibold text-[#7A4A36]">해당 항목의 데이터가 아직 없어요</p>
+            <p className="mt-2 text-xs text-slate-500">{searchError}</p>
+          </article>
+        ) : null}
+
+        {costResult ? (
+          <article className="space-y-4 rounded-2xl bg-white p-5 shadow-md">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-lg font-bold text-[#4F2A1D]">{costResult.matchedItem}</h2>
             {priceBadge ? <span className={`rounded-full px-3 py-1 text-xs font-semibold ${priceBadge.className}`}>{priceBadge.label}</span> : null}
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl bg-[#FFF8F0] p-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl bg-white p-4 shadow-md">
               <p className="text-xs text-[#7A4A36]">검색 결과 평균</p>
               <p className="mt-1 text-2xl font-bold text-[#F97316]">{toWon(costResult.priceStats.avg)}</p>
-            </div>
-            <div className="rounded-2xl bg-[#FFF8F0] p-4">
+              </div>
+              <div className="rounded-2xl bg-white p-4 shadow-md">
               <p className="text-xs text-[#7A4A36]">전국 평균</p>
-              <p className="mt-1 text-xl font-bold text-[#4F2A1D]">{toWon(costResult.nationalAvg)}</p>
-            </div>
-            <div className="rounded-2xl bg-[#FFF8F0] p-4">
+              <p className="mt-1 text-2xl font-bold text-[#F97316]">{toWon(costResult.nationalAvg)}</p>
+              </div>
+              <div className="rounded-2xl bg-white p-4 shadow-md">
               <p className="text-xs text-[#7A4A36]">{region} 평균</p>
-              <p className="mt-1 text-xl font-bold text-[#4F2A1D]">{toWon(costResult.regionalAvg)}</p>
+              <p className="mt-1 text-2xl font-bold text-[#F97316]">{toWon(costResult.regionalAvg)}</p>
+              </div>
             </div>
-          </div>
 
           <div className="space-y-3 rounded-2xl bg-[#FFF8F0] p-4">
             <h3 className="text-sm font-semibold text-[#7A4A36]">평균 비교 차트</h3>
@@ -420,13 +418,13 @@ export default function CostSearchClient() {
           ) : (
             <p className="text-xs text-[#9A6A52]">로그인하면 내 기록과의 비교도 확인할 수 있어요.</p>
           )}
-        </article>
-      ) : null}
+          </article>
+        ) : null}
 
-      {costResult ? <AffiliateProducts itemName={costResult.matchedItem} /> : null}
+        {costResult ? <AffiliateProducts itemName={costResult.matchedItem} /> : null}
 
-      {costResult ? (
-        <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+        {costResult ? (
+          <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-base font-bold text-[#1B3A4B]">AI 비용 분석</h2>
             {isPremiumUser ? (
@@ -462,11 +460,11 @@ export default function CostSearchClient() {
               />
             </div>
           ) : null}
-        </article>
-      ) : null}
+          </article>
+        ) : null}
 
-      {costResult ? (
-        <CostChat
+        {costResult ? (
+          <CostChat
           itemName={costResult.matchedItem}
           region={region}
           stats={{
@@ -481,8 +479,9 @@ export default function CostSearchClient() {
             max: costResult.priceStats.max,
             source: '공공데이터 기준 참고 범위'
           }}
-        />
-      ) : null}
+          />
+        ) : null}
+      </div>
     </section>
   );
 }
