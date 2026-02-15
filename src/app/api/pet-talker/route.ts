@@ -27,8 +27,7 @@ const SYSTEM_PROMPT = `당신은 반려동물의 입장에서 1인칭으로 말�
 - 의료 조언 절대 금지
 - 사진에서 보이는 반려동물의 외형, 표정, 자세를 반영`;
 
-const GUEST_MODEL = 'claude-haiku-4-5-20251001';
-const MEMBER_MODEL = 'claude-sonnet-4-5-20250929';
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
 
 const usageStore = new Map<string, number>();
 
@@ -45,7 +44,13 @@ function parseBase64Image(imageBase64: string): { mediaType: SupportedImageMedia
     if (!isSupportedMediaType(mediaType)) {
       throw new Error('INVALID_IMAGE_FORMAT');
     }
-    return { mediaType, data };
+
+    const normalizedData = data.replace(/\s/g, '');
+    if (!normalizedData) {
+      throw new Error('INVALID_IMAGE_FORMAT');
+    }
+
+    return { mediaType, data: normalizedData };
   }
 
   const normalized = trimmed.replace(/\s/g, '');
@@ -55,6 +60,20 @@ function parseBase64Image(imageBase64: string): { mediaType: SupportedImageMedia
   }
 
   return { mediaType: 'image/jpeg', data: normalized };
+}
+
+function serializeError(error: unknown): Record<string, unknown> {
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    };
+  }
+
+  return {
+    value: error
+  };
 }
 
 function getUsageKey(identifier: string): string {
@@ -152,6 +171,13 @@ async function createAnthropicMessageStream(params: {
         ]
       });
     } catch (error) {
+      console.error('[pet-talker] Claude API request failed', {
+        attempt: attempt + 1,
+        model: params.model,
+        mediaType: params.mediaType,
+        imageLength: params.imageData.length,
+        error: serializeError(error)
+      });
       lastError = error;
     }
   }
@@ -220,7 +246,7 @@ export async function POST(request: NextRequest) {
 
     incrementUsage(usageIdentifier);
 
-    const model = isMember ? MEMBER_MODEL : GUEST_MODEL;
+    const model = CLAUDE_MODEL;
     const userPrompt = isMember ? buildUserPrompt(body.petInfo) : buildUserPrompt();
 
     const anthropicClient = new Anthropic({ apiKey: anthropicApiKey });
