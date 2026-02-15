@@ -28,22 +28,24 @@ export default function Paywall({
   };
 
   return (
-    <section className="rounded-3xl border border-[#1B3A4B]/20 bg-white p-6 shadow-sm">
+    <section className="rounded-3xl bg-[#FFF8F0] p-6 ring-1 ring-[#F8C79F]/30">
       <div className="space-y-2">
-        <p className="inline-flex rounded-full bg-[#E8EEF1] px-3 py-1 text-xs font-semibold text-[#1B3A4B]">
-          프리미엄 전용
+        <p className="inline-flex rounded-full bg-white px-3 py-1 text-xs font-bold text-[#F97316] shadow-sm">
+          💎 프리미엄 전용
         </p>
-        <h2 className="text-2xl font-bold text-[#1B3A4B]">{title}</h2>
-        <p className="text-sm text-slate-600">{description}</p>
-        {featureName ? <p className="text-sm font-semibold text-[#1B3A4B]">잠긴 기능: {featureName}</p> : null}
+        <h2 className="text-xl font-extrabold text-[#4F2A1D]">{title}</h2>
+        <p className="text-sm text-[#7C4A2D]">{description}</p>
+        {featureName ? (
+          <p className="text-sm font-bold text-[#A36241]">잠긴 기능: {featureName}</p>
+        ) : null}
       </div>
 
-      <div className="mt-5 rounded-2xl bg-[#F8FAFB] p-4">
-        <p className="text-sm font-semibold text-[#1B3A4B]">결제 시스템 준비 중입니다</p>
-        <p className="mt-1 text-sm text-[#1B3A4B]">출시되면 알려드릴게요.</p>
+      <div className="mt-5 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-[#F8C79F]/20">
+        <p className="text-sm font-bold text-[#4F2A1D]">결제 시스템 준비 중입니다</p>
+        <p className="mt-1 text-sm text-[#7C4A2D]">출시되면 알려드릴게요.</p>
 
         {isSubmitted ? (
-          <p className="mt-3 rounded-xl bg-white px-3 py-2 text-sm font-medium text-emerald-700">
+          <p className="mt-3 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">
             알림 신청이 완료됐어요. 출시 소식을 메일로 보내드릴게요!
           </p>
         ) : (
@@ -58,11 +60,11 @@ export default function Paywall({
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="이메일 주소를 입력해 주세요"
-              className="w-full rounded-xl border border-[#1B3A4B]/20 px-3 py-2 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 placeholder:text-slate-400 focus:ring"
+              className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-2.5 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none transition focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
             />
             <button
               type="submit"
-              className="rounded-xl bg-[#2A9D8F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#238B7E]"
+              className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
             >
               출시 알림 신청
             </button>
@@ -72,9 +74,9 @@ export default function Paywall({
 
       <Link
         href="/premium"
-        className="mt-4 inline-flex text-sm font-semibold text-[#1B3A4B] underline decoration-[#2A9D8F]/50 underline-offset-4"
+        className="mt-4 inline-flex text-sm font-bold text-[#F97316] hover:underline"
       >
-        프리미엄 요금제 자세히 보기
+        프리미엄 요금제 자세히 보기 →
       </Link>
     </section>
   );
