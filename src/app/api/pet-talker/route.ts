@@ -317,7 +317,6 @@ async function createAnthropicMessage(params: {
       return await params.client.messages.create({
         model: params.model,
         max_tokens: 200,
-        max_tokens: 150,
         temperature: 0.9,
         system: SYSTEM_PROMPT,
         messages: [
