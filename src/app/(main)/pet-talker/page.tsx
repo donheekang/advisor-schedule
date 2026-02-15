@@ -106,6 +106,8 @@ export default function PetTalkerPage() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [userMessage, setUserMessage] = useState("");
   const [showMessageInput, setShowMessageInput] = useState(false);
+  const [callingName, setCallingName] = useState("엄마");
+  const [showCallingPrompt, setShowCallingPrompt] = useState(false);
 
   const usageText = useMemo(() => `오늘 ${usageCount}/2회 사용`, [usageCount]);
   const selectedPet = useMemo(() => pets.find((pet) => pet.id === selectedPetId) ?? null, [pets, selectedPetId]);
@@ -132,6 +134,21 @@ export default function PetTalkerPage() {
 
     return () => window.clearInterval(timer);
   }, [status]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const savedCallingName = window.localStorage.getItem("petTalkerCallingName")?.trim();
+    if (savedCallingName) {
+      setCallingName(savedCallingName);
+      setShowCallingPrompt(false);
+      return;
+    }
+
+    setShowCallingPrompt(true);
+  }, []);
 
   useEffect(() => {
     if (!user || isAuthLoading) {
@@ -306,9 +323,9 @@ export default function PetTalkerPage() {
         }
       }
       finalSpeech = finalSpeech.replace(/^["']|["']$/g, "").trim();
-      if (!finalSpeech) finalSpeech = "엄마, 나 지금 세상에서 제일 행복해 🐾";
+      if (!finalSpeech) finalSpeech = `${callingName}, 나 지금 세상에서 제일 행복해 🐾`;
 
-      setSpeech(finalSpeech);
+      setSpeech(finalSpeech.replace(/엄마/g, callingName));
       setEmotion(validEmotionCodes.includes(data.emotion as EmotionCode) ? (data.emotion as EmotionCode) : "happy");
       setEmotionScore(
         typeof data.emotionScore === "number" && Number.isInteger(data.emotionScore)
@@ -367,6 +384,20 @@ export default function PetTalkerPage() {
     }
   };
 
+  const handleCallingSelect = (value: string) => {
+    const trimmedValue = value.trim();
+    if (!trimmedValue) {
+      return;
+    }
+
+    setCallingName(trimmedValue);
+    setShowCallingPrompt(false);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("petTalkerCallingName", trimmedValue);
+    }
+  };
+
   const emotionMeta = EMOTION_META[emotion];
 
   return (
@@ -399,118 +430,164 @@ export default function PetTalkerPage() {
           </section>
         ) : null}
 
-        {status !== "success" && !showMessageInput ? (
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => fileInputRef.current?.click()}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                fileInputRef.current?.click();
-              }
-            }}
-            onDragOver={(event) => {
-              event.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={handleDrop}
-            className={`cursor-pointer rounded-3xl border bg-gradient-to-b from-white to-[#FFF6EE] p-6 shadow-lg transition ${
-              isDragging ? "border-[#F97316]" : "border-[#F8C79F]"
-            }`}
-            aria-label="사진 업로드"
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              className="hidden"
-              onChange={handleFileInputChange}
-            />
+        {showCallingPrompt ? (
+          <div className="space-y-5 rounded-3xl bg-white/95 p-8 text-center shadow-lg">
+            <p className="text-4xl">🐾</p>
+            <h2 className="text-xl font-bold text-[#4F2A1D]">
+              우리 아이가 나를
+              <br />
+              뭐라고 부를까요?
+            </h2>
+            <p className="text-sm text-[#A36241]">한 번 선택하면 기억할게요!</p>
+            <div className="flex justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => handleCallingSelect("엄마")}
+                className="rounded-2xl bg-gradient-to-b from-[#FFB7C5] to-[#FF8FAB] px-8 py-4 text-lg font-bold text-white shadow-lg transition active:scale-95"
+              >
+                엄마
+              </button>
+              <button
+                type="button"
+                onClick={() => handleCallingSelect("아빠")}
+                className="rounded-2xl bg-gradient-to-b from-[#87CEEB] to-[#5BA3D9] px-8 py-4 text-lg font-bold text-white shadow-lg transition active:scale-95"
+              >
+                아빠
+              </button>
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="다른 호칭 직접 입력 (예: 언니, 오빠)"
+                maxLength={10}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+                    const value = (event.target as HTMLInputElement).value.trim();
+                    if (value) {
+                      handleCallingSelect(value);
+                    }
+                  }
+                }}
+                className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 text-center text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#F97316]"
+              />
+            </div>
+          </div>
+        ) : (
+          <>
+            {status !== "success" && !showMessageInput ? (
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => fileInputRef.current?.click()}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    fileInputRef.current?.click();
+                  }
+                }}
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  setIsDragging(true);
+                }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={handleDrop}
+                className={`cursor-pointer rounded-3xl border bg-gradient-to-b from-white to-[#FFF6EE] p-6 shadow-lg transition ${
+                  isDragging ? "border-[#F97316]" : "border-[#F8C79F]"
+                }`}
+                aria-label="사진 업로드"
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleFileInputChange}
+                />
 
-            {previewUrl ? (
-              <div className="space-y-3">
-                <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#FFEFE2]">
-                  <Image src={previewUrl} alt="업로드한 반려동물 사진 미리보기" fill className="object-cover" unoptimized />
-                </div>
-                <p className="text-center text-xs text-[#A36241]">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
+                {previewUrl ? (
+                  <div className="space-y-3">
+                    <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#FFEFE2]">
+                      <Image src={previewUrl} alt="업로드한 반려동물 사진 미리보기" fill className="object-cover" unoptimized />
+                    </div>
+                    <p className="text-center text-xs text-[#A36241]">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
+                  </div>
+                ) : (
+                  <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl text-center">
+                    <span className="text-5xl">🐾</span>
+                    <p className="text-lg font-semibold text-[#6B3D2A]">우리 아이 사진을 올려주세요</p>
+                    <p className="text-[11px] text-[#AE7A5F]">최대 5MB · jpg/png/webp</p>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl text-center">
-                <span className="text-5xl">🐾</span>
-                <p className="text-lg font-semibold text-[#6B3D2A]">우리 아이 사진을 올려주세요</p>
-                <p className="text-[11px] text-[#AE7A5F]">최대 5MB · jpg/png/webp</p>
+            ) : null}
+
+            {showMessageInput && status === "idle" && previewUrl && (
+              <div className="space-y-4">
+                <div className="relative overflow-hidden rounded-3xl shadow-xl">
+                  <div className="relative aspect-square w-full">
+                    <Image src={previewUrl} alt="업로드한 사진" fill className="object-cover" unoptimized />
+                  </div>
+                </div>
+
+                <div className="rounded-3xl bg-white/95 p-5 shadow-lg">
+                  <p className="mb-1 text-base font-bold text-[#4F2A1D]">우리 아이에게 한마디 💬</p>
+                  <p className="mb-3 text-xs text-[#A36241]">말을 걸면 더 재밌는 반응이 나와요!</p>
+
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {["사랑해 ❤️", "배고프지? 🍖", "산책 갈까? 🐕", "뭐 생각해? 🤔", "미안해 늦어서 😢", "잘했어! 👏"].map((quick) => (
+                      <button
+                        key={quick}
+                        type="button"
+                        onClick={() => setUserMessage(quick)}
+                        className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                          userMessage === quick ? "bg-[#F97316] text-white shadow-md" : "bg-[#FFF0E6] text-[#7C4A2D] hover:bg-[#FFE0CC]"
+                        }`}
+                      >
+                        {quick}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={userMessage}
+                      onChange={(event) => setUserMessage(event.target.value.slice(0, 50))}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+                          event.preventDefault();
+                          void generateSpeech();
+                        }
+                      }}
+                      placeholder="직접 입력해도 돼요 (최대 50자)"
+                      maxLength={50}
+                      className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 pr-12 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#C4956E]">{userMessage.length}/50</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => void generateSpeech()}
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
+                >
+                  🐾 우리 아이의 반응 보기
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUserMessage("");
+                    void generateSpeech();
+                  }}
+                  className="w-full text-center text-sm text-[#A36241]"
+                >
+                  말 없이 사진만으로 해보기
+                </button>
               </div>
             )}
-          </div>
-        ) : null}
-
-        {showMessageInput && status === "idle" && previewUrl && (
-          <div className="space-y-4">
-            <div className="relative overflow-hidden rounded-3xl shadow-xl">
-              <div className="relative aspect-square w-full">
-                <Image src={previewUrl} alt="업로드한 사진" fill className="object-cover" unoptimized />
-              </div>
-            </div>
-
-            <div className="rounded-3xl bg-white/95 p-5 shadow-lg">
-              <p className="mb-1 text-base font-bold text-[#4F2A1D]">우리 아이에게 한마디 💬</p>
-              <p className="mb-3 text-xs text-[#A36241]">말을 걸면 더 재밌는 반응이 나와요!</p>
-
-              <div className="mb-3 flex flex-wrap gap-2">
-                {["사랑해 ❤️", "배고프지? 🍖", "산책 갈까? 🐕", "뭐 생각해? 🤔", "미안해 늦어서 😢", "잘했어! 👏"].map((quick) => (
-                  <button
-                    key={quick}
-                    type="button"
-                    onClick={() => setUserMessage(quick)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                      userMessage === quick ? "bg-[#F97316] text-white shadow-md" : "bg-[#FFF0E6] text-[#7C4A2D] hover:bg-[#FFE0CC]"
-                    }`}
-                  >
-                    {quick}
-                  </button>
-                ))}
-              </div>
-
-              <div className="relative">
-                <input
-                  type="text"
-                  value={userMessage}
-                  onChange={(event) => setUserMessage(event.target.value.slice(0, 50))}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" && !event.nativeEvent.isComposing) {
-                      event.preventDefault();
-                      void generateSpeech();
-                    }
-                  }}
-                  placeholder="직접 입력해도 돼요 (최대 50자)"
-                  maxLength={50}
-                  className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 pr-12 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
-                />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#C4956E]">{userMessage.length}/50</span>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => void generateSpeech()}
-              className="w-full rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
-            >
-              🐾 우리 아이의 반응 보기
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setUserMessage("");
-                void generateSpeech();
-              }}
-              className="w-full text-center text-sm text-[#A36241]"
-            >
-              말 없이 사진만으로 해보기
-            </button>
-          </div>
+          </>
         )}
 
         <section className="rounded-3xl bg-white/80 p-5 shadow-sm">
