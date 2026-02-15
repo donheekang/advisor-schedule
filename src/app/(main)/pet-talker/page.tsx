@@ -106,6 +106,8 @@ export default function PetTalkerPage() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [userMessage, setUserMessage] = useState("");
   const [showMessageInput, setShowMessageInput] = useState(false);
+  const [callingName, setCallingName] = useState<string | null>(null);
+  const [showCallingPrompt, setShowCallingPrompt] = useState(false);
 
   const usageText = useMemo(() => `오늘 ${usageCount}/2회 사용`, [usageCount]);
   const selectedPet = useMemo(() => pets.find((pet) => pet.id === selectedPetId) ?? null, [pets, selectedPetId]);
@@ -132,6 +134,16 @@ export default function PetTalkerPage() {
 
     return () => window.clearInterval(timer);
   }, [status]);
+
+  useEffect(() => {
+    const savedCalling = localStorage.getItem("pet_talker_calling");
+    if (savedCalling) {
+      setCallingName(savedCalling);
+      return;
+    }
+
+    setShowCallingPrompt(true);
+  }, []);
 
   useEffect(() => {
     if (!user || isAuthLoading) {
@@ -264,7 +276,8 @@ export default function PetTalkerPage() {
                 age: getPetAge(selectedPet.birth_date) ?? undefined
               }
             : undefined,
-          userMessage: userMessage.trim() || undefined
+          userMessage: userMessage.trim() || undefined,
+          callingName: callingName || "엄마"
         })
       });
 
@@ -367,6 +380,12 @@ export default function PetTalkerPage() {
     }
   };
 
+  const handleCallingSelect = (name: string) => {
+    setCallingName(name);
+    setShowCallingPrompt(false);
+    localStorage.setItem("pet_talker_calling", name);
+  };
+
   const emotionMeta = EMOTION_META[emotion];
 
   return (
@@ -399,7 +418,46 @@ export default function PetTalkerPage() {
           </section>
         ) : null}
 
-        {status !== "success" && !showMessageInput ? (
+        {showCallingPrompt ? (
+          <div className="space-y-5 rounded-3xl bg-white/95 p-8 text-center shadow-lg">
+            <p className="text-4xl">🐾</p>
+            <h2 className="text-xl font-bold text-[#4F2A1D]">
+              우리 아이가 나를<br />뭐라고 부를까요?
+            </h2>
+            <p className="text-sm text-[#A36241]">한 번 선택하면 기억할게요!</p>
+            <div className="flex justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => handleCallingSelect("엄마")}
+                className="rounded-2xl bg-gradient-to-b from-[#FFB7C5] to-[#FF8FAB] px-8 py-4 text-lg font-bold text-white shadow-lg transition active:scale-95"
+              >
+                🤱 엄마
+              </button>
+              <button
+                type="button"
+                onClick={() => handleCallingSelect("아빠")}
+                className="rounded-2xl bg-gradient-to-b from-[#87CEEB] to-[#5BA3D9] px-8 py-4 text-lg font-bold text-white shadow-lg transition active:scale-95"
+              >
+                👨 아빠
+              </button>
+            </div>
+            <div className="flex justify-center gap-2">
+              {["언니", "오빠", "누나", "형"].map((name) => (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => handleCallingSelect(name)}
+                  className="rounded-full bg-[#FFF0E6] px-4 py-1.5 text-sm font-semibold text-[#7C4A2D] transition hover:bg-[#FFE0CC]"
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-[#C4956E]">나중에 변경할 수 있어요</p>
+          </div>
+        ) : null}
+
+        {status !== "success" && !showMessageInput && !showCallingPrompt ? (
           <div
             role="button"
             tabIndex={0}
@@ -446,7 +504,7 @@ export default function PetTalkerPage() {
           </div>
         ) : null}
 
-        {showMessageInput && status === "idle" && previewUrl && (
+        {showMessageInput && status === "idle" && previewUrl && !showCallingPrompt && (
           <div className="space-y-4">
             <div className="relative overflow-hidden rounded-3xl shadow-xl">
               <div className="relative aspect-square w-full">
@@ -513,7 +571,7 @@ export default function PetTalkerPage() {
           </div>
         )}
 
-        <section className="rounded-3xl bg-white/80 p-5 shadow-sm">
+        {!showCallingPrompt ? <section className="rounded-3xl bg-white/80 p-5 shadow-sm">
           {status === "loading" && (
             <div className="space-y-4 rounded-3xl bg-[#FFF5EB] p-4 motion-safe:animate-pulse">
               <div className="relative mx-auto aspect-square w-full overflow-hidden rounded-3xl shadow-xl">
@@ -629,6 +687,17 @@ export default function PetTalkerPage() {
                   공유하기
                 </button>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.removeItem("pet_talker_calling");
+                  setShowCallingPrompt(true);
+                  handleReset();
+                }}
+                className="mt-2 w-full text-center text-xs text-[#C4956E] underline"
+              >
+                호칭 변경하기
+              </button>
             </div>
           )}
 
@@ -648,7 +717,7 @@ export default function PetTalkerPage() {
               )}
             </div>
           )}
-        </section>
+        </section> : null}
 
         <section className="rounded-3xl bg-gradient-to-r from-[#F97316] to-[#FB923C] p-6 text-center shadow-lg">
           <p className="text-sm font-semibold text-white">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>

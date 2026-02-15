@@ -10,6 +10,7 @@ type PetTalkerRequestBody = {
     age?: number;
   };
   userMessage?: string;
+  callingName?: string;
 };
 
 type UsagePolicy = {
@@ -155,8 +156,9 @@ function getClientIp(request: NextRequest): string {
   return realIp?.trim() || 'unknown';
 }
 
-function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo'], userMessage?: string): string {
-  let prompt = '이 사진 속 아이가 돼서 한마디 해줘.';
+function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo'], userMessage?: string, callingName?: string): string {
+  const calling = callingName?.trim() || '엄마';
+  let prompt = `이 사진 속 아이가 돼서 한마디 해줘. 보호자를 반드시 "${calling}"라고 불러. 절대 다른 호칭 쓰지 마.`;
 
   if (userMessage && userMessage.trim()) {
     prompt += `
@@ -300,7 +302,7 @@ export async function POST(request: NextRequest) {
     incrementUsage(usageIdentifier);
 
     const model = CLAUDE_MODEL;
-    const userPrompt = buildUserPrompt(body.petInfo, body.userMessage);
+    const userPrompt = buildUserPrompt(body.petInfo, body.userMessage, body.callingName);
 
     const anthropicClient = new Anthropic({ apiKey: anthropicApiKey });
     const claudeMessage = await createAnthropicMessage({
