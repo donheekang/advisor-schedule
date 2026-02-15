@@ -75,7 +75,6 @@ export default function MyPageRecordsPage() {
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -84,6 +83,7 @@ export default function MyPageRecordsPage() {
     const params = new URLSearchParams(window.location.search);
     setPetId(params.get('petId')?.trim() ?? '');
   }, []);
+
   useEffect(() => {
     if (loading || !user) {
       return;
@@ -128,20 +128,23 @@ export default function MyPageRecordsPage() {
   const heading = useMemo(() => (petId ? '선택한 펫의 진료 기록' : '전체 진료 기록'), [petId]);
 
   if (loading) {
-    return <p className="mx-auto w-full max-w-3xl text-sm text-slate-500">로그인 상태를 확인 중이에요...</p>;
+    return (
+      <p className="mx-auto w-full max-w-3xl text-sm text-[#A36241]">로그인 상태를 확인 중이에요...</p>
+    );
   }
 
   if (!user) {
     return (
-      <section className="mx-auto w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
-        <h1 className="text-xl font-bold text-slate-900">로그인이 필요해요</h1>
-        <p className="mt-2 text-sm text-slate-600">진료 기록은 로그인 후 확인할 수 있어요.</p>
+      <section className="mx-auto w-full max-w-3xl rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
+        <p className="text-4xl">🔒</p>
+        <h1 className="mt-3 text-xl font-extrabold text-[#4F2A1D]">로그인이 필요해요</h1>
+        <p className="mt-2 text-sm text-[#7C4A2D]">진료 기록은 로그인 후 확인할 수 있어요.</p>
         <button
           type="button"
           onClick={() => {
             void signIn();
           }}
-          className="mt-5 rounded-xl bg-brand-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+          className="mt-5 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
         >
           로그인하기
         </button>
@@ -150,23 +153,29 @@ export default function MyPageRecordsPage() {
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-3xl flex-col gap-4" aria-label="진료 기록 목록">
+    <section
+      className="mx-auto flex w-full max-w-3xl flex-col gap-4 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8"
+      aria-label="진료 기록 목록"
+    >
       <header>
-        <h1 className="text-xl font-bold text-slate-900">{heading}</h1>
-        <p className="mt-1 text-sm text-slate-500">앱에 등록한 진료 영수증을 최신순으로 보여드려요.</p>
+        <h1 className="text-xl font-extrabold text-[#4F2A1D]">{heading}</h1>
+        <p className="mt-1 text-sm text-[#7C4A2D]">앱에 등록한 진료 영수증을 최신순으로 보여드려요.</p>
       </header>
 
-      {errorMessage ? <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-600">{errorMessage}</p> : null}
+      {errorMessage ? (
+        <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">{errorMessage}</p>
+      ) : null}
 
-      {isFetching ? <p className="text-sm text-slate-500">진료 기록을 불러오는 중이에요...</p> : null}
+      {isFetching ? <p className="text-sm text-[#A36241]">진료 기록을 불러오는 중이에요...</p> : null}
 
       {!isFetching && records.length === 0 ? (
-        <article className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-          <h2 className="text-lg font-semibold text-slate-900">아직 진료 기록이 없어요</h2>
-          <p className="mt-2 text-sm text-slate-600">앱에서 영수증을 등록하면 여기서도 볼 수 있어요</p>
+        <article className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
+          <p className="text-5xl">📋</p>
+          <h2 className="mt-3 text-lg font-extrabold text-[#4F2A1D]">아직 진료 기록이 없어요</h2>
+          <p className="mt-2 text-sm text-[#7C4A2D]">앱에서 영수증을 등록하면 여기서도 볼 수 있어요</p>
           <Link
             href="/app-download"
-            className="mt-5 inline-flex rounded-xl bg-brand-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+            className="mt-5 inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
           >
             앱 다운로드
           </Link>
