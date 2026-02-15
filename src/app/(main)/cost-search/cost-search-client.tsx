@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '@/components/auth-provider';
+import AffiliateProducts from '@/components/affiliate-products';
 import CostChat from '@/components/cost-chat';
 import Paywall from '@/components/paywall';
 import { apiClient } from '@/lib/api-client';
@@ -390,6 +391,8 @@ export default function CostSearchClient() {
           </>
         ) : null}
       </article>
+
+      {costResult ? <AffiliateProducts itemName={costResult.matchedItem} /> : null}
 
       <article className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between gap-3">
