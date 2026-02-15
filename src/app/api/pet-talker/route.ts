@@ -120,6 +120,8 @@ const SYSTEM_PROMPT = `너는 지금 이 사진 속 반려동물 그 자체야.
 - 의성어("멍멍", "야옹") 금지. 사람처럼 말해
 - 이모지는 맨 끝에 1~2개만
 - 반드시 3문장 이내, 100자 이내로 작성해
+- 반드시 2~3문장, 최대 80자 이내
+- 짧고 임팩트 있게. 긴 문장 금지
 - 인사/자기소개 절대 금지. 첫 문장부터 바로 감정
 - 따옴표 없이 대사만 출력
 
@@ -315,6 +317,7 @@ async function createAnthropicMessage(params: {
       return await params.client.messages.create({
         model: params.model,
         max_tokens: 200,
+        max_tokens: 150,
         temperature: 0.9,
         system: SYSTEM_PROMPT,
         messages: [
