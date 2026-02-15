@@ -8,6 +8,21 @@ type RequestStatus = "idle" | "loading" | "success" | "error";
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
+function toDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== "string") {
+        reject(new Error("failed_to_read"));
+        return;
+      }
+      resolve(reader.result);
+    };
+    reader.onerror = () => reject(new Error("failed_to_read"));
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function PetTalkerPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -50,12 +65,17 @@ export default function PetTalkerPage() {
     setSpeech("");
 
     try {
-      const formData = new FormData();
-      formData.append("image", file);
+      const image = await toDataUrl(file);
 
       const response = await fetch("/api/pet-talker", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image,
+          petInfo: undefined,
+        }),
       });
 
       if (!response.ok) {
