@@ -16,6 +16,7 @@ type EmotionMeta = {
   label: string;
   background: string;
   border: string;
+  animationClassName: string;
 };
 
 type PetInfo = {
@@ -32,14 +33,14 @@ type PetsApiResponse = {
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const EMOTION_META: Record<EmotionCode, EmotionMeta> = {
-  happy: { emoji: "😆", label: "신남", background: "#FEF3C7", border: "#F59E0B" },
-  peaceful: { emoji: "😌", label: "평화", background: "#D1FAE5", border: "#10B981" },
-  curious: { emoji: "🤔", label: "호기심", background: "#DBEAFE", border: "#3B82F6" },
-  grumpy: { emoji: "😤", label: "투정", background: "#FEE2E2", border: "#EF4444" },
-  proud: { emoji: "😏", label: "도도", background: "#F3E8FF", border: "#8B5CF6" },
-  love: { emoji: "🥰", label: "사랑", background: "#FCE7F3", border: "#EC4899" },
-  sleepy: { emoji: "😴", label: "나른", background: "#E0E7FF", border: "#6366F1" },
-  hungry: { emoji: "🤤", label: "배고픔", background: "#FFEDD5", border: "#F97316" }
+  happy: { emoji: "😆", label: "신남", background: "#FEF3C7", border: "#F59E0B", animationClassName: "emotion-animate-bounce" },
+  peaceful: { emoji: "😌", label: "평화", background: "#D1FAE5", border: "#10B981", animationClassName: "emotion-animate-breathe" },
+  curious: { emoji: "🤔", label: "호기심", background: "#DBEAFE", border: "#3B82F6", animationClassName: "emotion-animate-tilt" },
+  grumpy: { emoji: "😤", label: "투정", background: "#FEE2E2", border: "#EF4444", animationClassName: "emotion-animate-shake" },
+  proud: { emoji: "😏", label: "도도", background: "#F3E8FF", border: "#8B5CF6", animationClassName: "emotion-animate-shake" },
+  love: { emoji: "🥰", label: "사랑", background: "#FCE7F3", border: "#EC4899", animationClassName: "emotion-animate-heartbeat" },
+  sleepy: { emoji: "😴", label: "나른", background: "#E0E7FF", border: "#6366F1", animationClassName: "emotion-animate-breathe" },
+  hungry: { emoji: "🤤", label: "배고픔", background: "#FFEDD5", border: "#F97316", animationClassName: "emotion-animate-wiggle" }
 };
 
 const ERROR_MESSAGE_BY_TYPE: Record<ErrorType, string> = {
@@ -437,7 +438,7 @@ export default function PetTalkerPage() {
                     alt="반려동물 결과 사진"
                     fill
                     unoptimized
-                    className="object-cover motion-safe:animate-[kenBurns_10s_ease-out_forwards] motion-reduce:animate-none"
+                    className={`object-cover ${emotionMeta.animationClassName}`}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
                 </div>
@@ -550,12 +551,92 @@ export default function PetTalkerPage() {
       </section>
 
       <style jsx global>{`
-        @keyframes kenBurns {
-          from {
+        @keyframes bounce {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+        @keyframes breathe {
+          0%,
+          100% {
             transform: scale(1);
           }
-          to {
+          50% {
+            transform: scale(1.02);
+          }
+        }
+        @keyframes tilt {
+          0%,
+          100% {
+            transform: rotate(0deg);
+          }
+          50% {
+            transform: rotate(3deg);
+          }
+        }
+        @keyframes shake {
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-2px);
+          }
+          75% {
+            transform: translateX(2px);
+          }
+        }
+        @keyframes heartbeat {
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
             transform: scale(1.03);
+          }
+        }
+        @keyframes wiggle {
+          0%,
+          100% {
+            transform: rotate(0deg);
+          }
+          25% {
+            transform: rotate(-2deg);
+          }
+          75% {
+            transform: rotate(2deg);
+          }
+        }
+        .emotion-animate-bounce {
+          animation: bounce 1.5s ease-in-out infinite;
+        }
+        .emotion-animate-breathe {
+          animation: breathe 3s ease-in-out infinite;
+        }
+        .emotion-animate-tilt {
+          animation: tilt 2s ease-in-out infinite;
+        }
+        .emotion-animate-shake {
+          animation: shake 0.5s ease-in-out infinite;
+        }
+        .emotion-animate-heartbeat {
+          animation: heartbeat 1.2s ease-in-out infinite;
+        }
+        .emotion-animate-wiggle {
+          animation: wiggle 1s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .emotion-animate-bounce,
+          .emotion-animate-breathe,
+          .emotion-animate-tilt,
+          .emotion-animate-shake,
+          .emotion-animate-heartbeat,
+          .emotion-animate-wiggle {
+            animation: none;
           }
         }
         @keyframes fadeIn {
