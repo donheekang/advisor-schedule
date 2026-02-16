@@ -10,7 +10,7 @@ import {
 } from '@/lib/care-product-map';
 import { CATEGORY_DEFAULT_TIPS, CARE_TIPS } from '@/lib/care-tips';
 import { getCategoryBySlug } from '@/lib/fee-categories';
-import { IconBadge } from '@/components/ui';
+import { AnimateOnScroll, IconBadge } from '@/components/ui';
 
 type CareGuideProps = {
   keyword: string;
@@ -53,41 +53,50 @@ export default function CareGuide({ keyword, categorySlug, matchedTags }: CareGu
   if (!tip) return null;
 
   return (
-    <div className="mt-6 rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm md:p-8">
-      <div className="mb-5 flex items-center gap-3">
-        <IconBadge icon={<span className="text-sm">💛</span>} color="orange" size="sm" />
-        <h3 className="text-lg font-bold text-[#4F2A1D]">{keyword} 받았다면 이것만 챙기세요</h3>
-      </div>
-
-      <div className="mb-6 space-y-2.5">
-        {tip.tips.map((tipItem, i) => (
-          <div key={`${tipItem}-${i}`} className="flex items-start gap-2.5">
-            <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#FFF3E6] text-xs text-[#F97316]">✓</span>
-            <p className="text-sm leading-relaxed text-[#6B4226]">{tipItem}</p>
+    <div className="mt-6 space-y-4">
+      <AnimateOnScroll animation="fade-up" delay={100}>
+        <section className="rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm">
+          <div className="mb-4 flex items-center gap-3">
+            <IconBadge icon={<span className="text-sm">💛</span>} color="orange" size="sm" />
+            <h3 className="text-lg font-bold text-[#4F2A1D]">{keyword} 맞춤 케어 팁</h3>
           </div>
-        ))}
-      </div>
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {products.map((product) => (
-          <a
-            key={product.name}
-            href={createCoupangSearchUrl(product.coupangKeyword)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-start gap-3 rounded-xl bg-[#FFFAF5] p-4 transition-all duration-200 hover:bg-[#FFF3E6] hover:shadow-sm"
-          >
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white">
-              <span className="text-[#F97316]">🛍️</span>
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-[#4F2A1D] transition-colors group-hover:text-[#F97316]">{product.name}</p>
-              <p className="mt-0.5 line-clamp-1 text-xs text-[#8B6B4E]">{product.reason}</p>
-            </div>
-            <span className="mt-1 text-xs text-[#B8A08A] transition-colors group-hover:text-[#F97316]">→</span>
-          </a>
-        ))}
-      </div>
+          <ul className="space-y-2.5">
+            {tip.tips.map((tipItem, i) => (
+              <li key={tipItem + '-' + i} className="flex items-start gap-2.5">
+                <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M16.704 5.29a1 1 0 010 1.42l-7.25 7.25a1 1 0 01-1.415 0l-3.25-3.25a1 1 0 111.414-1.42l2.543 2.544 6.543-6.543a1 1 0 011.415 0z" clipRule="evenodd" />
+                </svg>
+                <p className="text-sm leading-relaxed text-[#6B4226]">{tipItem}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </AnimateOnScroll>
+
+      <AnimateOnScroll animation="fade-up" delay={200}>
+        <section className="rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm">
+          <div className="mb-4 flex items-center gap-3">
+            <IconBadge icon={<span className="text-sm">🛍️</span>} color="orange" size="sm" />
+            <h3 className="text-lg font-bold text-[#4F2A1D]">추천 케어 제품</h3>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {products.map((product) => (
+              <a
+                key={product.name}
+                href={createCoupangSearchUrl(product.coupangKeyword)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer rounded-xl border border-[#F8C79F]/20 bg-[#FFFAF5] p-4 transition-colors duration-200 hover:bg-[#FFF3E6]"
+              >
+                <p className="text-sm font-semibold text-[#4F2A1D]">{product.name}</p>
+                <p className="mt-1 text-xs text-[#8B6B4E]">{product.reason}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      </AnimateOnScroll>
     </div>
   );
 }
