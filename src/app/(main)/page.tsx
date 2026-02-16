@@ -86,20 +86,20 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-6xl px-4">
           <AnimateOnScroll animation="fade-up">
-            <span className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#F8C79F]/30 bg-white/80 px-3 py-1.5 text-xs font-semibold tracking-wide text-[#F97316] shadow-sm backdrop-blur">
+            <span className="mb-6 inline-flex items-center gap-1.5 rounded-full bg-[#F97316]/10 px-4 py-1.5 text-sm font-semibold text-[#F97316]">
               <Stethoscope className="h-3.5 w-3.5" />
               반려동물 보호자를 위한 AI 플랫폼
             </span>
           </AnimateOnScroll>
 
           <AnimateOnScroll animation="fade-up" delay={150}>
-            <h1 className="mb-4 text-3xl font-black leading-[1.15] tracking-tight text-[#4F2A1D] md:mb-6 md:text-5xl lg:text-6xl">
+            <h1 className="mb-4 text-3xl font-bold leading-[1.15] tracking-tight text-[#1B2A4A] md:mb-6 md:text-5xl lg:text-6xl">
               우리 아이 진료비,<br />적정한 걸까?
             </h1>
           </AnimateOnScroll>
 
           <AnimateOnScroll animation="fade-up" delay={300}>
-            <p className="mb-8 max-w-xl text-base leading-relaxed text-[#6B4226] md:mb-10 md:text-lg">
+            <p className="mb-8 max-w-xl text-base leading-relaxed text-[#4A5568] md:mb-10 md:text-lg">
               진료비 비교부터 AI 펫토커까지,<br className="md:hidden" /> 우리 아이를 위한 모든 것
             </p>
           </AnimateOnScroll>
@@ -122,7 +122,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/ai-care"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E8D5C0] bg-white px-6 py-3.5 text-sm font-semibold text-[#4F2A1D] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#F8C79F] hover:bg-[#FFFAF5] active:translate-y-0 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E8D5C0] bg-white px-6 py-3.5 text-sm font-semibold text-[#1B2A4A] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#F8C79F] hover:bg-[#FFFAF5] active:translate-y-0 active:scale-[0.98]"
               >
                 <Sparkles className="h-4 w-4 text-[#F97316]" />
                 AI 케어 체험
@@ -136,8 +136,8 @@ export default function HomePage() {
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[1]}>
       <section className="mx-auto max-w-6xl px-4 py-20 md:py-28">
         <AnimateOnScroll animation="fade-up">
-          <h2 className="mb-3 text-2xl font-bold text-[#4F2A1D] md:text-3xl">이런 걸 할 수 있어요</h2>
-          <p className="mb-10 text-[#8B6B4E] md:mb-14">PetHealth+와 함께 우리 아이 건강을 관리하세요</p>
+          <h2 className="mb-3 text-2xl font-bold text-[#1B2A4A] md:text-3xl">이런 걸 할 수 있어요</h2>
+          <p className="mb-10 text-[#64748B] md:mb-14">PetHealth+와 함께 우리 아이 건강을 관리하세요</p>
         </AnimateOnScroll>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
@@ -170,11 +170,11 @@ export default function HomePage() {
                 className="group block rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#F8C79F]/30 hover:shadow-xl hover:shadow-[#4F2A1D]/5 md:p-8"
               >
                 <IconBadge icon={item.icon} color={item.color} size="lg" />
-                <h3 className="mb-2 mt-5 text-lg font-bold text-[#4F2A1D] transition-colors group-hover:text-[#F97316]">
+                <h3 className="mb-2 mt-5 text-lg font-semibold text-[#1B2A4A] transition-all duration-300 group-hover:text-[#F97316]">
                   {item.title}
                 </h3>
-                <p className="mb-4 text-sm leading-relaxed text-[#6B4226]">{item.desc}</p>
-                <span className="inline-flex items-center gap-1 text-sm font-medium text-[#F97316] transition-all group-hover:gap-2">
+                <p className="mb-4 text-sm leading-relaxed text-[#64748B]">{item.desc}</p>
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#F97316] transition-all duration-300 group-hover:gap-2 group-hover:text-[#EA580C]">
                   해보기 <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
@@ -188,8 +188,8 @@ export default function HomePage() {
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-4">
           <AnimateOnScroll animation="fade-up">
-            <h2 className="mb-3 text-2xl font-bold text-[#4F2A1D] md:text-3xl">3단계로 시작하세요</h2>
-            <p className="mb-10 text-[#8B6B4E] md:mb-14">간단한 3단계로 우리 아이 건강 관리를 시작할 수 있어요</p>
+            <h2 className="mb-3 text-2xl font-bold text-[#1B2A4A] md:text-3xl">3단계로 시작하세요</h2>
+            <p className="mb-10 text-[#64748B] md:mb-14">간단한 3단계로 우리 아이 건강 관리를 시작할 수 있어요</p>
           </AnimateOnScroll>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
@@ -200,9 +200,9 @@ export default function HomePage() {
             ].map((step, i) => (
               <AnimateOnScroll key={step.num} animation="fade-up" delay={i * 150}>
                 <div className="relative rounded-2xl bg-gradient-to-br from-[#FFF8F0] to-[#FFF3E6] p-6 md:p-8">
-                  <span className="text-5xl font-black text-[#F97316]/10 md:text-6xl">{step.num}</span>
-                  <h3 className="mb-2 mt-2 text-lg font-bold text-[#4F2A1D]">{step.title}</h3>
-                  <p className="text-sm leading-relaxed text-[#6B4226]">{step.desc}</p>
+                  <span className="text-6xl font-bold text-[#F97316]/20">{step.num}</span>
+                  <h3 className="mb-2 mt-2 text-lg font-semibold text-[#1B2A4A]">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-[#64748B]">{step.desc}</p>
                 </div>
               </AnimateOnScroll>
             ))}
@@ -214,7 +214,7 @@ export default function HomePage() {
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
       <section className="mx-auto max-w-6xl px-4 py-20 md:py-28">
         <AnimateOnScroll animation="fade-up">
-          <h2 className="mb-10 text-2xl font-bold text-[#4F2A1D] md:mb-14 md:text-3xl">보호자들이 신뢰하는 데이터</h2>
+          <h2 className="mb-10 text-2xl font-bold text-[#1B2A4A] md:mb-14 md:text-3xl">보호자들이 신뢰하는 데이터</h2>
         </AnimateOnScroll>
 
         <AnimateOnScroll animation="scale-up">
@@ -247,8 +247,8 @@ export default function HomePage() {
                     </span>
                   ))}
                 </div>
-                <p className="mb-4 text-sm leading-relaxed text-[#4F2A1D]">&ldquo;{review.text}&rdquo;</p>
-                <p className="text-xs text-[#8B6B4E]">{review.name}</p>
+                <p className="mb-4 text-sm leading-relaxed text-[#4A5568]">&ldquo;{review.text}&rdquo;</p>
+                <p className="text-xs text-[#94A3B8]">{review.name}</p>
               </div>
             </AnimateOnScroll>
           ))}
@@ -260,18 +260,20 @@ export default function HomePage() {
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-3xl px-4">
           <AnimateOnScroll animation="fade-up">
-            <h2 className="mb-10 text-2xl font-bold text-[#4F2A1D] md:text-3xl">자주 묻는 질문</h2>
+            <h2 className="mb-10 text-2xl font-bold text-[#1B2A4A] md:text-3xl">자주 묻는 질문</h2>
           </AnimateOnScroll>
 
-          {FAQ_ITEMS.map((faq, index) => (
-            <AnimateOnScroll
-              key={faq.question}
-              animation="fade-up"
-              delay={sectionDelays[index % sectionDelays.length]}
-            >
-              <Accordion title={faq.question}>{faq.answer}</Accordion>
-            </AnimateOnScroll>
-          ))}
+          <div className="[&_button]:text-[#1B2A4A] [&_button]:font-medium [&_button]:transition-all [&_button]:duration-300 [&_div>div]:text-[#64748B] [&_svg]:text-[#94A3B8]">
+            {FAQ_ITEMS.map((faq, index) => (
+              <AnimateOnScroll
+                key={faq.question}
+                animation="fade-up"
+                delay={sectionDelays[index % sectionDelays.length]}
+              >
+                <Accordion title={faq.question}>{faq.answer}</Accordion>
+              </AnimateOnScroll>
+            ))}
+          </div>
         </div>
       </section>
       </AnimateOnScroll>

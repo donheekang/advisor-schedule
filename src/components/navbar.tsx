@@ -48,28 +48,34 @@ export function Navbar() {
   const navClassName =
     'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ' +
     (scrolled
-      ? 'bg-white/80 backdrop-blur-xl shadow-sm border-b border-[#F8C79F]/10'
+      ? 'bg-[#1B2A4A]/95 backdrop-blur-xl shadow-sm border-b border-white/10'
       : 'bg-transparent');
 
   const desktopLinkClassName = (active: boolean) =>
-    'relative py-1 px-3 text-sm transition-colors duration-200 ' +
+    'relative py-1 px-3 text-sm transition-all duration-300 ' +
     (active
-      ? 'text-[#F97316] font-semibold'
-      : 'text-[#6B4226] hover:text-[#F97316] font-medium');
+      ? (scrolled ? 'text-white font-semibold' : 'text-[#1B2A4A] font-semibold')
+      : (scrolled ? 'text-white/70 hover:text-white font-medium' : 'text-[#4F2A1D] hover:text-[#1B2A4A] font-medium'));
 
   const mobilePanelClassName =
-    'fixed inset-0 z-[60] bg-white/95 backdrop-blur-xl transition-all duration-300 md:hidden ' +
+    'fixed inset-0 z-[60] bg-[#1B2A4A]/95 backdrop-blur-xl transition-all duration-300 md:hidden ' +
     (mobileOpen ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 -translate-y-3');
 
   const mobileItemClassName = (active: boolean) =>
-    'block py-3 text-lg font-medium border-b border-[#F8C79F]/10 transition-colors duration-200 ' +
-    (active ? 'text-[#F97316]' : 'text-[#4F2A1D] hover:text-[#F97316]');
+    'block py-3 text-lg font-medium border-b border-white/10 transition-all duration-300 ' +
+    (active ? 'text-white' : 'text-white/70 hover:text-white');
+
+  const logoClassName = 'text-lg font-bold transition-all duration-300 ' + (scrolled ? 'text-white' : 'text-[#1B2A4A]');
+
+  const menuButtonClassName =
+    'rounded-lg p-2 transition-all duration-300 md:hidden ' +
+    (scrolled ? 'text-white hover:bg-white/10' : 'text-[#1B2A4A] hover:bg-[#FFF8F0]');
 
   return (
     <>
       <nav className={navClassName}>
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-          <Link href="/" className="text-lg font-bold text-[#4F2A1D]">
+          <Link href="/" className={logoClassName}>
             🐾 PetHealth+
           </Link>
 
@@ -93,7 +99,7 @@ export function Navbar() {
           <div className="hidden md:block">
             <Link
               href="/login"
-              className="rounded-xl bg-[#F97316] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#EA580C]"
+              className="rounded-xl bg-[#F97316] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#EA580C]"
             >
               로그인
             </Link>
@@ -102,7 +108,7 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen((prev) => !prev)}
-            className="rounded-lg p-2 text-[#4F2A1D] transition-colors hover:bg-[#FFF8F0] md:hidden"
+            className={menuButtonClassName}
             aria-label={mobileOpen ? '메뉴 닫기' : '메뉴 열기'}
             aria-expanded={mobileOpen}
           >
@@ -116,13 +122,13 @@ export function Navbar() {
       <div className={mobilePanelClassName}>
         <div className="flex h-full flex-col px-6 pb-8 pt-5">
           <div className="mb-8 flex items-center justify-between">
-            <Link href="/" className="text-lg font-bold text-[#4F2A1D]">
+            <Link href="/" className="text-lg font-bold text-white">
               🐾 PetHealth+
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="rounded-lg p-2 text-[#4F2A1D] transition-colors hover:bg-[#FFF8F0]"
+              className="rounded-lg p-2 text-white transition-all duration-300 hover:bg-white/10"
               aria-label="메뉴 닫기"
             >
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
@@ -145,7 +151,7 @@ export function Navbar() {
 
           <Link
             href="/login"
-            className="mt-8 rounded-xl bg-[#F97316] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-200 hover:bg-[#EA580C]"
+            className="mt-8 rounded-xl bg-[#F97316] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#EA580C]"
           >
             로그인
           </Link>

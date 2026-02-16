@@ -19,11 +19,13 @@ export default function AiCarePage() {
     <>
       <section className="mx-auto w-full max-w-4xl px-5 pt-10 md:px-8 md:pt-12">
         <AnimateOnScroll animation="fade-up">
-          <h1 className="text-2xl font-bold text-[#4F2A1D] md:text-3xl">AI 맞춤 케어 리포트</h1>
-          <p className="mt-2 text-sm text-[#8B6B4E]">우리 아이 정보를 입력하면 맞춤 건강 리포트를 받아보세요</p>
+          <h1 className="text-2xl font-bold text-[#1B2A4A] md:text-3xl">AI 맞춤 케어 리포트</h1>
+          <p className="mt-2 text-sm text-[#64748B]">우리 아이 정보를 입력하면 맞춤 건강 리포트를 받아보세요</p>
         </AnimateOnScroll>
       </section>
-      <AiCareClient />
+      <div className="[&_h1]:text-[#1B2A4A] [&_h2]:text-[#1B2A4A] [&_h2]:font-semibold [&_label]:text-[#4A5568] [&_label]:font-medium">
+        <AiCareClient />
+      </div>
     </>
   );
 }
