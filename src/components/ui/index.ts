@@ -1,3 +1,4 @@
+export { AnimateOnScroll } from '@/components/ui/animate-on-scroll';
 export { AnimateOnScroll } from './animate-on-scroll';
 export { PriceBar } from './price-bar';
 export { FloatingInput } from './floating-input';

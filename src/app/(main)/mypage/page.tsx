@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '@/components/auth-provider';
 import { CTABanner } from '@/components/cta-banner';
-import { LoginModal } from '@/components/login-modal';
+import { AnimateOnScroll } from '@/components/ui';
 import { apiClient } from '@/lib/api-client';
 import { createCoupangSearchUrl, findCareProductsByCategory, type CareProduct } from '@/lib/care-product-map';
 
@@ -97,7 +97,6 @@ function getPetEmoji(species: string): string {
 export default function MyPage() {
   const { user, loading, token, signOut } = useAuth();
 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [pets, setPets] = useState<PetProfile[]>([]);
   const [selectedPetId, setSelectedPetId] = useState<string>('');
   const [records, setRecords] = useState<MedicalRecord[]>([]);
@@ -216,23 +215,26 @@ export default function MyPage() {
 
   if (!user) {
     return (
-      <>
-        <section className="mx-auto flex w-full max-w-3xl flex-col items-center rounded-3xl bg-white px-5 py-10 text-center shadow-lg ring-1 ring-[#F8C79F]/30 md:px-6 md:py-14">
-          <p className="text-4xl">🐾</p>
-          <h1 className="mt-4 text-xl font-extrabold text-[#4F2A1D] md:text-2xl">로그인하면 우리 아이 진료 기록을 관리할 수 있어요</h1>
-          <button
-            type="button"
-            onClick={() => setIsLoginModalOpen(true)}
-            className="mt-7 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-7 py-3 text-sm font-bold text-white shadow-lg"
+      <AnimateOnScroll animation="fade-up">
+        <div className="mx-auto max-w-md py-20 text-center">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#FFF3E6]">
+            <span className="text-4xl text-[#F97316]/60">🐾</span>
+          </div>
+          <h2 className="mb-2 text-xl font-bold text-[#4F2A1D]">로그인하면 우리 아이 진료 기록을 관리할 수 있어요</h2>
+          <p className="mb-8 text-sm text-[#8B6B4E]">진료 기록이 쌓일수록 AI 분석이 더 정확해져요</p>
+          <Link
+            href="/login"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F97316] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:translate-y-0 active:scale-[0.98]"
           >
             로그인
-          </button>
-          <Link href="/ai-care" className="mt-4 text-sm font-semibold text-[#A36241] underline underline-offset-4">
-            또는 무료 AI 케어 체험부터 시작해보세요
           </Link>
-        </section>
-        <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
-      </>
+          <p className="mt-4">
+            <Link href="/ai-care" className="text-sm font-medium text-[#F97316] hover:underline">
+              또는 무료 AI 케어 체험부터 시작해보세요
+            </Link>
+          </p>
+        </div>
+      </AnimateOnScroll>
     );
   }
 
@@ -427,8 +429,6 @@ export default function MyPage() {
       >
         로그아웃
       </button>
-
-      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </section>
   );
 }
