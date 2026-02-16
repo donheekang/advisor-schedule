@@ -1,113 +1,161 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import {
-  findCareProductsByKeyword,
   createCoupangSearchUrl,
-  CARE_CATEGORY_LABELS,
+  findCareProductsByCategory,
+  findCareProductsByKeyword,
+  findCareTagsByKeyword,
   type CareProduct,
-  type CareCategory,
 } from '@/lib/care-product-map';
+import { CATEGORY_DEFAULT_TIPS, CARE_TIPS } from '@/lib/care-tips';
+import { BREED_RISK_TAGS, TAG_LABELS } from '@/lib/condition-tag-map';
+import { getCategoryBySlug } from '@/lib/fee-categories';
 
 type CareGuideProps = {
-  /** 진료비 검색 결과의 matchedItem */
-  itemName: string;
+  keyword: string;
+  categorySlug?: string;
+  matchedTags?: string[];
 };
 
-export default function CareGuide({ itemName }: CareGuideProps) {
-  const products = findCareProductsByKeyword(itemName);
+function uniqProducts(products: CareProduct[]): CareProduct[] {
+  const map = new Map<string, CareProduct>();
+  products.forEach((product) => {
+    map.set(product.name, product);
+  });
+  return [...map.values()];
+}
 
-  if (products.length === 0) return null;
+export default function CareGuide({ keyword, categorySlug, matchedTags }: CareGuideProps) {
+  const [selectedBreed, setSelectedBreed] = useState('');
 
-  // 카테고리별 그룹핑
-  const grouped = products.reduce<Record<CareCategory, CareProduct[]>>(
-    (acc, product) => {
-      if (!acc[product.category]) acc[product.category] = [];
-      acc[product.category].push(product);
-      return acc;
-    },
-    {} as Record<CareCategory, CareProduct[]>,
-  );
+  const resolvedTags = useMemo(() => {
+    if (matchedTags && matchedTags.length > 0) {
+      return matchedTags;
+    }
+    return findCareTagsByKeyword(keyword);
+  }, [keyword, matchedTags]);
+
+  const tip = useMemo(() => {
+    if (resolvedTags.length > 0) {
+      const matchedTip = resolvedTags.find((tag) => Boolean(CARE_TIPS[tag]));
+      if (matchedTip) {
+        return CARE_TIPS[matchedTip];
+      }
+    }
+    if (!categorySlug) {
+      return null;
+    }
+    return CATEGORY_DEFAULT_TIPS[categorySlug] ?? null;
+  }, [categorySlug, resolvedTags]);
+
+  const products = useMemo(() => {
+    const fromKeyword = findCareProductsByKeyword(keyword);
+    const fromTags = resolvedTags.length > 0 ? findCareProductsByCategory(resolvedTags) : [];
+    const fallbackCategory = categorySlug ? getCategoryBySlug(categorySlug) : undefined;
+    const fromCategory = fallbackCategory
+      ? findCareProductsByCategory(fallbackCategory.relatedCareTags)
+      : [];
+
+    return uniqProducts([...fromKeyword, ...fromTags, ...fromCategory]).slice(0, 4);
+  }, [categorySlug, keyword, resolvedTags]);
+
+  if (!tip) {
+    return null;
+  }
+
+  const breedList = Object.keys(BREED_RISK_TAGS);
+  const selectedBreedRiskTags = selectedBreed ? BREED_RISK_TAGS[selectedBreed] ?? [] : [];
+
+  const breedMessage =
+    selectedBreed && tip.breedTip?.[selectedBreed]
+      ? tip.breedTip[selectedBreed]
+      : selectedBreed
+        ? `${selectedBreed}의 주의 관리: ${selectedBreedRiskTags.map((tag) => TAG_LABELS[tag] ?? tag).join(', ') || '기본 건강검진 루틴을 먼저 확인하세요.'}`
+        : null;
 
   return (
-    <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
-      {/* 헤더 */}
-      <div className="space-y-2">
-        <h2 className="text-lg font-extrabold text-[#4F2A1D]">
-          🩺 {itemName} 후, 이런 케어가 도움이 돼요
-        </h2>
-        <p className="text-sm text-[#A36241]">
-          진료 기록과 AI 분석을 참고해서 정리한 케어 포인트예요.
-        </p>
-      </div>
+    <article className="rounded-2xl border border-[#F8C79F]/30 bg-white p-6">
+      <div className="space-y-4">
+        <h2 className="text-lg font-bold text-[#4F2A1D]">🩺 {keyword} 받았다면 이것만 챙기세요</h2>
 
-      {/* 카테고리별 상품 */}
-      <div className="mt-5 space-y-5">
-        {(Object.entries(grouped) as [CareCategory, CareProduct[]][]).map(
-          ([category, categoryProducts]) => (
-            <div key={category} className="space-y-3">
-              <h3 className="text-sm font-bold text-[#7C4A2D]">
-                {CARE_CATEGORY_LABELS[category]}
-              </h3>
+        <section className="space-y-3">
+          <h3 className="text-lg font-bold text-[#4F2A1D]">📋 {tip.title}</h3>
+          <ul className="space-y-2 text-sm text-[#6B4226]">
+            {tip.tips.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="text-[#F97316]">✓</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-              <div className="space-y-3">
-                {categoryProducts.map((product) => (
-                  <div
-                    key={product.name}
-                    className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-4 ring-1 ring-[#F8C79F]/30"
+        <section className="space-y-3">
+          <label className="block text-sm font-bold text-[#4F2A1D]" htmlFor="breed-select">
+            🐕 내 품종은?
+          </label>
+          <select
+            id="breed-select"
+            value={selectedBreed}
+            onChange={(event) => setSelectedBreed(event.target.value)}
+            className="w-full rounded-xl border border-[#F8C79F] px-3 py-2 text-sm text-[#4F2A1D] outline-none"
+          >
+            <option value="">품종 선택하기</option>
+            {breedList.map((breed) => (
+              <option key={breed} value={breed}>
+                {breed}
+              </option>
+            ))}
+          </select>
+
+          {breedMessage ? (
+            <p className="rounded-xl bg-[#FFF8F0] p-3 text-sm text-[#7C4A2D]">{breedMessage}</p>
+          ) : null}
+        </section>
+
+        {products.length > 0 ? (
+          <section className="space-y-3">
+            <h3 className="text-lg font-bold text-[#4F2A1D]">🛒 도움이 되는 케어 상품</h3>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {products.map((product) => (
+                <article
+                  key={product.name}
+                  className="rounded-xl bg-[#FFFAF5] p-4 transition hover:shadow-md"
+                >
+                  <p className="text-sm font-bold text-[#4F2A1D]">{product.name}</p>
+                  <p className="mt-1 text-xs text-[#7C4A2D]">{product.reason}</p>
+                  <a
+                    href={createCoupangSearchUrl(product.coupangKeyword)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex rounded-lg border border-[#F97316] px-3 py-1.5 text-sm font-semibold text-[#F97316]"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 space-y-1">
-                        <p className="text-sm font-bold text-[#4F2A1D]">{product.name}</p>
-                        <p className="text-xs text-[#A36241]">{product.description}</p>
-                        <p className="text-xs text-[#7C4A2D] italic">&quot;{product.reason}&quot;</p>
-                      </div>
-                      <a
-                        href={createCoupangSearchUrl(product.coupangKeyword)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="shrink-0 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
-                      >
-                        쿠팡에서 보기
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    쿠팡에서 보기
+                  </a>
+                </article>
+              ))}
             </div>
-          ),
-        )}
+          </section>
+        ) : null}
       </div>
 
-      {/* AI 체험 CTA */}
-      <div className="mt-6 rounded-2xl bg-[#FFF8F0] p-5 text-center ring-1 ring-[#F8C79F]/20">
-        <p className="text-sm font-bold text-[#4F2A1D]">
-          ✨ 우리 아이 맞춤으로 더 정확하게 알고 싶다면?
-        </p>
-        <p className="mt-1 text-xs text-[#A36241]">
-          알러지, 체중, 진료 이력을 입력하면 AI가 맞춤 케어를 분석해줘요.
-        </p>
-        <div className="mt-3 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
-          <a
-            href="/ai-care"
-            className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg"
-          >
-            무료 AI 케어 체험 →
-          </a>
-          <a
-            href="https://apps.apple.com/app/id6504879567"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-2xl border border-[#F8C79F] bg-white px-6 py-2.5 text-sm font-bold text-[#4F2A1D] transition hover:bg-[#FFF8F0]"
-          >
-            📱 앱 다운로드
-          </a>
-        </div>
-      </div>
+      <div className="my-6 h-px bg-[#F8C79F]/40" />
 
-      {/* 쿠팡 파트너스 고지 */}
-      <p className="mt-4 text-center text-xs text-[#C4956E]">
-        이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
-      </p>
+      <div className="rounded-2xl bg-[#3D2518] p-6 text-white">
+        <p className="text-sm font-bold">📱 이 케어를 자동으로 관리하고 싶다면?</p>
+        <p className="mt-1 text-sm text-white/80">
+          앱에서 영수증 찍으면 자동 추적 + AI 맞춤 분석으로 루틴을 챙길 수 있어요.
+        </p>
+        <a
+          href="https://apps.apple.com/app/id6504879567"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex rounded-lg border border-white/30 px-4 py-2 text-sm font-semibold"
+        >
+          앱 다운로드 →
+        </a>
+      </div>
     </article>
   );
 }

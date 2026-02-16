@@ -176,7 +176,7 @@ export default function RecordDetailPage({ params }: RecordDetailPageProps) {
         </article>
       ) : null}
 
-      {careGuideKeyword ? <CareGuide itemName={careGuideKeyword} /> : null}
+      {careGuideKeyword ? <CareGuide keyword={careGuideKeyword} /> : null}
 
       <CTABanner variant="app-download" context="mypage-record-detail-bottom" />
     </section>

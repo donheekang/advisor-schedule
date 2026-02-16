@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/components/auth-provider';
 import CareGuide from '@/components/care-guide';
 import CostChat from '@/components/cost-chat';
 import Paywall from '@/components/paywall';
 import { apiClient } from '@/lib/api-client';
 import { isPremium } from '@/lib/subscription';
+import { FEE_CATEGORIES } from '@/lib/fee-categories';
+import { findCareTagsByKeyword } from '@/lib/care-product-map';
 
 type ApiCostSearchResult = {
   query: string;
@@ -172,6 +174,27 @@ export default function CostSearchClient() {
     }
     return { label: '적정 가격이에요 👍', className: 'bg-amber-100 text-amber-700' };
   }
+
+
+  const matchedCategory = useMemo(() => {
+    if (!costResult) {
+      return undefined;
+    }
+    const normalizedTarget = normalize(costResult.matchedItem || costResult.query || query);
+    return FEE_CATEGORIES.find((category) =>
+      category.searchTags.some((tag) => {
+        const normalizedTag = normalize(tag);
+        return normalizedTarget.includes(normalizedTag) || normalizedTag.includes(normalizedTarget);
+      }),
+    );
+  }, [costResult, query]);
+
+  const matchedTags = useMemo(() => {
+    if (!costResult) {
+      return [];
+    }
+    return findCareTagsByKeyword(costResult.matchedItem || costResult.query || query);
+  }, [costResult, query]);
 
   const priceBadge = getPriceBadge();
   const maxChartValue = costResult
@@ -462,8 +485,14 @@ export default function CostSearchClient() {
           </article>
         ) : null}
 
-        {/* 케어 가이드 (기존 AffiliateProducts 대체) */}
-        {costResult ? <CareGuide itemName={costResult.matchedItem} /> : null}
+        {/* 케어 가이드 — 검색 결과 바로 아래 */}
+        {costResult ? (
+          <CareGuide
+            keyword={costResult.query || query}
+            categorySlug={matchedCategory?.slug}
+            matchedTags={matchedTags}
+          />
+        ) : null}
 
         {costResult ? (
           <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
