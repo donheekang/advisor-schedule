@@ -161,6 +161,33 @@ function CountUpNumber({ target }: { target: number }) {
 
 export default function HomePageClient({ faqItems }: HomePageClientProps) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [totalItems, setTotalItems] = useState(128540);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadStats() {
+      try {
+        const response = await fetch('/api/cost-search/stats', { cache: 'no-store' });
+        if (!response.ok) {
+          return;
+        }
+
+        const data = (await response.json()) as { totalItems?: number };
+        if (isMounted && typeof data.totalItems === 'number' && data.totalItems > 0) {
+          setTotalItems(data.totalItems);
+        }
+      } catch {
+        // keep default badge number
+      }
+    }
+
+    void loadStats();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="space-y-16 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 md:p-8">
@@ -242,7 +269,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         </h2>
         <div className="mt-6 rounded-3xl bg-brand-navyDark px-6 py-8 text-white">
           <p className="text-sm text-slate-200">누적 진료비 데이터</p>
-          <CountUpNumber target={128540} />
+          <CountUpNumber target={totalItems} />
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {reviews.map((item) => (
