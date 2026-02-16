@@ -1,3 +1,10 @@
+export { AnimateOnScroll } from './animate-on-scroll';
+export { PriceBar } from './price-bar';
+export { FloatingInput } from './floating-input';
+export { CheckboxCard } from './checkbox-card';
+export { IconBadge } from './icon-badge';
+export { ResultSkeleton } from './result-skeleton';
+export { FormSkeleton } from './form-skeleton';
 export { Accordion } from '@/components/ui/accordion';
 export { AnimateOnScroll } from '@/components/ui/animate-on-scroll';
 export { CountUp } from '@/components/ui/count-up';

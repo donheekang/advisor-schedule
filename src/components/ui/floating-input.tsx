@@ -1,5 +1,13 @@
 'use client';
 
+import { InputHTMLAttributes } from 'react';
+
+type FloatingInputProps = InputHTMLAttributes<HTMLInputElement> & {
+  id: string;
+  label: string;
+};
+
+export function FloatingInput({ id, label, className, ...props }: FloatingInputProps) {
 import { type InputHTMLAttributes, useState } from 'react';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -15,6 +23,8 @@ export function FloatingInput({ label, id, className = '', ...props }: Props) {
     <div className="relative">
       <input
         id={id}
+        className={`peer w-full rounded-xl border border-[#E8D5C0] bg-white px-4 pb-2 pt-6 text-sm text-[#4F2A1D] outline-none transition focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 ${className ?? ''}`}
+        placeholder=" "
         className={`peer w-full pt-5 pb-2 px-4 rounded-xl border border-[#E8D5C0]
           bg-white text-[#4F2A1D] text-sm
           focus:ring-2 focus:ring-[#F97316]/20 focus:border-[#F97316]
@@ -30,6 +40,7 @@ export function FloatingInput({ label, id, className = '', ...props }: Props) {
       />
       <label
         htmlFor={id}
+        className="pointer-events-none absolute left-4 top-2 text-xs text-[#8B6B4E] transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs"
         className={`absolute left-4 transition-all duration-200 pointer-events-none
           ${
             isActive

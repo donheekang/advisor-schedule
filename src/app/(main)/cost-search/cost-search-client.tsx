@@ -1,39 +1,20 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/components/auth-provider';
 import CareGuide from '@/components/care-guide';
 import CostChat from '@/components/cost-chat';
 import Paywall from '@/components/paywall';
-import { ResultsSkeleton } from '@/components/skeleton';
-import { apiClient } from '@/lib/api-client';
+import {
+  AnimateOnScroll,
+  IconBadge,
+  PriceBar,
+  ResultSkeleton,
+} from '@/components/ui';
 import { isPremium } from '@/lib/subscription';
 import { FEE_CATEGORIES } from '@/lib/fee-categories';
 import { findCareTagsByKeyword } from '@/lib/care-product-map';
-
-type ApiCostSearchResult = {
-  source: 'live' | 'seed' | 'error';
-  query: string;
-  matchedItem: string;
-  species: 'dog' | 'cat' | 'etc';
-  region: string;
-  priceStats: {
-    min: number;
-    max: number;
-    avg: number;
-    median: number;
-    sampleSize: number;
-    source: 'user_data' | 'seed_data' | 'mixed';
-  };
-  nationalAvg: number;
-  regionalAvg: number;
-  relatedItems: string[];
-  sources: string[];
-  dataInfo?: {
-    totalRecords: number;
-    latestDate: string | null;
-  };
-};
 
 type CostSearchListItem = {
   item: string;
@@ -54,97 +35,32 @@ type CostSearchListResponse = {
   error?: string;
 };
 
-type MyPriceComparison = {
-  item: string;
-  average: number;
-  diffPercent: number;
-  isHigher: boolean;
-  sampleSize: number;
-};
-
 const popularTags = ['혈액검사', '스케일링', '슬개골수술', '중성화 암컷', '예방접종', '초음파', 'MRI'];
 const animalTypes = ['강아지', '고양이'] as const;
 const regions = ['전국', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '경기', '강원'];
 
-function toWon(value: number): string {
-  return `${Math.round(value).toLocaleString('ko-KR')}원`;
-}
-
-function normalize(text: string): string {
-  return text.trim().replace(/\s+/g, '').toLowerCase();
-}
-
-function extractMyItemPrices(records: unknown, keyword: string): number[] {
-  if (!Array.isArray(records)) {
-    return [];
-  }
-  const normalizedKeyword = normalize(keyword);
-  const prices = records.flatMap((record) => {
-    if (!record || typeof record !== 'object') {
-      return [];
-    }
-    const typedRecord = record as Record<string, unknown>;
-    const candidates = [typedRecord.items, typedRecord.health_items, typedRecord.healthItems].find(
-      (value) => Array.isArray(value),
-    );
-    if (!Array.isArray(candidates)) {
-      return [];
-    }
-    return candidates
-      .map((item) => {
-        if (!item || typeof item !== 'object') {
-          return null;
-        }
-        const typedItem = item as Record<string, unknown>;
-        const itemName =
-          typeof typedItem.item_name === 'string'
-            ? typedItem.item_name
-            : typeof typedItem.itemName === 'string'
-              ? typedItem.itemName
-              : '';
-        const rawPrice =
-          typeof typedItem.price === 'number' || typeof typedItem.price === 'string'
-            ? Number(typedItem.price)
-            : typeof typedItem.amount === 'number' || typeof typedItem.amount === 'string'
-              ? Number(typedItem.amount)
-              : NaN;
-        if (!itemName || !Number.isFinite(rawPrice)) {
-          return null;
-        }
-        return normalize(itemName).includes(normalizedKeyword) ? rawPrice : null;
-      })
-      .filter((value): value is number => value !== null);
-  });
-  return prices;
-}
-
 export default function CostSearchClient() {
-  const { user, loading, token } = useAuth();
+  const { user, loading } = useAuth();
   const [query, setQuery] = useState('혈액검사');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
   const [region, setRegion] = useState('전국');
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isPremiumUser, setIsPremiumUser] = useState(false);
-  const [costResult, setCostResult] = useState<ApiCostSearchResult | null>(null);
+  const [results, setResults] = useState<CostSearchListItem[]>([]);
+  const [source, setSource] = useState<'live' | 'seed' | 'error'>('seed');
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const [myComparison, setMyComparison] = useState<MyPriceComparison | null>(null);
-  const [comparingMine, setComparingMine] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isPremiumUser, setIsPremiumUser] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
     async function checkPremium() {
       if (!user?.uid) {
-        if (isMounted) {
-          setIsPremiumUser(false);
-        }
+        if (isMounted) setIsPremiumUser(false);
         return;
       }
       const premiumStatus = await isPremium(user.uid);
-      if (isMounted) {
-        setIsPremiumUser(premiumStatus);
-      }
+      if (isMounted) setIsPremiumUser(premiumStatus);
     }
     if (!loading) {
       void checkPremium();
@@ -158,508 +74,214 @@ export default function CostSearchClient() {
     const trimmed = searchQuery.trim();
     if (!trimmed) {
       setSearchError('검색어를 입력해 주세요.');
-      setCostResult(null);
+      setResults([]);
       return;
     }
+
     setSearching(true);
     setSearchError(null);
-    setMyComparison(null);
     setHasSearched(true);
+
     try {
       const species = animalType === '강아지' ? 'dog' : 'cat';
       const params = new URLSearchParams({ q: trimmed, species, region });
       const response = await fetch(`/api/cost-search?${params.toString()}`);
       const data = (await response.json()) as CostSearchListResponse;
+
       if (!response.ok || !Array.isArray(data.results)) {
         throw new Error(data.error || '검색 결과를 가져오지 못했습니다.');
       }
 
-      const topResult = data.results[0];
-      if (!topResult) {
-        throw new Error('해당 항목의 데이터가 아직 없어요.');
-      }
-
-      setCostResult({
-        source: data.source,
-        query: trimmed,
-        matchedItem: topResult.item,
-        species: topResult.species,
-        region: topResult.region,
-        priceStats: {
-          min: topResult.min,
-          max: topResult.max,
-          avg: topResult.avg,
-          median: topResult.avg,
-          sampleSize: topResult.count,
-          source: data.source === 'live' ? 'user_data' : 'seed_data',
-        },
-        nationalAvg: topResult.avg,
-        regionalAvg: topResult.avg,
-        relatedItems: data.results.slice(1, 9).map((item) => item.item),
-        sources:
-          data.source === 'live'
-            ? [`실시간 데이터 (${data.total.toLocaleString('ko-KR')}건)`]
-            : ['샘플 데이터'],
-        dataInfo: {
-          totalRecords: data.total,
-          latestDate: topResult.updatedAt,
-        },
-      });
+      setResults(data.results);
+      setSource(data.source);
     } catch (error) {
       setSearchError(error instanceof Error ? error.message : '검색 중 오류가 발생했습니다.');
-      setCostResult(null);
+      setResults([]);
+      setSource('error');
     } finally {
       setSearching(false);
     }
   }
 
-  function getPriceBadge() {
-    if (!costResult) {
-      return null;
-    }
-    const ratio = (costResult.priceStats.avg - costResult.nationalAvg) / costResult.nationalAvg;
-    if (ratio <= -0.05) {
-      return { label: '평균보다 저렴해요 😊', className: 'bg-emerald-100 text-emerald-700' };
-    }
-    if (ratio >= 0.05) {
-      return { label: '평균보다 높아요 😮', className: 'bg-rose-100 text-rose-700' };
-    }
-    return { label: '적정 가격이에요 👍', className: 'bg-amber-100 text-amber-700' };
-  }
-
-
+  const topResult = results[0];
   const matchedCategory = useMemo(() => {
-    if (!costResult) {
-      return undefined;
-    }
-    const normalizedTarget = normalize(costResult.matchedItem || costResult.query || query);
+    if (!topResult) return undefined;
     return FEE_CATEGORIES.find((category) =>
-      category.searchTags.some((tag) => {
-        const normalizedTag = normalize(tag);
-        return normalizedTarget.includes(normalizedTag) || normalizedTag.includes(normalizedTarget);
-      }),
+      category.searchTags.some((tag) => topResult.item.includes(tag) || tag.includes(topResult.item)),
     );
-  }, [costResult, query]);
+  }, [topResult]);
 
   const matchedTags = useMemo(() => {
-    if (!costResult) {
-      return [];
-    }
-    return findCareTagsByKeyword(costResult.matchedItem || costResult.query || query);
-  }, [costResult, query]);
-
-  const priceBadge = getPriceBadge();
-  const maxChartValue = costResult
-    ? Math.max(costResult.priceStats.max, costResult.nationalAvg, costResult.regionalAvg)
-    : 0;
-
-  function getChartWidth(value: number) {
-    if (!maxChartValue) {
-      return '0%';
-    }
-    return `${Math.max(8, (value / maxChartValue) * 100)}%`;
-  }
-
-  async function handleCompareMine() {
-    if (!user || !costResult || !token) {
-      return;
-    }
-    setComparingMine(true);
-    try {
-      apiClient.setToken(token);
-      const records = await apiClient.listRecords(undefined, true);
-      const prices = extractMyItemPrices(records, costResult.query);
-      if (prices.length === 0) {
-        setMyComparison(null);
-        return;
-      }
-      const myAverage = prices.reduce((sum, value) => sum + value, 0) / prices.length;
-      const diffPercent =
-        ((myAverage - costResult.priceStats.avg) / costResult.priceStats.avg) * 100;
-      setMyComparison({
-        item: costResult.matchedItem,
-        average: myAverage,
-        diffPercent,
-        isHigher: diffPercent >= 0,
-        sampleSize: prices.length,
-      });
-    } finally {
-      setComparingMine(false);
-    }
-  }
+    if (!topResult) return [];
+    return findCareTagsByKeyword(topResult.item);
+  }, [topResult]);
 
   return (
-    <section
-      className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12"
-      aria-label="진료비 검색"
-    >
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
-        <header className="space-y-2 text-center">
-          <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
-            💰 전국 평균 데이터와 비교
-          </p>
-          <h1 className="text-3xl font-extrabold text-[#4F2A1D]">우리 아이 진료비, 비싼 걸까?</h1>
-          <p className="text-sm text-[#7C4A2D]">전국 평균 데이터와 비교해보세요</p>
-        </header>
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12" aria-label="진료비 검색">
+      <div className="mx-auto w-full max-w-4xl">
+        <section className="py-12 text-center md:py-16">
+          <AnimateOnScroll animation="fade-up">
+            <span className="text-sm font-semibold text-[#F97316]">전국 평균 데이터와 비교</span>
+            <h1 className="mt-2 mb-3 text-2xl font-bold tracking-tight text-[#4F2A1D] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
+            <p className="text-sm text-[#8B6B4E]">전국 평균 데이터와 비교해보세요</p>
+          </AnimateOnScroll>
+        </section>
 
-        <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/30">
-          <form
-            className="space-y-4"
-            role="search"
-            aria-label="진료비 검색 폼"
-            onSubmit={(event) => {
-              event.preventDefault();
-              void runSearch(query);
-            }}
-          >
-            <label htmlFor="cost-search-input" className="block text-sm font-bold text-[#4F2A1D]">
-              어떤 진료를 받으셨나요?
-            </label>
-            <input
-              id="cost-search-input"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="예: 혈액검사, 스케일링, 슬개골 수술"
-              className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none transition focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
-            />
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <label className="flex flex-col gap-2 text-sm font-bold text-[#4F2A1D]">
-                동물 종류
+        <AnimateOnScroll animation="fade-up" delay={100}>
+          <div className="rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm md:p-8">
+            <form
+              role="search"
+              aria-label="진료비 검색 폼"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void runSearch(query);
+              }}
+            >
+              <div className="relative mb-5">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base text-[#8B6B4E]">🔎</span>
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  type="text"
+                  placeholder="어떤 진료를 받으셨나요?"
+                  className="w-full rounded-xl border border-[#E8D5C0] bg-[#FFFAF5] py-4 pl-12 pr-4 text-sm text-[#4F2A1D] placeholder:text-[#B8A08A] outline-none transition-all duration-200 focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/20"
+                />
+              </div>
+
+              <div className="mb-5 grid grid-cols-2 gap-3">
                 <select
                   value={animalType}
-                  onChange={(event) =>
-                    setAnimalType(event.target.value as (typeof animalTypes)[number])
-                  }
-                  className="rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-3 py-3 text-sm text-[#4F2A1D] outline-none transition focus:border-[#F97316]"
+                  onChange={(event) => setAnimalType(event.target.value as (typeof animalTypes)[number])}
+                  className="rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
                 >
                   {animalTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
+                    <option key={type} value={type}>{type}</option>
                   ))}
                 </select>
-              </label>
-              <label className="flex flex-col gap-2 text-sm font-bold text-[#4F2A1D]">
-                지역
                 <select
                   value={region}
                   onChange={(event) => setRegion(event.target.value)}
-                  className="rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-3 py-3 text-sm text-[#4F2A1D] outline-none transition focus:border-[#F97316]"
+                  className="rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
                 >
                   {regions.map((area) => (
-                    <option key={area} value={area}>
-                      {area}
-                    </option>
+                    <option key={area} value={area}>{area}</option>
                   ))}
                 </select>
-              </label>
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-1 pt-1">
-              {popularTags.map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => {
-                    setQuery(tag);
-                    void runSearch(tag);
-                  }}
-                  className="whitespace-nowrap rounded-full border border-[#F8C79F] bg-[#FFF8F0] px-3 py-1.5 text-xs font-semibold text-[#7C4A2D] transition hover:border-[#F97316] hover:bg-[#FFEEDC]"
-                >
-                  #{tag}
-                </button>
-              ))}
-            </div>
+              </div>
 
-            {/* 카테고리별 비교 바로가기 */}
-            <div className="space-y-2 pt-2">
-              <p className="text-xs font-bold text-[#7C4A2D]">카테고리별 비교</p>
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                {[
-                  { slug: 'vaccine', label: '💉 예방접종' },
-                  { slug: 'lab', label: '🧪 혈액검사' },
-                  { slug: 'dental', label: '🦷 치과' },
-                  { slug: 'surgery', label: '🔪 수술' },
-                  { slug: 'imaging', label: '📡 영상검사' },
-                  { slug: 'medication', label: '💊 투약' },
-                  { slug: 'exam', label: '🩺 진찰료' },
-                ].map((cat) => (
-                  <a
-                    key={cat.slug}
-                    href={`/cost-search/${cat.slug}`}
-                    className="flex min-h-[44px] items-center justify-center rounded-xl border border-[#F8C79F] bg-white px-2 py-1.5 text-center text-[11px] font-semibold text-[#7C4A2D] transition hover:border-[#F97316] hover:bg-[#FFEEDC]"
+              <div className="mb-5 flex flex-wrap gap-2">
+                {popularTags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => {
+                      setQuery(tag);
+                      void runSearch(tag);
+                    }}
+                    className="rounded-full border border-[#F8C79F]/30 bg-[#FFF7ED] px-3 py-1.5 text-xs font-medium text-[#F97316] transition-all duration-200 hover:border-[#F97316]/50 hover:bg-[#FFF3E6] active:scale-[0.97]"
                   >
-                    {cat.label}
-                  </a>
+                    #{tag}
+                  </button>
                 ))}
               </div>
-            </div>
 
-            <button
-              type="submit"
-              disabled={searching}
-              className="w-full rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-3.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98] disabled:opacity-60"
-            >
-              {searching ? '검색 중...' : '🔍 진료비 검색하기'}
-            </button>
-          </form>
-        </article>
-
-        <div className="min-h-[200px]">
-        {!hasSearched ? (
-          <article className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
-            <p className="text-5xl">🔍</p>
-            <p className="mt-4 text-lg font-bold text-[#4F2A1D]">진료 항목을 검색해보세요</p>
-            <p className="mt-2 text-sm text-[#7C4A2D]">
-              전국 평균과 비교해서 적정 가격인지 확인할 수 있어요
-            </p>
-          </article>
-        ) : null}
-
-        {searchError && !costResult ? (
-          <article className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
-            <p className="text-5xl">😢</p>
-            <p className="mt-4 text-lg font-bold text-[#4F2A1D]">
-              해당 항목의 데이터가 아직 없어요
-            </p>
-            <p className="mt-2 text-sm text-[#A36241]">{searchError}</p>
-          </article>
-        ) : null}
-
-        {costResult ? (
-          <article className="space-y-5 rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-xl font-extrabold text-[#4F2A1D]">{costResult.matchedItem}</h2>
-              <div className="flex items-center gap-2">
-                {costResult.source === 'live' ? (
-                  <span className="rounded-full bg-green-50 px-2 py-1 text-xs text-green-600">
-                    ✅ 실시간 데이터 ({(costResult.dataInfo?.totalRecords ?? 0).toLocaleString('ko-KR')}건)
-                  </span>
-                ) : (
-                  <span className="rounded-full bg-amber-50 px-2 py-1 text-xs text-amber-600">
-                    📊 샘플 데이터
-                  </span>
-                )}
-                {priceBadge ? (
-                  <span
-                    className={`rounded-full px-4 py-1.5 text-xs font-bold ${priceBadge.className}`}
-                  >
-                    {priceBadge.label}
-                  </span>
-                ) : null}
+              <div className="grid grid-cols-4 gap-2 md:grid-cols-7">
+                {FEE_CATEGORIES.slice(0, 7).map((cat) => (
+                  <Link key={cat.slug} href={`/cost-search/${cat.slug}`} className="group flex flex-col items-center gap-1.5 rounded-xl p-3 transition-all duration-200 hover:bg-[#FFF3E6]">
+                    <IconBadge icon={<span className="text-sm">{cat.icon}</span>} color="orange" size="sm" />
+                    <span className="text-xs text-[#6B4226] transition-colors group-hover:text-[#F97316]">{cat.title}</span>
+                  </Link>
+                ))}
               </div>
+
+              <button
+                type="submit"
+                className="mt-5 w-full rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:translate-y-0 active:scale-[0.99]"
+              >
+                🔍 진료비 검색하기
+              </button>
+            </form>
+          </div>
+        </AnimateOnScroll>
+
+        {searchError ? <p className="mt-4 text-sm font-medium text-rose-500">{searchError}</p> : null}
+        {searching && <ResultSkeleton />}
+
+        {results.length > 0 && (
+          <div className="mt-6 space-y-3">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-sm text-[#8B6B4E]">검색 결과 {results.length}건</span>
+              {source === 'live' && <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600">✅ 실시간 데이터</span>}
             </div>
-
-            {/* 데이터 신뢰 배지 */}
-            {costResult.dataInfo && costResult.dataInfo.totalRecords > 0 ? (
-              <div className="flex items-center gap-2 text-xs text-[#A36241]">
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-emerald-700">
-                  ✓ 실제 진료 {costResult.dataInfo.totalRecords}건 기반
-                </span>
-                {costResult.dataInfo.latestDate ? (
-                  <span>최근 데이터: {costResult.dataInfo.latestDate}</span>
-                ) : null}
-              </div>
-            ) : null}
-
-            <div className="space-y-3">
-              <h3 className="text-sm font-bold text-[#4F2A1D]">항목별 가격 요약</h3>
-              <div className="space-y-3 md:hidden">
-                <div className="rounded-xl bg-[#FFF8F0] p-4 shadow-sm ring-1 ring-[#F8C79F]/30">
-                  <div className="flex items-start justify-between">
+            {results.map((item, i) => (
+              <AnimateOnScroll key={item.item} animation="fade-up" delay={i * 50}>
+                <div className="rounded-2xl border border-[#F8C79F]/10 bg-white p-5 shadow-sm transition-all duration-200 hover:border-[#F8C79F]/30 hover:shadow-md md:p-6">
+                  <div className="mb-1 flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium text-[#4F2A1D]">{costResult.matchedItem}</p>
-                      <p className="mt-1 text-xs text-[#8B6B4E]">{animalType} · {region}</p>
+                      <h3 className="font-semibold text-[#4F2A1D]">{item.item}</h3>
+                      <p className="mt-0.5 text-xs text-[#8B6B4E]">{item.category}</p>
                     </div>
-                    <p className="text-lg font-bold text-[#F97316]">{toWon(costResult.priceStats.avg)}</p>
+                    <p className="text-xl font-bold tracking-tight text-[#F97316] md:text-2xl">
+                      {item.avg.toLocaleString('ko-KR')}<span className="text-sm font-normal">원</span>
+                    </p>
                   </div>
-                  <div className="mt-2 flex justify-between text-xs text-[#8B6B4E]">
-                    <span>최소 {toWon(costResult.priceStats.min)}</span>
-                    <span>최대 {toWon(costResult.priceStats.max)}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="hidden overflow-x-auto md:block">
-                <table className="min-w-full rounded-xl bg-[#FFF8F0] text-sm">
-                  <thead>
-                    <tr className="text-left text-[#7C4A2D]">
-                      <th className="px-4 py-3">항목</th>
-                      <th className="px-4 py-3">평균</th>
-                      <th className="px-4 py-3">최소</th>
-                      <th className="px-4 py-3">최대</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-t border-[#F8C79F]/30 text-[#4F2A1D]">
-                      <td className="px-4 py-3 font-semibold">{costResult.matchedItem}</td>
-                      <td className="px-4 py-3 font-bold text-[#F97316]">{toWon(costResult.priceStats.avg)}</td>
-                      <td className="px-4 py-3">{toWon(costResult.priceStats.min)}</td>
-                      <td className="px-4 py-3">{toWon(costResult.priceStats.max)}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
-                <p className="text-xs font-semibold text-[#A36241]">검색 결과 평균</p>
-                <p className="mt-2 text-2xl font-extrabold text-[#F97316]">
-                  {toWon(costResult.priceStats.avg)}
-                </p>
-              </div>
-              <div className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
-                <p className="text-xs font-semibold text-[#A36241]">전국 평균</p>
-                <p className="mt-2 text-2xl font-extrabold text-[#F97316]">
-                  {toWon(costResult.nationalAvg)}
-                </p>
-              </div>
-              <div className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
-                <p className="text-xs font-semibold text-[#A36241]">{region} 평균</p>
-                <p className="mt-2 text-2xl font-extrabold text-[#F97316]">
-                  {toWon(costResult.regionalAvg)}
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-3 rounded-2xl bg-[#FFF8F0] p-5 ring-1 ring-[#F8C79F]/20">
-              <h3 className="text-sm font-bold text-[#4F2A1D]">📊 평균 비교 차트</h3>
-              {[
-                { label: '최소', value: costResult.priceStats.min, color: 'bg-amber-300' },
-                { label: '평균', value: costResult.priceStats.avg, color: 'bg-[#F97316]' },
-                { label: '최대', value: costResult.priceStats.max, color: 'bg-[#EA580C]' },
-              ].map((item) => (
-                <div key={item.label} className="space-y-1">
-                  <div className="flex items-center justify-between text-xs font-medium text-[#7C4A2D]">
-                    <span>{item.label}</span>
-                    <span className="font-bold">{toWon(item.value)}</span>
-                  </div>
-                  <div className="h-3 w-full rounded-full bg-[#FFE7CF]">
-                    <div
-                      className={`h-3 rounded-full ${item.color}`}
-                      style={{ width: getChartWidth(item.value) }}
-                    />
+                  <div className="mt-4">
+                    <PriceBar min={item.min} avg={item.avg} max={item.max} />
                   </div>
                 </div>
-              ))}
-            </div>
+              </AnimateOnScroll>
+            ))}
+          </div>
+        )}
 
-            <div className="flex flex-wrap gap-2">
-              {costResult.sources.map((source) => (
-                <span
-                  key={source}
-                  className="rounded-full bg-[#FFF8F0] px-3 py-1.5 text-xs font-medium text-[#A36241] ring-1 ring-[#F8C79F]/30"
-                >
-                  {source}
-                </span>
-              ))}
-            </div>
-
-            {user ? (
-              <div className="mt-2 rounded-2xl bg-[#FFF8F0] p-5 ring-1 ring-[#F8C79F]/20">
-                <button
-                  type="button"
-                  onClick={() => void handleCompareMine()}
-                  disabled={comparingMine}
-                  className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98] disabled:opacity-60"
-                >
-                  {comparingMine ? '내 진료비 불러오는 중...' : '📋 내 진료비 비교'}
-                </button>
-                {myComparison ? (
-                  <p className="mt-3 text-sm text-[#4F2A1D]">
-                    내 평균은{' '}
-                    <span className="font-extrabold text-[#F97316]">
-                      {toWon(myComparison.average)}
-                    </span>
-                    이며, 전체 평균보다{' '}
-                    <span className="font-extrabold text-[#F97316]">
-                      {Math.abs(myComparison.diffPercent).toFixed(1)}%
-                    </span>{' '}
-                    {myComparison.isHigher ? '높아요.' : '낮아요.'}
-                  </p>
-                ) : (
-                  <p className="mt-3 text-xs text-[#A36241]">
-                    로그인 기록 기반으로 같은 항목을 비교합니다.
-                  </p>
-                )}
+        {!searching && results.length === 0 && hasSearched && query && (
+          <AnimateOnScroll animation="fade-in">
+            <div className="py-16 text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#FFF3E6]">
+                <span className="text-3xl text-[#F97316]/50">🔎</span>
               </div>
-            ) : (
-              <p className="text-xs text-[#A36241]">
-                로그인하면 내 기록과의 비교도 확인할 수 있어요.
-              </p>
-            )}
-          </article>
-        ) : null}
-        {searching ? <ResultsSkeleton /> : null}
-        </div>
+              <p className="mb-1 font-medium text-[#4F2A1D]">검색 결과가 없어요</p>
+              <p className="text-sm text-[#8B6B4E]">다른 키워드로 검색해보세요</p>
+            </div>
+          </AnimateOnScroll>
+        )}
 
-        {/* 케어 가이드 — 검색 결과 바로 아래 */}
-        {costResult ? (
-          <CareGuide
-            keyword={costResult.query || query}
-            categorySlug={matchedCategory?.slug}
-            matchedTags={matchedTags}
-          />
-        ) : null}
-
-        {costResult ? (
-          <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-lg font-extrabold text-[#4F2A1D]">🤖 AI 비용 분석</h2>
-              {isPremiumUser ? (
-                <button
-                  type="button"
-                  onClick={() => setIsChatOpen((prev) => !prev)}
-                  className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2 text-sm font-bold text-white shadow-md transition hover:shadow-lg"
-                >
-                  이 가격이 궁금하세요?
-                </button>
+        {topResult ? (
+          <div className="mt-6 space-y-6">
+            <CareGuide keyword={topResult.item} categorySlug={matchedCategory?.slug} matchedTags={matchedTags} />
+            <article className="rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="flex items-center gap-2 text-lg font-bold text-[#4F2A1D]"><span>🩺</span>AI 비용 분석</h2>
+                {isPremiumUser ? (
+                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2 text-sm font-semibold text-white">
+                    이 가격이 궁금하세요?
+                  </button>
+                ) : null}
+              </div>
+              {loading ? (
+                <p className="mt-3 text-sm text-[#8B6B4E]">구독 상태를 확인 중입니다...</p>
+              ) : isPremiumUser && isChatOpen ? (
+                <p className="mt-3 rounded-xl bg-[#FFF8F0] p-4 text-sm text-[#6B4226]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
+              ) : !isPremiumUser ? (
+                <div className="mt-4">
+                  <Paywall title="AI 비용 분석은 프리미엄 전용 기능입니다" description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한 제공돼요." featureName="AI 비용 분석" />
+                </div>
               ) : null}
-            </div>
-            {loading ? (
-              <p className="mt-3 text-sm text-[#A36241]">구독 상태를 확인 중입니다...</p>
-            ) : isPremiumUser && isChatOpen ? (
-              <div className="mt-4 space-y-3 rounded-2xl bg-[#FFF8F0] p-5 ring-1 ring-[#F8C79F]/20">
-                <div className="rounded-2xl bg-white p-4 text-sm text-[#4F2A1D] shadow-sm">
-                  {costResult?.matchedItem ?? query}의 평균 비용은{' '}
-                  {toWon(costResult?.priceStats.avg ?? 0)}이며, 검사/마취/입원 여부에 따라 차이가
-                  큽니다.
-                </div>
-                <div className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] p-4 text-sm font-medium text-white">
-                  항목별로 비용이 어떻게 달라지는지 알려줘.
-                </div>
-                <p className="text-xs text-[#A36241]">
-                  ※ 의료적 판단은 제공하지 않으며, 가격 비교 및 항목 설명 중심으로 안내해요.
-                </p>
-              </div>
-            ) : !isPremiumUser ? (
-              <div className="mt-4">
-                <Paywall
-                  title="AI 비용 분석은 프리미엄 전용 기능입니다"
-                  description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한으로 제공돼요."
-                  featureName="AI 비용 분석"
-                />
-              </div>
-            ) : null}
-          </article>
-        ) : null}
+            </article>
 
-        {costResult ? (
-          <CostChat
-            itemName={costResult.matchedItem}
-            region={region}
-            stats={{
-              average: costResult.priceStats.avg,
-              min: costResult.priceStats.min,
-              max: costResult.priceStats.max,
-              sampleSize: costResult.priceStats.sampleSize,
-              source: costResult.sources.join(', '),
-            }}
-            seedRange={{
-              min: costResult.priceStats.min,
-              max: costResult.priceStats.max,
-              source: '공공데이터 기준 참고 범위',
-            }}
-          />
+            <CostChat
+              itemName={topResult.item}
+              region={region}
+              stats={{
+                average: topResult.avg,
+                min: topResult.min,
+                max: topResult.max,
+                sampleSize: topResult.count,
+                source: source,
+              }}
+              seedRange={{ min: topResult.min, max: topResult.max, source: '공공데이터 기준 참고 범위' }}
+            />
+          </div>
         ) : null}
       </div>
     </section>
