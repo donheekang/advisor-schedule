@@ -23,6 +23,8 @@ export default function Header() {
     const items: NavigationItem[] = [
       { href: '/pet-talker', label: '펫토커' },
       { href: '/cost-search', label: '진료비 검색' },
+      { href: '/guides', label: '가이드' },
+      { href: '/ai-care', label: 'AI 케어' },
       { href: '/blog', label: '블로그' }
     ];
 

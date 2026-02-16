@@ -3,6 +3,7 @@ import { getCategoryBySlug, getAllCategorySlugs, FEE_CATEGORIES } from '@/lib/fe
 import { findCareProductsByCategory, createCoupangSearchUrl, CARE_CATEGORY_LABELS } from '@/lib/care-product-map';
 import { findCostSeedMatches } from '@/lib/cost-search-seed';
 import Link from 'next/link';
+import { TrackPageView } from '@/components/analytics/track-page-view';
 
 /* ─────────────────────────────────────────────────
  * 정적 경로 생성 (SSG)
@@ -30,7 +31,8 @@ export async function generateMetadata({
     openGraph: {
       title: `강아지·고양이 ${cat.title} 비용, 얼마가 적정일까?`,
       description: cat.metaDescription,
-    },
+      images: [`/api/og?title=${encodeURIComponent(`${cat.title} 비용 비교`)}&category=${cat.slug}`]
+    }
   };
 }
 
@@ -103,6 +105,7 @@ export default function CategoryPage({
 
   return (
     <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+      <TrackPageView eventName="category_view" params={{ category_slug: cat.slug }} />
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
         {/* 헤더 */}
         <header className="space-y-3">
