@@ -19,7 +19,7 @@ export function Accordion({ title, children, defaultOpen = false }: AccordionPro
       >
         <span className="pr-4">{title}</span>
         <svg
-          className={⁠ w-5 h-5 text-[#8B6B4E] flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''} ⁠}
+          className={`w-5 h-5 text-[#8B6B4E] flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -28,7 +28,7 @@ export function Accordion({ title, children, defaultOpen = false }: AccordionPro
         </svg>
       </button>
       <div
-        className={⁠ overflow-hidden transition-all duration-300 ease-out ${isOpen ? 'max-h-96 opacity-100 pb-5' : 'max-h-0 opacity-0'} ⁠}
+        className={`overflow-hidden transition-all duration-300 ease-out ${isOpen ? 'max-h-96 opacity-100 pb-5' : 'max-h-0 opacity-0'}`}
       >
         <div className="text-[#6B4226] text-sm leading-relaxed">{children}</div>
       </div>
