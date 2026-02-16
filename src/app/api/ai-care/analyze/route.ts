@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBreedRiskTags, mapConditionsToTags } from '@/lib/condition-tag-map';
-import { getRecommendedIngredients } from '@/lib/ingredient-recommender';
-import { getRecommendedProducts } from '@/lib/product-recommender';
+import { generateLocalCareReport } from '@/lib/care-report';
 
 type AnalyzeRequestBody = {
   species?: string;
@@ -51,14 +49,8 @@ function incrementUsage(ip: string): number {
   return next;
 }
 
-function buildFallbackSummary(params: {
-  breed: string;
-  species: string;
-  ingredients: { name: string }[];
-  tags: string[];
-}): string {
-  const ingredientNames = params.ingredients.map((item) => item.name).slice(0, 3);
-  return `보호자님, ${params.breed || '아이'} ${params.species}의 최근 상태를 보면 ${params.tags.length}개의 관리 포인트가 보여요. 현재는 생활 루틴을 일정하게 유지하면서 ${ingredientNames.join(', ') || '기본 영양'} 중심으로 케어를 시작해보는 게 좋아요. 증상이 반복되거나 심해지면 가까운 병원에서 정확한 진단을 받아보세요. 이 결과는 의료 진단이 아닌 참고용 건강 관리 가이드예요.`;
+function buildFallbackInsight(reportSummary: string): string {
+  return `${reportSummary}\n\n이 결과는 가격 비교/생활 루틴 안내를 위한 참고 정보예요. 의료 진단이나 처방은 반드시 병원 상담을 통해 확인해주세요.`;
 }
 
 export async function POST(request: NextRequest) {
@@ -67,7 +59,10 @@ export async function POST(request: NextRequest) {
     const currentUsage = getUsageCount(ip);
 
     if (currentUsage >= 3) {
-      return NextResponse.json({ error: 'DAILY_LIMIT_EXCEEDED', message: '오늘 무료 분석 3회를 모두 사용했어요.' }, { status: 429 });
+      return NextResponse.json(
+        { error: 'DAILY_LIMIT_EXCEEDED', message: '오늘 무료 분석 3회를 모두 사용했어요.' },
+        { status: 429 }
+      );
     }
 
     const body = (await request.json()) as AnalyzeRequestBody;
@@ -78,58 +73,55 @@ export async function POST(request: NextRequest) {
     const allergies = (body.allergies ?? []).map((item) => item.trim()).filter(Boolean);
     const conditions = body.conditions ?? [];
 
-    const conditionTags = mapConditionsToTags(conditions);
-    const breedRiskTags = getBreedRiskTags(breed);
-    const mergedTags = [...new Set([...conditionTags, ...breedRiskTags])];
-
-    const ingredients = getRecommendedIngredients(mergedTags);
-    const products = getRecommendedProducts(mergedTags, allergies);
-
-    let summary = buildFallbackSummary({ breed, species, ingredients, tags: mergedTags });
+    const localReport = generateLocalCareReport(species, breed, age, conditions, allergies);
+    let insight = buildFallbackInsight(localReport.summary);
+    let source: 'ai' | 'local' = 'local';
 
     if (process.env.ANTHROPIC_API_KEY) {
-      const prompt = `당신은 반려동물 건강 관리 가이드를 설명하는 전문가예요.
-의료 진단/처방은 하지 말고, 가격 비교와 생활 관리 팁만 안내해주세요.
-친절한 수의사 톤(~해요 체)으로 3~5문장 작성하세요.
-항상 "보호자님"으로 호칭하고 한국어로 작성하세요.
+      const prompt = `당신은 반려동물 케어 루틴 가이드입니다.
+의료 판단/진단은 절대 하지 말고, 생활 루틴과 가격 비교 관점의 정보만 한국어로 안내하세요.
+톤은 친절한 "~해요" 체로 3~4문장으로 작성하세요.
 
-반려동물: ${breed} ${species}, ${age}살, ${weight}kg
+반려동물 정보: ${breed} ${species}, ${age}살, ${weight}kg
+최근 진료 선택: ${conditions.join(', ') || '없음'}
 알러지: ${allergies.join(', ') || '없음'}
-관리 태그: ${mergedTags.join(', ') || '일반 관리'}
-추천 성분: ${ingredients.map((item) => item.name).join(', ') || '기본 영양'}
+로컬 리포트 요약: ${localReport.summary}
 
-마지막 문장에는 "의료 진단이 아닌 참고용 정보"라는 취지의 안전 문구를 포함하세요.`;
+마지막 문장은 "의료 진단이 아닌 참고용 정보"라는 취지의 안전 문구를 포함해주세요.`;
 
-      const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 800,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
+      try {
+        const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': process.env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 600,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
 
-      if (anthropicResponse.ok) {
-        const payload = (await anthropicResponse.json()) as AnthropicResponse;
-        const text = payload.content?.find((item) => item.type === 'text')?.text?.trim();
-        if (text) {
-          summary = text;
+        if (anthropicResponse.ok) {
+          const payload = (await anthropicResponse.json()) as AnthropicResponse;
+          const text = payload.content?.find((item) => item.type === 'text')?.text?.trim();
+          if (text) {
+            insight = text;
+            source = 'ai';
+          }
         }
+      } catch (anthropicError) {
+        console.warn('[ai-care/analyze] anthropic fallback to local insight', anthropicError);
       }
     }
 
     const nextUsage = incrementUsage(ip);
 
     return NextResponse.json({
-      summary,
-      conditionTags: mergedTags,
-      ingredients,
-      products,
+      insight,
+      source,
       remaining: Math.max(0, 3 - nextUsage)
     });
   } catch (error) {
