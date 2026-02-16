@@ -142,11 +142,11 @@ export default function CategoryPage({
 
         {/* 가격 항목 카드 */}
         {seedItems.length > 0 ? (
-          <article className="space-y-4 rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
+          <article className="space-y-4 rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#F8C79F]/20 md:p-6">
             <h2 className="text-lg font-extrabold text-[#4F2A1D]">
               📊 {cat.title} 항목별 평균 비용
             </h2>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {seedItems.map((item) => (
                 <div
                   key={item.name}
@@ -183,7 +183,7 @@ export default function CategoryPage({
             </div>
           </article>
         ) : (
-          <article className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
+          <article className="rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-[#F8C79F]/20 md:p-10">
             <p className="text-5xl">📋</p>
             <p className="mt-4 text-lg font-bold text-[#4F2A1D]">데이터 준비 중이에요</p>
             <p className="mt-2 text-sm text-[#A36241]">
@@ -194,7 +194,7 @@ export default function CategoryPage({
 
         {/* 케어 가이드 섹션 */}
         {careProducts.length > 0 ? (
-          <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
+          <article className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#F8C79F]/20 md:p-6">
             <div className="space-y-2">
               <h2 className="text-lg font-extrabold text-[#4F2A1D]">
                 🩺 {cat.title} 후, 이런 케어가 도움이 돼요

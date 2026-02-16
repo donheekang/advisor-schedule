@@ -82,22 +82,22 @@ export default function HomePage() {
           <p className="mb-4 inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
             🐾 반려동물 보호자를 위한 AI 플랫폼
           </p>
-          <h1 className="text-3xl font-extrabold leading-tight text-[#4F2A1D] md:text-5xl">
+          <h1 className="text-2xl font-extrabold leading-tight text-[#4F2A1D] md:text-5xl">
             우리 아이 진료비,<br />적정한 걸까?
           </h1>
           <p className="mt-5 text-lg text-[#7C4A2D] md:text-xl">
             진료비 비교부터 AI 펫토커까지,<br className="md:hidden" /> 우리 아이를 위한 모든 것
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/pet-talker"
-              className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-7 py-3.5 text-base font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
+              className="flex min-h-[44px] items-center justify-center rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-7 py-3.5 text-base font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
             >
               🗣 펫토커 해보기
             </Link>
             <Link
               href="/cost-search"
-              className="rounded-2xl border-2 border-[#F97316] bg-white px-7 py-3.5 text-base font-bold text-[#EA580C] transition hover:bg-[#FFF8F0]"
+              className="flex min-h-[44px] items-center justify-center rounded-2xl border-2 border-[#F97316] bg-white px-7 py-3.5 text-base font-bold text-[#C2410C] transition hover:bg-[#FFF8F0]"
             >
               💰 진료비 검색
             </Link>
@@ -175,7 +175,7 @@ export default function HomePage() {
         </h2>
         <div className="mt-6 rounded-3xl bg-[#2D1B0E] px-6 py-10 text-center text-white">
           <p className="text-sm text-[#D4A574]">전국 진료비 데이터</p>
-          <p className="mt-2 text-4xl font-extrabold text-[#FB923C] md:text-5xl">128,540건</p>
+          <p className="mt-2 px-2 text-4xl font-extrabold text-[#FB923C] md:text-5xl">128,540건</p>
           <p className="mt-1 text-lg font-semibold text-white/80">분석 완료</p>
         </div>
         <div className="mt-5 grid gap-4 md:grid-cols-2">

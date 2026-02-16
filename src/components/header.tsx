@@ -91,7 +91,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#7C4A2D]/25 bg-white/80 text-[#7C4A2D] md:hidden"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-[#7C4A2D]/25 bg-white/80 text-[#7C4A2D] md:hidden"
             aria-label="모바일 메뉴 열기"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -114,7 +114,7 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-lg px-3 py-2 text-sm ${
+                  className={`rounded-lg px-3 py-2.5 text-sm ${
                     isActive ? 'font-bold text-[#F97316]' : 'font-medium text-[#7C4A2D]'
                   }`}
                   onClick={() => setIsMenuOpen(false)}

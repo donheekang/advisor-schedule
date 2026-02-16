@@ -217,9 +217,9 @@ export default function MyPage() {
   if (!user) {
     return (
       <>
-        <section className="mx-auto flex w-full max-w-3xl flex-col items-center rounded-3xl bg-white px-6 py-14 text-center shadow-lg ring-1 ring-[#F8C79F]/30">
+        <section className="mx-auto flex w-full max-w-3xl flex-col items-center rounded-3xl bg-white px-5 py-10 text-center shadow-lg ring-1 ring-[#F8C79F]/30 md:px-6 md:py-14">
           <p className="text-4xl">🐾</p>
-          <h1 className="mt-4 text-2xl font-extrabold text-[#4F2A1D]">로그인하면 우리 아이 진료 기록을 관리할 수 있어요</h1>
+          <h1 className="mt-4 text-xl font-extrabold text-[#4F2A1D] md:text-2xl">로그인하면 우리 아이 진료 기록을 관리할 수 있어요</h1>
           <button
             type="button"
             onClick={() => setIsLoginModalOpen(true)}

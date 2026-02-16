@@ -122,9 +122,9 @@ export default function AiCareClient() {
           <p className="mt-3 text-[#7C2D12]/80">로그인 없이 간단한 정보만 입력하면 맞춤 관리 포인트와 케어 추천을 보여드려요.</p>
         </header>
 
-        <form onSubmit={handleSubmit} className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20 md:p-8">
+        <form onSubmit={handleSubmit} className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#F8C79F]/20 md:p-8">
           <h2 className="text-xl font-bold text-[#4F2A1D]">STEP 1. 아이 정보를 입력해요</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-sm font-semibold text-[#4F2A1D]">
               종류
               <select
@@ -182,9 +182,9 @@ export default function AiCareClient() {
 
           <fieldset className="mt-6">
             <legend className="text-sm font-semibold text-[#4F2A1D]">최근 진료 이력</legend>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2 md:grid-cols-3">
+            <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-3">
               {CONDITION_OPTIONS.map((item) => (
-                <label key={item.value} className="flex items-center gap-2 rounded-xl bg-[#FFF8F0] px-3 py-2 text-sm text-[#4F2A1D]">
+                <label key={item.value} className="flex min-h-[44px] items-center gap-2 rounded-xl bg-[#FFF8F0] px-3 py-2 text-sm text-[#4F2A1D]">
                   <input
                     type="checkbox"
                     checked={form.conditions.includes(item.value)}
@@ -203,7 +203,7 @@ export default function AiCareClient() {
           {error && <p className="mt-3 text-sm font-semibold text-rose-500">{error}</p>}
         </form>
 
-        <section ref={resultRef} className="space-y-5 rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20 md:p-8">
+        <section ref={resultRef} className="space-y-5 rounded-3xl bg-white p-5 shadow-lg ring-1 ring-[#F8C79F]/20 md:p-8">
           <h2 className="text-xl font-bold text-[#4F2A1D]">STEP 2. 맞춤 분석 결과</h2>
           {isLoading && (
             <div className="space-y-3 rounded-2xl bg-[#FFF8F0] p-5">

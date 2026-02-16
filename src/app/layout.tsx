@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import '@/app/globals.css';
 import { AuthProvider } from '@/components/auth-provider';
@@ -42,6 +42,12 @@ export const metadata: Metadata = {
       }
     ]
   }
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 type RootLayoutProps = Readonly<{

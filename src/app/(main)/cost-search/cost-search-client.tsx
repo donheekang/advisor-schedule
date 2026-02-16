@@ -5,6 +5,7 @@ import { useAuth } from '@/components/auth-provider';
 import CareGuide from '@/components/care-guide';
 import CostChat from '@/components/cost-chat';
 import Paywall from '@/components/paywall';
+import { ResultsSkeleton } from '@/components/skeleton';
 import { apiClient } from '@/lib/api-client';
 import { isPremium } from '@/lib/subscription';
 
@@ -230,6 +231,8 @@ export default function CostSearchClient() {
         <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/30">
           <form
             className="space-y-4"
+            role="search"
+            aria-label="진료비 검색 폼"
             onSubmit={(event) => {
               event.preventDefault();
               void runSearch(query);
@@ -277,7 +280,7 @@ export default function CostSearchClient() {
                 </select>
               </label>
             </div>
-            <div className="flex flex-wrap gap-2 pt-1">
+            <div className="flex gap-2 overflow-x-auto pb-1 pt-1">
               {popularTags.map((tag) => (
                 <button
                   key={tag}
@@ -286,7 +289,7 @@ export default function CostSearchClient() {
                     setQuery(tag);
                     void runSearch(tag);
                   }}
-                  className="rounded-full border border-[#F8C79F] bg-[#FFF8F0] px-3 py-1.5 text-xs font-semibold text-[#7C4A2D] transition hover:bg-[#FFEEDC] hover:border-[#F97316]"
+                  className="whitespace-nowrap rounded-full border border-[#F8C79F] bg-[#FFF8F0] px-3 py-1.5 text-xs font-semibold text-[#7C4A2D] transition hover:border-[#F97316] hover:bg-[#FFEEDC]"
                 >
                   #{tag}
                 </button>
@@ -296,7 +299,7 @@ export default function CostSearchClient() {
             {/* 카테고리별 비교 바로가기 */}
             <div className="space-y-2 pt-2">
               <p className="text-xs font-bold text-[#7C4A2D]">카테고리별 비교</p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {[
                   { slug: 'vaccine', label: '💉 예방접종' },
                   { slug: 'lab', label: '🧪 혈액검사' },
@@ -309,7 +312,7 @@ export default function CostSearchClient() {
                   <a
                     key={cat.slug}
                     href={`/cost-search/${cat.slug}`}
-                    className="rounded-full border border-[#F8C79F] bg-white px-3 py-1.5 text-xs font-semibold text-[#7C4A2D] transition hover:bg-[#FFEEDC] hover:border-[#F97316]"
+                    className="flex min-h-[44px] items-center justify-center rounded-xl border border-[#F8C79F] bg-white px-2 py-1.5 text-center text-[11px] font-semibold text-[#7C4A2D] transition hover:border-[#F97316] hover:bg-[#FFEEDC]"
                   >
                     {cat.label}
                   </a>
@@ -327,6 +330,7 @@ export default function CostSearchClient() {
           </form>
         </article>
 
+        <div className="min-h-[200px]">
         {!hasSearched ? (
           <article className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
             <p className="text-5xl">🔍</p>
@@ -371,6 +375,45 @@ export default function CostSearchClient() {
                 ) : null}
               </div>
             ) : null}
+
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-[#4F2A1D]">항목별 가격 요약</h3>
+              <div className="space-y-3 md:hidden">
+                <div className="rounded-xl bg-[#FFF8F0] p-4 shadow-sm ring-1 ring-[#F8C79F]/30">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-medium text-[#4F2A1D]">{costResult.matchedItem}</p>
+                      <p className="mt-1 text-xs text-[#8B6B4E]">{animalType} · {region}</p>
+                    </div>
+                    <p className="text-lg font-bold text-[#F97316]">{toWon(costResult.priceStats.avg)}</p>
+                  </div>
+                  <div className="mt-2 flex justify-between text-xs text-[#8B6B4E]">
+                    <span>최소 {toWon(costResult.priceStats.min)}</span>
+                    <span>최대 {toWon(costResult.priceStats.max)}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="hidden overflow-x-auto md:block">
+                <table className="min-w-full rounded-xl bg-[#FFF8F0] text-sm">
+                  <thead>
+                    <tr className="text-left text-[#7C4A2D]">
+                      <th className="px-4 py-3">항목</th>
+                      <th className="px-4 py-3">평균</th>
+                      <th className="px-4 py-3">최소</th>
+                      <th className="px-4 py-3">최대</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-[#F8C79F]/30 text-[#4F2A1D]">
+                      <td className="px-4 py-3 font-semibold">{costResult.matchedItem}</td>
+                      <td className="px-4 py-3 font-bold text-[#F97316]">{toWon(costResult.priceStats.avg)}</td>
+                      <td className="px-4 py-3">{toWon(costResult.priceStats.min)}</td>
+                      <td className="px-4 py-3">{toWon(costResult.priceStats.max)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
@@ -461,6 +504,8 @@ export default function CostSearchClient() {
             )}
           </article>
         ) : null}
+        {searching ? <ResultsSkeleton /> : null}
+        </div>
 
         {/* 케어 가이드 (기존 AffiliateProducts 대체) */}
         {costResult ? <CareGuide itemName={costResult.matchedItem} /> : null}
