@@ -3,15 +3,15 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
+import CareGuide from '@/components/care-guide';
 import { useAuth } from '@/components/auth-provider';
 import { CTABanner } from '@/components/cta-banner';
 import { apiClient } from '@/lib/api-client';
 
 const APPSTORE_URL = 'https://apps.apple.com/app/id6504879567';
-const PAGE_SIZE = 10;
 const currencyFormatter = new Intl.NumberFormat('ko-KR');
 
-type ApiRecordItem = {
+type RecordItem = {
   item_name?: string;
   name?: string;
   price?: number;
@@ -19,13 +19,19 @@ type ApiRecordItem = {
   category_tag?: string;
 };
 
-type ApiRecord = {
+type RecordDetail = {
   id?: string;
   visit_date?: string;
   hospital_name?: string;
   total_amount?: number;
   tags?: string[];
-  items?: ApiRecordItem[];
+  items?: RecordItem[];
+};
+
+type RecordDetailPageProps = {
+  params: {
+    id: string;
+  };
 };
 
 function formatDate(value?: string) {
@@ -41,12 +47,11 @@ function formatDate(value?: string) {
   return parsed.toLocaleDateString('ko-KR');
 }
 
-export default function MyPageRecordsPage() {
+export default function RecordDetailPage({ params }: RecordDetailPageProps) {
   const { user, loading, signIn } = useAuth();
-  const [records, setRecords] = useState<ApiRecord[]>([]);
+  const [record, setRecord] = useState<RecordDetail | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
     if (loading || !user) {
@@ -55,27 +60,18 @@ export default function MyPageRecordsPage() {
 
     let mounted = true;
 
-    async function fetchRecords() {
+    async function fetchRecord() {
       setIsFetching(true);
       setErrorMessage(null);
 
       try {
-        const response = await apiClient.listRecords(undefined, true);
-        const list = (Array.isArray(response) ? response : []) as ApiRecord[];
-
-        if (!mounted) {
-          return;
+        const response = (await apiClient.getRecord(params.id)) as RecordDetail;
+        if (mounted) {
+          setRecord(response);
         }
-
-        setRecords(
-          list.sort(
-            (left, right) =>
-              new Date(right.visit_date ?? '').getTime() - new Date(left.visit_date ?? '').getTime()
-          )
-        );
       } catch {
         if (mounted) {
-          setErrorMessage('진료 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');
+          setErrorMessage('기록 상세를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');
         }
       } finally {
         if (mounted) {
@@ -84,14 +80,17 @@ export default function MyPageRecordsPage() {
       }
     }
 
-    void fetchRecords();
+    void fetchRecord();
 
     return () => {
       mounted = false;
     };
-  }, [loading, user]);
+  }, [loading, params.id, user]);
 
-  const visibleRecords = useMemo(() => records.slice(0, visibleCount), [records, visibleCount]);
+  const careGuideKeyword = useMemo(() => {
+    const firstItem = record?.items?.[0];
+    return firstItem?.item_name ?? firstItem?.name ?? '';
+  }, [record]);
 
   if (loading) {
     return <p className="mx-auto w-full max-w-4xl text-sm text-[#A36241]">로그인 상태를 확인하고 있어요...</p>;
@@ -102,7 +101,6 @@ export default function MyPageRecordsPage() {
       <section className="mx-auto w-full max-w-3xl rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
         <p className="text-4xl">🔒</p>
         <h1 className="mt-3 text-xl font-extrabold text-[#4F2A1D]">로그인이 필요해요</h1>
-        <p className="mt-2 text-sm text-[#7C4A2D]">진료 기록 상세는 로그인 후 확인할 수 있어요.</p>
         <button
           type="button"
           onClick={() => {
@@ -118,38 +116,25 @@ export default function MyPageRecordsPage() {
 
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-col gap-4 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8">
-      <header>
-        <h1 className="text-2xl font-extrabold text-[#4F2A1D]">진료 기록 상세 목록</h1>
-        <p className="mt-1 text-sm text-[#7C4A2D]">최신 진료 순으로 항목과 태그를 확인해보세요.</p>
+      <header className="flex items-center justify-between gap-3">
+        <h1 className="text-2xl font-extrabold text-[#4F2A1D]">진료 기록 상세</h1>
+        <Link href="/mypage/records" className="text-sm font-bold text-[#A36241] underline underline-offset-4">
+          ← 목록으로
+        </Link>
       </header>
 
       {errorMessage ? <p className="rounded-2xl bg-rose-50 p-4 text-sm text-rose-600">{errorMessage}</p> : null}
-      {isFetching ? <p className="text-sm text-[#A36241]">기록을 불러오는 중이에요...</p> : null}
+      {isFetching ? <p className="text-sm text-[#A36241]">상세 정보를 불러오는 중이에요...</p> : null}
 
-      {!isFetching && records.length === 0 ? (
-        <article className="rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
-          <p className="text-4xl">📋</p>
-          <p className="mt-2 text-sm text-[#7C4A2D]">앱에서 진료 영수증을 등록하면 여기에서 상세 목록을 볼 수 있어요.</p>
-          <a
-            href={APPSTORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white"
-          >
-            앱 다운로드
-          </a>
-        </article>
-      ) : null}
-
-      {visibleRecords.map((record, index) => (
-        <article key={record.id ?? `record-${index}`} className="rounded-2xl bg-white p-5 shadow-lg ring-1 ring-[#F8C79F]/20">
-          <header className="flex flex-wrap items-center justify-between gap-2">
+      {record ? (
+        <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <p className="text-sm font-bold text-[#4F2A1D]">{formatDate(record.visit_date)}</p>
               <p className="text-sm text-[#7C4A2D]">{record.hospital_name ?? '병원 정보 없음'}</p>
             </div>
-            <p className="text-lg font-extrabold text-[#F97316]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
-          </header>
+            <p className="text-xl font-extrabold text-[#F97316]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
+          </div>
 
           <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-[#F8C79F]/30">
             <table className="w-full border-collapse text-sm">
@@ -161,8 +146,8 @@ export default function MyPageRecordsPage() {
                 </tr>
               </thead>
               <tbody>
-                {(record.items ?? []).map((item, itemIndex) => (
-                  <tr key={`${item.item_name ?? item.name ?? 'item'}-${itemIndex}`} className="border-t border-[#F8C79F]/20">
+                {(record.items ?? []).map((item, index) => (
+                  <tr key={`${item.item_name ?? item.name ?? 'item'}-${index}`} className="border-t border-[#F8C79F]/20">
                     <td className="px-3 py-2 text-[#4F2A1D]">{item.item_name ?? item.name ?? '-'}</td>
                     <td className="px-3 py-2 text-[#4F2A1D]">{currencyFormatter.format(item.price ?? item.amount ?? 0)}원</td>
                     <td className="px-3 py-2 text-[#A36241]">{item.category_tag ?? '-'}</td>
@@ -180,35 +165,20 @@ export default function MyPageRecordsPage() {
             ))}
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-4">
-            {record.id ? (
-              <Link href={`/mypage/records/${record.id}`} className="text-sm font-bold text-[#F97316] underline underline-offset-4">
-                기록 상세 보기 →
-              </Link>
-            ) : null}
-            <a
-              href={APPSTORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-bold text-[#A36241] underline underline-offset-4"
-            >
-              앱에서 영수증 사진 보기
-            </a>
-          </div>
+          <a
+            href={APPSTORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex text-sm font-bold text-[#F97316] underline underline-offset-4"
+          >
+            앱에서 영수증 사진도 보기
+          </a>
         </article>
-      ))}
-
-      {visibleCount < records.length ? (
-        <button
-          type="button"
-          onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
-          className="rounded-2xl bg-white px-5 py-3 text-sm font-bold text-[#7C4A2D] ring-1 ring-[#F8C79F]/30"
-        >
-          더 보기
-        </button>
       ) : null}
 
-      <CTABanner variant="app-download" context="mypage-records-bottom" />
+      {careGuideKeyword ? <CareGuide itemName={careGuideKeyword} /> : null}
+
+      <CTABanner variant="app-download" context="mypage-record-detail-bottom" />
     </section>
   );
 }

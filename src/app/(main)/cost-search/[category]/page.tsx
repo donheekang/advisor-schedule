@@ -3,6 +3,7 @@ import { getCategoryBySlug, getAllCategorySlugs, FEE_CATEGORIES } from '@/lib/fe
 import { findCareProductsByCategory, createCoupangSearchUrl, CARE_CATEGORY_LABELS } from '@/lib/care-product-map';
 import { findCostSeedMatches } from '@/lib/cost-search-seed';
 import Link from 'next/link';
+import { CTABanner } from '@/components/cta-banner';
 
 /* ─────────────────────────────────────────────────
  * 정적 경로 생성 (SSG)
@@ -241,30 +242,11 @@ export default function CategoryPage({
           </article>
         ) : null}
 
-        {/* AI 체험 CTA */}
-        <article className="rounded-3xl bg-gradient-to-r from-[#4F2A1D] to-[#7C4A2D] p-6 text-center shadow-lg">
-          <p className="text-2xl">✨</p>
-          <h2 className="mt-3 text-lg font-extrabold text-white">
-            우리 아이 맞춤 케어, 30초면 알 수 있어요
-          </h2>
-          <p className="mt-2 text-sm text-[#F8C79F]">
-            알러지, 체중, 진료 이력을 입력하면 AI가 맞춤 케어를 분석해줘요.
-          </p>
-          <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
-            <Link
-              href="/ai-care"
-              className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl"
-            >
-              무료 AI 케어 체험 →
-            </Link>
-            <a
-              href="https://apps.apple.com/app/id6504879567"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-2xl border border-[#F8C79F]/50 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
-            >
-              📱 앱 다운로드
-            </a>
+        <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
+          <p className="text-sm font-semibold text-[#7C4A2D]">카테고리 분석 다음 단계</p>
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <CTABanner variant="ai-care" context="cost-category-bottom" />
+            <CTABanner variant="app-download" context="cost-category-bottom" />
           </div>
         </article>
       </div>
