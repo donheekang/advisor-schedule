@@ -99,7 +99,7 @@ export default function HomePage() {
           </AnimateOnScroll>
 
           <AnimateOnScroll animation="fade-up" delay={150}>
-            <h1 className="mb-6 text-4xl font-extrabold leading-[1.1] tracking-tight text-[#1B2A4A] md:text-5xl lg:text-[3.5rem]">
+            <h1 className="mb-6 text-2xl font-extrabold leading-[1.1] tracking-tight text-[#1B2A4A] md:text-4xl lg:text-[3.5rem]">
               우리 아이 진료비,
               <br />
               <span className="bg-gradient-to-r from-[#F97316] to-[#FB923C] bg-clip-text text-transparent">적정한 걸까?</span>
@@ -137,7 +137,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-[#94A3B8]">
+            <div className="mt-10 flex flex-col gap-2 text-sm text-[#94A3B8] sm:flex-row sm:gap-6">
               <div className="flex items-center gap-2">
                 <svg className="h-4 w-4 text-[#F97316]" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
@@ -169,7 +169,7 @@ export default function HomePage() {
           <p className="mb-10 text-[#64748B] md:mb-14">PetHealth+와 함께 우리 아이 건강을 관리하세요</p>
         </AnimateOnScroll>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
           {[
             {
               icon: <PawPrint className="h-6 w-6" />,
@@ -189,7 +189,7 @@ export default function HomePage() {
               icon: <Sparkles className="h-6 w-6" />,
               color: 'purple' as const,
               title: 'AI 견적서',
-              desc: '우리 아이 맞춤 케어 리포트를 받아보세요',
+              desc: '증상을 입력하면 예상 진료비를 알려드려요',
               href: '/ai-care'
             }
           ].map((item, i) => (
@@ -225,35 +225,31 @@ export default function HomePage() {
       </section>
       </AnimateOnScroll>
 
-      <AnimateOnScroll animation="fade-up" delay={sectionDelays[2]}>
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-4">
-          <AnimateOnScroll animation="fade-up">
-            <h2 className="mb-3 text-2xl font-bold text-[#1B2A4A] md:text-3xl">3단계로 시작하세요</h2>
-            <p className="mb-10 text-[#64748B] md:mb-14">간단한 3단계로 우리 아이 건강 관리를 시작할 수 있어요</p>
-          </AnimateOnScroll>
+          <h2 className="mb-3 text-2xl font-bold text-[#1B2A4A] md:text-3xl">3단계로 시작하세요</h2>
+          <p className="mb-10 text-[#64748B] md:mb-14">간단한 3단계로 우리 아이 건강 관리를 시작할 수 있어요</p>
 
-          <div className="relative grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+          <div className="relative">
             <div className="pointer-events-none absolute left-[16.6%] right-[16.6%] top-12 hidden h-0.5 bg-gradient-to-r from-[#F97316]/20 via-[#F97316]/40 to-[#F97316]/20 md:block" />
-            {[
-              { num: '1', title: '사진 올리기 or 검색', desc: '우리 아이 사진을 올리거나 진료 항목을 검색하세요' },
-              { num: '2', title: 'AI가 분석', desc: 'AI가 사진을 읽고 대사를 만들거나 진료비를 비교해요' },
-              { num: '3', title: '공유 & 기록', desc: 'SNS에 공유하고, 앱에서 기록하면 더 정확해져요' }
-            ].map((step, i) => (
-              <AnimateOnScroll key={step.num} animation="fade-up" delay={i * 100}>
-                <div className="relative rounded-2xl bg-gradient-to-br from-[#FFF8F0] to-[#FFF3E6] p-6 md:p-8">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+              {[
+                { num: '1', title: '사진 올리기 or 검색', desc: '우리 아이 사진을 올리거나 진료 항목을 검색하세요' },
+                { num: '2', title: 'AI가 분석', desc: 'AI가 사진을 읽고 대사를 만들거나 진료비를 비교해요' },
+                { num: '3', title: '공유 & 기록', desc: 'SNS에 공유하고, 앱에서 기록하면 더 정확해져요' }
+              ].map((step) => (
+                <div key={step.num} className="relative rounded-2xl bg-gradient-to-br from-[#FFF8F0] to-[#FFF3E6] p-6 md:p-8">
                   <div className="relative z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#F97316] text-lg font-bold text-white shadow-lg shadow-[#F97316]/25">
                     {step.num}
                   </div>
                   <h3 className="mb-2 text-lg font-bold text-[#1B2A4A]">{step.title}</h3>
                   <p className="text-sm leading-relaxed text-[#64748B]">{step.desc}</p>
                 </div>
-              </AnimateOnScroll>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
-      </AnimateOnScroll>
 
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
       <section className="mx-auto max-w-6xl px-4 py-20 md:py-28">
@@ -264,21 +260,19 @@ export default function HomePage() {
         <AnimateOnScroll animation="scale-up">
           <div className="rounded-3xl bg-gradient-to-br from-[#1B2A4A] via-[#243656] to-[#1B2A4A] p-8 text-center text-white md:p-14">
             <p className="mb-6 text-sm font-medium uppercase tracking-widest text-white/50">보호자들이 신뢰하는 데이터</p>
-            <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:gap-16">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-0">
               <div>
                 <p className="text-4xl font-black tracking-tight md:text-5xl">
                   <CountUp target={128540} suffix="+" />
                 </p>
                 <p className="mt-1 text-sm text-white/60">전국 진료비 데이터</p>
               </div>
-              <div className="hidden h-12 w-px bg-white/20 md:block" />
               <div>
                 <p className="text-4xl font-black tracking-tight md:text-5xl">
                   <CountUp target={2847} suffix="+" />
                 </p>
                 <p className="mt-1 text-sm text-white/60">등록 동물병원</p>
               </div>
-              <div className="hidden h-12 w-px bg-white/20 md:block" />
               <div>
                 <p className="text-4xl font-black tracking-tight md:text-5xl">
                   <CountUp target={15} suffix="개" />
@@ -289,7 +283,7 @@ export default function HomePage() {
           </div>
         </AnimateOnScroll>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           {[
             {
               text: '병원에서 받은 비용이 평균보다 높은지 바로 확인할 수 있어서 안심됐어요.',
@@ -341,29 +335,23 @@ export default function HomePage() {
       </AnimateOnScroll>
 
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[2]}>
-      <section className="mx-auto max-w-6xl px-4 py-20 md:py-28">
-        <AnimateOnScroll animation="scale-up">
-          <div className="rounded-3xl bg-gradient-to-br from-[#1B2A4A] via-[#243656] to-[#2D4A6F] p-8 text-center text-white md:p-14">
-            <h2 className="mb-3 text-2xl font-bold md:text-3xl">우리 아이 건강 관리, 지금 시작하세요 🐾</h2>
-            <p className="mb-8 text-sm text-white/80 md:text-base">
-              앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.
-            </p>
-            <div className="flex flex-col justify-center gap-3 sm:flex-row">
-              <a
-                href="https://apps.apple.com"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-500 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"
-              >
-                App Store 다운로드
-              </a>
-              <a
-                href="https://play.google.com/store"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-500 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"
-              >
-                Google Play 다운로드
-              </a>
-            </div>
-          </div>
-        </AnimateOnScroll>
+      <section className="bg-gradient-to-r from-[#1B2A4A] to-[#2D4A6F] px-4 py-16 text-center text-white md:py-20">
+        <h2 className="mb-3 text-xl font-extrabold md:text-2xl">우리 아이 진료비, 지금 바로 확인해보세요</h2>
+        <p className="mb-8 text-sm text-white/70 md:text-base">전국 평균 데이터로 비교하고, AI로 예상 비용까지</p>
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href="/cost-search"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#F97316] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#F97316]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+          >
+            🔍 진료비 검색하기
+          </a>
+          <a
+            href="/ai-care"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20"
+          >
+            ✨ AI 견적서 받기
+          </a>
+        </div>
       </section>
       </AnimateOnScroll>
 
