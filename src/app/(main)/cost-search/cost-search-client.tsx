@@ -35,7 +35,7 @@ type CostSearchListResponse = {
   error?: string;
 };
 
-const popularTags = ['혈액검사', '스케일링', '슬개골수술', '중성화 암컷', '예방접종', '초음파', 'MRI'];
+const popularTags = ['중성화', '슬개골', '스케일링', '혈액검사', '예방접종', '초음파', '피부', 'MRI'];
 const animalTypes = ['강아지', '고양이'] as const;
 const regions = ['전국', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '경기', '강원'];
 
@@ -138,13 +138,17 @@ export default function CostSearchClient() {
               }}
             >
               <div className="relative mb-5">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base text-[#8B6B4E]">🔎</span>
+                <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8B6B4E]">
+                  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+                    <path d="M21 21L15.8 15.8M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   type="text"
-                  placeholder="어떤 진료를 받으셨나요?"
-                  className="w-full rounded-xl border border-[#E8D5C0] bg-[#FFFAF5] py-4 pl-12 pr-4 text-sm text-[#4F2A1D] placeholder:text-[#B8A08A] outline-none transition-all duration-200 focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/20"
+                  placeholder="진료 항목을 검색해보세요 (예: 중성화, 슬개골)"
+                  className="w-full rounded-xl border border-[#E8D5C0] bg-[#FFFAF5] py-3 pl-10 pr-4 text-sm text-[#4F2A1D] placeholder:text-[#B8A08A] outline-none transition-all duration-300 focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/20"
                 />
               </div>
 
@@ -152,7 +156,7 @@ export default function CostSearchClient() {
                 <select
                   value={animalType}
                   onChange={(event) => setAnimalType(event.target.value as (typeof animalTypes)[number])}
-                  className="rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
+                  className="rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-300 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
                 >
                   {animalTypes.map((type) => (
                     <option key={type} value={type}>{type}</option>
@@ -161,7 +165,7 @@ export default function CostSearchClient() {
                 <select
                   value={region}
                   onChange={(event) => setRegion(event.target.value)}
-                  className="rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
+                  className="rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-300 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
                 >
                   {regions.map((area) => (
                     <option key={area} value={area}>{area}</option>
@@ -169,7 +173,7 @@ export default function CostSearchClient() {
                 </select>
               </div>
 
-              <div className="mb-5 flex flex-wrap gap-2">
+              <div className="mb-6 flex flex-wrap gap-2">
                 {popularTags.map((tag) => (
                   <button
                     key={tag}
@@ -178,25 +182,25 @@ export default function CostSearchClient() {
                       setQuery(tag);
                       void runSearch(tag);
                     }}
-                    className="rounded-full border border-[#F8C79F]/30 bg-[#FFF7ED] px-3 py-1.5 text-xs font-medium text-[#F97316] transition-all duration-200 hover:border-[#F97316]/50 hover:bg-[#FFF3E6] active:scale-[0.97]"
+                    className="cursor-pointer rounded-full bg-[#FFF3E6] px-3 py-1.5 text-xs font-medium text-[#C2410C] transition-all duration-200 hover:bg-[#F97316] hover:text-white"
                   >
-                    #{tag}
+                    {tag}
                   </button>
                 ))}
               </div>
 
-              <div className="grid grid-cols-4 gap-2 md:grid-cols-7">
+              <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-6">
                 {FEE_CATEGORIES.slice(0, 7).map((cat) => (
-                  <Link key={cat.slug} href={`/cost-search/${cat.slug}`} className="group flex flex-col items-center gap-1.5 rounded-xl p-3 transition-all duration-200 hover:bg-[#FFF3E6]">
-                    <IconBadge icon={<span className="text-sm">{cat.icon}</span>} color="orange" size="sm" />
-                    <span className="text-xs text-[#6B4226] transition-colors group-hover:text-[#F97316]">{cat.title}</span>
+                  <Link key={cat.slug} href={'/cost-search/' + cat.slug} className="flex cursor-pointer flex-col items-center gap-2 rounded-2xl bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                    <IconBadge icon={<span className="text-sm">{cat.icon}</span>} color="orange" size="md" />
+                    <span className="text-center text-xs font-medium text-[#6B4226]">{cat.title}</span>
                   </Link>
                 ))}
               </div>
 
               <button
                 type="submit"
-                className="mt-5 w-full rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:translate-y-0 active:scale-[0.99]"
+                className="mt-5 w-full rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:translate-y-0 active:scale-[0.99]"
               >
                 🔍 진료비 검색하기
               </button>

@@ -60,6 +60,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
   }
 
   const seedItems = getCategorySeedItems(category.seedKeywords);
+  const categoryNavClass = 'rounded-full px-4 py-2 text-xs font-semibold transition-all duration-300 ';
 
   return (
     <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
@@ -81,35 +82,51 @@ export default function CategoryPage({ params }: { params: { category: string } 
 
           <nav className="mb-6 flex flex-wrap gap-2">
             {FEE_CATEGORIES.map((c) => (
-              <Link key={c.slug} href={`/cost-search/${c.slug}`} className={`rounded-full px-4 py-2 text-xs font-semibold ${c.slug === category.slug ? 'bg-[#F97316] text-white' : 'border border-[#E8D5C0] bg-white text-[#6B4226]'}`}>
+              <Link
+                key={c.slug}
+                href={'/cost-search/' + c.slug}
+                className={
+                  categoryNavClass +
+                  (c.slug === category.slug ? 'bg-[#F97316] text-white' : 'border border-[#E8D5C0] bg-white text-[#6B4226] hover:border-[#F97316]/40 hover:text-[#F97316]')
+                }
+              >
                 {c.title}
               </Link>
             ))}
           </nav>
 
           {seedItems.length > 0 ? (
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {seedItems.map((item, i) => (
-                <AnimateOnScroll key={item.name} animation="fade-up" delay={i * 50}>
-                  <article className="rounded-2xl border border-[#F8C79F]/10 bg-white p-5 shadow-sm md:p-6">
-                    <div className="mb-1 flex items-start justify-between">
-                      <div>
-                        <h3 className="font-semibold text-[#4F2A1D]">{item.name}</h3>
-                        <p className="text-xs text-[#8B6B4E]">{category.title}</p>
-                      </div>
-                      <p className="text-xl font-bold text-[#F97316] md:text-2xl">{Math.round(item.avg).toLocaleString('ko-KR')}원</p>
+                <AnimateOnScroll key={item.name} animation="fade-up" delay={i * 100}>
+                  <article className="rounded-2xl border border-[#F8C79F]/10 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                      <h3 className="text-base font-semibold text-[#4F2A1D]">{item.name}</h3>
+                      <span className="rounded-full bg-[#FFF3E6] px-2.5 py-1 text-xs font-medium text-[#C2410C]">강아지</span>
                     </div>
-                    <div className="mt-4">
+                    <div>
                       <PriceBar min={item.min} avg={item.avg} max={item.max} />
                     </div>
+                    <p className="mt-4 text-sm text-[#8B6B4E]">
+                      최소 {Math.round(item.min).toLocaleString('ko-KR')}원 · 평균 {Math.round(item.avg).toLocaleString('ko-KR')}원 · 최대{' '}
+                      {Math.round(item.max).toLocaleString('ko-KR')}원
+                    </p>
                   </article>
                 </AnimateOnScroll>
               ))}
             </div>
           ) : (
-            <article className="rounded-2xl border border-[#F8C79F]/10 bg-white p-8 text-center">
-              <p className="text-lg font-semibold text-[#4F2A1D]">데이터 준비 중이에요</p>
-            </article>
+            <AnimateOnScroll animation="fade-in">
+              <article className="rounded-2xl border border-[#F8C79F]/10 bg-white px-8 py-14 text-center">
+                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#FFF8F0]">
+                  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="h-10 w-10 text-[#D1B49A]">
+                    <path d="M21 21L15.8 15.8M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <p className="text-lg font-semibold text-[#8B6B4E]">검색 결과가 없어요</p>
+                <p className="mt-1 text-sm text-[#8B6B4E]">다른 키워드로 검색해보세요</p>
+              </article>
+            </AnimateOnScroll>
           )}
         </section>
 
