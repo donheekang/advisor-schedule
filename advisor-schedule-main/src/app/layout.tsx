@@ -4,7 +4,6 @@ import { AuthProvider } from '@/components/auth-provider';
 
 const siteName = 'PetHealth+';
 const siteDescription = '반려동물 진료비 데이터를 검색하고 비교해 합리적인 의료비 결정을 돕는 데이터 플랫폼입니다.';
-
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -50,7 +49,7 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
-      <body className="min-h-screen bg-[#F8FAFB] text-[#1B3A4B] antialiased">
+      <body className="min-h-screen bg-[#F8FAFB] text-[#1B3A4B] antialiased" style={{ fontFamily: "'Pretendard Variable', Pretendard, system-ui, -apple-system, sans-serif" }}>
         <AuthProvider>{children}</AuthProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </body>
