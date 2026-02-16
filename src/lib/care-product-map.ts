@@ -96,6 +96,30 @@ export const CARE_PRODUCTS: CareProduct[] = [
     relatedTags: ['dental_scaling', 'dental_extraction'],
     reason: '일반 칫솔보다 거부감이 적어서 양치 입문용으로 좋아요.',
   },
+  {
+    name: '치태 파우더',
+    category: 'oral_care',
+    description: '사료에 뿌려주기만 하면 되는 구강 관리 파우더.',
+    coupangKeyword: '강아지 치태 파우더 치석',
+    relatedTags: ['dental_scaling'],
+    reason: '칫솔질이 어려운 아이에게 가장 쉬운 구강 관리법이에요.',
+  },
+  {
+    name: '구강 물티슈',
+    category: 'oral_care',
+    description: '손가락에 감아 닦아주는 일회용 구강 티슈.',
+    coupangKeyword: '강아지 구강 물티슈 치석',
+    relatedTags: ['dental_scaling', 'dental_extraction'],
+    reason: '외출 후나 간식 후 간편하게 닦아줄 수 있어요.',
+  },
+  {
+    name: '구강 스프레이',
+    category: 'oral_care',
+    description: '입 냄새와 치면 세균 관리를 돕는 데일리 스프레이.',
+    coupangKeyword: '강아지 구강 스프레이 치석',
+    relatedTags: ['dental_scaling', 'dental_extraction'],
+    reason: '양치가 어려운 날에 보조 루틴으로 사용하기 좋아요.',
+  },
 
   // ===== 피부·알러지 =====
   {
@@ -122,6 +146,30 @@ export const CARE_PRODUCTS: CareProduct[] = [
     relatedTags: ['medicine_skin', 'medicine_allergy'],
     reason: '목욕 사이사이 건조한 부위를 케어해줄 수 있어요.',
   },
+  {
+    name: '세라마이드 크림',
+    category: 'skin_allergy',
+    description: '피부 장벽을 강화하는 보습 크림.',
+    coupangKeyword: '강아지 세라마이드 크림 피부',
+    relatedTags: ['medicine_skin', 'medicine_allergy'],
+    reason: '건조하고 갈라진 피부에 직접 발라주면 장벽 회복에 도움이 돼요.',
+  },
+  {
+    name: '약용 샴푸',
+    category: 'skin_allergy',
+    description: '수의사 처방 기반의 약용 샴푸.',
+    coupangKeyword: '강아지 약용 샴푸 피부병',
+    relatedTags: ['medicine_skin'],
+    reason: '피부 감염이 반복되면 일반 샴푸 대신 약용 샴푸를 사용하세요.',
+  },
+  {
+    name: '항진균 스프레이',
+    category: 'skin_allergy',
+    description: '곰팡이성 피부염용 스프레이.',
+    coupangKeyword: '강아지 항진균 스프레이 피부',
+    relatedTags: ['medicine_skin'],
+    reason: '곰팡이 피부염이 진단되면 국소 스프레이로 관리할 수 있어요.',
+  },
 
   // ===== 관절 케어 =====
   {
@@ -139,6 +187,22 @@ export const CARE_PRODUCTS: CareProduct[] = [
     coupangKeyword: '강아지 미끄럼방지 매트',
     relatedTags: ['ortho_patella', 'ortho_arthritis'],
     reason: '바닥이 미끄러우면 슬개골에 부담이 커져요. 매트가 도움이 돼요.',
+  },
+  {
+    name: '반려동물 계단/슬로프',
+    category: 'joint',
+    description: '소파나 침대에 오르내리는 계단.',
+    coupangKeyword: '강아지 계단 슬로프 슬개골',
+    relatedTags: ['ortho_patella', 'ortho_arthritis'],
+    reason: '높은 곳에서 뛰어내리는 대신 계단을 사용하면 관절 부담을 줄여요.',
+  },
+  {
+    name: '관절 보온 밴드',
+    category: 'joint',
+    description: '겨울철 관절 보온용 밴드.',
+    coupangKeyword: '강아지 관절 보호대 보온',
+    relatedTags: ['ortho_arthritis'],
+    reason: '추운 날 관절이 뻣뻣해지는 걸 방지해줘요.',
   },
 
   // ===== 영양제 (일반) =====
@@ -166,16 +230,102 @@ export const CARE_PRODUCTS: CareProduct[] = [
     relatedTags: ['vaccine_comprehensive', 'prevent_heartworm'],
     reason: '예방접종 시기에 면역력 보조 영양제를 함께 챙기면 좋아요.',
   },
+  {
+    name: '소화효소 보조제',
+    category: 'supplement',
+    description: '소화를 돕는 효소 보조제.',
+    coupangKeyword: '강아지 소화효소 보조제',
+    relatedTags: ['medicine_gi'],
+    reason: '소화가 약한 아이에게 사료와 함께 급여하면 도움이 돼요.',
+  },
+  {
+    name: '비타민E 영양제',
+    category: 'supplement',
+    description: '피부·면역 건강에 도움되는 비타민E.',
+    coupangKeyword: '강아지 비타민E 영양제',
+    relatedTags: ['medicine_skin', 'vaccine_comprehensive'],
+    reason: '피부 건강과 면역력 보조에 도움이 돼요.',
+  },
+  {
+    name: '간건강 영양제',
+    category: 'supplement',
+    description: '밀크씨슬 기반 간 보호 영양제.',
+    coupangKeyword: '강아지 간건강 영양제 밀크씨슬',
+    relatedTags: ['exam_blood_chem', 'exam_blood_general', 'exam_lab_panel'],
+    reason: '혈액검사에서 간 수치가 높았다면 간 보호 영양제를 고려하세요.',
+  },
+  {
+    name: '심장사상충 예방약',
+    category: 'supplement',
+    description: '매월 1회 급여하는 심장사상충 예방약.',
+    coupangKeyword: '강아지 심장사상충 예방약',
+    relatedTags: ['prevent_heartworm', 'vaccine_comprehensive'],
+    reason: '심장사상충은 예방이 최선이에요. 매월 같은 날 급여하세요.',
+  },
+  {
+    name: '외부기생충 예방약',
+    category: 'supplement',
+    description: '진드기·벼룩 예방 약.',
+    coupangKeyword: '강아지 진드기 예방약 외부기생충',
+    relatedTags: ['vaccine_comprehensive', 'prevent_heartworm'],
+    reason: '야외 활동이 많다면 외부기생충 예방을 꼭 챙기세요.',
+  },
+  {
+    name: '내부구충제',
+    category: 'supplement',
+    description: '장내 기생충 예방·치료용.',
+    coupangKeyword: '강아지 내부구충제',
+    relatedTags: ['vaccine_comprehensive', 'medicine_gi'],
+    reason: '3~6개월마다 내부구충을 해주는 게 좋아요.',
+  },
+  {
+    name: '눈물 세정제',
+    category: 'supplement',
+    description: '눈물자국 제거 및 눈 주변 세정.',
+    coupangKeyword: '강아지 눈물 세정제 눈물자국',
+    relatedTags: ['medicine_eye'],
+    reason: '매일 눈물을 닦아주면 눈물자국과 감염을 예방할 수 있어요.',
+  },
+  {
+    name: '귀 세정제',
+    category: 'supplement',
+    description: '귀 안 세정 및 외이염 예방.',
+    coupangKeyword: '강아지 귀 세정제 외이염',
+    relatedTags: ['medicine_ear'],
+    reason: '주 1~2회 귀 세정으로 외이염을 예방하세요.',
+  },
+
+  // ===== 식이 =====
+  {
+    name: '저자극 사료',
+    category: 'food_snack',
+    description: 'LID(제한 단백질) 저자극 사료.',
+    coupangKeyword: '강아지 저자극 사료 LID',
+    relatedTags: ['medicine_gi', 'medicine_allergy'],
+    reason: '식이 알러지나 소화 문제가 있으면 저자극 사료로 전환을 고려하세요.',
+  },
+  {
+    name: '유산균 간식',
+    category: 'food_snack',
+    description: '프로바이오틱스가 들어간 간식.',
+    coupangKeyword: '강아지 유산균 간식 프로바이오틱스',
+    relatedTags: ['medicine_gi'],
+    reason: '간식으로 자연스럽게 장 건강을 챙길 수 있어요.',
+  },
+  {
+    name: '회복 습식 파우치',
+    category: 'food_snack',
+    description: '발치·수술 후 먹이기 쉬운 부드러운 습식 사료.',
+    coupangKeyword: '강아지 회복식 습식 사료',
+    relatedTags: ['dental_extraction', 'surgery_general'],
+    reason: '입 안 통증이 있거나 회복 중일 때 급여 부담을 줄여줘요.',
+  },
 ];
 
-/**
- * 진료비 검색 키워드로 관련 케어 상품을 찾는 함수
- */
-export function findCareProductsByKeyword(keyword: string): CareProduct[] {
+export function findCareTagsByKeyword(keyword: string): string[] {
   const normalizedKeyword = keyword.trim().replace(/\s+/g, '').toLowerCase();
-
-  // 키워드 → 태그 매핑
   const matchedTags = new Set<string>();
+
   for (const [key, tags] of Object.entries(SEARCH_KEYWORD_TO_CARE_TAGS)) {
     const normalizedKey = key.replace(/\s+/g, '').toLowerCase();
     if (normalizedKeyword.includes(normalizedKey) || normalizedKey.includes(normalizedKeyword)) {
@@ -183,12 +333,18 @@ export function findCareProductsByKeyword(keyword: string): CareProduct[] {
     }
   }
 
-  if (matchedTags.size === 0) return [];
+  return [...matchedTags];
+}
 
-  // 태그가 일치하는 상품 반환
-  return CARE_PRODUCTS.filter((product) =>
-    product.relatedTags.some((tag) => matchedTags.has(tag))
-  );
+/**
+ * 진료비 검색 키워드로 관련 케어 상품을 찾는 함수
+ */
+export function findCareProductsByKeyword(keyword: string): CareProduct[] {
+  const matchedTags = findCareTagsByKeyword(keyword);
+  if (matchedTags.length === 0) return [];
+
+  const tagSet = new Set(matchedTags);
+  return CARE_PRODUCTS.filter((product) => product.relatedTags.some((tag) => tagSet.has(tag)));
 }
 
 /**
@@ -196,9 +352,7 @@ export function findCareProductsByKeyword(keyword: string): CareProduct[] {
  */
 export function findCareProductsByCategory(categoryTags: string[]): CareProduct[] {
   const tagSet = new Set(categoryTags);
-  return CARE_PRODUCTS.filter((product) =>
-    product.relatedTags.some((tag) => tagSet.has(tag))
-  );
+  return CARE_PRODUCTS.filter((product) => product.relatedTags.some((tag) => tagSet.has(tag)));
 }
 
 /**

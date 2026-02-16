@@ -27,7 +27,7 @@ export const FEE_CATEGORIES: FeeCategory[] = [
     icon: '🩺',
     searchTags: ['진찰', '초진', '재진', '야간', '휴일'],
     seedKeywords: [],
-    relatedCareTags: [],
+    relatedCareTags: ['exam_blood_general', 'exam_lab_panel'],
     metaDescription:
       '강아지·고양이 진찰료 평균 비용을 전국 실데이터로 비교해보세요. 초진, 재진, 야간/휴일 진찰비 안내.',
   },
@@ -82,7 +82,7 @@ export const FEE_CATEGORIES: FeeCategory[] = [
     icon: '🔪',
     searchTags: ['수술', '중성화', '슬개골', '슬개골수술'],
     seedKeywords: ['중성화 수컷', '중성화 암컷', '슬개골수술'],
-    relatedCareTags: ['ortho_patella', 'ortho_arthritis', 'surgery_general'],
+    relatedCareTags: ['ortho_patella', 'ortho_arthritis', 'surgery_general', 'surgery_neutering'],
     metaDescription:
       '강아지·고양이 수술 비용 비교. 중성화, 슬개골수술 전국 평균 가격 안내.',
   },
