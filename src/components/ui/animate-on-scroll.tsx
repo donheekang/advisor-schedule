@@ -12,6 +12,22 @@ interface AnimateOnScrollProps {
   className?: string;
 }
 
+const visibleMap: Record<Animation, string> = {
+  'fade-up': 'opacity-100 translate-y-0',
+  'fade-in': 'opacity-100',
+  'slide-left': 'opacity-100 translate-x-0',
+  'slide-right': 'opacity-100 translate-x-0',
+  'scale-up': 'opacity-100 scale-100',
+};
+
+const hiddenMap: Record<Animation, string> = {
+  'fade-up': 'opacity-0 translate-y-8',
+  'fade-in': 'opacity-0',
+  'slide-left': 'opacity-0 -translate-x-8',
+  'slide-right': 'opacity-0 translate-x-8',
+  'scale-up': 'opacity-0 scale-95',
+};
+
 export function AnimateOnScroll({
   children,
   animation = 'fade-up',
@@ -38,23 +54,14 @@ export function AnimateOnScroll({
     return () => observer.disconnect();
   }, []);
 
-  const base = 'transition-all ease-out';
-  const styles: Record<Animation, { visible: string; hidden: string }> = {
-    'fade-up': { visible: 'opacity-100 translate-y-0', hidden: 'opacity-0 translate-y-8' },
-    'fade-in': { visible: 'opacity-100', hidden: 'opacity-0' },
-    'slide-left': { visible: 'opacity-100 translate-x-0', hidden: 'opacity-0 -translate-x-8' },
-    'slide-right': { visible: 'opacity-100 translate-x-0', hidden: 'opacity-0 translate-x-8' },
-    'scale-up': { visible: 'opacity-100 scale-100', hidden: 'opacity-0 scale-95' },
-  };
-  const s = styles[animation];
+  const stateClass = isVisible ? visibleMap[animation] : hiddenMap[animation];
+  const fullClass = "transition-all ease-out " + stateClass + " " + className;
+  const styleObj = { transitionDelay: delay + "ms", transitionDuration: duration + "ms" };
 
   return (
-    <div
-      ref={ref}
-      className={`${base} ${isVisible ? s.visible : s.hidden} ${className}`}
-      style={{ transitionDelay: `${delay}ms`, transitionDuration: `${duration}ms` }}
-    >
+    <div ref={ref} className={fullClass} style={styleObj}>
       {children}
     </div>
   );
 }
+
