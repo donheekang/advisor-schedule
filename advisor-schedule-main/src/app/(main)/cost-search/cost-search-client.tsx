@@ -247,14 +247,14 @@ export default function CostSearchClient() {
   }
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12" aria-label="진료비 검색">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
+    <section className="w-full bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6]" aria-label="진료비 검색">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-20 pt-24 md:pt-28">
         <header className="space-y-2 text-center">
           <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
             💰 전국 평균 데이터와 비교
           </p>
-          <h1 className="text-3xl font-extrabold text-[#4F2A1D]">우리 아이 진료비, 비싼 걸까?</h1>
-          <p className="text-sm text-[#7C4A2D]">전국 평균 데이터와 비교해보세요</p>
+          <h1 className="text-3xl font-extrabold text-[#1B2A4A]">우리 아이 진료비, 비싼 걸까?</h1>
+          <p className="text-sm text-[#64748B]">전국 평균 데이터와 비교해보세요</p>
         </header>
 
         <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/30">

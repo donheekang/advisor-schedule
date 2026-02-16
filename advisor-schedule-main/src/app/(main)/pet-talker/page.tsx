@@ -401,8 +401,9 @@ export default function PetTalkerPage() {
   const emotionMeta = EMOTION_META[emotion];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-4 py-8 text-[#2D2D2D] md:py-12">
-      <section className="mx-auto flex w-full max-w-md flex-col gap-6">
+    <main className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] text-[#2D2D2D]">
+      <section className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-20 pt-24 md:pt-28">
+        <div className="mx-auto w-full max-w-md space-y-6">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#7C4A2D] shadow-sm">{usageText}</p>
           <h1 className="text-3xl font-extrabold leading-tight text-[#4F2A1D]">우리 아이가 말을 한다면 🐾</h1>
@@ -735,6 +736,7 @@ export default function PetTalkerPage() {
         </section>
 
         {errorMessage && status !== "error" ? <p className="text-center text-xs font-medium text-[#C2410C]">{errorMessage}</p> : null}
+        </div>
       </section>
 
       <style jsx global>{`
