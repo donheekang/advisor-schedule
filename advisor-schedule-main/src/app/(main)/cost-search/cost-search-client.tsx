@@ -248,7 +248,7 @@ export default function CostSearchClient() {
 
   return (
     <section className="w-full bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6]" aria-label="진료비 검색">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-20 pt-24 md:pt-28">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-20 pt-24">
         <header className="space-y-2 text-center">
           <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
             💰 전국 평균 데이터와 비교

@@ -402,15 +402,15 @@ export default function PetTalkerPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] text-[#2D2D2D]">
-      <section className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-20 pt-24 md:pt-28">
+      <section className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-20 pt-24">
         <div className="mx-auto w-full max-w-md space-y-6">
-        <header className="space-y-3 text-center">
+          <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#7C4A2D] shadow-sm">{usageText}</p>
           <h1 className="text-3xl font-extrabold leading-tight text-[#4F2A1D]">우리 아이가 말을 한다면 🐾</h1>
           <p className="text-sm leading-relaxed text-[#7C4A2D]">사진 한 장으로 우리 아이의 마음을 따뜻한 한마디로 들어보세요.</p>
-        </header>
+          </header>
 
-        {user && pets.length > 0 ? (
+          {user && pets.length > 0 ? (
           <section className="rounded-2xl bg-white/95 p-4 shadow-sm">
             <label htmlFor="pet-selector" className="mb-2 block text-sm font-semibold text-[#7C4A2D]">
               어떤 아이의 사진인가요?
