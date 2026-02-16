@@ -99,7 +99,7 @@ export default function HomePage() {
           </AnimateOnScroll>
 
           <AnimateOnScroll animation="fade-up" delay={150}>
-            <h1 className="mb-6 text-2xl font-extrabold leading-[1.1] tracking-tight text-[#1B2A4A] md:text-4xl lg:text-[3.5rem]">
+            <h1 className="mb-6 text-2xl font-extrabold leading-[1.3] tracking-tight text-[#1B2A4A] md:text-4xl lg:text-[3.5rem]">
               우리 아이 진료비,
               <br />
               <span className="bg-gradient-to-r from-[#F97316] to-[#FB923C] bg-clip-text text-transparent">적정한 걸까?</span>
