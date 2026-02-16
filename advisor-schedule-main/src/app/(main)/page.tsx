@@ -134,13 +134,16 @@ export default function HomePage() {
               bg: 'from-[#FFF8F0] to-[#DBEAFE]'
             }
           ].map((feature) => (
-            <Link key={feature.title} href={feature.href}>
+            <Link key={feature.title} href={feature.href} className="h-full">
               <article
-                className={`group rounded-3xl bg-gradient-to-b ${feature.bg} p-7 shadow-md ring-1 ring-[#F8C79F]/30 transition hover:-translate-y-1 hover:shadow-xl`}
+                className={
+                  'group flex h-full flex-col rounded-3xl bg-gradient-to-b p-7 shadow-md ring-1 ring-[#F8C79F]/30 transition hover:-translate-y-1 hover:shadow-xl ' +
+                  feature.bg
+                }
               >
                 <p className="text-4xl">{feature.emoji}</p>
                 <h3 className="mt-4 text-xl font-bold text-[#4F2A1D]">{feature.title}</h3>
-                <p className="mt-2 text-sm text-[#7C4A2D]">{feature.description}</p>
+                <p className="mt-2 flex-1 text-sm text-[#7C4A2D]">{feature.description}</p>
                 <p className="mt-4 text-sm font-bold text-[#F97316] group-hover:underline">해보기 →</p>
               </article>
             </Link>

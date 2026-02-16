@@ -13,7 +13,7 @@ export default async function BlogListPage() {
 
   return (
     <section className="w-full bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6]">
-      <div className="mx-auto w-full max-w-4xl space-y-8 px-4 pb-20 pt-24 md:pt-28">
+      <div className="mx-auto w-full max-w-4xl space-y-8 px-4 pb-20 pt-24">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
             📖 보호자를 위한 가이드
