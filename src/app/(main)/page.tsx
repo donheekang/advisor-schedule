@@ -234,13 +234,13 @@ export default function HomePage() {
           </AnimateOnScroll>
 
           <div className="relative grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
-            <div className="absolute left-[16.6%] right-[16.6%] top-12 hidden h-0.5 bg-gradient-to-r from-[#F97316]/20 via-[#F97316]/40 to-[#F97316]/20 md:block" />
+            <div className="pointer-events-none absolute left-[16.6%] right-[16.6%] top-12 hidden h-0.5 bg-gradient-to-r from-[#F97316]/20 via-[#F97316]/40 to-[#F97316]/20 md:block" />
             {[
               { num: '1', title: '사진 올리기 or 검색', desc: '우리 아이 사진을 올리거나 진료 항목을 검색하세요' },
               { num: '2', title: 'AI가 분석', desc: 'AI가 사진을 읽고 대사를 만들거나 진료비를 비교해요' },
               { num: '3', title: '공유 & 기록', desc: 'SNS에 공유하고, 앱에서 기록하면 더 정확해져요' }
             ].map((step, i) => (
-              <AnimateOnScroll key={step.num} animation="fade-up" delay={i * 150}>
+              <AnimateOnScroll key={step.num} animation="fade-up" delay={i * 100}>
                 <div className="relative rounded-2xl bg-gradient-to-br from-[#FFF8F0] to-[#FFF3E6] p-6 md:p-8">
                   <div className="relative z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#F97316] text-lg font-bold text-white shadow-lg shadow-[#F97316]/25">
                     {step.num}
