@@ -51,8 +51,8 @@ export function AnimateOnScroll({
   return (
     <div
       ref={ref}
-      className={⁠ ${base} ${isVisible ? s.visible : s.hidden} ${className} ⁠}
-      style={{ transitionDelay: ⁠ ${delay}ms ⁠, transitionDuration: ⁠ ${duration}ms ⁠ }}
+      className={`${base} ${isVisible ? s.visible : s.hidden} ${className}`}
+      style={{ transitionDelay: `${delay}ms`, transitionDuration: `${duration}ms` }}
     >
       {children}
     </div>
