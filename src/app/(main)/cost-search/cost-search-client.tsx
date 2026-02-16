@@ -9,10 +9,11 @@ import { apiClient } from '@/lib/api-client';
 import { isPremium } from '@/lib/subscription';
 
 type ApiCostSearchResult = {
+  source: 'live' | 'seed' | 'error';
   query: string;
   matchedItem: string;
   species: 'dog' | 'cat' | 'etc';
-  region: string | null;
+  region: string;
   priceStats: {
     min: number;
     max: number;
@@ -29,6 +30,25 @@ type ApiCostSearchResult = {
     totalRecords: number;
     latestDate: string | null;
   };
+};
+
+type CostSearchListItem = {
+  item: string;
+  category: string;
+  species: 'dog' | 'cat' | 'etc';
+  region: string;
+  avg: number;
+  min: number;
+  max: number;
+  count: number;
+  updatedAt: string | null;
+};
+
+type CostSearchListResponse = {
+  results: CostSearchListItem[];
+  total: number;
+  source: 'live' | 'seed' | 'error';
+  error?: string;
 };
 
 type MyPriceComparison = {
@@ -144,13 +164,44 @@ export default function CostSearchClient() {
     setHasSearched(true);
     try {
       const species = animalType === '강아지' ? 'dog' : 'cat';
-      const params = new URLSearchParams({ query: trimmed, species, region });
+      const params = new URLSearchParams({ q: trimmed, species, region });
       const response = await fetch(`/api/cost-search?${params.toString()}`);
-      const data = (await response.json()) as ApiCostSearchResult | { error?: string };
-      if (!response.ok || 'error' in data) {
-        throw new Error('error' in data ? data.error : '검색 결과를 가져오지 못했습니다.');
+      const data = (await response.json()) as CostSearchListResponse;
+      if (!response.ok || !Array.isArray(data.results)) {
+        throw new Error(data.error || '검색 결과를 가져오지 못했습니다.');
       }
-      setCostResult(data as ApiCostSearchResult);
+
+      const topResult = data.results[0];
+      if (!topResult) {
+        throw new Error('해당 항목의 데이터가 아직 없어요.');
+      }
+
+      setCostResult({
+        source: data.source,
+        query: trimmed,
+        matchedItem: topResult.item,
+        species: topResult.species,
+        region: topResult.region,
+        priceStats: {
+          min: topResult.min,
+          max: topResult.max,
+          avg: topResult.avg,
+          median: topResult.avg,
+          sampleSize: topResult.count,
+          source: data.source === 'live' ? 'user_data' : 'seed_data',
+        },
+        nationalAvg: topResult.avg,
+        regionalAvg: topResult.avg,
+        relatedItems: data.results.slice(1, 9).map((item) => item.item),
+        sources:
+          data.source === 'live'
+            ? [`실시간 데이터 (${data.total.toLocaleString('ko-KR')}건)`]
+            : ['샘플 데이터'],
+        dataInfo: {
+          totalRecords: data.total,
+          latestDate: topResult.updatedAt,
+        },
+      });
     } catch (error) {
       setSearchError(error instanceof Error ? error.message : '검색 중 오류가 발생했습니다.');
       setCostResult(null);
@@ -351,13 +402,24 @@ export default function CostSearchClient() {
           <article className="space-y-5 rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-xl font-extrabold text-[#4F2A1D]">{costResult.matchedItem}</h2>
-              {priceBadge ? (
-                <span
-                  className={`rounded-full px-4 py-1.5 text-xs font-bold ${priceBadge.className}`}
-                >
-                  {priceBadge.label}
-                </span>
-              ) : null}
+              <div className="flex items-center gap-2">
+                {costResult.source === 'live' ? (
+                  <span className="rounded-full bg-green-50 px-2 py-1 text-xs text-green-600">
+                    ✅ 실시간 데이터 ({(costResult.dataInfo?.totalRecords ?? 0).toLocaleString('ko-KR')}건)
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-amber-50 px-2 py-1 text-xs text-amber-600">
+                    📊 샘플 데이터
+                  </span>
+                )}
+                {priceBadge ? (
+                  <span
+                    className={`rounded-full px-4 py-1.5 text-xs font-bold ${priceBadge.className}`}
+                  >
+                    {priceBadge.label}
+                  </span>
+                ) : null}
+              </div>
             </div>
 
             {/* 데이터 신뢰 배지 */}
