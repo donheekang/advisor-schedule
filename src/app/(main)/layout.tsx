@@ -1,6 +1,6 @@
 import Script from 'next/script';
 import { Footer } from '@/components/footer';
-import { MobileBottomCTA } from '@/components/mobile-bottom-cta';
+import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import { Navbar } from '@/components/navbar';
 
 type MainLayoutProps = Readonly<{
@@ -16,9 +16,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
       />
       <div className="flex min-h-screen flex-col bg-[#FFF8F0]">
         <Navbar />
-        <main className="flex-1 pb-20 md:pb-0">{children}</main>
+        <main className="flex-1 pb-16 md:pb-0">{children}</main>
         <Footer />
-        <MobileBottomCTA />
+        <MobileBottomNav />
       </div>
     </>
   );
