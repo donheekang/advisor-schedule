@@ -175,6 +175,12 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
           <p className="mt-5 text-lg text-[#7C2D12]/80 md:text-xl">진료비 비교부터 AI 펫토커까지, 우리 아이를 위한 모든 것</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
+              href="/ai-care"
+              className="rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-base font-extrabold text-white shadow-lg shadow-[#F97316]/30 transition hover:brightness-105"
+            >
+              ✨ 무료 AI 케어 체험 →
+            </Link>
+            <Link
               href="/pet-talker"
               className="rounded-xl bg-[#F97316] px-6 py-3 text-base font-bold text-white transition hover:bg-[#EA580C]"
             >
