@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ChangeEvent, DragEvent, useMemo, useRef, useState } from "react";
 
 type RequestStatus = "idle" | "loading" | "success" | "error";
@@ -243,6 +244,26 @@ export default function PetTalkerPage() {
             앱 다운로드
           </button>
         </section>
+
+        {status === "success" && (
+          <section className="rounded-3xl bg-white p-5 text-center shadow-sm ring-1 ring-[#F8C79F]/40">
+            <p className="text-lg font-bold text-[#4F2A1D]">우리 아이 건강도 확인해보세요</p>
+            <div className="mt-3 flex flex-wrap justify-center gap-2">
+              <Link
+                href="/ai-care"
+                className="rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2 text-sm font-bold text-white"
+              >
+                무료 AI 케어 체험 →
+              </Link>
+              <Link
+                href="/cost-search"
+                className="rounded-xl border border-[#F97316] bg-white px-4 py-2 text-sm font-bold text-[#C2410C]"
+              >
+                진료비 검색 →
+              </Link>
+            </div>
+          </section>
+        )}
 
         {errorMessage && status !== "error" && (
           <p className="text-center text-xs font-medium text-rose-500">{errorMessage}</p>

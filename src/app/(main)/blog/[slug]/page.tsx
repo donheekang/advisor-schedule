@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { CTABanner } from '@/components/cta-banner';
 import { getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog';
 
 type BlogPageProps = {
@@ -70,7 +71,11 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
 
-        <footer className="border-t border-[#F8C79F]/40 pt-6">
+        <footer className="space-y-4 border-t border-[#F8C79F]/40 pt-6">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <CTABanner variant="ai-care" context="blog-post-bottom" />
+            <CTABanner variant="cost-search" context="blog-post-bottom" />
+          </div>
           <Link
             href="/blog"
             className="inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
