@@ -1,24 +1,32 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function MobileBottomCTA() {
+  const pathname = usePathname();
+
+  const hideOnPaths = ['/ai-care', '/login', '/mypage'];
+  if (hideOnPaths.some((path) => pathname.startsWith(path))) {
+    return null;
+  }
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#F8C79F]/30 bg-white/95 px-4 py-3 shadow-[0_-8px_24px_rgba(124,74,45,0.14)] backdrop-blur md:hidden">
-      <div className="mx-auto flex w-full max-w-7xl gap-2">
+    <div className="safe-area-pb fixed bottom-0 left-0 right-0 z-30 border-t border-[#F8C79F]/20 bg-white/90 px-4 py-3 backdrop-blur-xl md:hidden">
+      <div className="flex gap-2">
         <Link
           href="/ai-care"
-          className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-[#F97316] px-2 text-center text-sm font-medium text-white"
-          aria-label="무료 AI 케어 체험 이동"
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#F97316] py-3 text-sm font-semibold text-white transition-all duration-200 active:scale-[0.97]"
         >
-          🐾 무료 AI 케어 체험
+          <span aria-hidden="true">✨</span>
+          AI 케어 체험
         </Link>
         <Link
           href="/cost-search"
-          className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl border border-[#F97316] bg-white px-2 text-center text-sm font-medium text-[#C2410C]"
-          aria-label="진료비 검색 이동"
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border-2 border-[#F97316] bg-white py-3 text-sm font-semibold text-[#F97316] transition-all duration-200 active:scale-[0.97]"
         >
-          💰 진료비 검색
+          <span aria-hidden="true">🔍</span>
+          진료비 검색
         </Link>
       </div>
     </div>
