@@ -99,18 +99,17 @@ export default function CategoryPage({ params }: { params: { category: string } 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {seedItems.map((item, i) => (
                 <AnimateOnScroll key={item.name} animation="fade-up" delay={i * 100}>
-                  <article className="rounded-2xl border border-[#F8C79F]/10 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                    <div className="mb-4 flex items-center justify-between gap-3">
-                      <h3 className="text-base font-semibold text-[#4F2A1D]">{item.name}</h3>
-                      <span className="rounded-full bg-[#FFF3E6] px-2.5 py-1 text-xs font-medium text-[#C2410C]">강아지</span>
+                  <article className="rounded-2xl border border-[#F1F5F9] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <h3 className="text-base font-semibold text-[#1B2A4A]">{item.name}</h3>
+                      <span className="rounded-full bg-[#F0FDF4] px-2.5 py-0.5 text-xs font-medium text-[#16A34A]">실데이터</span>
                     </div>
-                    <div>
-                      <PriceBar min={item.min} avg={item.avg} max={item.max} />
+                    <PriceBar min={item.min} avg={item.avg} max={item.max} />
+                    <div className="mt-3 flex justify-between text-xs text-[#94A3B8]">
+                      <span>최저 {Math.round(item.min).toLocaleString('ko-KR')}원</span>
+                      <span className="font-semibold text-[#F97316]">평균 {Math.round(item.avg).toLocaleString('ko-KR')}원</span>
+                      <span>최고 {Math.round(item.max).toLocaleString('ko-KR')}원</span>
                     </div>
-                    <p className="mt-4 text-sm text-[#8B6B4E]">
-                      최소 {Math.round(item.min).toLocaleString('ko-KR')}원 · 평균 {Math.round(item.avg).toLocaleString('ko-KR')}원 · 최대{' '}
-                      {Math.round(item.max).toLocaleString('ko-KR')}원
-                    </p>
                   </article>
                 </AnimateOnScroll>
               ))}
