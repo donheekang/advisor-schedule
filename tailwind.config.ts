@@ -10,15 +10,26 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          primary: '#1B3A4B',
-          secondary: '#E67E22',
-          background: '#F8FAFB',
+          bg: '#FFF8F0',
           card: '#FFFFFF',
-          ctaHover: '#CF6D17',
-          textSecondary: '#6B7280',
-          warning: '#F59E0B',
-          error: '#EF4444',
-          navyDark: '#162F3C'
+          highlight: '#FFF3E6',
+          dark: '#3D2518'
+        },
+        text: {
+          heading: '#4F2A1D',
+          body: '#6B4226',
+          sub: '#8B6B4E',
+          muted: '#B8A08A'
+        },
+        accent: {
+          DEFAULT: '#F97316',
+          hover: '#EA580C',
+          light: '#FB923C',
+          bg: '#FFF7ED'
+        },
+        border: {
+          DEFAULT: 'rgba(248, 199, 159, 0.3)',
+          strong: 'rgba(248, 199, 159, 0.5)'
         }
       }
     }
