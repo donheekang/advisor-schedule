@@ -122,8 +122,8 @@ export default function CostSearchClient() {
         <section className="py-12 text-center md:py-16">
           <AnimateOnScroll animation="fade-up">
             <span className="text-sm font-semibold text-[#F97316]">전국 평균 데이터와 비교</span>
-            <h1 className="mt-2 mb-3 text-2xl font-bold tracking-tight text-[#4F2A1D] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
-            <p className="text-sm text-[#8B6B4E]">전국 평균 데이터와 비교해보세요</p>
+            <h1 className="mt-2 mb-3 text-2xl font-bold tracking-tight text-[#1B2A4A] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
+            <p className="text-sm text-[#64748B]">전국 평균 데이터와 비교해보세요</p>
           </AnimateOnScroll>
         </section>
 
@@ -148,7 +148,7 @@ export default function CostSearchClient() {
                   onChange={(event) => setQuery(event.target.value)}
                   type="text"
                   placeholder="진료 항목을 검색해보세요 (예: 중성화, 슬개골)"
-                  className="w-full rounded-xl border border-[#E8D5C0] bg-[#FFFAF5] py-3 pl-10 pr-4 text-sm text-[#4F2A1D] placeholder:text-[#B8A08A] outline-none transition-all duration-300 focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/20"
+                  className="w-full rounded-xl border border-[#E8D5C0] bg-[#FFFAF5] py-3 pl-10 pr-4 text-sm text-[#4F2A1D] placeholder:text-[#94A3B8] outline-none transition-all duration-300 focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/20"
                 />
               </div>
 
@@ -193,7 +193,7 @@ export default function CostSearchClient() {
                 {FEE_CATEGORIES.slice(0, 7).map((cat) => (
                   <Link key={cat.slug} href={'/cost-search/' + cat.slug} className="flex cursor-pointer flex-col items-center gap-2 rounded-2xl bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                     <IconBadge icon={<span className="text-sm">{cat.icon}</span>} color="orange" size="md" />
-                    <span className="text-center text-xs font-medium text-[#6B4226]">{cat.title}</span>
+                    <span className="text-center text-xs font-medium text-[#4A5568]">{cat.title}</span>
                   </Link>
                 ))}
               </div>
