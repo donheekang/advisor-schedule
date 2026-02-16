@@ -13,11 +13,11 @@ export function PriceBar({ min, avg, max }: PriceBarProps) {
       <div className="relative h-2 bg-[#F8C79F]/20 rounded-full overflow-visible">
         <div
           className="absolute h-full bg-gradient-to-r from-[#FB923C] to-[#F97316] rounded-full transition-all duration-500"
-          style={{ width: ⁠ ${avgPos}% ⁠ }}
+          style={{ width: `${avgPos}%` }}
         />
         <div
           className="absolute w-4 h-4 -top-1 bg-[#F97316] rounded-full border-2 border-white shadow-md transition-all duration-500"
-          style={{ left: ⁠ ${avgPos}% ⁠, transform: 'translateX(-50%)' }}
+          style={{ left: `${avgPos}%`, transform: 'translateX(-50%)' }}
         />
       </div>
       <div className="flex justify-between text-xs text-[#8B6B4E]">
