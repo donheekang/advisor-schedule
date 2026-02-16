@@ -253,7 +253,7 @@ export default function PetTalkerPage() {
                 href="/ai-care"
                 className="rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2 text-sm font-bold text-white"
               >
-                무료 AI 케어 체험 →
+                무료 AI 견적서 →
               </Link>
               <Link
                 href="/cost-search"

@@ -205,7 +205,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
               href="/ai-care"
               className="rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-base font-extrabold text-white shadow-lg shadow-[#F97316]/30 transition hover:brightness-105"
             >
-              ✨ 무료 AI 케어 체험 →
+              ✨ 무료 AI 견적서 →
             </Link>
             <Link
               href="/pet-talker"

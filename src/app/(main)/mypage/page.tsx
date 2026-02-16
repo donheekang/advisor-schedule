@@ -230,7 +230,7 @@ export default function MyPage() {
           </Link>
           <p className="mt-4">
             <Link href="/ai-care" className="text-sm font-medium text-[#F97316] hover:underline">
-              또는 무료 AI 케어 체험부터 시작해보세요
+              또는 무료 AI 견적서부터 시작해보세요
             </Link>
           </p>
         </div>
@@ -242,7 +242,7 @@ export default function MyPage() {
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8">
       <header className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/30 sm:p-7">
         <h1 className="text-2xl font-extrabold text-[#4F2A1D]">마이페이지</h1>
-        <p className="mt-2 text-sm text-[#7C4A2D]">앱 진료 기록과 AI 케어 인사이트를 한눈에 확인해보세요.</p>
+        <p className="mt-2 text-sm text-[#7C4A2D]">앱 진료 기록과 AI 견적서 인사이트를 한눈에 확인해보세요.</p>
       </header>
 
       {errorMessage ? <p className="rounded-2xl bg-rose-50 p-4 text-sm text-rose-600">{errorMessage}</p> : null}
@@ -300,7 +300,7 @@ export default function MyPage() {
       </article>
 
       <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
-        <h2 className="text-xl font-extrabold text-[#4F2A1D]">B. AI 케어 인사이트 요약</h2>
+        <h2 className="text-xl font-extrabold text-[#4F2A1D]">B. AI 견적서 인사이트 요약</h2>
         {!selectedPet ? (
           <p className="mt-4 text-sm text-[#A36241]">분석할 반려동물을 선택해 주세요.</p>
         ) : insight ? (

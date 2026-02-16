@@ -49,7 +49,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/ai-care" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
-                  AI 케어
+                  AI 견적서
                 </Link>
               </li>
               <li>

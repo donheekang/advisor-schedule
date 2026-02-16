@@ -133,7 +133,7 @@ export default function HomePage() {
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#E8D5C0] bg-white px-6 py-3.5 text-sm font-semibold text-[#1B2A4A] transition-all duration-500 hover:-translate-y-0.5 hover:border-[#F8C79F] hover:bg-[#FFFAF5] active:translate-y-0 active:scale-[0.98]"
               >
                 <Sparkles className="h-4 w-4 text-[#F97316]" />
-                AI 케어 체험
+                AI 견적서
               </Link>
             </div>
 
@@ -188,7 +188,7 @@ export default function HomePage() {
             {
               icon: <Sparkles className="h-6 w-6" />,
               color: 'purple' as const,
-              title: 'AI 케어',
+              title: 'AI 견적서',
               desc: '우리 아이 맞춤 케어 리포트를 받아보세요',
               href: '/ai-care'
             }
