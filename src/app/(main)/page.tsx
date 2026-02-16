@@ -76,12 +76,15 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  const sectionDelays = [0, 150, 300] as const;
+
   return (
     <>
-      <section className="relative overflow-hidden">
+      <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FFF3E6] via-[#FFF8F0] to-transparent" />
 
-        <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-16 md:pb-32 md:pt-24">
+        <div className="relative mx-auto max-w-6xl px-4">
           <AnimateOnScroll animation="fade-up">
             <span className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#F8C79F]/30 bg-white/80 px-3 py-1.5 text-xs font-semibold tracking-wide text-[#F97316] shadow-sm backdrop-blur">
               <Stethoscope className="h-3.5 w-3.5" />
@@ -89,23 +92,23 @@ export default function HomePage() {
             </span>
           </AnimateOnScroll>
 
-          <AnimateOnScroll animation="fade-up" delay={100}>
-            <h1 className="mb-4 text-3xl font-bold leading-[1.15] tracking-tight text-[#4F2A1D] md:mb-6 md:text-5xl lg:text-6xl">
+          <AnimateOnScroll animation="fade-up" delay={150}>
+            <h1 className="mb-4 text-3xl font-black leading-[1.15] tracking-tight text-[#4F2A1D] md:mb-6 md:text-5xl lg:text-6xl">
               우리 아이 진료비,<br />적정한 걸까?
             </h1>
           </AnimateOnScroll>
 
-          <AnimateOnScroll animation="fade-up" delay={200}>
+          <AnimateOnScroll animation="fade-up" delay={300}>
             <p className="mb-8 max-w-xl text-base leading-relaxed text-[#6B4226] md:mb-10 md:text-lg">
               진료비 비교부터 AI 펫토커까지,<br className="md:hidden" /> 우리 아이를 위한 모든 것
             </p>
           </AnimateOnScroll>
 
-          <AnimateOnScroll animation="fade-up" delay={300}>
+          <AnimateOnScroll animation="fade-up" delay={450}>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/pet-talker"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F97316] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:translate-y-0 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:scale-[0.98]"
               >
                 <PawPrint className="h-4 w-4" />
                 펫토커 해보기
@@ -128,7 +131,9 @@ export default function HomePage() {
           </AnimateOnScroll>
         </div>
       </section>
+      </AnimateOnScroll>
 
+      <AnimateOnScroll animation="fade-up" delay={sectionDelays[1]}>
       <section className="mx-auto max-w-6xl px-4 py-20 md:py-28">
         <AnimateOnScroll animation="fade-up">
           <h2 className="mb-3 text-2xl font-bold text-[#4F2A1D] md:text-3xl">이런 걸 할 수 있어요</h2>
@@ -177,7 +182,9 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      </AnimateOnScroll>
 
+      <AnimateOnScroll animation="fade-up" delay={sectionDelays[2]}>
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-4">
           <AnimateOnScroll animation="fade-up">
@@ -202,7 +209,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      </AnimateOnScroll>
 
+      <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
       <section className="mx-auto max-w-6xl px-4 py-20 md:py-28">
         <AnimateOnScroll animation="fade-up">
           <h2 className="mb-10 text-2xl font-bold text-[#4F2A1D] md:mb-14 md:text-3xl">보호자들이 신뢰하는 데이터</h2>
@@ -245,24 +254,32 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      </AnimateOnScroll>
 
+      <AnimateOnScroll animation="fade-up" delay={sectionDelays[1]}>
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-3xl px-4">
           <AnimateOnScroll animation="fade-up">
             <h2 className="mb-10 text-2xl font-bold text-[#4F2A1D] md:text-3xl">자주 묻는 질문</h2>
           </AnimateOnScroll>
 
-          <AnimateOnScroll animation="fade-up" delay={100}>
-            <Accordion title={FAQ_ITEMS[0].question}>{FAQ_ITEMS[0].answer}</Accordion>
-            <Accordion title={FAQ_ITEMS[1].question}>{FAQ_ITEMS[1].answer}</Accordion>
-            <Accordion title={FAQ_ITEMS[2].question}>{FAQ_ITEMS[2].answer}</Accordion>
-          </AnimateOnScroll>
+          {FAQ_ITEMS.map((faq, index) => (
+            <AnimateOnScroll
+              key={faq.question}
+              animation="fade-up"
+              delay={sectionDelays[index % sectionDelays.length]}
+            >
+              <Accordion title={faq.question}>{faq.answer}</Accordion>
+            </AnimateOnScroll>
+          ))}
         </div>
       </section>
+      </AnimateOnScroll>
 
-      <section className="mx-auto max-w-6xl px-4 pb-20 md:pb-28">
+      <AnimateOnScroll animation="fade-up" delay={sectionDelays[2]}>
+      <section className="mx-auto max-w-6xl px-4 py-20 md:py-28">
         <AnimateOnScroll animation="scale-up">
-          <div className="rounded-3xl bg-gradient-to-r from-[#F97316] to-[#FB923C] p-8 text-center text-white md:p-12">
+          <div className="rounded-3xl bg-gradient-to-r from-[#3D2518] via-[#4F2A1D] to-[#6B3A27] p-8 text-center text-white md:p-12">
             <h2 className="mb-3 text-2xl font-bold md:text-3xl">우리 아이 건강 관리, 지금 시작하세요 🐾</h2>
             <p className="mb-8 text-sm text-white/80 md:text-base">
               앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.
@@ -270,13 +287,13 @@ export default function HomePage() {
             <div className="flex flex-col justify-center gap-3 sm:flex-row">
               <a
                 href="https://apps.apple.com"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-[#4F2A1D] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"
               >
                 App Store 다운로드
               </a>
               <a
                 href="https://play.google.com/store"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#3D2518] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98]"
               >
                 Google Play 다운로드
               </a>
@@ -284,6 +301,7 @@ export default function HomePage() {
           </div>
         </AnimateOnScroll>
       </section>
+      </AnimateOnScroll>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
