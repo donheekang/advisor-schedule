@@ -1,5 +1,13 @@
 'use client';
 
+import { type ReactNode, useEffect, useRef, useState } from 'react';
+
+type AnimateOnScrollProps = {
+  children: ReactNode;
+  animation?: 'fade-up' | 'scale-up';
+  delay?: number;
+  className?: string;
+};
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 type Animation = 'fade-up' | 'fade-in' | 'slide-left' | 'slide-right' | 'scale-up';
@@ -16,6 +24,8 @@ export function AnimateOnScroll({
   children,
   animation = 'fade-up',
   delay = 0,
+  className = ''
+}: AnimateOnScrollProps) {
   duration = 700,
   className = ''
 }: Props) {
@@ -23,6 +33,11 @@ export function AnimateOnScroll({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const element = ref.current;
+
+    if (!element) {
+      return;
+    }
     const el = ref.current;
     if (!el) return;
 
@@ -33,6 +48,24 @@ export function AnimateOnScroll({
           observer.unobserve(entry.target);
         }
       },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const animationClass =
+    animation === 'scale-up'
+      ? isVisible
+        ? 'translate-y-0 scale-100 opacity-100'
+        : 'translate-y-2 scale-95 opacity-0'
+      : isVisible
+        ? 'translate-y-0 opacity-100'
+        : 'translate-y-6 opacity-0';
       { threshold: 0.1, rootMargin: '50px' }
     );
 
@@ -70,6 +103,8 @@ export function AnimateOnScroll({
   return (
     <div
       ref={ref}
+      className={`transition-all duration-700 ease-out will-change-transform ${animationClass} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
       className={`${base} ${isVisible ? s.visible : s.hidden} ${className}`}
       style={{
         transitionDelay: `${delay}ms`,
