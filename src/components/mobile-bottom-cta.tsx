@@ -27,7 +27,7 @@ export function MobileBottomCTA() {
     },
     {
       href: '/ai-care',
-      label: 'AI 케어',
+      label: 'AI 견적서',
       icon: 'sparkles',
     },
     {

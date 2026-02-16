@@ -216,7 +216,7 @@ export function buildShareText(report: CareReport, breed: string, conditionLabel
     .join('\n');
 
   return [
-    `${breed || '우리 아이'} AI 케어 리포트`,
+    `${breed || '우리 아이'} AI 견적서 리포트`,
     `주요 이력: ${conditionLabels.join(', ') || '선택 없음'}`,
     '',
     topRecommendations,

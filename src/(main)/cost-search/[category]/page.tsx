@@ -255,7 +255,7 @@ export default function CategoryPage({
               href="/ai-care"
               className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl"
             >
-              무료 AI 케어 체험 →
+              무료 AI 견적서 →
             </Link>
             <a
               href="https://apps.apple.com/app/id6504879567"

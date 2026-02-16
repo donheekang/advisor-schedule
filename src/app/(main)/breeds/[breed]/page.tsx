@@ -83,7 +83,7 @@ export default function BreedPage({ params }: BreedPageProps) {
           <div className="mt-4 flex flex-wrap gap-3">
             <Link href="/cost-search" className="rounded-2xl bg-white px-4 py-2 text-sm font-bold text-[#4F2A1D]">진료비 검색</Link>
             <Link href="/guides" className="rounded-2xl border border-white/40 px-4 py-2 text-sm font-bold text-white">카테고리 가이드 보기</Link>
-            <Link href="/ai-care" className="rounded-2xl border border-white/40 px-4 py-2 text-sm font-bold text-white">AI 케어 체험</Link>
+            <Link href="/ai-care" className="rounded-2xl border border-white/40 px-4 py-2 text-sm font-bold text-white">AI 견적서</Link>
           </div>
         </section>
       </div>

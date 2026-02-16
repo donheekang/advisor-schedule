@@ -23,7 +23,7 @@ export function GuideCtaButtons({ sourcePage }: GuideCtaButtonsProps) {
         onClick={() => trackEvent('app_cta_click', { source_page: sourcePage, cta_type: 'ai_care' })}
         className="rounded-2xl bg-[#FFF8F0] px-4 py-3 text-sm font-bold text-[#7C4A2D] ring-1 ring-[#F8C79F]/30"
       >
-        AI 케어 체험
+        AI 견적서
       </Link>
       <Link
         href="/premium"

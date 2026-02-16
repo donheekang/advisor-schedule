@@ -14,7 +14,7 @@ const bannerConfig: Record<CTABannerProps['variant'], {
   className: string;
 }> = {
   'ai-care': {
-    title: '✨ 우리 아이 맞춤 AI 케어 분석 →',
+    title: '✨ 우리 아이 맞춤 AI 견적서 분석 →',
     href: '/ai-care',
     className: 'bg-gradient-to-r from-[#F97316] to-[#FB923C] text-white'
   },
