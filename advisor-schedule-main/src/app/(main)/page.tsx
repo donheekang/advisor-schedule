@@ -82,7 +82,7 @@ export default function HomePage() {
           <p className="mb-4 inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
             🐾 반려동물 보호자를 위한 AI 플랫폼
           </p>
-          <h1 className="text-3xl font-extrabold leading-tight text-[#4F2A1D] md:text-5xl">
+          <h1 className="text-3xl font-extrabold leading-[1.3] text-[#4F2A1D] md:text-5xl">
             우리 아이 진료비,<br />적정한 걸까?
           </h1>
           <p className="mt-5 text-lg text-[#7C4A2D] md:text-xl">
