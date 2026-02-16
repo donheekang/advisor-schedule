@@ -1,49 +1,329 @@
-import type { Metadata } from 'next';
-import AiCareClient from '@/app/(main)/ai-care/ai-care-client';
-import { AnimateOnScroll } from '@/components/ui';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'AI 맞춤 케어 리포트 | 펫헬스플러스',
-  description: '우리 아이 정보를 입력하면 맞춤 건강 리포트를 받아보세요.',
-  keywords: ['반려동물', '강아지', '고양이', 'AI 케어', '건강관리', '진료비'],
-  openGraph: {
-    title: '무료 AI 케어 체험',
-    description: '우리 아이 맞춤 케어 분석을 무료로 받아보세요.',
-    locale: 'ko_KR',
-    type: 'website',
-  },
-};
+import { useRef, useState } from 'react';
+
+interface CostItem {
+  name: string;
+  minPrice: number;
+  maxPrice: number;
+}
+
+interface Condition {
+  name: string;
+  probability: string;
+  description: string;
+  items: CostItem[];
+  totalMin: number;
+  totalMax: number;
+}
+
+interface AnalysisResult {
+  conditions: Condition[];
+  recommendation: string;
+}
+
+const SYMPTOM_CHIPS = [
+  { emoji: '🦴', label: '다리를 절어요' },
+  { emoji: '🤮', label: '구토를 해요' },
+  { emoji: '😿', label: '밥을 안 먹어요' },
+  { emoji: '🩸', label: '피가 나요' },
+  { emoji: '👁️', label: '눈이 충혈됐어요' },
+  { emoji: '🦷', label: '입냄새가 심해요' },
+  { emoji: '🐾', label: '발을 계속 핥아요' },
+  { emoji: '😰', label: '기침을 해요' },
+  { emoji: '💧', label: '물을 많이 마셔요' },
+  { emoji: '🔄', label: '빙글빙글 돌아요' },
+  { emoji: '😫', label: '힘이 없어요' },
+  { emoji: '🩹', label: '피부가 빨개요' },
+];
+
+const DOG_BREEDS = ['말티즈', '푸들', '포메라니안', '치와와', '시츄', '골든리트리버', '진돗개', '비숑', '코카스파니엘', '닥스훈트', '믹스', '기타'];
+const CAT_BREEDS = ['코리안숏헤어', '러시안블루', '페르시안', '브리티시숏헤어', '스코티시폴드', '랙돌', '샴', '먼치킨', '노르웨이숲', '벵갈', '믹스', '기타'];
 
 export default function AiCarePage() {
-  return (
-    <>
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#F5F0FF] via-[#FFF8F0] to-[#FFF8F0] pb-6 pt-24 md:pb-10 md:pt-32">
-        <div className="absolute left-[10%] top-20 h-48 w-48 rounded-full bg-[#8B5CF6]/5 blur-3xl" />
-        <div className="absolute right-[15%] top-10 h-64 w-64 rounded-full bg-[#F97316]/5 blur-3xl" />
+  const [petType, setPetType] = useState<'dog' | 'cat'>('dog');
+  const [breed, setBreed] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [symptoms, setSymptoms] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [result, setResult] = useState<AnalysisResult | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
-        <AnimateOnScroll animation="fade-up">
-          <div className="relative mx-auto max-w-4xl px-4 text-center">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#8B5CF6]/10 px-4 py-2 text-sm font-medium text-[#8B5CF6]">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
-                />
-              </svg>
-              30초 무료 AI 분석
-            </span>
-            <h1 className="mb-3 text-2xl font-extrabold text-[#1B2A4A] md:text-4xl">AI 맞춤 케어 리포트</h1>
-            <p className="text-sm text-[#64748B] md:text-base">우리 아이 정보를 입력하면 맞춤 건강 리포트를 받아보세요</p>
-          </div>
-        </AnimateOnScroll>
+  const breedOptions = petType === 'dog' ? DOG_BREEDS : CAT_BREEDS;
+
+  const isChipSelected = (label: string) => symptoms.includes(label);
+
+  const handleChipToggle = (label: string) => {
+    setSymptoms((prev) => {
+      if (prev.includes(label)) {
+        return prev
+          .split('\n')
+          .map((line) => line.trim())
+          .filter((line) => line && line !== label)
+          .join('\n');
+      }
+
+      const trimmed = prev.trim();
+      if (!trimmed) {
+        return label;
+      }
+
+      return trimmed + '\n' + label;
+    });
+  };
+
+  const probabilityClassName = (probability: string) => {
+    if (probability === '높음') {
+      return 'bg-[#FFF7ED] text-[#F97316] border border-[#FDBA74]';
+    }
+
+    if (probability === '보통') {
+      return 'bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]';
+    }
+
+    return 'bg-[#F8FAFC] text-[#64748B] border border-[#E2E8F0]';
+  };
+
+  const handleAnalyze = async () => {
+    if (!symptoms.trim()) {
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setResult(null);
+
+    try {
+      const res = await fetch('/api/ai-estimate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ petType, breed, age, weight, symptoms }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'AI 분석 실패');
+      }
+
+      const data = await res.json();
+      setResult(data);
+
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'AI 분석 중 오류가 발생했습니다');
+      } else {
+        setError('AI 분석 중 오류가 발생했습니다');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="mx-auto max-w-4xl px-4 pb-20 pt-24 md:pt-28">
+      <section className="rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
+        <div className="mb-6 flex items-center gap-3">
+          <span className="relative flex h-3 w-3">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3B82F6] opacity-75" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-[#1D4ED8]" />
+          </span>
+          <h1 className="text-2xl font-extrabold text-[#1B2A4A] md:text-3xl">AI 진료비 견적서</h1>
+        </div>
+        <p className="text-sm text-[#64748B] md:text-base">증상을 입력하면 Claude AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
       </section>
 
-      <div
-        className="mx-auto -mt-4 max-w-3xl px-4 pb-20 [&_main]:rounded-none [&_main]:bg-transparent [&_main]:px-0 [&_main]:py-0 [&_main>div]:max-w-none [&_main>div>section:first-child]:hidden [&_form]:space-y-0 [&_form>div:first-child>div]:rounded-2xl [&_form>div:first-child>div]:bg-white [&_form>div:first-child>div]:p-6 [&_form>div:first-child>div]:shadow-xl [&_form>div:first-child>div]:shadow-[#1B2A4A]/5 md:[&_form>div:first-child>div]:p-8 [&_form>div:first-child_h2]:mb-6 [&_form>div:first-child_h2]:flex [&_form>div:first-child_h2]:items-center [&_form>div:first-child_h2]:gap-3 [&_form>div:first-child_h2]:text-base [&_form>div:first-child_h2]:font-bold [&_form>div:first-child_h2]:text-[#1B2A4A] [&_form>div:first-child_h2]:before:flex [&_form>div:first-child_h2]:before:h-7 [&_form>div:first-child_h2]:before:w-7 [&_form>div:first-child_h2]:before:items-center [&_form>div:first-child_h2]:before:justify-center [&_form>div:first-child_h2]:before:rounded-full [&_form>div:first-child_h2]:before:bg-[#F97316] [&_form>div:first-child_h2]:before:text-xs [&_form>div:first-child_h2]:before:font-bold [&_form>div:first-child_h2]:before:text-white [&_form>div:first-child_h2]:before:content-['1'] [&_form_label]:text-xs [&_form_label]:font-medium [&_form_label]:text-[#64748B] [&_form_select]:rounded-xl [&_form_select]:border [&_form_select]:border-[#E2E8F0] [&_form_select]:bg-[#F8FAFC] [&_form_select]:px-4 [&_form_select]:py-3 [&_form_select]:text-sm [&_form_select]:text-[#1B2A4A] [&_form_select]:transition-all [&_form_select]:duration-200 [&_form_select]:focus:border-[#F97316] [&_form_select]:focus:bg-white [&_form_select]:focus:outline-none [&_form_select]:focus:ring-4 [&_form_select]:focus:ring-[#F97316]/10 [&_form_input]:rounded-xl [&_form_input]:border [&_form_input]:border-[#E2E8F0] [&_form_input]:bg-[#F8FAFC] [&_form_input]:px-4 [&_form_input]:py-3 [&_form_input]:text-sm [&_form_input]:text-[#1B2A4A] [&_form_input]:placeholder-[#CBD5E1] [&_form_input]:transition-all [&_form_input]:duration-200 [&_form_input]:focus:border-[#F97316] [&_form_input]:focus:bg-white [&_form_input]:focus:outline-none [&_form_input]:focus:ring-4 [&_form_input]:focus:ring-[#F97316]/10 [&_form_button[type='submit']]:mt-8 [&_form_button[type='submit']]:w-full [&_form_button[type='submit']]:rounded-xl [&_form_button[type='submit']]:bg-gradient-to-r [&_form_button[type='submit']]:from-[#F97316] [&_form_button[type='submit']]:to-[#FB923C] [&_form_button[type='submit']]:py-4 [&_form_button[type='submit']]:text-sm [&_form_button[type='submit']]:font-bold [&_form_button[type='submit']]:text-white [&_form_button[type='submit']]:shadow-lg [&_form_button[type='submit']]:shadow-[#F97316]/25 [&_form_button[type='submit']]:transition-all [&_form_button[type='submit']]:duration-300 [&_form_button[type='submit']]:hover:-translate-y-0.5 [&_form_button[type='submit']]:hover:shadow-xl [&_form_button[type='submit']]:active:scale-[0.98] [&_form>div:last-child_section]:mt-8 [&_form>div:last-child_section]:rounded-2xl [&_form>div:last-child_section]:border-0 [&_form>div:last-child_section]:bg-white [&_form>div:last-child_section]:p-6 [&_form>div:last-child_section]:shadow-xl [&_form>div:last-child_section]:shadow-[#1B2A4A]/5 md:[&_form>div:last-child_section]:p-8 [&_form>div:last-child_section_h2]:mb-2 [&_form>div:last-child_section_h2]:flex [&_form>div:last-child_section_h2]:items-center [&_form>div:last-child_section_h2]:gap-3 [&_form>div:last-child_section_h2]:text-base [&_form>div:last-child_section_h2]:font-bold [&_form>div:last-child_section_h2]:text-[#1B2A4A] [&_form>div:last-child_section_h2]:before:flex [&_form>div:last-child_section_h2]:before:h-7 [&_form>div:last-child_section_h2]:before:w-7 [&_form>div:last-child_section_h2]:before:items-center [&_form>div:last-child_section_h2]:before:justify-center [&_form>div:last-child_section_h2]:before:rounded-full [&_form>div:last-child_section_h2]:before:bg-[#8B5CF6] [&_form>div:last-child_section_h2]:before:text-xs [&_form>div:last-child_section_h2]:before:font-bold [&_form>div:last-child_section_h2]:before:text-white [&_form>div:last-child_section_h2]:before:content-['2'] [&_form>div:last-child_section_.rounded-full]:bg-[#F8FAFC] [&_form>div:last-child_section_.rounded-full_span]:text-[#CBD5E1] [&_form>div:last-child_section_p]:text-sm [&_form>div:last-child_section_p]:text-[#94A3B8] [&_[data-checked='true']]:border-[#F97316] [&_[data-checked='true']]:bg-[#FFF7ED] [&_[data-checked='true']]:text-[#F97316] [&_[data-checked='false']]:border-[#E2E8F0] [&_[data-checked='false']]:bg-white [&_[data-checked='false']]:text-[#64748B] [&_[data-checked='false']]:hover:border-[#CBD5E1] [&_[data-checked='false']]:hover:bg-[#F8FAFC]"
-      >
-        <AiCareClient />
-      </div>
-    </>
+      <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
+        <h2 className="mb-5 text-lg font-bold text-[#1B2A4A]">1단계. 반려동물 정보</h2>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <p className="mb-2 text-xs font-semibold text-[#64748B]">반려동물 종류</p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setPetType('dog')}
+                className={
+                  'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
+                  (petType === 'dog'
+                    ? 'border-[#F97316] bg-[#FFF7ED] text-[#F97316]'
+                    : 'border-[#E2E8F0] bg-white text-[#475569] hover:border-[#CBD5E1]')
+                }
+              >
+                <span>🐶</span>
+                강아지
+              </button>
+              <button
+                type="button"
+                onClick={() => setPetType('cat')}
+                className={
+                  'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
+                  (petType === 'cat'
+                    ? 'border-[#F97316] bg-[#FFF7ED] text-[#F97316]'
+                    : 'border-[#E2E8F0] bg-white text-[#475569] hover:border-[#CBD5E1]')
+                }
+              >
+                <span>🐱</span>
+                고양이
+              </button>
+            </div>
+          </div>
+
+          <label className="flex flex-col gap-2">
+            <span className="text-xs font-semibold text-[#64748B]">품종</span>
+            <select
+              value={breed}
+              onChange={(event) => setBreed(event.target.value)}
+              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1B2A4A] outline-none transition focus:border-[#F97316] focus:bg-white"
+            >
+              <option value="">품종을 선택해주세요</option>
+              {breedOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex flex-col gap-2">
+            <span className="text-xs font-semibold text-[#64748B]">나이 (살)</span>
+            <input
+              type="number"
+              min="0"
+              value={age}
+              onChange={(event) => setAge(event.target.value)}
+              placeholder="예: 5"
+              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1B2A4A] outline-none transition focus:border-[#F97316] focus:bg-white"
+            />
+          </label>
+
+          <label className="flex flex-col gap-2 md:col-span-2">
+            <span className="text-xs font-semibold text-[#64748B]">체중 (kg)</span>
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={weight}
+              onChange={(event) => setWeight(event.target.value)}
+              placeholder="예: 3.2"
+              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1B2A4A] outline-none transition focus:border-[#F97316] focus:bg-white"
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
+        <h2 className="mb-5 text-lg font-bold text-[#1B2A4A]">2단계. 증상 입력</h2>
+
+        <div className="mb-4 flex flex-wrap gap-2">
+          {SYMPTOM_CHIPS.map((chip) => (
+            <button
+              key={chip.label}
+              type="button"
+              onClick={() => handleChipToggle(chip.label)}
+              className={
+                'rounded-full border px-3 py-2 text-xs font-medium transition ' +
+                (isChipSelected(chip.label)
+                  ? 'border-[#F97316] bg-[#FFF7ED] text-[#F97316]'
+                  : 'border-[#E2E8F0] bg-white text-[#64748B] hover:border-[#CBD5E1]')
+              }
+            >
+              <span className="mr-1">{chip.emoji}</span>
+              {chip.label}
+            </button>
+          ))}
+        </div>
+
+        <textarea
+          value={symptoms}
+          onChange={(event) => setSymptoms(event.target.value)}
+          placeholder="아이의 증상을 자세히 입력해주세요.\n예) 2일 전부터 밥을 잘 안 먹고 구토를 2번 했어요."
+          rows={6}
+          className="w-full rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1B2A4A] outline-none transition focus:border-[#F97316] focus:bg-white"
+        />
+
+        {error ? <p className="mt-3 rounded-xl bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#DC2626]">{error}</p> : null}
+
+        <button
+          type="button"
+          onClick={handleAnalyze}
+          disabled={loading || !symptoms.trim()}
+          className={
+            'mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-4 text-sm font-bold text-white transition ' +
+            (loading || !symptoms.trim()
+              ? 'bg-[#CBD5E1] cursor-not-allowed'
+              : 'bg-gradient-to-r from-[#1B2A4A] to-[#2D4A6F] hover:opacity-95')
+          }
+        >
+          {loading ? (
+            <>
+              <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-90" d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+              </svg>
+              Claude AI가 분석 중이에요...
+            </>
+          ) : (
+            'AI 진료비 견적서 생성하기'
+          )}
+        </button>
+      </section>
+
+      <section ref={resultRef} className="mt-6">
+        {result ? (
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-3 text-sm text-[#9A3412]">
+              본 결과는 참고용 정보이며 의료적 진단이 아닙니다. 정확한 진단과 치료는 반드시 동물병원 수의사 상담이 필요합니다.
+            </div>
+
+            {result.conditions.map((condition, index) => (
+              <article
+                key={condition.name + '-' + index.toString()}
+                className={
+                  'rounded-2xl border p-5 ' +
+                  (index === 0 ? 'border-[#F97316]/30 bg-[#FFF7ED]' : 'border-[#E2E8F0] bg-white')
+                }
+              >
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="text-lg font-bold text-[#1B2A4A]">{condition.name}</h3>
+                  <span className={'rounded-full px-3 py-1 text-xs font-semibold ' + probabilityClassName(condition.probability)}>
+                    가능성 {condition.probability}
+                  </span>
+                </div>
+                <p className="mb-4 text-sm leading-relaxed text-[#475569]">{condition.description}</p>
+
+                <div className="space-y-2 rounded-xl border border-[#E2E8F0] bg-white p-4">
+                  {condition.items.map((item, itemIndex) => (
+                    <div key={item.name + '-' + itemIndex.toString()} className="flex items-center justify-between gap-4 text-sm">
+                      <span className="font-medium text-[#334155]">{item.name}</span>
+                      <span className="text-[#64748B]">
+                        {item.minPrice.toLocaleString()}원 ~ {item.maxPrice.toLocaleString()}원
+                      </span>
+                    </div>
+                  ))}
+                  <div className="mt-3 border-t border-[#E2E8F0] pt-3 text-right text-base font-extrabold text-[#F97316] md:text-lg">
+                    총 예상 {condition.totalMin.toLocaleString()}원 ~ {condition.totalMax.toLocaleString()}원
+                  </div>
+                </div>
+              </article>
+            ))}
+
+            <article className="rounded-2xl bg-[#1B2A4A] p-5">
+              <h3 className="mb-2 text-base font-bold text-white">수의사 상담 전 추천사항</h3>
+              <p className="text-sm leading-relaxed text-slate-100">{result.recommendation}</p>
+            </article>
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-dashed border-[#CBD5E1] bg-white px-6 py-14 text-center text-[#94A3B8]">
+            <div className="mb-3 text-4xl">📄</div>
+            <p className="text-sm md:text-base">증상을 입력하면 AI가 예상 진료비 견적서를 작성해드려요</p>
+          </div>
+        )}
+      </section>
+    </main>
   );
 }
