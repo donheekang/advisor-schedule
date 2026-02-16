@@ -26,7 +26,7 @@ interface IconBadgeProps {
 export function IconBadge({ icon, color = 'orange', size = 'md' }: IconBadgeProps) {
   return (
     <div
-      className={⁠ ${colorMap[color]} ${sizeMap[size]} rounded-2xl flex items-center justify-center flex-shrink-0 ⁠}
+      className={`${colorMap[color]} ${sizeMap[size]} rounded-2xl flex items-center justify-center flex-shrink-0`}
     >
       {icon}
     </div>
