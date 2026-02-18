@@ -401,7 +401,7 @@ export default function PetTalkerPage() {
   const emotionMeta = EMOTION_META[emotion];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-4 py-8 text-[#2D2D2D] md:py-12">
+    <main className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-4 pt-24 pb-8 text-[#2D2D2D] md:pb-12">
       <section className="mx-auto flex w-full max-w-md flex-col gap-6">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#7C4A2D] shadow-sm">{usageText}</p>
@@ -728,9 +728,9 @@ export default function PetTalkerPage() {
         </section>
 
         <section className="rounded-3xl bg-gradient-to-r from-[#F97316] to-[#FB923C] p-6 text-center shadow-lg">
-          <p className="text-sm font-semibold text-white">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
+          <p className="text-sm font-semibold text-white">PetHealth+ 앱에서 더 많은 기능을 만나보세요</p>
           <button type="button" className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold text-[#EA580C] shadow-sm">
-            앱 다운로드
+            앱 다운로드 (준비 중)
           </button>
         </section>
 
