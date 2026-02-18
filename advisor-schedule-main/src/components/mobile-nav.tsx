@@ -21,20 +21,17 @@ export default function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#7C4A2D]/10 bg-white/95 shadow-[0_-8px_24px_rgba(124,74,45,0.14)] backdrop-blur md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white md:hidden" aria-label="모바일 하단 내비게이션">
       <ul className="mx-auto grid w-full max-w-7xl grid-cols-5">
         {tabs.map((tab) => {
           const isActive = tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
+          const linkClassName =
+            'flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium transition ' +
+            (isActive ? 'text-[#48B8D0]' : 'text-gray-400');
 
           return (
             <li key={tab.href}>
-              <Link
-                href={tab.href}
-                className={`flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium transition ${
-                  isActive ? 'font-bold text-[#F97316]' : 'text-[#7C4A2D]'
-                }`}
-                aria-current={isActive ? 'page' : undefined}
-              >
+              <Link href={tab.href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
                 <span aria-hidden="true" className="text-base leading-none">
                   {tab.icon}
                 </span>
