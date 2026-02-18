@@ -36,7 +36,7 @@ export function Navbar() {
     return pathname === href || pathname.startsWith(href + '/');
   };
 
-  const navClassName = 'fixed top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm';
+  const navClassName = 'fixed top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm';
 
   const desktopLinkClassName = (active: boolean) =>
     'relative py-1 px-3 text-sm transition-all duration-300 ' +
