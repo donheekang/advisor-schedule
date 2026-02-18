@@ -95,10 +95,10 @@ export default function PremiumClient() {
   }
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-16">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-16">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
         <header className="text-center">
-          <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#48B8D0] shadow-sm">
+          <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#F97316] shadow-sm">
             💎 프리미엄으로 더 특별하게
           </p>
           <h1 className="mt-4 text-3xl font-extrabold text-[#4F2A1D] md:text-4xl">
@@ -111,7 +111,7 @@ export default function PremiumClient() {
           <article className="rounded-3xl bg-white p-7 shadow-lg ring-1 ring-[#F8C79F]/30">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-extrabold text-[#4F2A1D]">무료</h2>
-              <span className="rounded-full bg-[#D4B8C0] px-3 py-1 text-xs font-bold text-[#A36241] ring-1 ring-[#F8C79F]/30">
+              <span className="rounded-full bg-[#FFF8F0] px-3 py-1 text-xs font-bold text-[#A36241] ring-1 ring-[#F8C79F]/30">
                 기본 플랜
               </span>
             </div>
@@ -119,12 +119,12 @@ export default function PremiumClient() {
             <ul className="mt-6 space-y-3">
               {FREE_FEATURES.map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm text-[#4F2A1D]">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#D4B8C0] text-xs text-[#48B8D0]">✓</span>
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FFF8F0] text-xs text-[#F97316]">✓</span>
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="mt-7 rounded-2xl bg-[#D4B8C0] px-4 py-3 text-sm font-bold text-[#A36241] ring-1 ring-[#F8C79F]/20">
+            <p className="mt-7 rounded-2xl bg-[#FFF8F0] px-4 py-3 text-sm font-bold text-[#A36241] ring-1 ring-[#F8C79F]/20">
               {isChecking || loading
                 ? '현재 플랜 확인 중...'
                 : isPremiumUser
@@ -133,18 +133,18 @@ export default function PremiumClient() {
             </p>
           </article>
 
-          <article className="relative rounded-3xl bg-white p-7 shadow-xl ring-2 ring-[#48B8D0]">
-            <span className="absolute -top-3 right-5 rounded-full bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-4 py-1.5 text-xs font-bold text-white shadow-md">
+          <article className="relative rounded-3xl bg-white p-7 shadow-xl ring-2 ring-[#F97316]">
+            <span className="absolute -top-3 right-5 rounded-full bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-1.5 text-xs font-bold text-white shadow-md">
               추천
             </span>
             <h2 className="text-2xl font-extrabold text-[#4F2A1D]">프리미엄</h2>
             <p className="mt-3">
-              <span className="text-4xl font-extrabold text-[#48B8D0] md:text-5xl">월 9,900원</span>
+              <span className="text-4xl font-extrabold text-[#F97316] md:text-5xl">월 9,900원</span>
             </p>
             <ul className="mt-6 space-y-3">
               {PREMIUM_FEATURES.map((item) => (
                 <li key={item} className="flex items-center gap-3 text-sm font-medium text-[#4F2A1D]">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#48B8D0] text-xs text-white">✓</span>
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#F97316] text-xs text-white">✓</span>
                   {item}
                 </li>
               ))}
@@ -152,7 +152,7 @@ export default function PremiumClient() {
             <button
               type="button"
               onClick={() => setShowWaitlistForm(true)}
-              className="mt-7 w-full rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-5 py-3.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
+              className="mt-7 w-full rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-3.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
             >
               프리미엄 시작하기
             </button>
@@ -173,7 +173,7 @@ export default function PremiumClient() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="이메일 주소를 입력해 주세요"
-                className="w-full rounded-2xl border border-[#F8C79F] bg-[#D4B8C0] px-4 py-3 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none transition focus:border-[#48B8D0] focus:ring-2 focus:ring-[#48B8D0]/20"
+                className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none transition focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
               />
               <button
                 type="submit"

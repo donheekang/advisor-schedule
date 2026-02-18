@@ -48,7 +48,7 @@ export default function PrivacyPage() {
           <p className="leading-relaxed">서비스 운영을 위해 다음과 같이 개인정보 처리를 위탁하고 있습니다.</p>
           <p className="mt-2 leading-relaxed">- Firebase (Google): 인증 및 데이터 저장</p>
           <p className="leading-relaxed">- Vercel: 웹 호스팅</p>
-          <p className="leading-relaxed">- Anthropic (AI): AI 분석 (증상 텍스트만 전달, 개인 식별 정보 미포함)</p>
+          <p className="leading-relaxed">- Anthropic (Claude AI): AI 분석 (증상 텍스트만 전달, 개인 식별 정보 미포함)</p>
         </section>
 
         <section>

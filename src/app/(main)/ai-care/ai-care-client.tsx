@@ -120,11 +120,11 @@ export default function AiCareClient() {
   };
 
   return (
-    <main className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <main className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <div className="mx-auto w-full max-w-4xl">
         <section className="py-12 md:py-16">
           <AnimateOnScroll animation="fade-up">
-            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#FFF3E6] px-3 py-1.5 text-xs font-semibold text-[#48B8D0]">✨ 30초 무료 AI 견적서</span>
+            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#FFF3E6] px-3 py-1.5 text-xs font-semibold text-[#F97316]">✨ 30초 무료 AI 견적서</span>
             <h1 className="mb-3 text-2xl font-bold tracking-tight text-[#4F2A1D] md:text-4xl">우리 아이 맞춤 케어,<br />지금 바로 확인하세요</h1>
             <p className="text-sm text-[#8B6B4E]">로그인 없이 간단한 정보만 입력하면 맞춤 관리 포인트와 케어 추천을 보여드려요.</p>
           </AnimateOnScroll>
@@ -141,7 +141,7 @@ export default function AiCareClient() {
                   <select
                     value={form.species}
                     onChange={(event) => setForm((prev) => ({ ...prev, species: event.target.value as FormState['species'] }))}
-                    className="w-full rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#48B8D0] focus:ring-2 focus:ring-[#48B8D0]/20"
+                    className="w-full rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
                   >
                     <option>강아지</option>
                     <option>고양이</option>
@@ -152,7 +152,7 @@ export default function AiCareClient() {
                   <select
                     value={form.breed}
                     onChange={(event) => setForm((prev) => ({ ...prev, breed: event.target.value }))}
-                    className="w-full rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#48B8D0] focus:ring-2 focus:ring-[#48B8D0]/20"
+                    className="w-full rounded-xl border border-[#E8D5C0] bg-white px-4 py-3 text-sm text-[#4F2A1D] outline-none transition-all duration-200 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
                   >
                     <option value="">품종 선택</option>
                     {BREED_OPTIONS.map((breed) => (
@@ -185,7 +185,7 @@ export default function AiCareClient() {
                 </div>
               </div>
 
-              <button disabled={isLoading} className="w-full rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] py-4 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#48B8D0]/25 active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0">
+              <button disabled={isLoading} className="w-full rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0">
                 {isLoading ? 'AI 분석 중...' : 'AI 분석 시작하기 →'}
               </button>
               {error ? <p className="mt-3 text-sm font-medium text-rose-500">{error}</p> : null}
@@ -201,14 +201,14 @@ export default function AiCareClient() {
               ) : !hasResult ? (
                 <div className="py-12 text-center">
                   <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#FFF3E6]">
-                    <span className="text-3xl text-[#48B8D0]/50">✨</span>
+                    <span className="text-3xl text-[#F97316]/50">✨</span>
                   </div>
                   <p className="text-sm text-[#8B6B4E]">입력을 완료하고 분석 버튼을 누르면 결과가 여기에 표시돼요.</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <p className="text-sm text-[#6B4226]">{report.summary}</p>
-                  {aiInsight ? <p className="whitespace-pre-line rounded-xl bg-[#D4B8C0] p-4 text-sm text-[#6B4226]">{aiInsight}</p> : null}
+                  {aiInsight ? <p className="whitespace-pre-line rounded-xl bg-[#FFF8F0] p-4 text-sm text-[#6B4226]">{aiInsight}</p> : null}
                   {remaining !== null ? <p className="text-xs text-[#8B6B4E]">오늘 남은 AI 인사이트: {remaining}회</p> : null}
                   <button type="button" onClick={() => void handleCopy()} className="rounded-xl border border-[#E8D5C0] px-4 py-2 text-sm font-medium text-[#6B4226]">결과 복사하기</button>
                 </div>

@@ -4,7 +4,7 @@ type Color = 'orange' | 'blue' | 'green' | 'purple' | 'red';
 type Size = 'sm' | 'md' | 'lg';
 
 const colorMap: Record<Color, string> = {
-  orange: 'bg-[#FFF3E6] text-[#48B8D0]',
+  orange: 'bg-[#FFF3E6] text-[#F97316]',
   blue: 'bg-[#EFF6FF] text-[#3B82F6]',
   green: 'bg-[#F0FFF4] text-[#16A34A]',
   purple: 'bg-[#F5F3FF] text-[#8B5CF6]',

@@ -52,7 +52,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
       <section className="mx-auto max-w-4xl px-5 py-20 text-center">
         <p className="text-5xl">🔍</p>
         <h1 className="mt-4 text-2xl font-bold text-[#4F2A1D]">카테고리를 찾을 수 없어요</h1>
-        <Link href="/cost-search" className="mt-4 inline-block text-[#48B8D0] underline">
+        <Link href="/cost-search" className="mt-4 inline-block text-[#F97316] underline">
           진료비 검색으로 돌아가기
         </Link>
       </section>
@@ -63,12 +63,12 @@ export default function CategoryPage({ params }: { params: { category: string } 
   const categoryNavClass = 'rounded-full px-4 py-2 text-xs font-semibold transition-all duration-300 ';
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <TrackPageView eventName="category_view" params={{ category_slug: category.slug }} />
       <div className="mx-auto w-full max-w-4xl">
         <section className="py-12 md:py-16">
           <AnimateOnScroll animation="fade-up">
-            <Link href="/cost-search" className="mb-6 inline-flex text-sm text-[#8B6B4E] hover:text-[#48B8D0]">
+            <Link href="/cost-search" className="mb-6 inline-flex text-sm text-[#8B6B4E] hover:text-[#F97316]">
               ← 진료비 검색
             </Link>
             <div className="mb-8 flex items-center gap-4">
@@ -87,7 +87,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
                 href={'/cost-search/' + c.slug}
                 className={
                   categoryNavClass +
-                  (c.slug === category.slug ? 'bg-[#48B8D0] text-white' : 'border border-[#E8D5C0] bg-white text-[#6B4226] hover:border-[#48B8D0]/40 hover:text-[#48B8D0]')
+                  (c.slug === category.slug ? 'bg-[#F97316] text-white' : 'border border-[#E8D5C0] bg-white text-[#6B4226] hover:border-[#F97316]/40 hover:text-[#F97316]')
                 }
               >
                 {c.title}
@@ -107,7 +107,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
                     <PriceBar min={item.min} avg={item.avg} max={item.max} />
                     <div className="mt-3 flex justify-between text-xs text-[#94A3B8]">
                       <span>최저 {Math.round(item.min).toLocaleString('ko-KR')}원</span>
-                      <span className="font-semibold text-[#48B8D0]">평균 {Math.round(item.avg).toLocaleString('ko-KR')}원</span>
+                      <span className="font-semibold text-[#F97316]">평균 {Math.round(item.avg).toLocaleString('ko-KR')}원</span>
                       <span>최고 {Math.round(item.max).toLocaleString('ko-KR')}원</span>
                     </div>
                   </article>
@@ -117,7 +117,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
           ) : (
             <AnimateOnScroll animation="fade-in">
               <article className="rounded-2xl border border-[#F8C79F]/10 bg-white px-8 py-14 text-center">
-                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#D4B8C0]">
+                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#FFF8F0]">
                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="h-10 w-10 text-[#D1B49A]">
                     <path d="M21 21L15.8 15.8M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>

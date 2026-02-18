@@ -106,7 +106,7 @@ export default function RecordDetailPage({ params }: RecordDetailPageProps) {
           onClick={() => {
             void signIn();
           }}
-          className="mt-5 rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-6 py-3 text-sm font-bold text-white"
+          className="mt-5 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white"
         >
           로그인하기
         </button>
@@ -115,7 +115,7 @@ export default function RecordDetailPage({ params }: RecordDetailPageProps) {
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-4xl flex-col gap-4 rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] p-5 sm:p-8">
+    <section className="mx-auto flex w-full max-w-4xl flex-col gap-4 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8">
       <header className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-extrabold text-[#4F2A1D]">진료 기록 상세</h1>
         <Link href="/mypage/records" className="text-sm font-bold text-[#A36241] underline underline-offset-4">
@@ -133,12 +133,12 @@ export default function RecordDetailPage({ params }: RecordDetailPageProps) {
               <p className="text-sm font-bold text-[#4F2A1D]">{formatDate(record.visit_date)}</p>
               <p className="text-sm text-[#7C4A2D]">{record.hospital_name ?? '병원 정보 없음'}</p>
             </div>
-            <p className="text-xl font-extrabold text-[#48B8D0]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
+            <p className="text-xl font-extrabold text-[#F97316]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
           </div>
 
           <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-[#F8C79F]/30">
             <table className="w-full border-collapse text-sm">
-              <thead className="bg-[#D4B8C0] text-left text-xs font-bold text-[#7C4A2D]">
+              <thead className="bg-[#FFF8F0] text-left text-xs font-bold text-[#7C4A2D]">
                 <tr>
                   <th className="px-3 py-2">item_name</th>
                   <th className="px-3 py-2">price</th>
@@ -159,7 +159,7 @@ export default function RecordDetailPage({ params }: RecordDetailPageProps) {
 
           <div className="mt-3 flex flex-wrap gap-2">
             {(record.tags ?? []).map((tag) => (
-              <span key={tag} className="rounded-full bg-[#D4B8C0] px-2.5 py-1 text-xs font-semibold text-[#7C4A2D] ring-1 ring-[#F8C79F]/30">
+              <span key={tag} className="rounded-full bg-[#FFF8F0] px-2.5 py-1 text-xs font-semibold text-[#7C4A2D] ring-1 ring-[#F8C79F]/30">
                 #{tag}
               </span>
             ))}
@@ -169,7 +169,7 @@ export default function RecordDetailPage({ params }: RecordDetailPageProps) {
             href={APPSTORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex text-sm font-bold text-[#48B8D0] underline underline-offset-4"
+            className="mt-4 inline-flex text-sm font-bold text-[#F97316] underline underline-offset-4"
           >
             앱에서 영수증 사진도 보기
           </a>
