@@ -80,10 +80,10 @@ export default function AiCarePage() {
     }
 
     if (probability === '보통') {
-      return 'bg-[#EFF6FF] text-[#48B8D0] border border-[#B28B84]';
+      return 'border border-[#48B8D0] bg-[#D4B8C0]/30 text-[#1F2937]';
     }
 
-    return 'bg-[#F8FAFC] text-[#6B7280] border border-[#E2E8F0]';
+    return 'border border-gray-200 bg-white text-[#6B7280]';
   };
 
   const handleAnalyze = async () => {
@@ -299,7 +299,7 @@ export default function AiCarePage() {
                 <div className="space-y-2 rounded-xl border border-[#E2E8F0] bg-white p-4">
                   {condition.items.map((item, itemIndex) => (
                     <div key={item.name + '-' + itemIndex.toString()} className="flex items-center justify-between gap-4 text-sm">
-                      <span className="font-medium text-[#334155]">{item.name}</span>
+                      <span className="font-medium text-[#1F2937]">{item.name}</span>
                       <span className="text-[#6B7280]">
                         {item.minPrice.toLocaleString()}원 ~ {item.maxPrice.toLocaleString()}원
                       </span>
