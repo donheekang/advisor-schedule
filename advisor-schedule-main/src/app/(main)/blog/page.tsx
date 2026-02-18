@@ -12,34 +12,22 @@ export default async function BlogListPage() {
   const posts = await getAllBlogPosts();
 
   return (
-    <section className="w-full bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6]">
+    <section className="w-full bg-gradient-to-b from-[#F5E5FC]/30 to-white">
       <div className="mx-auto w-full max-w-4xl space-y-8 px-4 pb-20 pt-24">
         <header className="space-y-3 text-center">
-          <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
-            📖 보호자를 위한 가이드
-          </p>
-          <h1 className="text-3xl font-extrabold text-[#4F2A1D] md:text-4xl">
-            반려동물 건강 가이드
-          </h1>
-          <p className="text-sm text-[#7C4A2D]">보호자가 알아야 할 건강 정보를 모았어요</p>
+          <p className="inline-flex rounded-full bg-[#48B8D0]/10 px-4 py-1.5 text-sm font-bold text-[#48B8D0] shadow-sm">📖 보호자를 위한 가이드</p>
+          <h1 className="text-3xl font-extrabold text-[#1F2937] md:text-4xl">반려동물 건강 가이드</h1>
+          <p className="text-sm text-[#6B7280]">보호자가 알아야 할 건강 정보를 모았어요</p>
         </header>
 
         <div className="grid gap-6 md:grid-cols-2">
           {posts.map((post) => (
-            <article
-              key={post.slug}
-              className="group overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-[#F8C79F]/20 transition hover:-translate-y-1 hover:shadow-xl"
-            >
+            <article key={post.slug} className="group overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-200 transition hover:shadow-md">
               <div className="space-y-3 p-7">
-                <p className="text-xs font-semibold text-[#A36241]">{post.date}</p>
-                <h2 className="text-xl font-extrabold text-[#4F2A1D] group-hover:text-[#F97316]">
-                  {post.title}
-                </h2>
-                <p className="text-sm leading-relaxed text-[#7C4A2D]">{post.description}</p>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="inline-flex text-sm font-bold text-[#F97316] group-hover:underline"
-                >
+                <p className="text-xs font-semibold text-[#B28B84]">{post.date}</p>
+                <h2 className="text-xl font-extrabold text-[#1F2937] group-hover:text-[#48B8D0]">{post.title}</h2>
+                <p className="text-sm leading-relaxed text-[#6B7280]">{post.description}</p>
+                <Link href={'/blog/' + post.slug} className="inline-flex text-sm font-bold text-[#48B8D0] group-hover:underline">
                   읽어보기 →
                 </Link>
               </div>
@@ -48,10 +36,10 @@ export default async function BlogListPage() {
         </div>
 
         {posts.length === 0 ? (
-          <div className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
+          <div className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-gray-200">
             <p className="text-5xl">📝</p>
-            <p className="mt-4 text-lg font-bold text-[#4F2A1D]">아직 작성된 글이 없어요</p>
-            <p className="mt-2 text-sm text-[#7C4A2D]">곧 유용한 가이드가 올라올 예정이에요!</p>
+            <p className="mt-4 text-lg font-bold text-[#1F2937]">아직 작성된 글이 없어요</p>
+            <p className="mt-2 text-sm text-[#6B7280]">곧 유용한 가이드가 올라올 예정이에요!</p>
           </div>
         ) : null}
       </div>

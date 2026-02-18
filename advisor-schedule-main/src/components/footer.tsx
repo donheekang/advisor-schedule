@@ -1,29 +1,53 @@
 import Link from 'next/link';
 
-const footerLinks = [
-  { href: '/pet-talker', label: '펫토커' },
-  { href: '/cost-search', label: '진료비 검색' },
-  { href: '/blog', label: '블로그' },
-  { href: '/mypage', label: '마이페이지' }
-];
+const footerGroups = [
+  {
+    title: '서비스',
+    links: [
+      { href: '/pet-talker', label: '펫토커' },
+      { href: '/cost-search', label: '진료비 검색' }
+    ]
+  },
+  {
+    title: '가이드',
+    links: [{ href: '/blog', label: '블로그' }]
+  },
+  {
+    title: '회사',
+    links: [{ href: '/mypage', label: '마이페이지' }]
+  }
+] as const;
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[#7C4A2D]/10 bg-[#FFF0E6]">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-10 text-[#7C4A2D]">
-        <Link href="/" className="w-fit text-xl font-extrabold tracking-tight text-[#4F2A1D] transition hover:text-[#7C4A2D]">
-          PetHealth+
-        </Link>
+    <footer className="bg-[#1F2937]">
+      <div className="mx-auto w-full max-w-7xl px-4 py-12">
+        <div className="mb-8">
+          <Link href="/" className="inline-flex items-center">
+            <span className="text-xl font-extrabold tracking-tight text-white">
+              Pet<span className="text-[#48B8D0]">Health</span>+
+            </span>
+          </Link>
+        </div>
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#7C4A2D]/90">
-          {footerLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="transition hover:text-[#F97316]">
-              {link.label}
-            </Link>
+        <div className="grid gap-8 sm:grid-cols-3">
+          {footerGroups.map((group) => (
+            <div key={group.title} className="space-y-3">
+              <h3 className="text-sm font-semibold text-[#B28B84]">{group.title}</h3>
+              <ul className="space-y-2">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="text-sm text-gray-400 transition hover:text-white">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
 
-        <p className="text-sm text-[#7C4A2D]/75">© 2026 PetHealth+</p>
+        <p className="mt-10 text-xs text-gray-500">© {new Date().getFullYear()} PetHealth+. All rights reserved.</p>
       </div>
     </footer>
   );
