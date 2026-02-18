@@ -108,7 +108,7 @@ export default function MyPageRecordsPage() {
           onClick={() => {
             void signIn();
           }}
-          className="mt-5 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white"
+          className="mt-5 rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-6 py-3 text-sm font-bold text-white"
         >
           로그인하기
         </button>
@@ -134,7 +134,7 @@ export default function MyPageRecordsPage() {
             href={APPSTORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white"
+            className="mt-4 inline-flex rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white"
           >
             앱 다운로드
           </a>
@@ -148,7 +148,7 @@ export default function MyPageRecordsPage() {
               <p className="text-sm font-bold text-[#4F2A1D]">{formatDate(record.visit_date)}</p>
               <p className="text-sm text-[#7C4A2D]">{record.hospital_name ?? '병원 정보 없음'}</p>
             </div>
-            <p className="text-lg font-extrabold text-[#F97316]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
+            <p className="text-lg font-extrabold text-[#48B8D0]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
           </header>
 
           <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-[#F8C79F]/30">
@@ -182,7 +182,7 @@ export default function MyPageRecordsPage() {
 
           <div className="mt-4 flex flex-wrap items-center gap-4">
             {record.id ? (
-              <Link href={`/mypage/records/${record.id}`} className="text-sm font-bold text-[#F97316] underline underline-offset-4">
+              <Link href={`/mypage/records/${record.id}`} className="text-sm font-bold text-[#48B8D0] underline underline-offset-4">
                 기록 상세 보기 →
               </Link>
             ) : null}

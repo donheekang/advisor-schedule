@@ -9,10 +9,10 @@ interface CheckboxCardProps {
 
 export function CheckboxCard({ label, icon, checked, onChange }: CheckboxCardProps) {
   const wrapperClass = "flex items-center gap-3 px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 " +
-    (checked ? "bg-[#FFF3E6] border-[#F97316]" : "bg-white border-[#E8D5C0] hover:bg-[#FFFAF5] hover:border-[#F8C79F]");
+    (checked ? "bg-[#FFF3E6] border-[#48B8D0]" : "bg-white border-[#E8D5C0] hover:bg-[#FFFAF5] hover:border-[#F8C79F]");
 
   const boxClass = "w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all duration-200 " +
-    (checked ? "bg-[#F97316] border-[#F97316]" : "border-[#D4B896]");
+    (checked ? "bg-[#48B8D0] border-[#48B8D0]" : "border-[#D4B896]");
 
   const textClass = "text-sm font-medium " + (checked ? "text-[#4F2A1D]" : "text-[#6B4226]");
 

@@ -31,7 +31,7 @@ export default function MobileNav() {
               <Link
                 href={tab.href}
                 className={`flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium transition ${
-                  isActive ? 'font-bold text-[#F97316]' : 'text-[#7C4A2D]'
+                  isActive ? 'font-bold text-[#48B8D0]' : 'text-[#7C4A2D]'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >

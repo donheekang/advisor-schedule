@@ -184,7 +184,12 @@ export default function CostSearchClient() {
                       setQuery(tag);
                       void runSearch(tag);
                     }}
-                    className="rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-medium text-[#6B7280] transition-all duration-200 hover:border-[#48B8D0] hover:bg-[#F5E5FC] hover:text-[#48B8D0]"
+                    className={
+                      'rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-200 ' +
+                      (query === tag
+                        ? 'border-[#48B8D0] bg-[#48B8D0]/5 text-[#48B8D0]'
+                        : 'border-gray-200 bg-white text-[#6B7280] hover:border-[#48B8D0] hover:bg-[#D4B8C0]/5 hover:text-[#48B8D0]')
+                    }
                   >
                     {tag}
                   </button>
@@ -194,7 +199,7 @@ export default function CostSearchClient() {
               <div className="mt-6 grid grid-cols-4 gap-3 border-t border-[#F1F5F9] pt-6 md:grid-cols-7">
                 {FEE_CATEGORIES.slice(0, 7).map((cat) => (
                   <Link key={cat.slug} href={'/cost-search/' + cat.slug} className="flex flex-col items-center gap-2 rounded-xl p-3 transition-all duration-200 hover:bg-[#F5E5FC]">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F8FAFC] text-lg">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D4B8C0] text-lg">
                       {cat.icon}
                     </div>
                     <span className="text-center text-xs font-medium text-[#6B7280]">{cat.title}</span>
@@ -204,7 +209,7 @@ export default function CostSearchClient() {
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
+                className="mt-6 w-full rounded-xl bg-[#48B8D0] py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
               >
                 🔍 진료비 검색하기
               </button>
