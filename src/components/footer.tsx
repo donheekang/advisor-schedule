@@ -2,14 +2,14 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="bg-[#1F2937]">
+    <footer className="bg-[#0B3041]">
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-16 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           <div className="col-span-2 md:col-span-1">
             <div className="mb-4 flex items-center gap-2">
               <span className="text-xl font-extrabold tracking-tight text-white">PetHealth+</span>
             </div>
-            <p className="mb-6 max-w-xs text-sm leading-relaxed text-white/50">
+            <p className="mb-6 max-w-xs text-sm leading-relaxed text-gray-400">
               반려동물 보호자를 위한
               <br />
               AI 건강 관리 플랫폼
