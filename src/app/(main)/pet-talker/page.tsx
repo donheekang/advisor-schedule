@@ -727,9 +727,9 @@ export default function PetTalkerPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] p-6 text-center shadow-lg">
+        <section className="rounded-3xl bg-[#B28B84] p-6 text-center shadow-lg">
           <p className="text-sm font-semibold text-white">PetHealth+ 앱에서 더 많은 기능을 만나보세요</p>
-          <button type="button" className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold text-[#3CA8BF] shadow-sm">
+          <button type="button" className="mt-3 w-full rounded-2xl bg-[#48B8D0] px-4 py-3 text-sm font-bold text-white shadow-sm">
             앱 다운로드 (준비 중)
           </button>
         </section>

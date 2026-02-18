@@ -36,7 +36,7 @@ export default function AffiliateProducts({ itemName }: AffiliateProductsProps) 
           href={createCoupangLink(matchedProduct.productName)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
+          className="mt-3 inline-flex rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-4 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
         >
           쿠팡에서 보기
         </a>

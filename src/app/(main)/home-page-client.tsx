@@ -153,7 +153,7 @@ function CountUpNumber({ target }: { target: number }) {
   }, [started, target]);
 
   return (
-    <p ref={ref} className="mt-2 text-5xl font-extrabold tracking-tight text-[#F97316] md:text-6xl">
+    <p ref={ref} className="mt-2 text-5xl font-extrabold tracking-tight text-[#48B8D0] md:text-6xl">
       {count.toLocaleString('ko-KR')}건
     </p>
   );
@@ -203,19 +203,19 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/ai-care"
-              className="rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-base font-extrabold text-white shadow-lg shadow-[#F97316]/30 transition hover:brightness-105"
+              className="rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-6 py-3 text-base font-extrabold text-white shadow-lg shadow-[#48B8D0]/30 transition hover:brightness-105"
             >
               ✨ 무료 AI 견적서 →
             </Link>
             <Link
               href="/pet-talker"
-              className="rounded-xl bg-[#F97316] px-6 py-3 text-base font-bold text-white transition hover:bg-[#EA580C]"
+              className="rounded-xl bg-[#48B8D0] px-6 py-3 text-base font-bold text-white transition hover:bg-[#48B8D0]"
             >
               🗣 펫토커 해보기
             </Link>
             <Link
               href="/cost-search"
-              className="rounded-xl border-2 border-[#F97316] bg-white px-6 py-3 text-base font-bold text-[#C2410C] transition hover:bg-[#FFF7ED]"
+              className="rounded-xl border-2 border-[#48B8D0] bg-white px-6 py-3 text-base font-bold text-[#C2410C] transition hover:bg-[#FFF7ED]"
             >
               💰 진료비 검색
             </Link>
@@ -236,7 +236,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
               <p className="text-4xl">{feature.emoji}</p>
               <h3 className="mt-4 text-xl font-bold text-[#7C2D12]">{feature.title}</h3>
               <p className="mt-3 text-[#7C2D12]/75">{feature.description}</p>
-              <Link href={feature.href} className="mt-5 inline-flex text-sm font-semibold text-[#EA580C]">
+              <Link href={feature.href} className="mt-5 inline-flex text-sm font-semibold text-[#48B8D0]">
                 {feature.cta}
               </Link>
             </article>
@@ -252,7 +252,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
           {steps.map((step, index) => (
             <li key={step.title} className="rounded-3xl bg-[#FFF6EA] p-6 shadow-sm">
               <div className="md:flex md:items-start md:gap-5">
-                <p className="text-5xl font-extrabold text-[#F97316]/20">{index + 1}</p>
+                <p className="text-5xl font-extrabold text-[#48B8D0]/20">{index + 1}</p>
                 <div className="mt-2 md:mt-1">
                   <p className="text-lg font-bold text-[#7C2D12]">{step.title}</p>
                   <p className="mt-2 text-[#7C2D12]/70">{step.description}</p>
@@ -282,7 +282,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         </div>
       </Section>
 
-      <Section className="rounded-3xl bg-gradient-to-r from-[#F97316] via-[#FB923C] to-[#FDBA74] px-6 py-12 text-center text-white md:px-10">
+      <Section className="rounded-3xl bg-gradient-to-r from-[#48B8D0] via-[#FB923C] to-[#FDBA74] px-6 py-12 text-center text-white md:px-10">
         <h2 className="text-2xl font-bold md:text-3xl">우리 아이 건강 관리, 지금 시작하세요 🐾</h2>
         <p className="mt-3 text-[#FFF3E6]">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -291,7 +291,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
           </Link>
           <Link
             href="https://play.google.com/store"
-            className="rounded-xl border border-white/60 px-5 py-3 font-bold text-white transition hover:bg-[#EA580C]"
+            className="rounded-xl border border-white/60 px-5 py-3 font-bold text-white transition hover:bg-[#48B8D0]"
           >
             Google Play 다운로드
           </Link>
@@ -315,7 +315,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
                   aria-expanded={isOpen}
                 >
                   <span className="font-semibold text-[#7C2D12]">{item.question}</span>
-                  <span className="text-[#EA580C]">{isOpen ? '−' : '+'}</span>
+                  <span className="text-[#48B8D0]">{isOpen ? '−' : '+'}</span>
                 </button>
                 {isOpen && <p className="mt-3 text-sm text-[#7C2D12]/75">{item.answer}</p>}
               </article>

@@ -52,7 +52,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
       <section className="mx-auto max-w-4xl px-5 py-20 text-center">
         <p className="text-5xl">🔍</p>
         <h1 className="mt-4 text-2xl font-bold text-[#4F2A1D]">카테고리를 찾을 수 없어요</h1>
-        <Link href="/cost-search" className="mt-4 inline-block text-[#F97316] underline">
+        <Link href="/cost-search" className="mt-4 inline-block text-[#48B8D0] underline">
           진료비 검색으로 돌아가기
         </Link>
       </section>
@@ -68,7 +68,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
       <div className="mx-auto w-full max-w-4xl">
         <section className="py-12 md:py-16">
           <AnimateOnScroll animation="fade-up">
-            <Link href="/cost-search" className="mb-6 inline-flex text-sm text-[#8B6B4E] hover:text-[#F97316]">
+            <Link href="/cost-search" className="mb-6 inline-flex text-sm text-[#8B6B4E] hover:text-[#48B8D0]">
               ← 진료비 검색
             </Link>
             <div className="mb-8 flex items-center gap-4">
@@ -87,7 +87,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
                 href={'/cost-search/' + c.slug}
                 className={
                   categoryNavClass +
-                  (c.slug === category.slug ? 'bg-[#F97316] text-white' : 'border border-[#E8D5C0] bg-white text-[#6B4226] hover:border-[#F97316]/40 hover:text-[#F97316]')
+                  (c.slug === category.slug ? 'bg-[#48B8D0] text-white' : 'border border-[#E8D5C0] bg-white text-[#6B4226] hover:border-[#48B8D0]/40 hover:text-[#48B8D0]')
                 }
               >
                 {c.title}
@@ -107,7 +107,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
                     <PriceBar min={item.min} avg={item.avg} max={item.max} />
                     <div className="mt-3 flex justify-between text-xs text-[#94A3B8]">
                       <span>최저 {Math.round(item.min).toLocaleString('ko-KR')}원</span>
-                      <span className="font-semibold text-[#F97316]">평균 {Math.round(item.avg).toLocaleString('ko-KR')}원</span>
+                      <span className="font-semibold text-[#48B8D0]">평균 {Math.round(item.avg).toLocaleString('ko-KR')}원</span>
                       <span>최고 {Math.round(item.max).toLocaleString('ko-KR')}원</span>
                     </div>
                   </article>
