@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -8,8 +7,9 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           <div className="col-span-2 md:col-span-1">
             <div className="mb-4 flex items-center gap-2">
-              <Image src="/logo.png" alt="PetHealth+" width={28} height={28} className="rounded-lg" />
-              <span className="text-lg font-bold text-white">PetHealth+</span>
+              <span className="text-xl font-extrabold tracking-tight text-white">
+                Pet<span className="text-[#48B8D0]">Health</span>+
+              </span>
             </div>
             <p className="mb-6 max-w-xs text-sm leading-relaxed text-white/50">
               반려동물 보호자를 위한
@@ -39,25 +39,25 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/30">서비스</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#B28B84]">서비스</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/pet-talker" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/pet-talker" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   펫토커
                 </Link>
               </li>
               <li>
-                <Link href="/cost-search" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/cost-search" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   진료비 검색
                 </Link>
               </li>
               <li>
-                <Link href="/ai-care" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/ai-care" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   AI 견적서
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/blog" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   블로그
                 </Link>
               </li>
@@ -65,25 +65,25 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/30">가이드</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#B28B84]">가이드</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   치과 진료비
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   예방접종 비용
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   수술 비용
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   혈액검사 비용
                 </Link>
               </li>
@@ -91,20 +91,20 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/30">회사</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#B28B84]">회사</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/about" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/about" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   소개
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/privacy" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   개인정보처리방침
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
+                <Link href="/terms" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   이용약관
                 </Link>
               </li>
@@ -113,7 +113,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
-          <p className="text-xs text-white/30">&copy; 2026 PetHealth+. All rights reserved.</p>
+          <p className="text-xs text-gray-500">&copy; 2026 PetHealth+. All rights reserved.</p>
           <p className="text-xs text-white/20">본 서비스는 의료 진단을 대체하지 않습니다</p>
         </div>
       </div>
