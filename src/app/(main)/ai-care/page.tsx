@@ -76,14 +76,14 @@ export default function AiCarePage() {
 
   const probabilityClassName = (probability: string) => {
     if (probability === '높음') {
-      return 'bg-[#F5E5FC] text-[#48B8D0] border border-[#B28B84]';
+      return 'border border-[#B28B84] bg-[#D4B8C0]/50 text-[#1F2937]';
     }
 
     if (probability === '보통') {
-      return 'bg-[#EFF6FF] text-[#48B8D0] border border-[#B28B84]';
+      return 'border border-[#48B8D0] bg-[#D4B8C0]/30 text-[#1F2937]';
     }
 
-    return 'bg-[#F8FAFC] text-[#6B7280] border border-[#E2E8F0]';
+    return 'border border-gray-200 bg-white text-[#6B7280]';
   };
 
   const handleAnalyze = async () => {
@@ -276,7 +276,7 @@ export default function AiCarePage() {
       <section ref={resultRef} className="mt-6">
         {result ? (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-[#FED7AA] bg-[#F5E5FC] px-4 py-3 text-sm text-[#9A3412]">
+            <div className="rounded-2xl border border-[#B28B84]/40 bg-[#D4B8C0]/40 px-4 py-3 text-sm text-[#1F2937]">
               본 결과는 참고용 정보이며 의료적 진단이 아닙니다. 정확한 진단과 치료는 반드시 동물병원 수의사 상담이 필요합니다.
             </div>
 
@@ -285,7 +285,7 @@ export default function AiCarePage() {
                 key={condition.name + '-' + index.toString()}
                 className={
                   'rounded-2xl border p-5 ' +
-                  (index === 0 ? 'border-[#48B8D0]/30 bg-[#F5E5FC]' : 'border-[#E2E8F0] bg-white')
+                  (index === 0 ? 'border-[#48B8D0]/30 bg-[#D4B8C0]/40' : 'border-[#E2E8F0] bg-white')
                 }
               >
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -299,7 +299,7 @@ export default function AiCarePage() {
                 <div className="space-y-2 rounded-xl border border-[#E2E8F0] bg-white p-4">
                   {condition.items.map((item, itemIndex) => (
                     <div key={item.name + '-' + itemIndex.toString()} className="flex items-center justify-between gap-4 text-sm">
-                      <span className="font-medium text-[#334155]">{item.name}</span>
+                      <span className="font-medium text-[#1F2937]">{item.name}</span>
                       <span className="text-[#6B7280]">
                         {item.minPrice.toLocaleString()}원 ~ {item.maxPrice.toLocaleString()}원
                       </span>
