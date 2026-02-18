@@ -51,7 +51,7 @@ export default function BreedPage({ params }: BreedPageProps) {
   }
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <TrackPageView eventName="category_view" params={{ category_slug: `breed_${profile.species}` }} />
       <div className="mx-auto w-full max-w-5xl space-y-8">
         <header className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/30">
@@ -72,7 +72,7 @@ export default function BreedPage({ params }: BreedPageProps) {
                 <h2 className="mt-2 text-xl font-extrabold text-[#4F2A1D]">{risk.condition}</h2>
                 <p className="mt-2 text-sm text-[#7C4A2D]">카테고리: {guideCategoryLabels[risk.category]}</p>
                 <p className="mt-1 text-lg font-bold text-[#48B8D0]">평균 비용 {toWon(averageCost)}</p>
-                <p className="mt-3 rounded-2xl bg-[#FFF8F0] p-3 text-sm text-[#7C4A2D]">{risk.careGuide}</p>
+                <p className="mt-3 rounded-2xl bg-[#D4B8C0] p-3 text-sm text-[#7C4A2D]">{risk.careGuide}</p>
               </article>
             );
           })}

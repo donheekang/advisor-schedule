@@ -117,11 +117,11 @@ export default function CostSearchClient() {
 
   return (
     <section className="w-full pb-10" aria-label="진료비 검색">
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#D4B8C0]/40 via-[#D4B8C0]/20 to-white pb-8 pt-24 md:pb-12 md:pt-32">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#D4B8C0]/20 via-[#D4B8C0]/20 to-white pb-8 pt-24 md:pb-12 md:pt-32">
         <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-[#48B8D0]/5 blur-3xl" />
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <AnimateOnScroll animation="fade-up">
-            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#48B8D0]/10 px-3 py-1 text-xs font-semibold text-[#48B8D0]">
+            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#48B8D0] px-3 py-1 text-xs font-semibold text-white">
               전국 평균 데이터와 비교
             </span>
             <h1 className="mb-3 text-2xl font-extrabold text-[#1F2937] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
@@ -197,7 +197,7 @@ export default function CostSearchClient() {
               <div className="mt-6 grid grid-cols-4 gap-3 border-t border-[#F1F5F9] pt-6 md:grid-cols-7">
                 {FEE_CATEGORIES.slice(0, 7).map((cat) => (
                   <Link key={cat.slug} href={'/cost-search/' + cat.slug} className="flex flex-col items-center gap-2 rounded-xl p-3 transition-all duration-200 hover:bg-[#48B8D0]/5">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D4B8C0] text-lg">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D4B8C0]/30 text-lg">
                       {cat.icon}
                     </div>
                     <span className="text-center text-xs font-medium text-[#6B7280]">{cat.title}</span>
@@ -207,7 +207,7 @@ export default function CostSearchClient() {
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded-xl bg-[#48B8D0] py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
+                className="mt-6 w-full rounded-xl bg-[#48B8D0] py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:bg-[#3CA8BF] active:scale-[0.98]"
               >
                 🔍 진료비 검색하기
               </button>

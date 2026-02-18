@@ -239,7 +239,7 @@ export default function MyPage() {
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8">
+    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] p-5 sm:p-8">
       <header className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/30 sm:p-7">
         <h1 className="text-2xl font-extrabold text-[#4F2A1D]">마이페이지</h1>
         <p className="mt-2 text-sm text-[#7C4A2D]">앱 진료 기록과 AI 견적서 인사이트를 한눈에 확인해보세요.</p>
@@ -251,7 +251,7 @@ export default function MyPage() {
       <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
         <h2 className="text-xl font-extrabold text-[#4F2A1D]">A. 펫 프로필</h2>
         {pets.length === 0 ? (
-          <div className="mt-4 rounded-2xl bg-[#FFF8F0] p-5 text-sm text-[#7C4A2D]">
+          <div className="mt-4 rounded-2xl bg-[#D4B8C0] p-5 text-sm text-[#7C4A2D]">
             <p>앱에서 반려동물을 등록해보세요.</p>
             <a
               href={APPSTORE_URL}
@@ -273,7 +273,7 @@ export default function MyPage() {
                   className={`rounded-full px-4 py-2 text-xs font-bold ${
                     pet.id === selectedPetId
                       ? 'bg-gradient-to-r from-[#48B8D0] to-[#FB923C] text-white'
-                      : 'bg-[#FFF8F0] text-[#7C4A2D] ring-1 ring-[#F8C79F]/30'
+                      : 'bg-[#D4B8C0] text-[#7C4A2D] ring-1 ring-[#F8C79F]/30'
                   }`}
                 >
                   {pet.name}
@@ -283,7 +283,7 @@ export default function MyPage() {
 
             <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
               {pets.map((pet) => (
-                <article key={pet.id} className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
+                <article key={pet.id} className="rounded-2xl bg-gradient-to-b from-[#D4B8C0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
                   <p className="text-2xl">{getPetEmoji(pet.species)}</p>
                   <h3 className="mt-1 text-lg font-extrabold text-[#4F2A1D]">{pet.name}</h3>
                   <p className="text-sm text-[#7C4A2D]">종류: {pet.species}</p>
@@ -308,7 +308,7 @@ export default function MyPage() {
             <div className="mt-4 flex flex-wrap gap-2">
               {insightTags.length > 0 ? (
                 insightTags.map((tag) => (
-                  <span key={tag} className="rounded-full bg-[#FFF8F0] px-3 py-1 text-xs font-semibold text-[#7C4A2D] ring-1 ring-[#F8C79F]/30">
+                  <span key={tag} className="rounded-full bg-[#D4B8C0] px-3 py-1 text-xs font-semibold text-[#7C4A2D] ring-1 ring-[#F8C79F]/30">
                     #{tag}
                   </span>
                 ))
@@ -316,7 +316,7 @@ export default function MyPage() {
                 <span className="text-sm text-[#A36241]">태그 정보가 아직 없어요.</span>
               )}
             </div>
-            <p className="mt-4 rounded-2xl bg-[#FFF8F0] p-4 text-sm text-[#4F2A1D]">
+            <p className="mt-4 rounded-2xl bg-[#D4B8C0] p-4 text-sm text-[#4F2A1D]">
               {insight.summary ?? 'AI 요약 결과가 아직 없어요. 앱에서 진료 데이터를 더 등록해보세요.'}
             </p>
             <a
@@ -345,7 +345,7 @@ export default function MyPage() {
             <p className="text-sm text-[#A36241]">최근 진료 기록이 없어요.</p>
           ) : (
             records.map((record, index) => (
-              <article key={record.id ?? `recent-record-${index}`} className="rounded-2xl bg-[#FFF8F0] p-4 ring-1 ring-[#F8C79F]/20">
+              <article key={record.id ?? `recent-record-${index}`} className="rounded-2xl bg-[#D4B8C0] p-4 ring-1 ring-[#F8C79F]/20">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-sm font-bold text-[#4F2A1D]">{formatVisitDate(record.visit_date)}</p>
                   <p className="text-sm font-extrabold text-[#48B8D0]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
@@ -379,7 +379,7 @@ export default function MyPage() {
             <p className="text-sm text-[#A36241]">AI 태그를 바탕으로 추천할 케어 상품이 아직 없어요.</p>
           ) : (
             recommendedProducts.slice(0, 4).map((product) => (
-              <div key={product.name} className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-4 ring-1 ring-[#F8C79F]/30">
+              <div key={product.name} className="rounded-2xl bg-gradient-to-b from-[#D4B8C0] to-[#FFEDD5] p-4 ring-1 ring-[#F8C79F]/30">
                 <p className="text-sm font-bold text-[#4F2A1D]">{product.name}</p>
                 <p className="mt-1 text-xs text-[#A36241]">{product.description}</p>
                 <a
@@ -425,7 +425,7 @@ export default function MyPage() {
         onClick={() => {
           void signOut();
         }}
-        className="rounded-2xl bg-[#FFF8F0] px-5 py-3 text-sm font-bold text-[#7C4A2D] ring-1 ring-[#F8C79F]/40"
+        className="rounded-2xl bg-[#D4B8C0] px-5 py-3 text-sm font-bold text-[#7C4A2D] ring-1 ring-[#F8C79F]/40"
       >
         로그아웃
       </button>

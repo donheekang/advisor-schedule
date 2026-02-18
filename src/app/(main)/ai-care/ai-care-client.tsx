@@ -120,7 +120,7 @@ export default function AiCareClient() {
   };
 
   return (
-    <main className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <main className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <div className="mx-auto w-full max-w-4xl">
         <section className="py-12 md:py-16">
           <AnimateOnScroll animation="fade-up">
@@ -208,7 +208,7 @@ export default function AiCareClient() {
               ) : (
                 <div className="space-y-4">
                   <p className="text-sm text-[#6B4226]">{report.summary}</p>
-                  {aiInsight ? <p className="whitespace-pre-line rounded-xl bg-[#FFF8F0] p-4 text-sm text-[#6B4226]">{aiInsight}</p> : null}
+                  {aiInsight ? <p className="whitespace-pre-line rounded-xl bg-[#D4B8C0] p-4 text-sm text-[#6B4226]">{aiInsight}</p> : null}
                   {remaining !== null ? <p className="text-xs text-[#8B6B4E]">오늘 남은 AI 인사이트: {remaining}회</p> : null}
                   <button type="button" onClick={() => void handleCopy()} className="rounded-xl border border-[#E8D5C0] px-4 py-2 text-sm font-medium text-[#6B4226]">결과 복사하기</button>
                 </div>
