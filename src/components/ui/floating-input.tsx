@@ -18,7 +18,7 @@ export function FloatingInput({ id, label, className = '', ...props }: FloatingI
         id={id}
         className={`peer w-full pt-5 pb-2 px-4 rounded-xl border border-[#E8D5C0]
           bg-white text-[#4F2A1D] text-sm
-          focus:ring-2 focus:ring-[#48B8D0]/20 focus:border-[#48B8D0]
+          focus:ring-2 focus:ring-[#F97316]/20 focus:border-[#F97316]
           transition-all duration-200 outline-none
           ${className}`}
         placeholder=" "
@@ -34,11 +34,11 @@ export function FloatingInput({ id, label, className = '', ...props }: FloatingI
         className={`absolute left-4 transition-all duration-200 pointer-events-none
           ${
             isActive
-              ? 'top-1.5 text-xs text-[#48B8D0] font-medium'
+              ? 'top-1.5 text-xs text-[#F97316] font-medium'
               : 'top-3.5 text-sm text-[#8B6B4E]'
           }
-          peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-[#48B8D0] peer-focus:font-medium
-          peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-[#48B8D0]`}
+          peer-focus:top-1.5 peer-focus:text-xs peer-focus:text-[#F97316] peer-focus:font-medium
+          peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-[#F97316]`}
       >
         {label}
       </label>

@@ -51,7 +51,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
   }
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <article className="mx-auto max-w-2xl space-y-8">
         <header className="space-y-3 border-b border-[#F8C79F]/40 pb-6">
           <Link
@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
         </header>
 
         <section
-          className="prose prose-lg max-w-none leading-relaxed text-[#2D2D2D] prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D] prose-a:text-[#48B8D0] prose-a:no-underline hover:prose-a:underline prose-strong:text-[#4F2A1D]"
+          className="prose prose-lg max-w-none leading-relaxed text-[#2D2D2D] prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D] prose-a:text-[#F97316] prose-a:no-underline hover:prose-a:underline prose-strong:text-[#4F2A1D]"
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
 
@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
           </div>
           <Link
             href="/blog"
-            className="inline-flex rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
+            className="inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
           >
             ← 다른 글 보기
           </Link>

@@ -49,7 +49,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isSigningIn}
-            className="w-full rounded-2xl border border-[#F8C79F] bg-white px-4 py-3.5 text-sm font-bold text-[#4F2A1D] transition hover:bg-[#D4B8C0] disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-2xl border border-[#F8C79F] bg-white px-4 py-3.5 text-sm font-bold text-[#4F2A1D] transition hover:bg-[#FFF8F0] disabled:cursor-not-allowed disabled:opacity-60"
           >
             구글로 로그인
           </button>
@@ -69,7 +69,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
         <button
           type="button"
           onClick={onClose}
-          className="mt-5 w-full rounded-2xl px-4 py-3 text-sm font-medium text-[#A36241] transition hover:bg-[#D4B8C0]"
+          className="mt-5 w-full rounded-2xl px-4 py-3 text-sm font-medium text-[#A36241] transition hover:bg-[#FFF8F0]"
         >
           닫기
         </button>

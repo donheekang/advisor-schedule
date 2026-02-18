@@ -11,15 +11,15 @@ interface AccordionProps {
 export function Accordion({ title, children, defaultOpen = false }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
-  const svgClass = "w-5 h-5 text-[#B28B84] flex-shrink-0 transition-transform duration-300" + (isOpen ? " rotate-180" : "");
+  const svgClass = "w-5 h-5 text-[#8B6B4E] flex-shrink-0 transition-transform duration-300" + (isOpen ? " rotate-180" : "");
 
   const contentClass = "overflow-hidden transition-all duration-300 ease-out" + (isOpen ? " max-h-96 opacity-100 pb-5" : " max-h-0 opacity-0");
 
   return (
-    <div className="border-b border-gray-200">
+    <div className="border-b border-[#F8C79F]/20">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-5 text-left font-medium text-[#1F2937] transition-colors duration-200 hover:text-[#48B8D0]"
+        className="w-full flex items-center justify-between py-5 text-left text-[#4F2A1D] font-medium hover:text-[#F97316] transition-colors duration-200"
       >
         <span className="pr-4">{title}</span>
         <svg
@@ -32,8 +32,9 @@ export function Accordion({ title, children, defaultOpen = false }: AccordionPro
         </svg>
       </button>
       <div className={contentClass}>
-        <div className="text-sm leading-relaxed text-[#6B7280]">{children}</div>
+        <div className="text-[#6B4226] text-sm leading-relaxed">{children}</div>
       </div>
     </div>
   );
 }
+
