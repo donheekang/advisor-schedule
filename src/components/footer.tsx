@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -6,7 +7,10 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-16 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           <div className="col-span-2 md:col-span-1">
-            <div className="mb-4 text-lg font-bold text-white">🐾 PetHealth+</div>
+            <div className="mb-4 flex items-center gap-2">
+              <Image src="/logo.png" alt="PetHealth+" width={28} height={28} className="rounded-lg" />
+              <span className="text-lg font-bold text-white">PetHealth+</span>
+            </div>
             <p className="mb-6 max-w-xs text-sm leading-relaxed text-white/50">
               반려동물 보호자를 위한
               <br />

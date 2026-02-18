@@ -26,6 +26,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/'
   },
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
   openGraph: {
     title: '펫헬스플러스 | 반려동물 진료비 데이터 플랫폼',
     description: '앱에서 기록한 반려동물 진료 데이터를 기반으로 진료비 정보를 검색하고 비교할 수 있습니다.',
