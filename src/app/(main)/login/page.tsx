@@ -158,8 +158,8 @@ export default function LoginPage() {
         </Link>
 
         <p className="mt-6 text-center text-xs text-[#6B7280]">
-          로그인 시 <Link href="/terms" className="text-[#6B7280] underline">이용약관</Link> 및{' '}
-          <Link href="/privacy" className="text-[#6B7280] underline">
+          로그인 시 <Link href="/terms" className="text-[#48B8D0] underline">이용약관</Link> 및{' '}
+          <Link href="/privacy" className="text-[#48B8D0] underline">
             개인정보처리방침
           </Link>
           에 동의합니다.
