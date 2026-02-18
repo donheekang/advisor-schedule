@@ -267,6 +267,28 @@ export default function HomePage() {
         </section>
       </AnimateOnScroll>
 
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-2xl px-4 text-center">
+          <div className="mb-4 text-3xl">📱</div>
+          <h2 className="mb-2 text-2xl font-extrabold text-[#1F2937]">앱에서 더 편리하게</h2>
+          <p className="mb-8 text-sm text-[#6B7280]">PetHealth+ 앱이 곧 출시돼요</p>
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <button
+              disabled
+              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#1F2937] px-6 py-3.5 text-sm font-bold text-white opacity-80"
+            >
+              App Store 출시 예정
+            </button>
+            <button
+              disabled
+              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#1F2937] px-6 py-3.5 text-sm font-bold text-white opacity-80"
+            >
+              ▶ Google Play 출시 예정
+            </button>
+          </div>
+        </div>
+      </section>
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     </>
