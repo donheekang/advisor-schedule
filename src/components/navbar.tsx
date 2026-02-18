@@ -48,28 +48,28 @@ export function Navbar() {
   const navClassName =
     'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ' +
     (scrolled
-      ? 'bg-[#1B2A4A]/95 backdrop-blur-xl shadow-sm border-b border-white/10'
+      ? 'bg-[#0B3041]/95 backdrop-blur-xl shadow-sm border-b border-white/10'
       : 'bg-transparent');
 
   const desktopLinkClassName = (active: boolean) =>
     'relative py-1 px-3 text-sm transition-all duration-300 ' +
     (active
-      ? (scrolled ? 'text-white font-semibold' : 'text-[#1B2A4A] font-semibold')
-      : (scrolled ? 'text-white/70 hover:text-white font-medium' : 'text-[#4F2A1D] hover:text-[#1B2A4A] font-medium'));
+      ? (scrolled ? 'text-white font-semibold' : 'text-[#0B3041] font-semibold')
+      : (scrolled ? 'text-white/70 hover:text-white font-medium' : 'text-[#4F2A1D] hover:text-[#0B3041] font-medium'));
 
   const mobilePanelClassName =
-    'fixed inset-0 z-[60] bg-[#1B2A4A]/95 backdrop-blur-xl transition-all duration-300 md:hidden ' +
+    'fixed inset-0 z-[60] bg-[#0B3041]/95 backdrop-blur-xl transition-all duration-300 md:hidden ' +
     (mobileOpen ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 -translate-y-3');
 
   const mobileItemClassName = (active: boolean) =>
     'block py-3 text-lg font-medium border-b border-white/10 transition-all duration-300 ' +
     (active ? 'text-white' : 'text-white/70 hover:text-white');
 
-  const logoClassName = 'text-lg font-bold transition-all duration-300 ' + (scrolled ? 'text-white' : 'text-[#1B2A4A]');
+  const logoClassName = 'text-lg font-bold transition-all duration-300 ' + (scrolled ? 'text-white' : 'text-[#0B3041]');
 
   const menuButtonClassName =
     'rounded-lg p-2 transition-all duration-300 md:hidden ' +
-    (scrolled ? 'text-white hover:bg-white/10' : 'text-[#1B2A4A] hover:bg-[#FFF8F0]');
+    (scrolled ? 'text-white hover:bg-white/10' : 'text-[#0B3041] hover:bg-[#F5E5FC]');
 
   return (
     <>
@@ -77,7 +77,7 @@ export function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link href="/" className={logoClassName + ' flex items-center gap-2'}>
             <Image src="/logo.png" alt="PetHealth+" width={32} height={32} className="rounded-lg" />
-            <span className="text-lg font-bold text-[#1B2A4A]">PetHealth+</span>
+            <span className="text-lg font-bold text-[#0B3041]">PetHealth+</span>
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">
@@ -90,7 +90,7 @@ export function Navbar() {
                     {item.label}
                   </Link>
                   {active && (
-                    <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#F97316]" />
+                    <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#48B8D0]" />
                   )}
                 </div>
               );
@@ -100,7 +100,7 @@ export function Navbar() {
           <div className="hidden md:block">
             <Link
               href="/login"
-              className="rounded-xl bg-[#F97316] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#EA580C]"
+              className="rounded-xl bg-[#48B8D0] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#3CA8BF]"
             >
               로그인
             </Link>
@@ -152,7 +152,7 @@ export function Navbar() {
 
           <Link
             href="/login"
-            className="mt-8 rounded-xl bg-[#F97316] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#EA580C]"
+            className="mt-8 rounded-xl bg-[#48B8D0] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#3CA8BF]"
           >
             로그인
           </Link>
