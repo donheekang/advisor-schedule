@@ -49,7 +49,7 @@ export function Navbar() {
 
   const navClassName =
     'fixed top-0 z-50 w-full transition-all duration-300 ' +
-    (scrolled ? 'bg-[#1F2937] shadow-lg' : 'bg-white border-b border-gray-200');
+    (scrolled ? 'bg-[#0B3041] shadow-lg' : 'bg-white border-b border-gray-200');
 
   const desktopLinkClassName = (active: boolean) =>
     'relative py-1 px-3 text-sm font-medium transition-colors duration-300 ' +
@@ -90,7 +90,7 @@ export function Navbar() {
             <span
               className={
                 'text-xl font-extrabold tracking-tight transition-colors duration-300 ' +
-                (scrolled ? 'text-white' : 'text-[#1F2937]')
+                (scrolled ? 'text-white' : 'text-[#0B3041]')
               }
             >
               PetHealth+
