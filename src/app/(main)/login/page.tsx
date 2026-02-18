@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -45,8 +46,9 @@ export default function LoginPage() {
     <div className="flex min-h-[80vh] items-center justify-center px-4 py-20">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <Link href="/" className="mb-4 inline-block text-2xl font-bold text-[#1B2A4A]">
-            🐾 PetHealth+
+          <Link href="/" className="mb-4 inline-block">
+            <Image src="/logo.png" alt="PetHealth+" width={48} height={48} className="mx-auto rounded-xl" />
+            <h1 className="mt-3 text-xl font-bold text-[#1B2A4A]">PetHealth+</h1>
           </Link>
           <h1 className="mb-2 text-xl font-bold text-[#1B2A4A]">로그인</h1>
           <p className="text-sm text-[#64748B]">우리 아이 건강 관리를 시작하세요</p>

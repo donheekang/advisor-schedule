@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 const NAV_ITEMS = [
@@ -74,8 +75,9 @@ export function Navbar() {
     <>
       <nav className={navClassName}>
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-          <Link href="/" className={logoClassName}>
-            🐾 PetHealth+
+          <Link href="/" className={logoClassName + ' flex items-center gap-2'}>
+            <Image src="/logo.png" alt="PetHealth+" width={32} height={32} className="rounded-lg" />
+            <span className="text-lg font-bold text-[#1B2A4A]">PetHealth+</span>
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">
