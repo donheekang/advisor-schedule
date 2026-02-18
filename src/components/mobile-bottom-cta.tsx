@@ -38,7 +38,7 @@ export function MobileBottomCTA() {
   ];
 
   return (
-    <nav className="safe-area-pb fixed bottom-0 left-0 right-0 z-50 border-t border-[#1B2A4A]/10 bg-white/90 backdrop-blur-xl md:hidden">
+    <nav className="safe-area-pb fixed bottom-0 left-0 right-0 z-50 border-t border-[#1F2937]/10 bg-white/90 backdrop-blur-xl md:hidden">
       <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-1.5">
         {items.map((item) => {
           const active = isActive(item.href);

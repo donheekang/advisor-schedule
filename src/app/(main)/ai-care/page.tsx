@@ -76,14 +76,14 @@ export default function AiCarePage() {
 
   const probabilityClassName = (probability: string) => {
     if (probability === '높음') {
-      return 'bg-[#FFF7ED] text-[#48B8D0] border border-[#FDBA74]';
+      return 'bg-[#F5E5FC] text-[#48B8D0] border border-[#B28B84]';
     }
 
     if (probability === '보통') {
-      return 'bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE]';
+      return 'bg-[#EFF6FF] text-[#48B8D0] border border-[#B28B84]';
     }
 
-    return 'bg-[#F8FAFC] text-[#64748B] border border-[#E2E8F0]';
+    return 'bg-[#F8FAFC] text-[#6B7280] border border-[#E2E8F0]';
   };
 
   const handleAnalyze = async () => {
@@ -129,20 +129,20 @@ export default function AiCarePage() {
       <section className="rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
         <div className="mb-6 flex items-center gap-3">
           <span className="relative flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3B82F6] opacity-75" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-[#1D4ED8]" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#48B8D0] opacity-75" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-[#48B8D0]" />
           </span>
-          <h1 className="text-2xl font-extrabold text-[#0B3041] md:text-3xl">AI 진료비 견적서</h1>
+          <h1 className="text-2xl font-extrabold text-[#1F2937] md:text-3xl">AI 진료비 견적서</h1>
         </div>
-        <p className="text-sm text-[#64748B] md:text-base">증상을 입력하면 Claude AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
+        <p className="text-sm text-[#6B7280] md:text-base">증상을 입력하면 Claude AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
       </section>
 
       <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
-        <h2 className="mb-5 text-lg font-bold text-[#0B3041]">1단계. 반려동물 정보</h2>
+        <h2 className="mb-5 text-lg font-bold text-[#1F2937]">1단계. 반려동물 정보</h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2">
-            <p className="mb-2 text-xs font-semibold text-[#64748B]">반려동물 종류</p>
+            <p className="mb-2 text-xs font-semibold text-[#6B7280]">반려동물 종류</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
@@ -150,8 +150,8 @@ export default function AiCarePage() {
                 className={
                   'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
                   (petType === 'dog'
-                    ? 'border-[#48B8D0] bg-[#FFF7ED] text-[#48B8D0]'
-                    : 'border-[#E2E8F0] bg-white text-[#475569] hover:border-[#CBD5E1]')
+                    ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
+                    : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
                 }
               >
                 <span>🐶</span>
@@ -163,8 +163,8 @@ export default function AiCarePage() {
                 className={
                   'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
                   (petType === 'cat'
-                    ? 'border-[#48B8D0] bg-[#FFF7ED] text-[#48B8D0]'
-                    : 'border-[#E2E8F0] bg-white text-[#475569] hover:border-[#CBD5E1]')
+                    ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
+                    : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
                 }
               >
                 <span>🐱</span>
@@ -174,11 +174,11 @@ export default function AiCarePage() {
           </div>
 
           <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-[#64748B]">품종</span>
+            <span className="text-xs font-semibold text-[#6B7280]">품종</span>
             <select
               value={breed}
               onChange={(event) => setBreed(event.target.value)}
-              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#0B3041] outline-none transition focus:border-[#48B8D0] focus:bg-white"
+              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
             >
               <option value="">품종을 선택해주세요</option>
               {breedOptions.map((option) => (
@@ -190,19 +190,19 @@ export default function AiCarePage() {
           </label>
 
           <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-[#64748B]">나이 (살)</span>
+            <span className="text-xs font-semibold text-[#6B7280]">나이 (살)</span>
             <input
               type="number"
               min="0"
               value={age}
               onChange={(event) => setAge(event.target.value)}
               placeholder="예: 5"
-              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#0B3041] outline-none transition focus:border-[#48B8D0] focus:bg-white"
+              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
             />
           </label>
 
           <label className="flex flex-col gap-2 md:col-span-2">
-            <span className="text-xs font-semibold text-[#64748B]">체중 (kg)</span>
+            <span className="text-xs font-semibold text-[#6B7280]">체중 (kg)</span>
             <input
               type="number"
               min="0"
@@ -210,14 +210,14 @@ export default function AiCarePage() {
               value={weight}
               onChange={(event) => setWeight(event.target.value)}
               placeholder="예: 3.2"
-              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#0B3041] outline-none transition focus:border-[#48B8D0] focus:bg-white"
+              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
             />
           </label>
         </div>
       </section>
 
       <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
-        <h2 className="mb-5 text-lg font-bold text-[#0B3041]">2단계. 증상 입력</h2>
+        <h2 className="mb-5 text-lg font-bold text-[#1F2937]">2단계. 증상 입력</h2>
 
         <div className="mb-4 flex flex-wrap gap-2">
           {SYMPTOM_CHIPS.map((chip) => (
@@ -228,8 +228,8 @@ export default function AiCarePage() {
               className={
                 'rounded-full border px-3 py-2 text-xs font-medium transition ' +
                 (isChipSelected(chip.label)
-                  ? 'border-[#48B8D0] bg-[#FFF7ED] text-[#48B8D0]'
-                  : 'border-[#E2E8F0] bg-white text-[#64748B] hover:border-[#CBD5E1]')
+                  ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
+                  : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
               }
             >
               <span className="mr-1">{chip.emoji}</span>
@@ -243,7 +243,7 @@ export default function AiCarePage() {
           onChange={(event) => setSymptoms(event.target.value)}
           placeholder="아이의 증상을 자세히 입력해주세요.\n예) 2일 전부터 밥을 잘 안 먹고 구토를 2번 했어요."
           rows={6}
-          className="w-full rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#0B3041] outline-none transition focus:border-[#48B8D0] focus:bg-white"
+          className="w-full rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
         />
 
         {error ? <p className="mt-3 rounded-xl bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#DC2626]">{error}</p> : null}
@@ -256,7 +256,7 @@ export default function AiCarePage() {
             'mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-4 text-sm font-bold text-white transition ' +
             (loading || !symptoms.trim()
               ? 'bg-[#CBD5E1] cursor-not-allowed'
-              : 'bg-gradient-to-r from-[#0B3041] to-[#2D4A6F] hover:opacity-95')
+              : 'bg-gradient-to-r from-[#1F2937] to-[#1F2937] hover:opacity-95')
           }
         >
           {loading ? (
@@ -276,7 +276,7 @@ export default function AiCarePage() {
       <section ref={resultRef} className="mt-6">
         {result ? (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-3 text-sm text-[#9A3412]">
+            <div className="rounded-2xl border border-[#FED7AA] bg-[#F5E5FC] px-4 py-3 text-sm text-[#9A3412]">
               본 결과는 참고용 정보이며 의료적 진단이 아닙니다. 정확한 진단과 치료는 반드시 동물병원 수의사 상담이 필요합니다.
             </div>
 
@@ -285,22 +285,22 @@ export default function AiCarePage() {
                 key={condition.name + '-' + index.toString()}
                 className={
                   'rounded-2xl border p-5 ' +
-                  (index === 0 ? 'border-[#48B8D0]/30 bg-[#FFF7ED]' : 'border-[#E2E8F0] bg-white')
+                  (index === 0 ? 'border-[#48B8D0]/30 bg-[#F5E5FC]' : 'border-[#E2E8F0] bg-white')
                 }
               >
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-lg font-bold text-[#0B3041]">{condition.name}</h3>
+                  <h3 className="text-lg font-bold text-[#1F2937]">{condition.name}</h3>
                   <span className={'rounded-full px-3 py-1 text-xs font-semibold ' + probabilityClassName(condition.probability)}>
                     가능성 {condition.probability}
                   </span>
                 </div>
-                <p className="mb-4 text-sm leading-relaxed text-[#475569]">{condition.description}</p>
+                <p className="mb-4 text-sm leading-relaxed text-[#6B7280]">{condition.description}</p>
 
                 <div className="space-y-2 rounded-xl border border-[#E2E8F0] bg-white p-4">
                   {condition.items.map((item, itemIndex) => (
                     <div key={item.name + '-' + itemIndex.toString()} className="flex items-center justify-between gap-4 text-sm">
                       <span className="font-medium text-[#334155]">{item.name}</span>
-                      <span className="text-[#64748B]">
+                      <span className="text-[#6B7280]">
                         {item.minPrice.toLocaleString()}원 ~ {item.maxPrice.toLocaleString()}원
                       </span>
                     </div>
@@ -312,13 +312,13 @@ export default function AiCarePage() {
               </article>
             ))}
 
-            <article className="rounded-2xl bg-[#0B3041] p-5">
+            <article className="rounded-2xl bg-[#1F2937] p-5">
               <h3 className="mb-2 text-base font-bold text-white">수의사 상담 전 추천사항</h3>
               <p className="text-sm leading-relaxed text-slate-100">{result.recommendation}</p>
             </article>
           </div>
         ) : (
-          <div className="rounded-3xl border border-dashed border-[#CBD5E1] bg-white px-6 py-14 text-center text-[#94A3B8]">
+          <div className="rounded-3xl border border-dashed border-[#CBD5E1] bg-white px-6 py-14 text-center text-[#6B7280]">
             <div className="mb-3 text-4xl">📄</div>
             <p className="text-sm md:text-base">증상을 입력하면 AI가 예상 진료비 견적서를 작성해드려요</p>
           </div>

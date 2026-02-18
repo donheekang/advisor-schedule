@@ -85,36 +85,36 @@ export default function HomePage() {
               <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#48B8D0]/10 px-4 py-2 text-sm font-medium text-[#48B8D0]">
                 <span>🤖</span> AI 진료비 분석 서비스
               </div>
-              <h1 className="mb-6 text-3xl font-extrabold leading-[1.3] text-[#0B3041] md:text-4xl md:leading-[1.3] lg:text-[3.5rem] lg:leading-[1.3]">
+              <h1 className="mb-6 text-3xl font-extrabold leading-[1.3] text-[#1F2937] md:text-4xl md:leading-[1.3] lg:text-[3.5rem] lg:leading-[1.3]">
                 증상만 입력하면
                 <br />
-                <span className="bg-gradient-to-r from-[#48B8D0] to-[#8AE1FC] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#48B8D0] to-[#B28B84] bg-clip-text text-transparent">
                   예상 진료비를 알려드려요
                 </span>
               </h1>
-              <p className="mx-auto mb-8 max-w-lg text-base text-[#64748B] md:text-lg">
+              <p className="mx-auto mb-8 max-w-lg text-base text-[#6B7280] md:text-lg">
                 Claude AI가 증상을 분석하고, 예상 질환과 진료비 범위를 알려드려요.
               </p>
               <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <a
                   href="/ai-care"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-white shadow-lg shadow-sky-200 transition hover:bg-[#3CA8BF] sm:w-auto"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-white shadow-lg shadow-rose-200 transition hover:bg-[#3CA8BF] sm:w-auto"
                 >
                   ✨ AI 견적서 받기
                 </a>
                 <a
                   href="/cost-search"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E2E8F0] bg-white px-8 py-4 text-base font-bold text-[#0B3041] transition hover:border-[#48B8D0] hover:text-[#48B8D0] sm:w-auto"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E2E8F0] bg-white px-8 py-4 text-base font-bold text-[#1F2937] transition hover:border-[#48B8D0] hover:text-[#48B8D0] sm:w-auto"
                 >
                   🔍 진료비 검색
                 </a>
               </div>
-              <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-[#64748B]">
+              <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-[#6B7280]">
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-green-400"></span>무료 이용
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[#8AE1FC]"></span>30초 AI 분석
+                  <span className="h-2 w-2 rounded-full bg-[#B28B84]"></span>30초 AI 분석
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-[#48B8D0]"></span>전국 진료비 비교
@@ -128,14 +128,14 @@ export default function HomePage() {
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[1]}>
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-6xl px-4">
-            <h2 className="mb-3 text-center text-2xl font-extrabold text-[#0B3041] md:text-3xl">이런 걸 할 수 있어요</h2>
-            <p className="mb-10 text-center text-sm text-[#64748B]">PetHealth+와 함께 우리 아이 건강을 관리하세요</p>
+            <h2 className="mb-3 text-center text-2xl font-extrabold text-[#1F2937] md:text-3xl">이런 걸 할 수 있어요</h2>
+            <p className="mb-10 text-center text-sm text-[#6B7280]">PetHealth+와 함께 우리 아이 건강을 관리하세요</p>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <a href="/ai-care" className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md">
                 <div className="mb-4 h-1 w-16 rounded-full bg-[#48B8D0]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-sky-50 text-2xl">✨</div>
-                <h3 className="mb-2 text-lg font-bold text-[#0B3041]">AI 견적서</h3>
-                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#64748B]">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-2xl">✨</div>
+                <h3 className="mb-2 text-lg font-bold text-[#1F2937]">AI 견적서</h3>
+                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요
                 </p>
                 <span className="mt-auto text-sm font-semibold text-[#48B8D0]">받아보기 →</span>
@@ -144,10 +144,10 @@ export default function HomePage() {
                 href="/cost-search"
                 className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
               >
-                <div className="mb-4 h-1 w-16 rounded-full bg-[#8AE1FC]"></div>
+                <div className="mb-4 h-1 w-16 rounded-full bg-[#B28B84]"></div>
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-2xl">🔍</div>
-                <h3 className="mb-2 text-lg font-bold text-[#0B3041]">진료비 검색</h3>
-                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#64748B]">
+                <h3 className="mb-2 text-lg font-bold text-[#1F2937]">진료비 검색</h3>
+                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   전국 평균과 비교해서 적정 가격을 확인하세요
                 </p>
                 <span className="mt-auto text-sm font-semibold text-[#48B8D0]">검색하기 →</span>
@@ -158,8 +158,8 @@ export default function HomePage() {
               >
                 <div className="mb-4 h-1 w-16 rounded-full bg-[#F5E5FC]"></div>
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-2xl">🐾</div>
-                <h3 className="mb-2 text-lg font-bold text-[#0B3041]">펫토커</h3>
-                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#64748B]">
+                <h3 className="mb-2 text-lg font-bold text-[#1F2937]">펫토커</h3>
+                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   사진 한 장으로 우리 아이의 마음을 들어보세요
                 </p>
                 <span className="mt-auto text-sm font-semibold text-[#48B8D0]">해보기 →</span>
@@ -171,8 +171,8 @@ export default function HomePage() {
 
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="mb-3 text-2xl font-bold text-[#0B3041] md:text-3xl">3단계로 시작하세요</h2>
-          <p className="mb-10 text-[#64748B] md:mb-14">간단한 3단계로 우리 아이 건강 관리를 시작할 수 있어요</p>
+          <h2 className="mb-3 text-2xl font-bold text-[#1F2937] md:text-3xl">3단계로 시작하세요</h2>
+          <p className="mb-10 text-[#6B7280] md:mb-14">간단한 3단계로 우리 아이 건강 관리를 시작할 수 있어요</p>
 
           <div className="relative">
             <div className="pointer-events-none absolute left-[16.6%] right-[16.6%] top-12 hidden h-0.5 bg-gradient-to-r from-[#48B8D0]/20 via-[#48B8D0]/40 to-[#48B8D0]/20 md:block" />
@@ -182,12 +182,12 @@ export default function HomePage() {
                 { num: '2', title: 'AI가 분석', desc: 'AI가 사진을 읽고 대사를 만들거나 진료비를 비교해요' },
                 { num: '3', title: '공유 & 기록', desc: 'SNS에 공유하고, 앱에서 기록하면 더 정확해져요' }
               ].map((step) => (
-                <div key={step.num} className="relative rounded-2xl bg-gradient-to-br from-[#F5E5FC] to-[#FFF3E6] p-6 md:p-8">
+                <div key={step.num} className="relative rounded-2xl bg-gradient-to-br from-[#F5E5FC] to-[#F5E5FC] p-6 md:p-8">
                   <div className="relative z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#48B8D0] text-lg font-bold text-white shadow-lg shadow-[#48B8D0]/25">
                     {step.num}
                   </div>
-                  <h3 className="mb-2 text-lg font-bold text-[#0B3041]">{step.title}</h3>
-                  <p className="text-sm leading-relaxed text-[#64748B]">{step.desc}</p>
+                  <h3 className="mb-2 text-lg font-bold text-[#1F2937]">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-[#6B7280]">{step.desc}</p>
                 </div>
               ))}
             </div>
@@ -198,22 +198,22 @@ export default function HomePage() {
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-6xl px-4">
-            <h2 className="mb-4 text-center text-2xl font-extrabold text-[#0B3041] md:text-3xl">이런 점이 다릅니다</h2>
-            <p className="mb-10 text-center text-sm text-[#64748B]">PetHealth+만의 차별점</p>
+            <h2 className="mb-4 text-center text-2xl font-extrabold text-[#1F2937] md:text-3xl">이런 점이 다릅니다</h2>
+            <p className="mb-10 text-center text-sm text-[#6B7280]">PetHealth+만의 차별점</p>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="rounded-2xl bg-[#0B3041] p-8 text-center text-white">
+              <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
                 <div className="mb-3 text-3xl">🤖</div>
-                <div className="mb-2 text-xl font-bold text-[#8AE1FC]">AI 진료비 분석</div>
+                <div className="mb-2 text-xl font-bold text-[#48B8D0]">AI 진료비 분석</div>
                 <p className="text-sm text-white/70">Claude AI가 증상을 분석하고 예상 진료비를 알려드려요</p>
               </div>
-              <div className="rounded-2xl bg-[#0B3041] p-8 text-center text-white">
+              <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
                 <div className="mb-3 text-3xl">📊</div>
-                <div className="mb-2 text-xl font-bold text-[#8AE1FC]">전국 평균 비교</div>
+                <div className="mb-2 text-xl font-bold text-[#48B8D0]">전국 평균 비교</div>
                 <p className="text-sm text-white/70">지역별 진료비 평균 데이터로 적정 가격을 확인하세요</p>
               </div>
-              <div className="rounded-2xl bg-[#0B3041] p-8 text-center text-white">
+              <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
                 <div className="mb-3 text-3xl">💰</div>
-                <div className="mb-2 text-xl font-bold text-[#8AE1FC]">완전 무료</div>
+                <div className="mb-2 text-xl font-bold text-[#48B8D0]">완전 무료</div>
                 <p className="text-sm text-white/70">진료비 검색부터 AI 견적까지 모든 기능이 무료예요</p>
               </div>
             </div>
@@ -223,8 +223,8 @@ export default function HomePage() {
 
       <section className="py-12">
         <div className="mx-auto max-w-4xl px-4 text-center">
-          <p className="text-lg font-semibold text-[#0B3041]">우리 아이 건강, 지금 바로 확인해보세요</p>
-          <p className="mt-2 text-sm text-[#64748B]">진료비가 걱정되셨다면 PetHealth+가 도와드릴게요</p>
+          <p className="text-lg font-semibold text-[#1F2937]">우리 아이 건강, 지금 바로 확인해보세요</p>
+          <p className="mt-2 text-sm text-[#6B7280]">진료비가 걱정되셨다면 PetHealth+가 도와드릴게요</p>
         </div>
       </section>
 
@@ -232,7 +232,7 @@ export default function HomePage() {
         <section className="bg-white py-20 md:py-28">
           <div className="mx-auto max-w-3xl px-4">
             <AnimateOnScroll animation="fade-up">
-              <h2 className="mb-10 text-2xl font-bold text-[#0B3041] md:text-3xl">자주 묻는 질문</h2>
+              <h2 className="mb-10 text-2xl font-bold text-[#1F2937] md:text-3xl">자주 묻는 질문</h2>
             </AnimateOnScroll>
 
             <div className="space-y-3">
@@ -247,7 +247,7 @@ export default function HomePage() {
       </AnimateOnScroll>
 
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[2]}>
-        <section className="bg-gradient-to-r from-[#0B3041] to-[#2D4A6F] px-4 py-16 text-center text-white md:py-20">
+        <section className="bg-[#1F2937] px-4 py-16 text-center text-white md:py-20">
           <h2 className="mb-3 text-xl font-extrabold md:text-2xl">우리 아이 진료비, 지금 바로 확인해보세요</h2>
           <p className="mb-8 text-sm text-white/70 md:text-base">전국 평균 데이터로 비교하고, AI로 예상 비용까지</p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">

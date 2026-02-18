@@ -570,7 +570,7 @@ export default function PetTalkerPage() {
                 <button
                   type="button"
                   onClick={() => void generateSpeech()}
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#8AE1FC] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
                 >
                   🐾 우리 아이의 반응 보기
                 </button>
@@ -650,7 +650,7 @@ export default function PetTalkerPage() {
                   <button
                     type="button"
                     onClick={handleSpeechPlayback}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#8AE1FC] text-white shadow-md"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#B28B84] text-white shadow-md"
                     aria-label="대사 음성 재생"
                   >
                     {isSpeaking ? (
@@ -727,7 +727,7 @@ export default function PetTalkerPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-gradient-to-r from-[#48B8D0] to-[#8AE1FC] p-6 text-center shadow-lg">
+        <section className="rounded-3xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] p-6 text-center shadow-lg">
           <p className="text-sm font-semibold text-white">PetHealth+ 앱에서 더 많은 기능을 만나보세요</p>
           <button type="button" className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold text-[#3CA8BF] shadow-sm">
             앱 다운로드 (준비 중)

@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export function Footer() {
   return (
-    <footer className="bg-[#0B3041]">
+    <footer className="bg-[#1F2937]">
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-16 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           <div className="col-span-2 md:col-span-1">
@@ -42,22 +42,22 @@ export function Footer() {
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/30">서비스</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/pet-talker" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/pet-talker" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   펫토커
                 </Link>
               </li>
               <li>
-                <Link href="/cost-search" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/cost-search" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   진료비 검색
                 </Link>
               </li>
               <li>
-                <Link href="/ai-care" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/ai-care" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   AI 견적서
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/blog" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   블로그
                 </Link>
               </li>
@@ -68,22 +68,22 @@ export function Footer() {
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/30">가이드</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   치과 진료비
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   예방접종 비용
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   수술 비용
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/guide" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   혈액검사 비용
                 </Link>
               </li>
@@ -94,17 +94,17 @@ export function Footer() {
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/30">회사</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/about" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/about" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   소개
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/privacy" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   개인정보처리방침
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                <Link href="/terms" className="text-sm text-white/50 transition-colors duration-200 hover:text-[#48B8D0]">
                   이용약관
                 </Link>
               </li>

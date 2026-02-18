@@ -117,22 +117,22 @@ export default function CostSearchClient() {
 
   return (
     <section className="w-full pb-10" aria-label="진료비 검색">
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#FFF3E6] via-[#FFF8F0] to-[#FFF8F0] pb-8 pt-24 md:pb-12 md:pt-32">
-        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-[#F97316]/5 blur-3xl" />
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#F5E5FC] via-[#F5E5FC] to-[#F5E5FC] pb-8 pt-24 md:pb-12 md:pt-32">
+        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-[#48B8D0]/5 blur-3xl" />
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <AnimateOnScroll animation="fade-up">
-            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#F97316]/10 px-3 py-1 text-xs font-semibold text-[#F97316]">
+            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#48B8D0]/10 px-3 py-1 text-xs font-semibold text-[#48B8D0]">
               전국 평균 데이터와 비교
             </span>
-            <h1 className="mb-3 text-2xl font-extrabold text-[#1B2A4A] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
-            <p className="text-sm text-[#64748B] md:text-base">전국 평균 데이터와 비교해보세요</p>
+            <h1 className="mb-3 text-2xl font-extrabold text-[#1F2937] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
+            <p className="text-sm text-[#6B7280] md:text-base">전국 평균 데이터와 비교해보세요</p>
           </AnimateOnScroll>
         </div>
       </div>
 
       <div className="mx-auto -mt-6 max-w-3xl px-4">
         <AnimateOnScroll animation="fade-up" delay={100}>
-          <div className="rounded-2xl bg-white p-6 shadow-xl shadow-[#1B2A4A]/5 md:p-8">
+          <div className="rounded-2xl bg-white p-6 shadow-xl shadow-[#1F2937]/5 md:p-8">
             <form
               role="search"
               aria-label="진료비 검색 폼"
@@ -142,7 +142,7 @@ export default function CostSearchClient() {
               }}
             >
               <div className="relative">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94A3B8]">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#6B7280]">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                 </svg>
                 <input
@@ -150,7 +150,7 @@ export default function CostSearchClient() {
                   onChange={(event) => setQuery(event.target.value)}
                   type="text"
                   placeholder="진료 항목을 검색해보세요 (예: 중성화, 슬개골)"
-                  className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-3.5 pl-12 pr-4 text-sm text-[#1B2A4A] placeholder-[#94A3B8] transition-all duration-200 focus:border-[#F97316] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#F97316]/10"
+                  className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-3.5 pl-12 pr-4 text-sm text-[#1F2937] placeholder-[#6B7280] transition-all duration-200 focus:border-[#48B8D0] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#48B8D0]/10"
                 />
               </div>
 
@@ -158,7 +158,7 @@ export default function CostSearchClient() {
                 <select
                   value={animalType}
                   onChange={(event) => setAnimalType(event.target.value as (typeof animalTypes)[number])}
-                  className="flex-1 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1B2A4A] transition-all duration-200 focus:border-[#F97316] focus:outline-none focus:ring-4 focus:ring-[#F97316]/10"
+                  className="flex-1 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1F2937] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-4 focus:ring-[#48B8D0]/10"
                 >
                   {animalTypes.map((type) => (
                     <option key={type} value={type}>{type}</option>
@@ -167,7 +167,7 @@ export default function CostSearchClient() {
                 <select
                   value={region}
                   onChange={(event) => setRegion(event.target.value)}
-                  className="flex-1 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1B2A4A] transition-all duration-200 focus:border-[#F97316] focus:outline-none focus:ring-4 focus:ring-[#F97316]/10"
+                  className="flex-1 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1F2937] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-4 focus:ring-[#48B8D0]/10"
                 >
                   {regions.map((area) => (
                     <option key={area} value={area}>{area}</option>
@@ -184,7 +184,7 @@ export default function CostSearchClient() {
                       setQuery(tag);
                       void runSearch(tag);
                     }}
-                    className="rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-medium text-[#64748B] transition-all duration-200 hover:border-[#F97316] hover:bg-[#FFF7ED] hover:text-[#F97316]"
+                    className="rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-medium text-[#6B7280] transition-all duration-200 hover:border-[#48B8D0] hover:bg-[#F5E5FC] hover:text-[#48B8D0]"
                   >
                     {tag}
                   </button>
@@ -193,18 +193,18 @@ export default function CostSearchClient() {
 
               <div className="mt-6 grid grid-cols-4 gap-3 border-t border-[#F1F5F9] pt-6 md:grid-cols-7">
                 {FEE_CATEGORIES.slice(0, 7).map((cat) => (
-                  <Link key={cat.slug} href={'/cost-search/' + cat.slug} className="flex flex-col items-center gap-2 rounded-xl p-3 transition-all duration-200 hover:bg-[#FFF7ED]">
+                  <Link key={cat.slug} href={'/cost-search/' + cat.slug} className="flex flex-col items-center gap-2 rounded-xl p-3 transition-all duration-200 hover:bg-[#F5E5FC]">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F8FAFC] text-lg">
                       {cat.icon}
                     </div>
-                    <span className="text-center text-xs font-medium text-[#64748B]">{cat.title}</span>
+                    <span className="text-center text-xs font-medium text-[#6B7280]">{cat.title}</span>
                   </Link>
                 ))}
               </div>
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#F97316]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
+                className="mt-6 w-full rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
               >
                 🔍 진료비 검색하기
               </button>
@@ -218,18 +218,18 @@ export default function CostSearchClient() {
         {results.length > 0 && (
           <div className="mt-6 space-y-3">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm text-[#8B6B4E]">검색 결과 {results.length}건</span>
+              <span className="text-sm text-[#6B7280]">검색 결과 {results.length}건</span>
               {source === 'live' && <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600">✅ 실시간 데이터</span>}
             </div>
             {results.map((item, i) => (
               <AnimateOnScroll key={item.item} animation="fade-up" delay={i * 50}>
-                <div className="rounded-2xl border border-[#F8C79F]/10 bg-white p-5 shadow-sm transition-all duration-200 hover:border-[#F8C79F]/30 hover:shadow-md md:p-6">
+                <div className="rounded-2xl border border-[#B28B84]/10 bg-white p-5 shadow-sm transition-all duration-200 hover:border-[#B28B84]/30 hover:shadow-md md:p-6">
                   <div className="mb-1 flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="font-semibold text-[#4F2A1D]">{item.item}</h3>
-                      <p className="mt-0.5 text-xs text-[#8B6B4E]">{item.category}</p>
+                      <h3 className="font-semibold text-[#1F2937]">{item.item}</h3>
+                      <p className="mt-0.5 text-xs text-[#6B7280]">{item.category}</p>
                     </div>
-                    <p className="text-xl font-bold tracking-tight text-[#F97316] md:text-2xl">
+                    <p className="text-xl font-bold tracking-tight text-[#48B8D0] md:text-2xl">
                       {item.avg.toLocaleString('ko-KR')}<span className="text-sm font-normal">원</span>
                     </p>
                   </div>
@@ -245,11 +245,11 @@ export default function CostSearchClient() {
         {!searching && results.length === 0 && hasSearched && query && (
           <AnimateOnScroll animation="fade-in">
             <div className="py-16 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#FFF3E6]">
-                <span className="text-3xl text-[#F97316]/50">🔎</span>
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#F5E5FC]">
+                <span className="text-3xl text-[#48B8D0]/50">🔎</span>
               </div>
-              <p className="mb-1 font-medium text-[#4F2A1D]">검색 결과가 없어요</p>
-              <p className="text-sm text-[#8B6B4E]">다른 키워드로 검색해보세요</p>
+              <p className="mb-1 font-medium text-[#1F2937]">검색 결과가 없어요</p>
+              <p className="text-sm text-[#6B7280]">다른 키워드로 검색해보세요</p>
             </div>
           </AnimateOnScroll>
         )}
@@ -257,19 +257,19 @@ export default function CostSearchClient() {
         {topResult ? (
           <div className="mt-6 space-y-6">
             <CareGuide keyword={topResult.item} categorySlug={matchedCategory?.slug} matchedTags={matchedTags} />
-            <article className="rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm">
+            <article className="rounded-2xl border border-[#B28B84]/10 bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between gap-3">
-                <h2 className="flex items-center gap-2 text-lg font-bold text-[#4F2A1D]"><span>🩺</span>AI 비용 분석</h2>
+                <h2 className="flex items-center gap-2 text-lg font-bold text-[#1F2937]"><span>🩺</span>AI 비용 분석</h2>
                 {isPremiumUser ? (
-                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2 text-sm font-semibold text-white">
+                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] px-4 py-2 text-sm font-semibold text-white">
                     이 가격이 궁금하세요?
                   </button>
                 ) : null}
               </div>
               {loading ? (
-                <p className="mt-3 text-sm text-[#8B6B4E]">구독 상태를 확인 중입니다...</p>
+                <p className="mt-3 text-sm text-[#6B7280]">구독 상태를 확인 중입니다...</p>
               ) : isPremiumUser && isChatOpen ? (
-                <p className="mt-3 rounded-xl bg-[#FFF8F0] p-4 text-sm text-[#6B4226]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
+                <p className="mt-3 rounded-xl bg-[#F5E5FC] p-4 text-sm text-[#1F2937]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
               ) : !isPremiumUser ? (
                 <div className="mt-4">
                   <Paywall title="AI 비용 분석은 프리미엄 전용 기능입니다" description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한 제공돼요." featureName="AI 비용 분석" />

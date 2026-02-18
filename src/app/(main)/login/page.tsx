@@ -48,10 +48,10 @@ export default function LoginPage() {
         <div className="mb-8 text-center">
           <Link href="/" className="mb-4 inline-block">
             <Image src="/logo.png" alt="PetHealth+" width={48} height={48} className="mx-auto rounded-xl" />
-            <h1 className="mt-3 text-xl font-bold text-[#0B3041]">PetHealth+</h1>
+            <h1 className="mt-3 text-xl font-bold text-[#1F2937]">PetHealth+</h1>
           </Link>
-          <h1 className="mb-2 text-xl font-bold text-[#0B3041]">로그인</h1>
-          <p className="text-sm text-[#64748B]">우리 아이 건강 관리를 시작하세요</p>
+          <h1 className="mb-2 text-xl font-bold text-[#1F2937]">로그인</h1>
+          <p className="text-sm text-[#6B7280]">우리 아이 건강 관리를 시작하세요</p>
         </div>
 
         {error && (
@@ -62,10 +62,10 @@ export default function LoginPage() {
           <button
             onClick={handleGoogle}
             disabled={loading !== ''}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-3.5 text-sm font-semibold text-[#0B3041] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-3.5 text-sm font-semibold text-[#1F2937] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
           >
             {loading === 'google' ? (
-              <svg className="h-5 w-5 animate-spin text-[#94A3B8]" viewBox="0 0 24 24" fill="none">
+              <svg className="h-5 w-5 animate-spin text-[#6B7280]" viewBox="0 0 24 24" fill="none">
                 <circle
                   className="opacity-25"
                   cx="12"
@@ -146,20 +146,20 @@ export default function LoginPage() {
 
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-[#E2E8F0]" />
-          <span className="text-xs text-[#94A3B8]">또는</span>
+          <span className="text-xs text-[#6B7280]">또는</span>
           <div className="h-px flex-1 bg-[#E2E8F0]" />
         </div>
 
         <Link
           href="/"
-          className="block w-full rounded-xl border border-[#E2E8F0] bg-white py-3 text-center text-sm font-medium text-[#64748B] transition-all duration-200 hover:bg-[#F8FAFC]"
+          className="block w-full rounded-xl border border-[#E2E8F0] bg-white py-3 text-center text-sm font-medium text-[#6B7280] transition-all duration-200 hover:bg-[#F8FAFC]"
         >
           로그인 없이 둘러보기
         </Link>
 
-        <p className="mt-6 text-center text-xs text-[#94A3B8]">
-          로그인 시 <Link href="/terms" className="text-[#64748B] underline">이용약관</Link> 및{' '}
-          <Link href="/privacy" className="text-[#64748B] underline">
+        <p className="mt-6 text-center text-xs text-[#6B7280]">
+          로그인 시 <Link href="/terms" className="text-[#6B7280] underline">이용약관</Link> 및{' '}
+          <Link href="/privacy" className="text-[#6B7280] underline">
             개인정보처리방침
           </Link>
           에 동의합니다.
