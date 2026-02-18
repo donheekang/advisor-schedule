@@ -109,11 +109,11 @@ export function Navbar() {
 
           <div className="hidden md:block">
             {user ? (
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#48B8D0] text-xs font-bold text-white">
+              <Link href="/mypage" className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#48B8D0] text-xs font-bold text-white transition hover:bg-[#3CA8BF]">
                   {user.displayName?.[0] || user.email?.[0] || '?'}
                 </div>
-              </div>
+              </Link>
             ) : (
               <Link
                 href="/login"
@@ -169,12 +169,15 @@ export function Navbar() {
           </div>
 
           {user ? (
-            <div className="mt-8 flex items-center justify-center gap-2 rounded-lg border border-[#48B8D0]/30 bg-[#F5E5FC] px-4 py-2 text-sm font-semibold text-[#0B3041]">
+            <Link
+              href="/mypage"
+              className="mt-8 flex items-center justify-center gap-2 rounded-lg border border-[#48B8D0]/30 bg-[#F5E5FC] px-4 py-2 text-sm font-semibold text-[#0B3041] transition hover:bg-[#F5E5FC]/70"
+            >
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#48B8D0] text-xs font-bold text-white">
                 {user.displayName?.[0] || user.email?.[0] || '?'}
               </span>
-              로그인 상태
-            </div>
+              마이페이지
+            </Link>
           ) : (
             <Link
               href="/login"
