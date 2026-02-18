@@ -102,7 +102,7 @@ export default function CategoryPage({
   );
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
         {/* 헤더 */}
         <header className="space-y-3">
@@ -128,7 +128,7 @@ export default function CategoryPage({
               className={`rounded-full px-4 py-2 text-xs font-bold transition ${
                 c.slug === cat.slug
                   ? 'bg-gradient-to-r from-[#48B8D0] to-[#FB923C] text-white shadow-md'
-                  : 'border border-[#F8C79F] bg-white text-[#7C4A2D] hover:bg-[#FFF8F0]'
+                  : 'border border-[#F8C79F] bg-white text-[#7C4A2D] hover:bg-[#D4B8C0]'
               }`}
             >
               {c.icon} {c.title}
@@ -146,7 +146,7 @@ export default function CategoryPage({
               {seedItems.map((item) => (
                 <div
                   key={item.name}
-                  className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-4 ring-1 ring-[#F8C79F]/30"
+                  className="rounded-2xl bg-gradient-to-b from-[#D4B8C0] to-[#FFEDD5] p-4 ring-1 ring-[#F8C79F]/30"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-bold text-[#4F2A1D]">{item.name}</p>
@@ -210,7 +210,7 @@ export default function CategoryPage({
                   {products.map((product) => (
                     <div
                       key={product.name}
-                      className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-4 ring-1 ring-[#F8C79F]/30"
+                      className="rounded-2xl bg-gradient-to-b from-[#D4B8C0] to-[#FFEDD5] p-4 ring-1 ring-[#F8C79F]/30"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 space-y-1">

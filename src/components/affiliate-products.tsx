@@ -30,7 +30,7 @@ export default function AffiliateProducts({ itemName }: AffiliateProductsProps) 
   return (
     <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
       <h2 className="text-lg font-extrabold text-[#4F2A1D]">🛒 관련 제품 추천</h2>
-      <div className="mt-4 rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
+      <div className="mt-4 rounded-2xl bg-gradient-to-b from-[#D4B8C0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
         <p className="text-sm font-bold text-[#4F2A1D]">{matchedProduct.productName}</p>
         <a
           href={createCoupangLink(matchedProduct.productName)}

@@ -190,7 +190,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
   }, []);
 
   return (
-    <div className="space-y-16 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 md:p-8">
+    <div className="space-y-16 rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] p-5 md:p-8">
       <Section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#FFE9D2] via-[#FFD5AE] to-[#FFC38A] px-6 py-16 md:px-12 md:py-20">
         <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#FDBA74]/45 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 left-12 h-56 w-56 rounded-full bg-[#FB923C]/30 blur-3xl" />

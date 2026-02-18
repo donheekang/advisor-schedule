@@ -25,7 +25,7 @@ export default async function GuidesIndexPage() {
   }, {});
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <div className="mx-auto w-full max-w-6xl space-y-8">
         <header className="space-y-2 text-center">
           <h1 className="text-3xl font-extrabold text-[#4F2A1D] md:text-4xl">반려동물 진료비 가이드 모음</h1>

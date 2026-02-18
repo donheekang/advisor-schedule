@@ -28,7 +28,7 @@ export default function Paywall({
   };
 
   return (
-    <section className="rounded-3xl bg-[#FFF8F0] p-6 ring-1 ring-[#F8C79F]/30">
+    <section className="rounded-3xl bg-[#D4B8C0] p-6 ring-1 ring-[#F8C79F]/30">
       <div className="space-y-2">
         <p className="inline-flex rounded-full bg-white px-3 py-1 text-xs font-bold text-[#48B8D0] shadow-sm">
           💎 프리미엄 전용
@@ -60,7 +60,7 @@ export default function Paywall({
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="이메일 주소를 입력해 주세요"
-              className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-2.5 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none transition focus:border-[#48B8D0] focus:ring-2 focus:ring-[#48B8D0]/20"
+              className="w-full rounded-2xl border border-[#F8C79F] bg-[#D4B8C0] px-4 py-2.5 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none transition focus:border-[#48B8D0] focus:ring-2 focus:ring-[#48B8D0]/20"
             />
             <button
               type="submit"

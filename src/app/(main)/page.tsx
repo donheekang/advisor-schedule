@@ -93,7 +93,7 @@ export default function HomePage() {
                 </span>
               </h1>
               <p className="mx-auto mb-8 max-w-lg text-base text-[#6B7280] md:text-lg">
-                Claude AI가 증상을 분석하고, 예상 질환과 진료비 범위를 알려드려요.
+                AI가 증상을 분석하고, 예상 질환과 진료비 범위를 알려드려요.
               </p>
               <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <a
@@ -204,7 +204,7 @@ export default function HomePage() {
               <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
                 <div className="mb-3 text-3xl">🤖</div>
                 <div className="mb-2 text-xl font-bold text-[#48B8D0]">AI 진료비 분석</div>
-                <p className="text-sm text-white/70">Claude AI가 증상을 분석하고 예상 진료비를 알려드려요</p>
+                <p className="text-sm text-white/70">AI가 증상을 분석하고 예상 진료비를 알려드려요</p>
               </div>
               <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
                 <div className="mb-3 text-3xl">📊</div>
