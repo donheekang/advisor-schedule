@@ -48,9 +48,9 @@ export default function LoginPage() {
         <div className="mb-8 text-center">
           <Link href="/" className="mb-4 inline-block">
             <Image src="/logo.png" alt="PetHealth+" width={48} height={48} className="mx-auto rounded-xl" />
-            <h1 className="mt-3 text-xl font-bold text-[#1B2A4A]">PetHealth+</h1>
+            <h1 className="mt-3 text-xl font-bold text-[#0B3041]">PetHealth+</h1>
           </Link>
-          <h1 className="mb-2 text-xl font-bold text-[#1B2A4A]">로그인</h1>
+          <h1 className="mb-2 text-xl font-bold text-[#0B3041]">로그인</h1>
           <p className="text-sm text-[#64748B]">우리 아이 건강 관리를 시작하세요</p>
         </div>
 
@@ -62,7 +62,7 @@ export default function LoginPage() {
           <button
             onClick={handleGoogle}
             disabled={loading !== ''}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-3.5 text-sm font-semibold text-[#1B2A4A] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-3.5 text-sm font-semibold text-[#0B3041] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
           >
             {loading === 'google' ? (
               <svg className="h-5 w-5 animate-spin text-[#94A3B8]" viewBox="0 0 24 24" fill="none">

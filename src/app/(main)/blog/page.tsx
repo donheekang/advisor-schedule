@@ -12,7 +12,7 @@ export default async function BlogListPage() {
   const posts = await getAllBlogPosts();
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 pt-24 pb-10 md:px-8 md:pb-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#F5E5FC] to-[#FFF0E6] px-5 pt-24 pb-10 md:px-8 md:pb-12">
       <div className="mx-auto w-full max-w-5xl space-y-8">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#7C4A2D] shadow-sm">
@@ -32,13 +32,13 @@ export default async function BlogListPage() {
             >
               <div className="space-y-3 p-7">
                 <p className="text-xs font-semibold text-[#A36241]">{post.date}</p>
-                <h2 className="text-xl font-extrabold text-[#4F2A1D] group-hover:text-[#F97316]">
+                <h2 className="text-xl font-extrabold text-[#4F2A1D] group-hover:text-[#48B8D0]">
                   {post.title}
                 </h2>
                 <p className="text-sm leading-relaxed text-[#7C4A2D]">{post.description}</p>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="inline-flex text-sm font-bold text-[#F97316] group-hover:underline"
+                  className="inline-flex text-sm font-bold text-[#48B8D0] group-hover:underline"
                 >
                   읽어보기 →
                 </Link>

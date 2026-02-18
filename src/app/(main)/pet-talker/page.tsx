@@ -40,7 +40,7 @@ const EMOTION_META: Record<EmotionCode, EmotionMeta> = {
   proud: { emoji: "😏", label: "도도", background: "#F3E8FF", border: "#8B5CF6", animationClassName: "emotion-animate-shake" },
   love: { emoji: "🥰", label: "사랑", background: "#FCE7F3", border: "#EC4899", animationClassName: "emotion-animate-heartbeat" },
   sleepy: { emoji: "😴", label: "나른", background: "#E0E7FF", border: "#6366F1", animationClassName: "emotion-animate-breathe" },
-  hungry: { emoji: "🤤", label: "배고픔", background: "#FFEDD5", border: "#F97316", animationClassName: "emotion-animate-bounce" }
+  hungry: { emoji: "🤤", label: "배고픔", background: "#FFEDD5", border: "#48B8D0", animationClassName: "emotion-animate-bounce" }
 };
 
 const ERROR_MESSAGE_BY_TYPE: Record<ErrorType, string> = {
@@ -401,7 +401,7 @@ export default function PetTalkerPage() {
   const emotionMeta = EMOTION_META[emotion];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-4 pt-24 pb-8 text-[#2D2D2D] md:pb-12">
+    <main className="min-h-screen bg-gradient-to-b from-[#F5E5FC] to-[#FFF0E6] px-4 pt-24 pb-8 text-[#2D2D2D] md:pb-12">
       <section className="mx-auto flex w-full max-w-md flex-col gap-6">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#7C4A2D] shadow-sm">{usageText}</p>
@@ -418,7 +418,7 @@ export default function PetTalkerPage() {
               id="pet-selector"
               value={selectedPetId}
               onChange={(event) => setSelectedPetId(event.target.value)}
-              className="w-full rounded-xl border border-[#FDBA74] bg-white px-3 py-2 text-sm text-[#5A3325] outline-none focus:border-[#F97316]"
+              className="w-full rounded-xl border border-[#FDBA74] bg-white px-3 py-2 text-sm text-[#5A3325] outline-none focus:border-[#48B8D0]"
             >
               {pets.map((pet) => (
                 <option key={pet.id} value={pet.id}>
@@ -468,7 +468,7 @@ export default function PetTalkerPage() {
                     }
                   }
                 }}
-                className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 text-center text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#F97316]"
+                className="w-full rounded-2xl border border-[#F8C79F] bg-[#F5E5FC] px-4 py-3 text-center text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#48B8D0]"
               />
             </div>
           </div>
@@ -492,7 +492,7 @@ export default function PetTalkerPage() {
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
                 className={`cursor-pointer rounded-3xl border bg-gradient-to-b from-white to-[#FFF6EE] p-6 shadow-lg transition ${
-                  isDragging ? "border-[#F97316]" : "border-[#F8C79F]"
+                  isDragging ? "border-[#48B8D0]" : "border-[#F8C79F]"
                 }`}
                 aria-label="사진 업로드"
               >
@@ -540,7 +540,7 @@ export default function PetTalkerPage() {
                         type="button"
                         onClick={() => setUserMessage(quick)}
                         className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                          userMessage === quick ? "bg-[#F97316] text-white shadow-md" : "bg-[#FFF0E6] text-[#7C4A2D] hover:bg-[#FFE0CC]"
+                          userMessage === quick ? "bg-[#48B8D0] text-white shadow-md" : "bg-[#FFF0E6] text-[#7C4A2D] hover:bg-[#FFE0CC]"
                         }`}
                       >
                         {quick}
@@ -561,7 +561,7 @@ export default function PetTalkerPage() {
                       }}
                       placeholder="직접 입력해도 돼요 (최대 50자)"
                       maxLength={50}
-                      className="w-full rounded-2xl border border-[#F8C79F] bg-[#FFF8F0] px-4 py-3 pr-12 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20"
+                      className="w-full rounded-2xl border border-[#F8C79F] bg-[#F5E5FC] px-4 py-3 pr-12 text-sm text-[#4F2A1D] placeholder-[#C4956E] outline-none focus:border-[#48B8D0] focus:ring-2 focus:ring-[#48B8D0]/20"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#C4956E]">{userMessage.length}/50</span>
                   </div>
@@ -570,7 +570,7 @@ export default function PetTalkerPage() {
                 <button
                   type="button"
                   onClick={() => void generateSpeech()}
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#8AE1FC] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
                 >
                   🐾 우리 아이의 반응 보기
                 </button>
@@ -600,7 +600,7 @@ export default function PetTalkerPage() {
                 <p className="text-base font-medium text-[#6B3D2A]">우리 아이가 생각하고 있어요...</p>
                 <div className="mt-2 inline-flex items-center gap-1">
                   {[1, 2, 3].map((dot) => (
-                    <span key={dot} className={`h-2 w-2 rounded-full bg-[#F97316] ${typingDots >= dot ? "opacity-100" : "opacity-25"}`} />
+                    <span key={dot} className={`h-2 w-2 rounded-full bg-[#48B8D0] ${typingDots >= dot ? "opacity-100" : "opacity-25"}`} />
                   ))}
                 </div>
               </div>
@@ -625,7 +625,7 @@ export default function PetTalkerPage() {
 
               {userMessage && (
                 <div className="flex justify-end">
-                  <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-[#F97316] px-4 py-2.5 text-sm font-medium text-white shadow-md">
+                  <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-[#48B8D0] px-4 py-2.5 text-sm font-medium text-white shadow-md">
                     {userMessage}
                   </div>
                 </div>
@@ -650,7 +650,7 @@ export default function PetTalkerPage() {
                   <button
                     type="button"
                     onClick={handleSpeechPlayback}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#FB923C] text-white shadow-md"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#8AE1FC] text-white shadow-md"
                     aria-label="대사 음성 재생"
                   >
                     {isSpeaking ? (
@@ -683,7 +683,7 @@ export default function PetTalkerPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="rounded-2xl border border-[#F97316] bg-white px-4 py-4 text-base font-bold text-[#C2410C]"
+                  className="rounded-2xl border border-[#48B8D0] bg-white px-4 py-4 text-base font-bold text-[#C2410C]"
                 >
                   다시 해보기
                 </button>
@@ -701,7 +701,7 @@ export default function PetTalkerPage() {
                     void navigator.clipboard.writeText(`${shareTitle}\n${shareText}\n${window.location.href}`);
                     setErrorMessage("공유 링크를 복사했어요. 원하는 앱에 붙여넣어 공유해 보세요!");
                   }}
-                  className="rounded-2xl bg-[#F97316] px-4 py-4 text-base font-bold text-white shadow-md"
+                  className="rounded-2xl bg-[#48B8D0] px-4 py-4 text-base font-bold text-white shadow-md"
                 >
                   공유하기
                 </button>
@@ -715,7 +715,7 @@ export default function PetTalkerPage() {
                 <div className="space-y-3">
                   <p>{errorMessage}</p>
                   {errorType === "usage_exceeded" ? (
-                    <Link href="https://apps.apple.com/" className="inline-flex rounded-lg bg-[#F97316] px-4 py-2 text-xs font-bold text-white">
+                    <Link href="https://apps.apple.com/" className="inline-flex rounded-lg bg-[#48B8D0] px-4 py-2 text-xs font-bold text-white">
                       앱 다운로드
                     </Link>
                   ) : null}
@@ -727,9 +727,9 @@ export default function PetTalkerPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-gradient-to-r from-[#F97316] to-[#FB923C] p-6 text-center shadow-lg">
+        <section className="rounded-3xl bg-gradient-to-r from-[#48B8D0] to-[#8AE1FC] p-6 text-center shadow-lg">
           <p className="text-sm font-semibold text-white">PetHealth+ 앱에서 더 많은 기능을 만나보세요</p>
-          <button type="button" className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold text-[#EA580C] shadow-sm">
+          <button type="button" className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold text-[#3CA8BF] shadow-sm">
             앱 다운로드 (준비 중)
           </button>
         </section>

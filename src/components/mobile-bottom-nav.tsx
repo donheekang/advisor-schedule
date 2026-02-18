@@ -59,13 +59,13 @@ export function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={"relative flex flex-col items-center gap-0.5 px-4 py-1 " + (active ? "text-[#F97316]" : "text-[#94A3B8]")}
+              className={"relative flex flex-col items-center gap-0.5 px-4 py-1 " + (active ? "text-[#48B8D0]" : "text-[#94A3B8]")}
             >
               {active && (
-                <span className="absolute -top-2 h-0.5 w-6 rounded-full bg-[#F97316]" />
+                <span className="absolute -top-2 h-0.5 w-6 rounded-full bg-[#48B8D0]" />
               )}
               {item.icon(active)}
-              <span className={"text-[10px] font-medium " + (active ? "text-[#F97316]" : "text-[#94A3B8]")}>
+              <span className={"text-[10px] font-medium " + (active ? "text-[#48B8D0]" : "text-[#94A3B8]")}>
                 {item.label}
               </span>
             </Link>
