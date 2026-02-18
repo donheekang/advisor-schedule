@@ -14,7 +14,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
         strategy="afterInteractive"
       />
-      <div className="flex min-h-screen flex-col bg-[#FFF8F0]">
+      <div className="flex min-h-screen flex-col bg-[#D4B8C0]">
         <Navbar />
         <main className="flex-1 pb-16 md:pb-0">{children}</main>
         <Footer />

@@ -12,10 +12,10 @@ export default async function BlogListPage() {
   const posts = await getAllBlogPosts();
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0]/40 to-white px-5 pt-24 pb-10 md:px-8 md:pb-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0]/10 to-white px-5 pb-10 pt-24 md:px-8 md:pb-12">
       <div className="mx-auto w-full max-w-5xl space-y-8">
         <header className="space-y-3 text-center">
-          <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#6B7280] shadow-sm">
+          <p className="inline-flex rounded-full bg-[#D4B8C0]/50 px-4 py-1.5 text-sm font-bold text-[#B28B84] shadow-sm">
             📖 보호자를 위한 가이드
           </p>
           <h1 className="text-3xl font-extrabold text-[#1F2937] md:text-4xl">
@@ -28,7 +28,7 @@ export default async function BlogListPage() {
           {posts.map((post) => (
             <article
               key={post.slug}
-              className="group overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-[#B28B84]/20 transition hover:-translate-y-1 hover:shadow-xl"
+              className="group overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-[#B28B84]/20 transition hover:shadow-md"
             >
               <div className="space-y-3 p-7">
                 <p className="text-xs font-semibold text-[#B28B84]">{post.date}</p>

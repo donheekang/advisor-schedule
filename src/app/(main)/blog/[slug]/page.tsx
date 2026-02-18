@@ -51,7 +51,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
   }
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <article className="mx-auto max-w-2xl space-y-8">
         <header className="space-y-3 border-b border-[#F8C79F]/40 pb-6">
           <Link

@@ -76,7 +76,7 @@ export default function AiCarePage() {
 
   const probabilityClassName = (probability: string) => {
     if (probability === '높음') {
-      return 'border border-[#B28B84] bg-[#D4B8C0]/50 text-[#1F2937]';
+      return 'bg-[#D4B8C0] text-[#48B8D0] border border-[#B28B84]';
     }
 
     if (probability === '보통') {
@@ -125,7 +125,7 @@ export default function AiCarePage() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 pb-20 pt-24 md:pt-28">
+    <main className="mx-auto max-w-4xl bg-[#D4B8C0]/20 px-4 pb-20 pt-24 md:pt-28">
       <section className="rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
         <div className="mb-6 flex items-center gap-3">
           <span className="relative flex h-3 w-3">
@@ -134,7 +134,7 @@ export default function AiCarePage() {
           </span>
           <h1 className="text-2xl font-extrabold text-[#1F2937] md:text-3xl">AI 진료비 견적서</h1>
         </div>
-        <p className="text-sm text-[#6B7280] md:text-base">증상을 입력하면 Claude AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
+        <p className="text-sm text-[#6B7280] md:text-base">증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
       </section>
 
       <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
@@ -256,7 +256,7 @@ export default function AiCarePage() {
             'mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-4 text-sm font-bold text-white transition ' +
             (loading || !symptoms.trim()
               ? 'bg-[#CBD5E1] cursor-not-allowed'
-              : 'bg-[#48B8D0] hover:opacity-95')
+              : 'bg-[#48B8D0] hover:bg-[#3CA8BF]')
           }
         >
           {loading ? (
@@ -265,7 +265,7 @@ export default function AiCarePage() {
                 <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-90" d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
               </svg>
-              Claude AI가 분석 중이에요...
+              AI가 분석 중이에요...
             </>
           ) : (
             'AI 진료비 견적서 생성하기'
@@ -276,7 +276,7 @@ export default function AiCarePage() {
       <section ref={resultRef} className="mt-6">
         {result ? (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-[#B28B84]/40 bg-[#D4B8C0]/40 px-4 py-3 text-sm text-[#1F2937]">
+            <div className="rounded-2xl border border-[#FED7AA] bg-[#D4B8C0] px-4 py-3 text-sm text-[#9A3412]">
               본 결과는 참고용 정보이며 의료적 진단이 아닙니다. 정확한 진단과 치료는 반드시 동물병원 수의사 상담이 필요합니다.
             </div>
 
@@ -285,7 +285,7 @@ export default function AiCarePage() {
                 key={condition.name + '-' + index.toString()}
                 className={
                   'rounded-2xl border p-5 ' +
-                  (index === 0 ? 'border-[#48B8D0]/30 bg-[#D4B8C0]/40' : 'border-[#E2E8F0] bg-white')
+                  (index === 0 ? 'border-[#48B8D0]/30 bg-[#D4B8C0]' : 'border-[#E2E8F0] bg-white')
                 }
               >
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">

@@ -57,7 +57,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
   const relatedGuides = await getGuidesByCategory(guide.category, guide.slug);
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <TrackPageView eventName="guide_view" params={{ guide_slug: guide.slug }} />
       <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_280px]">
         <article className="rounded-3xl bg-white/90 p-6 shadow-lg ring-1 ring-[#F8C79F]/30 md:p-8">
@@ -87,7 +87,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
           <h2 className="text-sm font-extrabold text-[#4F2A1D]">같은 카테고리의 다른 가이드</h2>
           <div className="space-y-3">
             {relatedGuides.slice(0, 8).map((item) => (
-              <Link key={item.slug} href={`/guides/${item.slug}`} className="block rounded-2xl bg-[#FFF8F0] p-3 text-sm text-[#7C4A2D] hover:bg-[#FFF0E6]">
+              <Link key={item.slug} href={`/guides/${item.slug}`} className="block rounded-2xl bg-[#D4B8C0] p-3 text-sm text-[#7C4A2D] hover:bg-[#FFF0E6]">
                 <p className="font-semibold text-[#4F2A1D]">{item.title}</p>
                 <p className="mt-1 line-clamp-2 text-xs text-[#A36241]">{item.description}</p>
               </Link>

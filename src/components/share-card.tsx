@@ -145,7 +145,7 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
   };
 
   return (
-    <section className="space-y-4 rounded-3xl bg-[#FFF8F0] p-6">
+    <section className="space-y-4 rounded-3xl bg-[#D4B8C0] p-6">
       <h2 className="text-xl font-bold text-[#5A3325]">SNS 공유 카드</h2>
       <p className="text-sm text-[#8B5A3C]">이미지 다운로드, 카카오톡 공유, 링크 복사를 한 번에 할 수 있어요.</p>
 

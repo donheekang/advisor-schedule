@@ -401,10 +401,10 @@ export default function PetTalkerPage() {
   const emotionMeta = EMOTION_META[emotion];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#D4B8C0] to-[#D4B8C0] px-4 pt-24 pb-8 text-[#1F2937] md:pb-12">
+    <main className="min-h-screen bg-[#D4B8C0]/20 px-4 pb-8 pt-24 text-[#1F2937] md:pb-12">
       <section className="mx-auto flex w-full max-w-md flex-col gap-6">
         <header className="space-y-3 text-center">
-          <p className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#6B7280] shadow-sm">{usageText}</p>
+          <p className="inline-flex rounded-full border border-[#48B8D0] px-4 py-2 text-sm font-semibold text-[#48B8D0] shadow-sm">{usageText}</p>
           <h1 className="text-3xl font-extrabold leading-tight text-[#1F2937]">우리 아이가 말을 한다면 🐾</h1>
           <p className="text-sm leading-relaxed text-[#6B7280]">사진 한 장으로 우리 아이의 마음을 따뜻한 한마디로 들어보세요.</p>
         </header>
@@ -491,7 +491,7 @@ export default function PetTalkerPage() {
                 }}
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
-                className={"cursor-pointer rounded-3xl border bg-gradient-to-b from-white to-[#D4B8C0] p-6 shadow-lg transition " +
+                className={"cursor-pointer rounded-3xl border bg-gradient-to-b from-[#D4B8C0]/20 to-[#D4B8C0]/30 p-6 shadow-lg transition " +
                   (isDragging ? "border-[#48B8D0]" : "border-[#B28B84]")}
                 aria-label="사진 업로드"
               >
@@ -727,7 +727,7 @@ export default function PetTalkerPage() {
 
         <section className="rounded-3xl bg-[#B28B84] p-6 text-center shadow-lg">
           <p className="text-sm font-semibold text-white">PetHealth+ 앱에서 더 많은 기능을 만나보세요</p>
-          <button type="button" className="mt-3 w-full rounded-2xl bg-[#48B8D0] px-4 py-3 text-sm font-bold text-white shadow-sm">
+          <button type="button" className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold text-[#B28B84] shadow-sm">
             앱 다운로드 (준비 중)
           </button>
         </section>
