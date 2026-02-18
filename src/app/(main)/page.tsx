@@ -93,7 +93,7 @@ export default function HomePage() {
                 </span>
               </h1>
               <p className="mx-auto mb-8 max-w-lg text-base text-[#6B7280] md:text-lg">
-                Claude AI가 증상을 분석하고, 예상 질환과 진료비 범위를 알려드려요.
+                AI가 증상을 분석하고, 예상 질환과 진료비 범위를 알려드려요.
               </p>
               <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <a
@@ -204,7 +204,7 @@ export default function HomePage() {
               <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
                 <div className="mb-3 text-3xl">🤖</div>
                 <div className="mb-2 text-xl font-bold text-[#48B8D0]">AI 진료비 분석</div>
-                <p className="text-sm text-white/70">Claude AI가 증상을 분석하고 예상 진료비를 알려드려요</p>
+                <p className="text-sm text-white/70">AI가 증상을 분석하고 예상 진료비를 알려드려요</p>
               </div>
               <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
                 <div className="mb-3 text-3xl">📊</div>
@@ -266,6 +266,28 @@ export default function HomePage() {
           </div>
         </section>
       </AnimateOnScroll>
+
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-2xl px-4 text-center">
+          <div className="mb-4 text-3xl">📱</div>
+          <h2 className="mb-2 text-2xl font-extrabold text-[#0B3041]">앱에서 더 편리하게</h2>
+          <p className="mb-8 text-sm text-[#6B7280]">PetHealth+ 앱이 곧 출시돼요</p>
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <button
+              disabled
+              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#0B3041] px-6 py-3.5 text-sm font-bold text-white opacity-80"
+            >
+              App Store 출시 예정
+            </button>
+            <button
+              disabled
+              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#0B3041] px-6 py-3.5 text-sm font-bold text-white opacity-80"
+            >
+              ▶ Google Play 출시 예정
+            </button>
+          </div>
+        </div>
+      </section>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />

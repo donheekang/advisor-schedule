@@ -134,7 +134,7 @@ export default function AiCarePage() {
           </span>
           <h1 className="text-2xl font-extrabold text-[#1F2937] md:text-3xl">AI 진료비 견적서</h1>
         </div>
-        <p className="text-sm text-[#6B7280] md:text-base">증상을 입력하면 Claude AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
+        <p className="text-sm text-[#6B7280] md:text-base">증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
       </section>
 
       <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
@@ -265,7 +265,7 @@ export default function AiCarePage() {
                 <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-90" d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
               </svg>
-              Claude AI가 분석 중이에요...
+              AI가 분석 중이에요...
             </>
           ) : (
             'AI 진료비 견적서 생성하기'
