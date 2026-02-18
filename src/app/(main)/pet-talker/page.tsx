@@ -725,6 +725,11 @@ export default function PetTalkerPage() {
               )}
             </div>
           )}
+
+          <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
+            <p className="text-sm font-medium text-[#0B3041]">📱 앱에서 기록할수록 우리 아이를 더 잘 아는 AI가 돼요</p>
+            <p className="mt-1 text-xs text-[#6B7280]">PetHealth+ 앱 출시 예정</p>
+          </div>
         </section>
 
         <section className="rounded-3xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] p-6 text-center shadow-lg">
