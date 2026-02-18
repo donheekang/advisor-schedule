@@ -6,10 +6,9 @@ import { usePathname } from 'next/navigation';
 
 const NAV_ITEMS = [
   { href: '/', label: '홈' },
-  { href: '/pet-talker', label: '펫토커' },
-  { href: '/cost-search', label: '진료비 검색' },
-  { href: '/guide', label: '가이드' },
   { href: '/ai-care', label: 'AI 견적서' },
+  { href: '/cost-search', label: '진료비 검색' },
+  { href: '/pet-talker', label: '펫토커' },
   { href: '/blog', label: '블로그' }
 ];
 

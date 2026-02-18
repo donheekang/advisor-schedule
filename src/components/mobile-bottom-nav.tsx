@@ -14,20 +14,20 @@ const NAV_ITEMS = [
     )
   },
   {
-    href: '/cost-search',
-    label: '진료비',
-    icon: (active: boolean) => (
-      <svg className={"h-6 w-6 transition-transform duration-200 " + (active ? "scale-110" : "")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={active ? 2 : 1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-      </svg>
-    )
-  },
-  {
     href: '/ai-care',
     label: 'AI 견적',
     icon: (active: boolean) => (
       <svg className={"h-6 w-6 transition-transform duration-200 " + (active ? "scale-110" : "")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={active ? 2 : 1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+      </svg>
+    )
+  },
+  {
+    href: '/cost-search',
+    label: '진료비',
+    icon: (active: boolean) => (
+      <svg className={"h-6 w-6 transition-transform duration-200 " + (active ? "scale-110" : "")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={active ? 2 : 1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
       </svg>
     )
   },
