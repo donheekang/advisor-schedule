@@ -81,7 +81,7 @@ export default function CategoryPage({
       <section className="mx-auto max-w-4xl px-5 py-20 text-center">
         <p className="text-5xl">🔍</p>
         <h1 className="mt-4 text-2xl font-bold text-[#4F2A1D]">카테고리를 찾을 수 없어요</h1>
-        <Link href="/cost-search" className="mt-4 inline-block text-[#F97316] underline">
+        <Link href="/cost-search" className="mt-4 inline-block text-[#48B8D0] underline">
           진료비 검색으로 돌아가기
         </Link>
       </section>
@@ -108,7 +108,7 @@ export default function CategoryPage({
         <header className="space-y-3">
           <Link
             href="/cost-search"
-            className="inline-flex items-center gap-1 text-sm text-[#A36241] transition hover:text-[#F97316]"
+            className="inline-flex items-center gap-1 text-sm text-[#A36241] transition hover:text-[#48B8D0]"
           >
             ← 진료비 검색
           </Link>
@@ -127,7 +127,7 @@ export default function CategoryPage({
               href={`/cost-search/${c.slug}`}
               className={`rounded-full px-4 py-2 text-xs font-bold transition ${
                 c.slug === cat.slug
-                  ? 'bg-gradient-to-r from-[#F97316] to-[#FB923C] text-white shadow-md'
+                  ? 'bg-gradient-to-r from-[#48B8D0] to-[#FB923C] text-white shadow-md'
                   : 'border border-[#F8C79F] bg-white text-[#7C4A2D] hover:bg-[#FFF8F0]'
               }`}
             >
@@ -150,7 +150,7 @@ export default function CategoryPage({
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-bold text-[#4F2A1D]">{item.name}</p>
-                    <p className="text-lg font-extrabold text-[#F97316]">{toWon(item.avg)}</p>
+                    <p className="text-lg font-extrabold text-[#48B8D0]">{toWon(item.avg)}</p>
                   </div>
                   <div className="mt-2 flex items-center gap-4 text-xs text-[#A36241]">
                     <span>최소 {toWon(item.min)}</span>
@@ -160,7 +160,7 @@ export default function CategoryPage({
                   {/* 바 차트 */}
                   <div className="mt-2 h-2 w-full rounded-full bg-[#FFE7CF]">
                     <div
-                      className="h-2 rounded-full bg-[#F97316]"
+                      className="h-2 rounded-full bg-[#48B8D0]"
                       style={{
                         width: `${Math.max(10, ((item.avg - item.min) / (item.max - item.min)) * 100)}%`,
                         marginLeft: `${Math.max(0, ((item.min) / item.max) * 100 * 0.3)}%`,
@@ -170,7 +170,7 @@ export default function CategoryPage({
                   {/* 검색 링크 */}
                   <Link
                     href={`/cost-search?q=${encodeURIComponent(item.name)}`}
-                    className="mt-2 inline-block text-xs font-semibold text-[#F97316] underline"
+                    className="mt-2 inline-block text-xs font-semibold text-[#48B8D0] underline"
                   >
                     상세 비교하기 →
                   </Link>
@@ -224,7 +224,7 @@ export default function CategoryPage({
                           href={createCoupangSearchUrl(product.coupangKeyword)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="shrink-0 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
+                          className="shrink-0 rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
                         >
                           쿠팡에서 보기
                         </a>
@@ -253,7 +253,7 @@ export default function CategoryPage({
           <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
             <Link
               href="/ai-care"
-              className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl"
+              className="rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl"
             >
               무료 AI 견적서 →
             </Link>

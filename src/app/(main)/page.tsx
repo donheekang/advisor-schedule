@@ -79,7 +79,7 @@ export default function HomePage() {
   return (
     <>
       <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#F5E5FC] to-white pb-16 pt-28 md:pb-24 md:pt-36">
+        <section className="relative overflow-hidden bg-gradient-to-b from-[#D4B8C0]/40 to-white pb-16 pt-28 md:pb-24 md:pt-36">
           <div className="mx-auto max-w-6xl px-4">
             <div className="text-center">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#48B8D0]/10 px-4 py-2 text-sm font-medium text-[#48B8D0]">
@@ -98,13 +98,13 @@ export default function HomePage() {
               <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <a
                   href="/ai-care"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-white shadow-lg shadow-rose-200 transition hover:bg-[#3CA8BF] sm:w-auto"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-white shadow-lg shadow-[#48B8D0]/20 transition hover:opacity-95 sm:w-auto"
                 >
                   ✨ AI 견적서 받기
                 </a>
                 <a
                   href="/cost-search"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E2E8F0] bg-white px-8 py-4 text-base font-bold text-[#1F2937] transition hover:border-[#48B8D0] hover:text-[#48B8D0] sm:w-auto"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-gray-200 bg-white px-8 py-4 text-base font-bold text-[#1F2937] transition hover:border-[#48B8D0] hover:text-[#48B8D0] sm:w-auto"
                 >
                   🔍 진료비 검색
                 </a>
@@ -133,7 +133,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <a href="/ai-care" className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md">
                 <div className="mb-4 h-1 w-16 rounded-full bg-[#48B8D0]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-2xl">✨</div>
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#48B8D0]/10 text-2xl">✨</div>
                 <h3 className="mb-2 text-lg font-bold text-[#1F2937]">AI 견적서</h3>
                 <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요
@@ -145,7 +145,7 @@ export default function HomePage() {
                 className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
               >
                 <div className="mb-4 h-1 w-16 rounded-full bg-[#B28B84]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-2xl">🔍</div>
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#B28B84]/10 text-2xl">🔍</div>
                 <h3 className="mb-2 text-lg font-bold text-[#1F2937]">진료비 검색</h3>
                 <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   전국 평균과 비교해서 적정 가격을 확인하세요
@@ -156,8 +156,8 @@ export default function HomePage() {
                 href="/pet-talker"
                 className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
               >
-                <div className="mb-4 h-1 w-16 rounded-full bg-[#F5E5FC]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-2xl">🐾</div>
+                <div className="mb-4 h-1 w-16 rounded-full bg-[#D4B8C0]"></div>
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#D4B8C0] text-2xl">🐾</div>
                 <h3 className="mb-2 text-lg font-bold text-[#1F2937]">펫토커</h3>
                 <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   사진 한 장으로 우리 아이의 마음을 들어보세요
@@ -182,7 +182,7 @@ export default function HomePage() {
                 { num: '2', title: 'AI가 분석', desc: 'AI가 사진을 읽고 대사를 만들거나 진료비를 비교해요' },
                 { num: '3', title: '공유 & 기록', desc: 'SNS에 공유하고, 앱에서 기록하면 더 정확해져요' }
               ].map((step) => (
-                <div key={step.num} className="relative rounded-2xl bg-gradient-to-br from-[#F5E5FC] to-[#F5E5FC] p-6 md:p-8">
+                <div key={step.num} className="relative rounded-2xl bg-[#D4B8C0]/50 p-6 md:p-8">
                   <div className="relative z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#48B8D0] text-lg font-bold text-white shadow-lg shadow-[#48B8D0]/25">
                     {step.num}
                   </div>

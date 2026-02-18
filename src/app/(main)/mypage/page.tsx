@@ -218,18 +218,18 @@ export default function MyPage() {
       <AnimateOnScroll animation="fade-up">
         <div className="mx-auto max-w-md py-20 text-center">
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#FFF3E6]">
-            <span className="text-4xl text-[#F97316]/60">🐾</span>
+            <span className="text-4xl text-[#48B8D0]/60">🐾</span>
           </div>
           <h2 className="mb-2 text-xl font-bold text-[#4F2A1D]">로그인하면 우리 아이 진료 기록을 관리할 수 있어요</h2>
           <p className="mb-8 text-sm text-[#8B6B4E]">진료 기록이 쌓일수록 AI 분석이 더 정확해져요</p>
           <Link
             href="/login"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F97316] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#F97316]/25 active:translate-y-0 active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#48B8D0]/25 active:translate-y-0 active:scale-[0.98]"
           >
             로그인
           </Link>
           <p className="mt-4">
-            <Link href="/ai-care" className="text-sm font-medium text-[#F97316] hover:underline">
+            <Link href="/ai-care" className="text-sm font-medium text-[#48B8D0] hover:underline">
               또는 무료 AI 견적서부터 시작해보세요
             </Link>
           </p>
@@ -257,7 +257,7 @@ export default function MyPage() {
               href={APPSTORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 inline-flex rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2.5 font-bold text-white"
+              className="mt-3 inline-flex rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-4 py-2.5 font-bold text-white"
             >
               앱 다운로드
             </a>
@@ -272,7 +272,7 @@ export default function MyPage() {
                   onClick={() => setSelectedPetId(pet.id)}
                   className={`rounded-full px-4 py-2 text-xs font-bold ${
                     pet.id === selectedPetId
-                      ? 'bg-gradient-to-r from-[#F97316] to-[#FB923C] text-white'
+                      ? 'bg-gradient-to-r from-[#48B8D0] to-[#FB923C] text-white'
                       : 'bg-[#FFF8F0] text-[#7C4A2D] ring-1 ring-[#F8C79F]/30'
                   }`}
                 >
@@ -323,7 +323,7 @@ export default function MyPage() {
               href={APPSTORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex text-sm font-bold text-[#F97316] underline underline-offset-4"
+              className="mt-4 inline-flex text-sm font-bold text-[#48B8D0] underline underline-offset-4"
             >
               앱에서 상세 분석 보기 →
             </a>
@@ -336,7 +336,7 @@ export default function MyPage() {
       <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-xl font-extrabold text-[#4F2A1D]">C. 최근 진료 기록</h2>
-          <Link href="/mypage/records" className="text-sm font-bold text-[#F97316] underline underline-offset-4">
+          <Link href="/mypage/records" className="text-sm font-bold text-[#48B8D0] underline underline-offset-4">
             전체 기록 보기 →
           </Link>
         </div>
@@ -348,7 +348,7 @@ export default function MyPage() {
               <article key={record.id ?? `recent-record-${index}`} className="rounded-2xl bg-[#FFF8F0] p-4 ring-1 ring-[#F8C79F]/20">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-sm font-bold text-[#4F2A1D]">{formatVisitDate(record.visit_date)}</p>
-                  <p className="text-sm font-extrabold text-[#F97316]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
+                  <p className="text-sm font-extrabold text-[#48B8D0]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
                 </div>
                 <p className="mt-1 text-sm text-[#7C4A2D]">{record.hospital_name ?? '병원 정보 없음'}</p>
                 <ul className="mt-3 space-y-1 text-xs text-[#7C4A2D]">
@@ -386,7 +386,7 @@ export default function MyPage() {
                   href={createCoupangSearchUrl(product.coupangKeyword)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex rounded-xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-3 py-2 text-xs font-bold text-white"
+                  className="mt-3 inline-flex rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#FB923C] px-3 py-2 text-xs font-bold text-white"
                 >
                   쿠팡 파트너스 보기
                 </a>
