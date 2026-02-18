@@ -270,8 +270,8 @@ export default function HomePage() {
       <section className="bg-white py-16">
         <div className="mx-auto max-w-2xl px-4 text-center">
           <div className="mb-4 text-3xl">📱</div>
-          <h2 className="mb-2 text-2xl font-extrabold text-[#0B3041]">앱에서 더 편리하게</h2>
-          <p className="mb-8 text-sm text-[#6B7280]">PetHealth+ 앱이 곧 출시돼요</p>
+          <h2 className="mb-2 text-2xl font-extrabold text-[#0B3041]">우리 아이 건강 기록, 앱으로 관리하세요</h2>
+          <p className="mb-8 text-sm text-[#6B7280]">진료 기록부터 건강 관리까지, PetHealth+ 앱이 곧 출시돼요</p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <button
               disabled

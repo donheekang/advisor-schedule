@@ -208,6 +208,11 @@ export default function CostSearchClient() {
               >
                 🔍 진료비 검색하기
               </button>
+
+              <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
+                <p className="text-sm font-medium text-[#0B3041]">📱 앱에서 진료 기록을 관리하면 비용 비교가 더 쉬워져요</p>
+                <p className="mt-1 text-xs text-[#6B7280]">PetHealth+ 앱 출시 예정</p>
+              </div>
             </form>
           </div>
         </AnimateOnScroll>

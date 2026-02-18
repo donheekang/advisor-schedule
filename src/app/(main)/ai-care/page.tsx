@@ -248,6 +248,11 @@ export default function AiCarePage() {
 
         {error ? <p className="mt-3 rounded-xl bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#DC2626]">{error}</p> : null}
 
+        <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
+          <p className="text-sm font-medium text-[#0B3041]">📱 앱에서 건강 기록을 연동하면 더 정확한 견적을 받을 수 있어요</p>
+          <p className="mt-1 text-xs text-[#6B7280]">PetHealth+ 앱 출시 예정</p>
+        </div>
+
         <button
           type="button"
           onClick={handleAnalyze}
