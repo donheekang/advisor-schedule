@@ -248,7 +248,7 @@ export default function CostSearchClient() {
         {!searching && results.length === 0 && hasSearched && query && (
           <AnimateOnScroll animation="fade-in">
             <div className="py-16 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#D4B8C0]/40">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#F5E5FC]">
                 <span className="text-3xl text-[#48B8D0]/50">🔎</span>
               </div>
               <p className="mb-1 font-medium text-[#1F2937]">검색 결과가 없어요</p>
@@ -272,7 +272,7 @@ export default function CostSearchClient() {
               {loading ? (
                 <p className="mt-3 text-sm text-[#6B7280]">구독 상태를 확인 중입니다...</p>
               ) : isPremiumUser && isChatOpen ? (
-                <p className="mt-3 rounded-xl bg-[#D4B8C0]/40 p-4 text-sm text-[#1F2937]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
+                <p className="mt-3 rounded-xl bg-[#F5E5FC] p-4 text-sm text-[#1F2937]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
               ) : !isPremiumUser ? (
                 <div className="mt-4">
                   <Paywall title="AI 비용 분석은 프리미엄 전용 기능입니다" description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한 제공돼요." featureName="AI 비용 분석" />
