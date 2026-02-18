@@ -48,7 +48,7 @@ export default function LoginPage() {
         <div className="mb-8 text-center">
           <Link href="/" className="mb-4 inline-block">
             <Image src="/logo.png" alt="PetHealth+" width={48} height={48} className="mx-auto rounded-xl" />
-            <h1 className="mt-3 text-xl font-bold text-[#1F2937]">PetHealth+</h1>
+            <h1 className="mt-3 text-xl font-bold text-[#1F2937]">Pet<span className="text-[#48B8D0]">Health</span>+</h1>
           </Link>
           <h1 className="mb-2 text-xl font-bold text-[#1F2937]">로그인</h1>
           <p className="text-sm text-[#6B7280]">우리 아이 건강 관리를 시작하세요</p>
