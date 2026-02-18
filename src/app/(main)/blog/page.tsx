@@ -12,7 +12,7 @@ export default async function BlogListPage() {
   const posts = await getAllBlogPosts();
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#F5E5FC] to-[#F5E5FC] px-5 pt-24 pb-10 md:px-8 md:pb-12">
+    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#D4B8C0]/40 to-white px-5 pt-24 pb-10 md:px-8 md:pb-12">
       <div className="mx-auto w-full max-w-5xl space-y-8">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#6B7280] shadow-sm">

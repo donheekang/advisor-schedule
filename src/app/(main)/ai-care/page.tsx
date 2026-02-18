@@ -150,8 +150,8 @@ export default function AiCarePage() {
                 className={
                   'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
                   (petType === 'dog'
-                    ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
-                    : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
+                    ? 'border-[#48B8D0] bg-[#48B8D0]/5 text-[#48B8D0]'
+                    : 'border-gray-200 bg-white text-[#6B7280] hover:border-[#B28B84]')
                 }
               >
                 <span>🐶</span>
@@ -163,8 +163,8 @@ export default function AiCarePage() {
                 className={
                   'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
                   (petType === 'cat'
-                    ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
-                    : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
+                    ? 'border-[#48B8D0] bg-[#48B8D0]/5 text-[#48B8D0]'
+                    : 'border-gray-200 bg-white text-[#6B7280] hover:border-[#B28B84]')
                 }
               >
                 <span>🐱</span>
@@ -228,8 +228,8 @@ export default function AiCarePage() {
               className={
                 'rounded-full border px-3 py-2 text-xs font-medium transition ' +
                 (isChipSelected(chip.label)
-                  ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
-                  : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
+                  ? 'bg-[#48B8D0] border-[#48B8D0] text-white'
+                  : 'border-gray-200 bg-white text-[#6B7280] hover:border-[#B28B84]')
               }
             >
               <span className="mr-1">{chip.emoji}</span>
@@ -256,7 +256,7 @@ export default function AiCarePage() {
             'mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-4 text-sm font-bold text-white transition ' +
             (loading || !symptoms.trim()
               ? 'bg-[#CBD5E1] cursor-not-allowed'
-              : 'bg-gradient-to-r from-[#1F2937] to-[#1F2937] hover:opacity-95')
+              : 'bg-[#48B8D0] hover:opacity-95')
           }
         >
           {loading ? (

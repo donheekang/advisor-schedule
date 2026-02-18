@@ -62,7 +62,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
       <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_280px]">
         <article className="rounded-3xl bg-white/90 p-6 shadow-lg ring-1 ring-[#F8C79F]/30 md:p-8">
           <header className="space-y-4 border-b border-[#F8C79F]/30 pb-6">
-            <Link href="/guides" className="inline-flex text-sm font-medium text-[#A36241] hover:text-[#F97316]">
+            <Link href="/guides" className="inline-flex text-sm font-medium text-[#A36241] hover:text-[#48B8D0]">
               ← 가이드 목록으로
             </Link>
             <span className="inline-flex rounded-full bg-[#FFF0E6] px-3 py-1 text-xs font-bold text-[#7C4A2D]">

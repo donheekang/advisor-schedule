@@ -60,7 +60,7 @@ export function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link href="/" className={logoClassName + ' flex items-center gap-2'}>
             <Image src="/logo.png" alt="PetHealth+" width={32} height={32} className="rounded-lg" />
-            <span className="text-xl font-extrabold tracking-tight text-[#0B3041]">PetHealth+</span>
+            <span className="text-xl font-extrabold tracking-tight text-[#1F2937]">PetHealth+</span>
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">

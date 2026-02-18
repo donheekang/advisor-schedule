@@ -44,9 +44,9 @@ export function MobileBottomCTA() {
           const active = isActive(item.href);
           const itemClass =
             'relative flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 transition-all duration-200 ' +
-            (active ? 'text-[#F97316]' : 'text-[#94A3B8]');
+            (active ? 'text-[#48B8D0]' : 'text-[#94A3B8]');
           const iconClass = 'h-6 w-6 transition-transform duration-200 ' + (active ? 'scale-110' : '');
-          const labelClass = 'text-[10px] font-medium ' + (active ? 'text-[#F97316]' : 'text-[#94A3B8]');
+          const labelClass = 'text-[10px] font-medium ' + (active ? 'text-[#48B8D0]' : 'text-[#94A3B8]');
 
           return (
             <Link key={item.href} href={item.href} className={itemClass} aria-label={item.label}>
@@ -87,7 +87,7 @@ export function MobileBottomCTA() {
                 </svg>
               )}
               <span className={labelClass}>{item.label}</span>
-              {active && <span className="absolute -top-0.5 h-0.5 w-5 rounded-full bg-[#F97316]" />}
+              {active && <span className="absolute -top-0.5 h-0.5 w-5 rounded-full bg-[#48B8D0]" />}
             </Link>
           );
         })}

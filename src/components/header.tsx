@@ -53,7 +53,7 @@ export default function Header() {
                   href={item.href}
                   className={`rounded-full px-4 py-2 text-sm transition ${
                     isActive
-                      ? 'font-bold text-[#F97316]'
+                      ? 'font-bold text-[#48B8D0]'
                       : 'font-medium text-[#7C4A2D] hover:bg-[#FFF0E6] hover:text-[#4F2A1D]'
                   }`}
                 >
@@ -72,7 +72,7 @@ export default function Header() {
                   onClick={() => {
                     void signOut();
                   }}
-                  className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#F97316]"
+                  className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#48B8D0]"
                 >
                   로그아웃
                 </button>
@@ -81,7 +81,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setIsLoginModalOpen(true)}
-                className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#F97316]"
+                className="rounded-full bg-[#E67E22] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#48B8D0]"
               >
                 로그인
               </button>
@@ -115,7 +115,7 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   className={`rounded-lg px-3 py-2.5 text-sm ${
-                    isActive ? 'font-bold text-[#F97316]' : 'font-medium text-[#7C4A2D]'
+                    isActive ? 'font-bold text-[#48B8D0]' : 'font-medium text-[#7C4A2D]'
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
