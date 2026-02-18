@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { signInWithApple, signInWithGoogle } from '@/lib/auth';
+import { apiClient } from '@/lib/api-client';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,7 +17,12 @@ export default function LoginPage() {
     setLoading('google');
     setError('');
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      const idToken = await result.user.getIdToken();
+      apiClient.setToken(idToken);
+      try {
+        await apiClient.upsertUser();
+      } catch {}
       router.push('/');
     } catch {
       setError('로그인에 실패했어요. 다시 시도해주세요.');
@@ -29,7 +35,12 @@ export default function LoginPage() {
     setLoading('apple');
     setError('');
     try {
-      await signInWithApple();
+      const result = await signInWithApple();
+      const idToken = await result.user.getIdToken();
+      apiClient.setToken(idToken);
+      try {
+        await apiClient.upsertUser();
+      } catch {}
       router.push('/');
     } catch {
       setError('로그인에 실패했어요. 다시 시도해주세요.');

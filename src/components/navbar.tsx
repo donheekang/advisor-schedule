@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
 
 const NAV_ITEMS = [
   { href: '/', label: '홈' },
@@ -14,6 +15,7 @@ const NAV_ITEMS = [
 ];
 
 export function Navbar() {
+  const { user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -106,12 +108,20 @@ export function Navbar() {
           </div>
 
           <div className="hidden md:block">
-            <Link
-              href="/login"
-              className="rounded-lg bg-[#48B8D0] px-4 py-2 text-sm font-medium text-white hover:bg-[#3CA8BF]"
-            >
-              로그인
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#48B8D0] text-xs font-bold text-white">
+                  {user.displayName?.[0] || user.email?.[0] || '?'}
+                </div>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-lg bg-[#48B8D0] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#3CA8BF]"
+              >
+                로그인
+              </Link>
+            )}
           </div>
 
           <button
@@ -158,12 +168,21 @@ export function Navbar() {
             })}
           </div>
 
-          <Link
-            href="/login"
-            className="mt-8 rounded-lg bg-[#48B8D0] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#3CA8BF]"
-          >
-            로그인
-          </Link>
+          {user ? (
+            <div className="mt-8 flex items-center justify-center gap-2 rounded-lg border border-[#48B8D0]/30 bg-[#F5E5FC] px-4 py-2 text-sm font-semibold text-[#0B3041]">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#48B8D0] text-xs font-bold text-white">
+                {user.displayName?.[0] || user.email?.[0] || '?'}
+              </span>
+              로그인 상태
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="mt-8 rounded-lg bg-[#48B8D0] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#3CA8BF]"
+            >
+              로그인
+            </Link>
+          )}
         </div>
       </div>
     </>

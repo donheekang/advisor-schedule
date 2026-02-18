@@ -1,6 +1,8 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useAuth } from '@/lib/auth-context';
+import { apiClient } from '@/lib/api-client';
 
 interface CostItem {
   name: string;
@@ -22,6 +24,24 @@ interface AnalysisResult {
   recommendation: string;
 }
 
+type AppPet = {
+  id: string;
+  name?: string;
+  species?: string;
+  breed?: string;
+  weight_kg?: number;
+  birthday?: string;
+  allergy_tags?: string[];
+};
+
+type AppRecord = {
+  visit_date?: string;
+  hospital_name?: string;
+  items?: Array<Record<string, unknown>>;
+  total_amount?: number;
+  tags?: string[];
+};
+
 const SYMPTOM_CHIPS = [
   { emoji: '🦴', label: '다리를 절어요' },
   { emoji: '🤮', label: '구토를 해요' },
@@ -41,6 +61,7 @@ const DOG_BREEDS = ['말티즈', '푸들', '포메라니안', '치와와', '시�
 const CAT_BREEDS = ['코리안숏헤어', '러시안블루', '페르시안', '브리티시숏헤어', '스코티시폴드', '랙돌', '샴', '먼치킨', '노르웨이숲', '벵갈', '믹스', '기타'];
 
 export default function AiCarePage() {
+  const { user } = useAuth();
   const [petType, setPetType] = useState<'dog' | 'cat'>('dog');
   const [breed, setBreed] = useState('');
   const [age, setAge] = useState('');
@@ -49,11 +70,96 @@ export default function AiCarePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [appPets, setAppPets] = useState<AppPet[]>([]);
+  const [selectedAppPet, setSelectedAppPet] = useState<AppPet | null>(null);
+  const [appRecords, setAppRecords] = useState<AppRecord[]>([]);
+  const [appDataLoaded, setAppDataLoaded] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
   const breedOptions = petType === 'dog' ? DOG_BREEDS : CAT_BREEDS;
 
   const isChipSelected = (label: string) => symptoms.includes(label);
+
+  const applyPetToForm = (pet: AppPet) => {
+    setPetType(pet.species === 'cat' ? 'cat' : 'dog');
+
+    if (pet.breed) {
+      setBreed(pet.breed);
+    }
+
+    if (pet.weight_kg) {
+      setWeight(String(pet.weight_kg));
+    }
+
+    if (pet.birthday) {
+      const birth = new Date(pet.birthday);
+      const ageYears = Math.floor((Date.now() - birth.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+      setAge(String(ageYears));
+    }
+  };
+
+  useEffect(() => {
+    if (!user) {
+      setAppPets([]);
+      setSelectedAppPet(null);
+      setAppRecords([]);
+      setAppDataLoaded(false);
+      return;
+    }
+
+    const loadAppData = async () => {
+      try {
+        const petsResult = await apiClient.listPets();
+        const pets = (Array.isArray(petsResult)
+          ? petsResult
+          : ((petsResult as { items?: AppPet[] }).items ?? [])) as AppPet[];
+
+        setAppPets(pets);
+
+        if (pets.length > 0) {
+          const firstPet = pets[0];
+          setSelectedAppPet(firstPet);
+          applyPetToForm(firstPet);
+
+          const recordsResult = await apiClient.listRecords(firstPet.id, true);
+          const records = (Array.isArray(recordsResult)
+            ? recordsResult
+            : ((recordsResult as { items?: AppRecord[] }).items ?? [])) as AppRecord[];
+
+          setAppRecords(records);
+        }
+
+        setAppDataLoaded(true);
+      } catch (loadError) {
+        console.warn('앱 데이터 로드 실패:', loadError);
+        setAppDataLoaded(true);
+      }
+    };
+
+    void loadAppData();
+  }, [user]);
+
+  const handleAppPetChange = async (petId: string) => {
+    const pet = appPets.find((item) => item.id === petId);
+
+    if (!pet) {
+      return;
+    }
+
+    setSelectedAppPet(pet);
+    applyPetToForm(pet);
+
+    try {
+      const recordsResult = await apiClient.listRecords(pet.id, true);
+      const records = (Array.isArray(recordsResult)
+        ? recordsResult
+        : ((recordsResult as { items?: AppRecord[] }).items ?? [])) as AppRecord[];
+
+      setAppRecords(records);
+    } catch (recordsError) {
+      console.warn('진료기록 로드 실패:', recordsError);
+    }
+  };
 
   const handleChipToggle = (label: string) => {
     setSymptoms((prev) => {
@@ -96,26 +202,81 @@ export default function AiCarePage() {
     setResult(null);
 
     try {
-      const res = await fetch('/api/ai-estimate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ petType, breed, age, weight, symptoms }),
-      });
+      if (user && selectedAppPet) {
+        const profile = {
+          name: selectedAppPet.name || '우리 아이',
+          species: selectedAppPet.species || (petType === 'cat' ? 'cat' : 'dog'),
+          breed: selectedAppPet.breed || breed || '믹스',
+          age_text: age ? age + '살' : '미입력',
+          weight_current: selectedAppPet.weight_kg || weight || 0,
+          allergies: selectedAppPet.allergy_tags || [],
+          symptoms_text: symptoms,
+        };
 
-      if (!res.ok) {
+        const medicalHistory = appRecords.map((record) => ({
+          visit_date: record.visit_date,
+          clinic_name: record.hospital_name || '',
+          item_count: record.items?.length || 0,
+          total_amount: record.total_amount || 0,
+          tags: record.tags || [],
+        }));
+
+        const analyzeResult = await apiClient.analyzeAiCare({
+          profile,
+          medicalHistory,
+          forceRefresh: false,
+        });
+
+        const summary = (analyzeResult.summary as string | undefined) || '';
+
+        if (Array.isArray(analyzeResult.conditions)) {
+          setResult(analyzeResult as unknown as AnalysisResult);
+        } else {
+          const estimateRes = await fetch('/api/ai-estimate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ petType, breed, age, weight, symptoms }),
+          });
+
+          if (!estimateRes.ok) {
+            const estimateError = await estimateRes.json();
+            throw new Error((estimateError as { error?: string }).error || 'AI 분석 실패');
+          }
+
+          const estimateData = (await estimateRes.json()) as AnalysisResult;
+
+          if (summary) {
+            estimateData.recommendation = summary + '\n\n' + (estimateData.recommendation || '');
+          }
+
+          if (appRecords.length > 0) {
+            estimateData.recommendation += '\n\n📋 앱 진료기록 ' + appRecords.length + '건이 분석에 반영되었습니다.';
+          }
+
+          setResult(estimateData);
+        }
+      } else {
+        const res = await fetch('/api/ai-estimate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ petType, breed, age, weight, symptoms }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error((data as { error?: string }).error || 'AI 분석 실패');
+        }
+
         const data = await res.json();
-        throw new Error(data.error || 'AI 분석 실패');
+        setResult(data as AnalysisResult);
       }
-
-      const data = await res.json();
-      setResult(data);
 
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message || 'AI 분석 중 오류가 발생했습니다');
+    } catch (analyzeError: unknown) {
+      if (analyzeError instanceof Error) {
+        setError(analyzeError.message || 'AI 분석 중 오류가 발생했습니다');
       } else {
         setError('AI 분석 중 오류가 발생했습니다');
       }
@@ -138,6 +299,44 @@ export default function AiCarePage() {
       </section>
 
       <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
+        {user && appPets.length > 0 && (
+          <div className="mb-5 rounded-xl bg-[#48B8D0]/10 p-4">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-green-400" />
+              <span className="text-sm font-bold text-[#1F2937]">앱 데이터 연동됨</span>
+              <span className="text-xs text-[#6B7280]">— 진료기록 {appRecords.length}건 반영</span>
+            </div>
+            {appPets.length > 1 && (
+              <select
+                value={selectedAppPet?.id || ''}
+                onChange={(event) => void handleAppPetChange(event.target.value)}
+                className="mt-1 rounded-lg border border-[#48B8D0]/30 bg-white px-3 py-2 text-sm text-[#1F2937] outline-none"
+              >
+                {appPets.map((pet) => (
+                  <option key={pet.id} value={pet.id}>
+                    {pet.species === 'cat' ? '🐱' : '🐶'} {pet.name}
+                    {pet.breed ? ' (' + pet.breed + ')' : ''}
+                  </option>
+                ))}
+              </select>
+            )}
+            {appPets.length === 1 && selectedAppPet && (
+              <p className="text-sm font-medium text-[#48B8D0]">
+                {selectedAppPet.species === 'cat' ? '🐱' : '🐶'} {selectedAppPet.name}
+                {selectedAppPet.breed ? ' (' + selectedAppPet.breed + ')' : ''} 의 정보로 분석합니다
+              </p>
+            )}
+          </div>
+        )}
+
+        {!user && (
+          <div className="mb-5 rounded-xl bg-[#F5E5FC]/50 p-4">
+            <p className="text-sm text-[#1F2937]">
+              <a href="/login" className="font-bold text-[#48B8D0] underline">로그인</a>하면 앱에 등록된 반려동물 정보와 진료기록이 자동으로 반영돼요
+            </p>
+          </div>
+        )}
+
         <h2 className="mb-5 text-lg font-bold text-[#1F2937]">1단계. 반려동물 정보</h2>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -173,14 +372,14 @@ export default function AiCarePage() {
             </div>
           </div>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-[#6B7280]">품종</span>
+          <label className="block">
+            <span className="mb-2 block text-xs font-semibold text-[#6B7280]">품종</span>
             <select
               value={breed}
               onChange={(event) => setBreed(event.target.value)}
-              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
+              className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
             >
-              <option value="">품종을 선택해주세요</option>
+              <option value="">품종 선택</option>
               {breedOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}
@@ -189,28 +388,23 @@ export default function AiCarePage() {
             </select>
           </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-[#6B7280]">나이 (살)</span>
+          <label className="block">
+            <span className="mb-2 block text-xs font-semibold text-[#6B7280]">나이</span>
             <input
-              type="number"
-              min="0"
               value={age}
               onChange={(event) => setAge(event.target.value)}
               placeholder="예: 5"
-              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
+              className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
             />
           </label>
 
-          <label className="flex flex-col gap-2 md:col-span-2">
-            <span className="text-xs font-semibold text-[#6B7280]">체중 (kg)</span>
+          <label className="block md:col-span-2">
+            <span className="mb-2 block text-xs font-semibold text-[#6B7280]">몸무게 (kg)</span>
             <input
-              type="number"
-              min="0"
-              step="0.1"
               value={weight}
               onChange={(event) => setWeight(event.target.value)}
-              placeholder="예: 3.2"
-              className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
+              placeholder="예: 4.2"
+              className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3 text-sm text-[#1F2937] outline-none transition focus:border-[#48B8D0] focus:bg-white"
             />
           </label>
         </div>
@@ -248,10 +442,22 @@ export default function AiCarePage() {
 
         {error ? <p className="mt-3 rounded-xl bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#DC2626]">{error}</p> : null}
 
-        <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
-          <p className="text-sm font-medium text-[#0B3041]">📱 앱에서 건강 기록을 연동하면 더 정확한 견적을 받을 수 있어요</p>
-          <p className="mt-1 text-xs text-[#6B7280]">PetHealth+ 앱 출시 예정</p>
-        </div>
+        {user && appPets.length > 0 ? (
+          <div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-4 text-center">
+            <p className="text-sm font-medium text-green-800">✅ {selectedAppPet?.name || '우리 아이'}의 진료기록 {appRecords.length}건이 AI 분석에 반영됩니다</p>
+          </div>
+        ) : user && appDataLoaded && appPets.length === 0 ? (
+          <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
+            <p className="text-sm font-medium text-[#0B3041]">📱 앱에서 반려동물을 등록하면 더 정확한 견적을 받을 수 있어요</p>
+            <p className="mt-1 text-xs text-[#6B7280]">App Store / Google Play에서 PetHealth+ 검색</p>
+          </div>
+        ) : (
+          <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
+            <p className="text-sm font-medium text-[#0B3041]">
+              📱 <a href="/login" className="text-[#48B8D0] underline">로그인</a>하면 앱 진료기록 기반으로 더 정확한 AI 분석을 받을 수 있어요
+            </p>
+          </div>
+        )}
 
         <button
           type="button"
@@ -260,7 +466,7 @@ export default function AiCarePage() {
           className={
             'mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-4 text-sm font-bold text-white transition ' +
             (loading || !symptoms.trim()
-              ? 'bg-[#CBD5E1] cursor-not-allowed'
+              ? 'cursor-not-allowed bg-[#CBD5E1]'
               : 'bg-gradient-to-r from-[#1F2937] to-[#1F2937] hover:opacity-95')
           }
         >

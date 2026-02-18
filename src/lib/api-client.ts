@@ -87,6 +87,16 @@ class ApiClient {
   async getAiCare(petId: string) {
     return this.request('GET', `/api/ai/care?petId=${encodeURIComponent(petId)}`);
   }
+
+  async analyzeAiCare(data: {
+    profile?: Record<string, unknown>;
+    recentWeights?: Array<Record<string, unknown>>;
+    medicalHistory?: Array<Record<string, unknown>>;
+    schedules?: Array<Record<string, unknown>>;
+    forceRefresh?: boolean;
+  }) {
+    return this.request<Record<string, unknown>>('POST', '/api/ai/analyze', data);
+  }
 }
 
 class ApiError extends Error {
