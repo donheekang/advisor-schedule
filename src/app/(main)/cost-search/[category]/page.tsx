@@ -101,7 +101,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
                 <AnimateOnScroll key={item.name} animation="fade-up" delay={i * 100}>
                   <article className="rounded-2xl border border-[#F1F5F9] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                     <div className="mb-3 flex items-center justify-between gap-3">
-                      <h3 className="text-base font-semibold text-[#1B2A4A]">{item.name}</h3>
+                      <h3 className="text-base font-semibold text-[#1F2937]">{item.name}</h3>
                       <span className="rounded-full bg-[#F0FDF4] px-2.5 py-0.5 text-xs font-medium text-[#16A34A]">실데이터</span>
                     </div>
                     <PriceBar min={item.min} avg={item.avg} max={item.max} />

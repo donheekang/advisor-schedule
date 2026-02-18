@@ -15,16 +15,7 @@ const NAV_ITEMS = [
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-
-    onScroll();
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -45,31 +36,23 @@ export function Navbar() {
     return pathname === href || pathname.startsWith(href + '/');
   };
 
-  const navClassName =
-    'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ' +
-    (scrolled
-      ? 'bg-[#0B3041]/95 backdrop-blur-xl shadow-sm border-b border-white/10'
-      : 'bg-transparent');
+  const navClassName = 'fixed top-0 z-50 w-full border-b border-gray-100 bg-white';
 
   const desktopLinkClassName = (active: boolean) =>
     'relative py-1 px-3 text-sm transition-all duration-300 ' +
-    (active
-      ? (scrolled ? 'text-white font-semibold' : 'text-[#0B3041] font-semibold')
-      : (scrolled ? 'text-white/70 hover:text-white font-medium' : 'text-[#4F2A1D] hover:text-[#0B3041] font-medium'));
+    (active ? 'text-[#48B8D0] font-semibold' : 'text-[#1F2937] hover:text-[#48B8D0] font-medium');
 
   const mobilePanelClassName =
-    'fixed inset-0 z-[60] bg-[#0B3041]/95 backdrop-blur-xl transition-all duration-300 md:hidden ' +
+    'fixed inset-0 z-[60] bg-white transition-all duration-300 md:hidden ' +
     (mobileOpen ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 -translate-y-3');
 
   const mobileItemClassName = (active: boolean) =>
-    'block py-3 text-lg font-medium border-b border-white/10 transition-all duration-300 ' +
-    (active ? 'text-white' : 'text-white/70 hover:text-white');
+    'block border-b border-gray-100 py-3 text-lg font-medium transition-all duration-300 ' +
+    (active ? 'text-[#48B8D0]' : 'text-[#1F2937] hover:text-[#48B8D0]');
 
-  const logoClassName = 'text-lg font-bold transition-all duration-300 ' + (scrolled ? 'text-white' : 'text-[#0B3041]');
+  const logoClassName = 'text-lg font-bold text-[#1F2937]';
 
-  const menuButtonClassName =
-    'rounded-lg p-2 transition-all duration-300 md:hidden ' +
-    (scrolled ? 'text-white hover:bg-white/10' : 'text-[#0B3041] hover:bg-[#F5E5FC]');
+  const menuButtonClassName = 'rounded-lg p-2 text-[#1F2937] transition-all duration-300 hover:bg-[#F5E5FC] md:hidden';
 
   return (
     <>
@@ -77,7 +60,7 @@ export function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link href="/" className={logoClassName + ' flex items-center gap-2'}>
             <Image src="/logo.png" alt="PetHealth+" width={32} height={32} className="rounded-lg" />
-            <span className="text-lg font-bold text-[#0B3041]">PetHealth+</span>
+            <span className="text-lg font-bold text-[#1F2937]">PetHealth+</span>
           </Link>
 
           <div className="hidden items-center gap-1 md:flex">
@@ -100,7 +83,7 @@ export function Navbar() {
           <div className="hidden md:block">
             <Link
               href="/login"
-              className="rounded-xl bg-[#48B8D0] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#3CA8BF]"
+              className="rounded-xl bg-[#48B8D0] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#B28B84]"
             >
               로그인
             </Link>
@@ -123,13 +106,13 @@ export function Navbar() {
       <div className={mobilePanelClassName}>
         <div className="flex h-full flex-col px-6 pb-8 pt-5">
           <div className="mb-8 flex items-center justify-between">
-            <Link href="/" className="text-lg font-bold text-white">
+            <Link href="/" className="text-lg font-bold text-[#1F2937]">
               🐾 PetHealth+
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="rounded-lg p-2 text-white transition-all duration-300 hover:bg-white/10"
+              className="rounded-lg p-2 text-[#1F2937] transition-all duration-300 hover:bg-[#F5E5FC]"
               aria-label="메뉴 닫기"
             >
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
@@ -152,7 +135,7 @@ export function Navbar() {
 
           <Link
             href="/login"
-            className="mt-8 rounded-xl bg-[#48B8D0] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#3CA8BF]"
+            className="mt-8 rounded-xl bg-[#48B8D0] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#B28B84]"
           >
             로그인
           </Link>

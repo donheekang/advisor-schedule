@@ -51,7 +51,7 @@ export function MobileBottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#E2E8F0] bg-white/95 backdrop-blur-xl md:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-100 bg-white md:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
       <div className="mx-auto flex max-w-lg items-center justify-around px-2 pt-2 pb-1">
         {NAV_ITEMS.map(item => {
           const active = isActive(item.href);
@@ -59,13 +59,13 @@ export function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={"relative flex flex-col items-center gap-0.5 px-4 py-1 " + (active ? "text-[#48B8D0]" : "text-[#94A3B8]")}
+              className={"relative flex flex-col items-center gap-0.5 px-4 py-1 " + (active ? "text-[#48B8D0]" : "text-gray-400")}
             >
               {active && (
                 <span className="absolute -top-2 h-0.5 w-6 rounded-full bg-[#48B8D0]" />
               )}
               {item.icon(active)}
-              <span className={"text-[10px] font-medium " + (active ? "text-[#48B8D0]" : "text-[#94A3B8]")}>
+              <span className={"text-[10px] font-medium " + (active ? "text-[#48B8D0]" : "text-gray-400")}>
                 {item.label}
               </span>
             </Link>
