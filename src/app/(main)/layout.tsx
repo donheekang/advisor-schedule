@@ -2,6 +2,7 @@ import Script from 'next/script';
 import { Footer } from '@/components/footer';
 import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import { Navbar } from '@/components/navbar';
+import { TwemojiProvider } from '@/components/twemoji-provider';
 import { AuthProvider } from '@/lib/auth-context';
 
 type MainLayoutProps = Readonly<{
@@ -17,10 +18,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
       />
       <div className="flex min-h-screen flex-col bg-[#FFF8F0]">
         <AuthProvider>
-          <Navbar />
-          <main className="flex-1 pb-16 md:pb-0">{children}</main>
-          <Footer />
-          <MobileBottomNav />
+          <TwemojiProvider>
+            <Navbar />
+            <main className="flex-1 pb-16 md:pb-0">{children}</main>
+            <Footer />
+            <MobileBottomNav />
+          </TwemojiProvider>
         </AuthProvider>
       </div>
     </>
