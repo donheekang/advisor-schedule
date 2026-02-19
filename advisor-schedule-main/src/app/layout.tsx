@@ -49,7 +49,7 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
-      <body className="min-h-screen bg-[#F8FAFB] text-[#1B3A4B] antialiased" style={{ fontFamily: "'Pretendard Variable', Pretendard, system-ui, -apple-system, sans-serif" }}>
+      <body className="min-h-screen bg-[#F8FAFB] text-[#1B3A4B] antialiased" style={{ fontFamily: "'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
         <AuthProvider>{children}</AuthProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </body>
