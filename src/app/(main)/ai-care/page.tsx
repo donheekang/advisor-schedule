@@ -353,7 +353,7 @@ export default function AiCarePage() {
                     : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
                 }
               >
-                <span>🐶</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75Z"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a13 13 0 0 0-.493-3.309m-9.243-6.082A8.8 8.8 0 0 1 12 5c.78 0 1.5.108 2.161.306"/></svg>
                 강아지
               </button>
               <button
@@ -366,7 +366,7 @@ export default function AiCarePage() {
                     : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
                 }
               >
-                <span>🐱</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.2 6.71-.56 2.09 2.04 1.95 5.4-.31 7.28l-.29.26c.52 1.39.8 2.88.8 4.42 0 3.28-2.73 5.34-6.5 5.34h-4.82C5.73 22 3 19.94 3 16.66c0-1.54.28-3.03.8-4.42l-.29-.26C1.23 10.1 1.09 6.74 3.18 4.7 4.86 3.06 8.11 3.26 9.89 5.26c.65-.17 1.34-.26 2.11-.26Z"/><path d="M10 14L8 18"/><path d="M14 14l2 4"/></svg>
                 고양이
               </button>
             </div>
@@ -530,7 +530,9 @@ export default function AiCarePage() {
           </div>
         ) : (
           <div className="rounded-3xl border border-dashed border-[#CBD5E1] bg-white px-6 py-14 text-center text-[#6B7280]">
-            <div className="mb-3 text-4xl">📄</div>
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0]">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+            </div>
             <p className="text-sm md:text-base">증상을 입력하면 AI가 예상 진료비 견적서를 작성해드려요</p>
           </div>
         )}

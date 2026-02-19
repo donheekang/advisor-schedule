@@ -82,8 +82,9 @@ export default function HomePage() {
         <section className="relative overflow-hidden bg-gradient-to-b from-[#F5E5FC] to-white pb-16 pt-28 md:pb-24 md:pt-36">
           <div className="mx-auto max-w-6xl px-4">
             <div className="text-center">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#48B8D0]/10 px-4 py-2 text-sm font-medium text-[#48B8D0]">
-                <span>🤖</span> AI 진료비 분석 서비스
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#48B8D0]/10 to-[#C084FC]/10 px-4 py-2 text-sm font-medium text-[#48B8D0] border border-[#48B8D0]/20">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                AI 진료비 분석 서비스
               </div>
               <h1 className="mb-6 text-3xl font-extrabold leading-[1.3] text-[#1F2937] md:text-4xl md:leading-[1.3] lg:text-[3.5rem] lg:leading-[1.3]">
                 증상만 입력하면
@@ -100,13 +101,15 @@ export default function HomePage() {
                   href="/ai-care"
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-white shadow-lg shadow-rose-200 transition hover:bg-[#3CA8BF] sm:w-auto"
                 >
-                  ✨ AI 견적서 받기
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                  AI 견적서 받기
                 </a>
                 <a
                   href="/cost-search"
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E2E8F0] bg-white px-8 py-4 text-base font-bold text-[#1F2937] transition hover:border-[#48B8D0] hover:text-[#48B8D0] sm:w-auto"
                 >
-                  🔍 진료비 검색
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  진료비 검색
                 </a>
               </div>
               <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-[#6B7280]">
@@ -133,7 +136,9 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <a href="/ai-care" className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md">
                 <div className="mb-4 h-1 w-16 rounded-full bg-[#48B8D0]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-2xl">✨</div>
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0]">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                </div>
                 <h3 className="mb-2 text-lg font-bold text-[#1F2937]">AI 견적서</h3>
                 <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요
@@ -145,7 +150,9 @@ export default function HomePage() {
                 className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
               >
                 <div className="mb-4 h-1 w-16 rounded-full bg-[#B28B84]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-2xl">🔍</div>
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#5CC4D8] to-[#48B8D0]">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
                 <h3 className="mb-2 text-lg font-bold text-[#1F2937]">진료비 검색</h3>
                 <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   전국 평균과 비교해서 적정 가격을 확인하세요
@@ -157,7 +164,9 @@ export default function HomePage() {
                 className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
               >
                 <div className="mb-4 h-1 w-16 rounded-full bg-[#F5E5FC]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-2xl">🐾</div>
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#C084FC] to-[#A855F7]">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg>
+                </div>
                 <h3 className="mb-2 text-lg font-bold text-[#1F2937]">펫토커</h3>
                 <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
                   사진 한 장으로 우리 아이의 마음을 들어보세요
@@ -202,17 +211,23 @@ export default function HomePage() {
             <p className="mb-10 text-center text-sm text-[#6B7280]">PetHealth+만의 차별점</p>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
-                <div className="mb-3 text-3xl">🤖</div>
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0]">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                </div>
                 <div className="mb-2 text-xl font-bold text-[#48B8D0]">AI 진료비 분석</div>
                 <p className="text-sm text-white/70">AI가 증상을 분석하고 예상 진료비를 알려드려요</p>
               </div>
               <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
-                <div className="mb-3 text-3xl">📊</div>
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#5CC4D8] to-[#48B8D0]">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                </div>
                 <div className="mb-2 text-xl font-bold text-[#48B8D0]">전국 평균 비교</div>
                 <p className="text-sm text-white/70">지역별 진료비 평균 데이터로 적정 가격을 확인하세요</p>
               </div>
               <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
-                <div className="mb-3 text-3xl">💰</div>
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#C084FC] to-[#A855F7]">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                </div>
                 <div className="mb-2 text-xl font-bold text-[#48B8D0]">완전 무료</div>
                 <p className="text-sm text-white/70">진료비 검색부터 AI 견적까지 모든 기능이 무료예요</p>
               </div>
@@ -255,13 +270,15 @@ export default function HomePage() {
               href="/ai-care"
               className="inline-flex items-center gap-2 rounded-xl bg-[#48B8D0] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
             >
-              ✨ AI 견적서 받기
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+              AI 견적서 받기
             </a>
             <a
               href="/cost-search"
               className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20"
             >
-              🔍 진료비 검색하기
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              진료비 검색하기
             </a>
           </div>
         </section>
@@ -269,7 +286,9 @@ export default function HomePage() {
 
       <section className="bg-white py-16">
         <div className="mx-auto max-w-2xl px-4 text-center">
-          <div className="mb-4 text-3xl">📱</div>
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0]">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          </div>
           <h2 className="mb-2 text-2xl font-extrabold text-[#0B3041]">우리 아이 건강 기록, 앱으로 관리하세요</h2>
           <p className="mb-8 text-sm text-[#6B7280]">진료 기록부터 건강 관리까지, PetHealth+ 앱이 곧 출시돼요</p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">

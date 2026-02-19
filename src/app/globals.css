@@ -94,13 +94,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(248, 199, 159, 0.6);
 }
-
-
-/* Twemoji: 이모지 이미지를 인라인 텍스트처럼 자연스럽게 표시 */
-img.emoji {
-  height: 1.2em;
-  width: 1.2em;
-  margin: 0 0.05em 0 0.1em;
-  vertical-align: -0.15em;
-  display: inline-block;
-}

@@ -8,6 +8,7 @@ import {
   PawPrint, Stethoscope, FileText,
   Smartphone, BrainCircuit, HardDrive,
   LogOut, Sparkles, Activity, Download,
+  Dog, Cat, Camera, Bell, MapPin,
 } from 'lucide-react';
 
 const APPSTORE_URL = 'https://apps.apple.com/app/id6504879567';
@@ -29,10 +30,29 @@ function speciesLabel(s: string): string {
 
 function SpeciesIcon({ species, size = 20 }: { species: string; size?: number }) {
   const l = species.toLowerCase();
-  const fontSize = size + 'px';
-  if (l === 'dog' || l.includes('강아지')) return <span style={{ fontSize, lineHeight: 1 }}>🐶</span>;
-  if (l === 'cat' || l.includes('고양이')) return <span style={{ fontSize, lineHeight: 1 }}>🐱</span>;
-  return <span style={{ fontSize, lineHeight: 1 }}>🐾</span>;
+  const boxSize = size >= 20 ? 'h-11 w-11' : 'h-7 w-7';
+  const radius = size >= 20 ? 'rounded-xl' : 'rounded-lg';
+  const iconSize = size >= 20 ? 22 : 14;
+
+  if (l === 'dog' || l.includes('강아지')) {
+    return (
+      <div className={'flex items-center justify-center bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0] ' + boxSize + ' ' + radius}>
+        <Dog size={iconSize} className="text-white" />
+      </div>
+    );
+  }
+  if (l === 'cat' || l.includes('고양이')) {
+    return (
+      <div className={'flex items-center justify-center bg-gradient-to-br from-[#C084FC] to-[#A855F7] ' + boxSize + ' ' + radius}>
+        <Cat size={iconSize} className="text-white" />
+      </div>
+    );
+  }
+  return (
+    <div className={'flex items-center justify-center bg-gradient-to-br from-[#5CC4D8] to-[#48B8D0] ' + boxSize + ' ' + radius}>
+      <PawPrint size={iconSize} className="text-white" />
+    </div>
+  );
 }
 
 function genderLabel(g?: string): string { if (g === 'M') return '남아'; if (g === 'F') return '여아'; return ''; }
@@ -216,7 +236,7 @@ export default function MyPage() {
               {pets.map((pet) => (
                 <div key={pet.id} className={'rounded-xl border p-4 transition cursor-pointer ' + (pet.id === selectedPetId ? 'border-[#48B8D0] bg-[#48B8D0]/5' : 'border-[#E2E8F0] bg-white hover:border-[#48B8D0]/50')} onClick={() => setSelectedPetId(pet.id)}>
                   <div className="flex items-center gap-3">
-                    <div className={'flex h-11 w-11 items-center justify-center rounded-xl ' + (pet.id === selectedPetId ? 'bg-[#48B8D0]/10' : 'bg-[#F8FAFC]')}><SpeciesIcon species={pet.species} size={22} /></div>
+                    <SpeciesIcon species={pet.species} size={22} />
                     <div>
                       <h3 className="font-bold text-[#1F2937]">{pet.name}</h3>
                       <p className="text-xs text-[#6B7280]">{speciesLabel(pet.species)}{pet.breed ? ' · ' + pet.breed : ''}{getAgeLabel(pet.birth_date) ? ' · ' + getAgeLabel(pet.birth_date) : ''}</p>
@@ -288,10 +308,10 @@ export default function MyPage() {
       <section className="rounded-2xl bg-[#0B3041] p-6 text-white">
         <div className="flex items-center gap-2"><Smartphone size={20} /><h2 className="text-lg font-bold">앱에서 더 많은 기능을 사용하세요</h2></div>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <AppFeatureRow icon={<span>📸</span>} text="영수증 촬영하면 자동 분류" />
-          <AppFeatureRow icon={<span>🔔</span>} text="예방접종 일정 푸시 알림" />
-          <AppFeatureRow icon={<span>📋</span>} text="검사결과 PDF 클라우드 보관" />
-          <AppFeatureRow icon={<span>🏥</span>} text="내 근처 동물병원 찾기" />
+          <AppFeatureRow icon={<Camera size={16} />} text="영수증 촬영하면 자동 분류" />
+          <AppFeatureRow icon={<Bell size={16} />} text="예방접종 일정 푸시 알림" />
+          <AppFeatureRow icon={<FileText size={16} />} text="검사결과 PDF 클라우드 보관" />
+          <AppFeatureRow icon={<MapPin size={16} />} text="내 근처 동물병원 찾기" />
         </div>
         <a href={APPSTORE_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-[#0B3041] transition hover:bg-white/90"><Download size={16} />App Store에서 다운로드</a>
       </section>
