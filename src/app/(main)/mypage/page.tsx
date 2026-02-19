@@ -5,8 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/components/auth-provider';
 import { apiClient } from '@/lib/api-client';
 import {
-  Dog, Cat, PawPrint, Stethoscope, FileText,
-  Camera, Bell, MapPin, Smartphone, BrainCircuit, HardDrive,
+  PawPrint, Stethoscope, FileText,
+  Smartphone, BrainCircuit, HardDrive,
   LogOut, Sparkles, Activity, Download,
 } from 'lucide-react';
 
@@ -29,10 +29,10 @@ function speciesLabel(s: string): string {
 
 function SpeciesIcon({ species, size = 20 }: { species: string; size?: number }) {
   const l = species.toLowerCase();
-  const cls = 'text-[#48B8D0]';
-  if (l === 'dog' || l.includes('강아지')) return <Dog size={size} className={cls} />;
-  if (l === 'cat' || l.includes('고양이')) return <Cat size={size} className={cls} />;
-  return <PawPrint size={size} className={cls} />;
+  const fontSize = size + 'px';
+  if (l === 'dog' || l.includes('강아지')) return <span style={{ fontSize, lineHeight: 1 }}>🐶</span>;
+  if (l === 'cat' || l.includes('고양이')) return <span style={{ fontSize, lineHeight: 1 }}>🐱</span>;
+  return <span style={{ fontSize, lineHeight: 1 }}>🐾</span>;
 }
 
 function genderLabel(g?: string): string { if (g === 'M') return '남아'; if (g === 'F') return '여아'; return ''; }
@@ -288,10 +288,10 @@ export default function MyPage() {
       <section className="rounded-2xl bg-[#0B3041] p-6 text-white">
         <div className="flex items-center gap-2"><Smartphone size={20} /><h2 className="text-lg font-bold">앱에서 더 많은 기능을 사용하세요</h2></div>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <AppFeatureRow icon={<Camera size={16} />} text="영수증 촬영하면 자동 분류" />
-          <AppFeatureRow icon={<Bell size={16} />} text="예방접종 일정 푸시 알림" />
-          <AppFeatureRow icon={<FileText size={16} />} text="검사결과 PDF 클라우드 보관" />
-          <AppFeatureRow icon={<MapPin size={16} />} text="내 근처 동물병원 찾기" />
+          <AppFeatureRow icon={<span>📸</span>} text="영수증 촬영하면 자동 분류" />
+          <AppFeatureRow icon={<span>🔔</span>} text="예방접종 일정 푸시 알림" />
+          <AppFeatureRow icon={<span>📋</span>} text="검사결과 PDF 클라우드 보관" />
+          <AppFeatureRow icon={<span>🏥</span>} text="내 근처 동물병원 찾기" />
         </div>
         <a href={APPSTORE_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-[#0B3041] transition hover:bg-white/90"><Download size={16} />App Store에서 다운로드</a>
       </section>
