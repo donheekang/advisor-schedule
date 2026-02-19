@@ -142,7 +142,7 @@ export function Navbar() {
         <div className="flex h-full flex-col px-6 pb-8 pt-5">
           <div className="mb-8 flex items-center justify-between">
             <Link href="/" className="text-lg font-bold text-[#1F2937]">
-              🐾 PetHealth+
+              PetHealth+
             </Link>
             <button
               type="button"
