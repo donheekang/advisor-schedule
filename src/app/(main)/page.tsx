@@ -1,5 +1,8 @@
+import { existsSync } from 'fs';
+
 import { Accordion, AnimateOnScroll } from '@/components/ui';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 
 const FAQ_ITEMS = [
   {
@@ -74,233 +77,331 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const sectionDelays = [0, 150, 300] as const;
+  const hasToriImage = existsSync(process.cwd() + '/public/tori-hero.jpeg');
 
   return (
     <>
-      <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#F5E5FC] to-white pb-16 pt-28 md:pb-24 md:pt-36">
-          <div className="mx-auto max-w-6xl px-4">
-            <div className="text-center">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#48B8D0]/20 bg-gradient-to-r from-[#48B8D0]/10 to-[#C084FC]/10 px-4 py-2 text-sm font-medium text-[#48B8D0]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
-                AI 진료비 분석 서비스
-              </div>
-              <h1 className="mb-6 text-3xl font-extrabold leading-[1.3] text-[#1F2937] md:text-4xl md:leading-[1.3] lg:text-[3.5rem] lg:leading-[1.3]">
-                증상만 입력하면
-                <br />
-                <span className="bg-gradient-to-r from-[#48B8D0] to-[#B28B84] bg-clip-text text-transparent">
-                  예상 진료비를 알려드려요
-                </span>
-              </h1>
-              <p className="mx-auto mb-8 max-w-lg text-base text-[#6B7280] md:text-lg">
-                AI가 증상을 분석하고, 예상 질환과 진료비 범위를 알려드려요.
-              </p>
-              <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                <a
-                  href="/ai-care"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-white shadow-lg shadow-rose-200 transition hover:bg-[#3CA8BF] sm:w-auto"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg> AI 견적서 받기
-                </a>
-                <a
-                  href="/cost-search"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E2E8F0] bg-white px-8 py-4 text-base font-bold text-[#1F2937] transition hover:border-[#48B8D0] hover:text-[#48B8D0] sm:w-auto"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> 진료비 검색
-                </a>
-              </div>
-              <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-[#6B7280]">
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-green-400"></span>무료 이용
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[#B28B84]"></span>30초 AI 분석
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[#48B8D0]"></span>전국 진료비 비교
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-      </AnimateOnScroll>
-
-      <AnimateOnScroll animation="fade-up" delay={sectionDelays[1]}>
-        <section className="py-16 md:py-24">
-          <div className="mx-auto max-w-6xl px-4">
-            <h2 className="mb-3 text-center text-2xl font-extrabold text-[#1F2937] md:text-3xl">이런 걸 할 수 있어요</h2>
-            <p className="mb-10 text-center text-sm text-[#6B7280]">PetHealth+와 함께 우리 아이 건강을 관리하세요</p>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <a href="/ai-care" className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md">
-                <div className="mb-4 h-1 w-16 rounded-full bg-[#48B8D0]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0]">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
-                </div>
-                <h3 className="mb-2 text-lg font-bold text-[#1F2937]">AI 견적서</h3>
-                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
-                  증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요
-                </p>
-                <span className="mt-auto text-sm font-semibold text-[#48B8D0]">받아보기 →</span>
-              </a>
-              <a
-                href="/cost-search"
-                className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
-              >
-                <div className="mb-4 h-1 w-16 rounded-full bg-[#B28B84]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#5CC4D8] to-[#48B8D0]">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                </div>
-                <h3 className="mb-2 text-lg font-bold text-[#1F2937]">진료비 검색</h3>
-                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
-                  전국 평균과 비교해서 적정 가격을 확인하세요
-                </p>
-                <span className="mt-auto text-sm font-semibold text-[#48B8D0]">검색하기 →</span>
-              </a>
-              <a
-                href="/pet-talker"
-                className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition hover:shadow-md"
-              >
-                <div className="mb-4 h-1 w-16 rounded-full bg-[#F5E5FC]"></div>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#C084FC] to-[#A855F7]">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg>
-                </div>
-                <h3 className="mb-2 text-lg font-bold text-[#1F2937]">펫토커</h3>
-                <p className="mb-4 flex-1 text-sm leading-relaxed text-[#6B7280]">
-                  사진 한 장으로 우리 아이의 마음을 들어보세요
-                </p>
-                <span className="mt-auto text-sm font-semibold text-[#48B8D0]">해보기 →</span>
-              </a>
-            </div>
-          </div>
-        </section>
-      </AnimateOnScroll>
-
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="mb-3 text-2xl font-bold text-[#1F2937] md:text-3xl">3단계로 시작하세요</h2>
-          <p className="mb-10 text-[#6B7280] md:mb-14">간단한 3단계로 우리 아이 건강 관리를 시작할 수 있어요</p>
-
-          <div className="relative">
-            <div className="pointer-events-none absolute left-[16.6%] right-[16.6%] top-12 hidden h-0.5 bg-gradient-to-r from-[#48B8D0]/20 via-[#48B8D0]/40 to-[#48B8D0]/20 md:block" />
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-              {[
-                { num: '1', title: '사진 올리기 or 검색', desc: '우리 아이 사진을 올리거나 진료 항목을 검색하세요' },
-                { num: '2', title: 'AI가 분석', desc: 'AI가 사진을 읽고 대사를 만들거나 진료비를 비교해요' },
-                { num: '3', title: '공유 & 기록', desc: 'SNS에 공유하고, 앱에서 기록하면 더 정확해져요' }
-              ].map((step) => (
-                <div key={step.num} className="relative rounded-2xl bg-gradient-to-br from-[#F5E5FC] to-[#F5E5FC] p-6 md:p-8">
-                  <div className="relative z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#48B8D0] text-lg font-bold text-white shadow-lg shadow-[#48B8D0]/25">
-                    {step.num}
-                  </div>
-                  <h3 className="mb-2 text-lg font-bold text-[#1F2937]">{step.title}</h3>
-                  <p className="text-sm leading-relaxed text-[#6B7280]">{step.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-[#0A0F1A] px-4 pt-20">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-[30%] top-[20%] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#48B8D0]/[0.06] blur-[120px]" />
+          <div className="absolute bottom-[10%] right-[20%] h-[400px] w-[500px] rounded-full bg-[#B28B84]/[0.05] blur-[100px]" />
         </div>
-      </section>
 
-      <AnimateOnScroll animation="fade-up" delay={sectionDelays[0]}>
-        <section className="py-16 md:py-24">
-          <div className="mx-auto max-w-6xl px-4">
-            <h2 className="mb-4 text-center text-2xl font-extrabold text-[#1F2937] md:text-3xl">이런 점이 다릅니다</h2>
-            <p className="mb-10 text-center text-sm text-[#6B7280]">PetHealth+만의 차별점</p>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0]">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
-                </div>
-                <div className="mb-2 text-xl font-bold text-[#48B8D0]">AI 진료비 분석</div>
-                <p className="text-sm text-white/70">AI가 증상을 분석하고 예상 진료비를 알려드려요</p>
-              </div>
-              <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#5CC4D8] to-[#48B8D0]">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                </div>
-                <div className="mb-2 text-xl font-bold text-[#48B8D0]">전국 평균 비교</div>
-                <p className="text-sm text-white/70">지역별 진료비 평균 데이터로 적정 가격을 확인하세요</p>
-              </div>
-              <div className="rounded-2xl bg-[#1F2937] p-8 text-center text-white">
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#C084FC] to-[#A855F7]">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
-                </div>
-                <div className="mb-2 text-xl font-bold text-[#48B8D0]">완전 무료</div>
-                <p className="text-sm text-white/70">진료비 검색부터 AI 견적까지 모든 기능이 무료예요</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </AnimateOnScroll>
-
-      <section className="py-12">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <p className="text-lg font-semibold text-[#1F2937]">우리 아이 건강, 지금 바로 확인해보세요</p>
-          <p className="mt-2 text-sm text-[#6B7280]">진료비가 걱정되셨다면 PetHealth+가 도와드릴게요</p>
-        </div>
-      </section>
-
-      <AnimateOnScroll animation="fade-up" delay={sectionDelays[1]}>
-        <section className="bg-white py-20 md:py-28">
-          <div className="mx-auto max-w-3xl px-4">
+        <div className="relative z-10 mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-12 px-4 md:grid-cols-2 md:gap-16">
+          <div>
             <AnimateOnScroll animation="fade-up">
-              <h2 className="mb-10 text-2xl font-bold text-[#1F2937] md:text-3xl">자주 묻는 질문</h2>
+              <h1 className="mb-6 text-4xl font-extrabold leading-[1.2] tracking-tight text-white md:text-5xl lg:text-[3.5rem]">
+                영수증은 쌓이고,
+                <br />
+                <span className="bg-gradient-to-r from-[#48B8D0] to-[#C084FC] bg-clip-text text-transparent">기록은 없고.</span>
+              </h1>
             </AnimateOnScroll>
 
-            <div className="space-y-3">
-              {FAQ_ITEMS.map((faq, index) => (
-                <AnimateOnScroll key={faq.question} animation="fade-up" delay={index * 100}>
-                  <Accordion title={faq.question}>{faq.answer}</Accordion>
-                </AnimateOnScroll>
-              ))}
+            <AnimateOnScroll animation="fade-up" delay={100}>
+              <p className="mb-10 max-w-[440px] text-lg leading-relaxed text-white/50 md:text-xl">
+                찍기만 하면 자동 기록.
+                <br />
+                AI가 분석하고, 전국 데이터와 비교해드려요.
+              </p>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll animation="fade-up" delay={200}>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="/ai-care"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-[#0A0F1A] shadow-[0_0_30px_rgba(72,184,208,0.4)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.5)]"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></svg>
+                  무료로 진료비 확인
+                </a>
+                <a
+                  href="https://apps.apple.com/app/id6504879567"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 px-8 py-4 text-base font-bold text-white transition-all hover:border-white/30 hover:bg-white/5"
+                >
+                  앱 다운로드
+                </a>
+              </div>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll animation="fade-up" delay={300}>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {['완전 무료', '30초 AI 분석', '전국 비교'].map((t) => (
+                  <span key={t} className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[13px] text-white/40">
+                    ✦ {t}
+                  </span>
+                ))}
+              </div>
+            </AnimateOnScroll>
+          </div>
+
+          <AnimateOnScroll animation="fade-up" delay={200}>
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full bg-[#48B8D0] opacity-15" />
+                <div className="absolute -left-4 bottom-2 h-8 w-8 rounded-full bg-[#B28B84] opacity-20" />
+                <div className="absolute right-[-24px] top-1/2 h-5 w-5 rounded-full bg-[#C084FC] opacity-12" />
+                <div className="h-[320px] w-[320px] overflow-hidden rounded-full border-4 border-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.4),0_0_80px_rgba(72,184,208,0.08)] md:h-[400px] md:w-[400px]">
+                  {hasToriImage ? (
+                    <Image
+                      src="/tori-hero.jpeg"
+                      alt="토리"
+                      width={400}
+                      height={400}
+                      className="h-full w-full object-cover"
+                      style={{ objectPosition: 'center 20%' }}
+                      priority
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-[#111827] text-sm font-semibold text-white/60">
+                      토리 이미지 준비중
+                    </div>
+                  )}
+                </div>
+                <div className="absolute -left-10 top-8 flex animate-bounce items-center gap-2 rounded-2xl border border-white/10 bg-[#111827]/90 px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl" style={{ animationDuration: '3s' }}>
+                  <span className="h-2 w-2 rounded-full bg-[#48B8D0]" />
+                  <span className="text-[13px] font-semibold text-white">AI 자동 기록 중</span>
+                </div>
+                <div className="absolute -right-8 bottom-10 flex animate-bounce items-center gap-2 rounded-2xl border border-white/10 bg-[#111827]/90 px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl" style={{ animationDuration: '3s', animationDelay: '1.5s' }}>
+                  <span className="h-2 w-2 rounded-full bg-[#22C55E]" />
+                  <span className="text-[13px] font-semibold text-white">토리 · 7.8kg 건강</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
-      </AnimateOnScroll>
+          </AnimateOnScroll>
+        </div>
+      </section>
 
-      <AnimateOnScroll animation="fade-up" delay={sectionDelays[2]}>
-        <section className="bg-[#1F2937] px-4 py-16 text-center text-white md:py-20">
-          <h2 className="mb-3 text-xl font-extrabold md:text-2xl">우리 아이 진료비, 지금 바로 확인해보세요</h2>
-          <p className="mb-8 text-sm text-white/70 md:text-base">전국 평균 데이터로 비교하고, AI로 예상 비용까지</p>
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href="/ai-care"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#48B8D0] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg> AI 견적서 받기
-            </a>
-            <a
-              href="/cost-search"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> 진료비 검색하기
-            </a>
+      <section className="bg-[#0A0F1A] px-4 py-28 md:py-36">
+        <div className="mx-auto max-w-[1100px]">
+          <AnimateOnScroll animation="fade-up">
+            <p className="mb-5 text-center text-sm font-semibold uppercase tracking-widest text-[#48B8D0]">Problem</p>
+          </AnimateOnScroll>
+          <AnimateOnScroll animation="fade-up">
+            <h2 className="mb-16 text-center text-3xl font-extrabold leading-snug tracking-tight text-white md:text-[2.75rem]">
+              혹시 이런 경험,
+              <br />
+              <span className="text-white/40">한 번쯤 있지 않으셨나요?</span>
+            </h2>
+          </AnimateOnScroll>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {[
+              {
+                grad: 'from-[#48B8D0] to-[#3A9BB0]',
+                icon: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/>',
+                t: '서랍 속 영수증',
+                d: '어디 갔는지도 모르는 진료 기록들. 나중에 찾으려면 이미 늦었어요.'
+              },
+              {
+                grad: 'from-[#B28B84] to-[#9A756E]',
+                icon: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+                t: '이게 적정가인가?',
+                d: '비교할 데이터도 없이 결제. 비싼 건지 싼 건지 알 수가 없어요.'
+              },
+              {
+                grad: 'from-[#C084FC] to-[#A855F7]',
+                icon: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+                t: '접종일, 또 잊었다',
+                d: '기억에만 의존하는 건강 관리. 다음 접종일이 언제였더라…'
+              }
+            ].map((c, i) => (
+              <AnimateOnScroll key={c.t} animation="fade-up" delay={i * 100}>
+                <div className="rounded-3xl border border-white/[0.06] bg-[#111827] p-10 transition-all hover:-translate-y-2 hover:border-[#48B8D0]/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+                  <div className={'mb-6 flex h-12 w-12 items-center justify-center rounded-[14px] bg-gradient-to-br ' + c.grad}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: c.icon }} />
+                  </div>
+                  <h3 className="mb-2 text-xl font-bold text-white">{c.t}</h3>
+                  <p className="text-[15px] leading-relaxed text-white/50">{c.d}</p>
+                </div>
+              </AnimateOnScroll>
+            ))}
           </div>
-        </section>
-      </AnimateOnScroll>
+        </div>
+      </section>
 
-      <section className="bg-white py-16">
-        <div className="mx-auto max-w-2xl px-4 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0]">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+      <section className="bg-white px-4 py-28 md:py-36">
+        <div className="mx-auto max-w-[1100px]">
+          <AnimateOnScroll animation="fade-up">
+            <h2 className="mb-3 text-center text-3xl font-extrabold tracking-tight text-[#0A0F1A] md:text-[2.75rem]">지금 바로 해볼 수 있어요</h2>
+          </AnimateOnScroll>
+          <AnimateOnScroll animation="fade-up" delay={100}>
+            <p className="mb-14 text-center text-base text-[#6B7280]">로그인 없이, 무료로.</p>
+          </AnimateOnScroll>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {[
+              {
+                href: '/ai-care',
+                grad: 'from-[#48B8D0] to-[#3A9BB0]',
+                icon: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>',
+                t: 'AI 진료비 견적',
+                d: '증상만 입력하면 30초만에 예상 진료비를 알려드려요',
+                l: '바로 해보기 →'
+              },
+              {
+                href: '/cost-search',
+                grad: 'from-[#B28B84] to-[#9A756E]',
+                icon: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+                t: '진료비 비교',
+                d: '우리 아이 진료비, 비싼 건지 전국 평균과 바로 비교',
+                l: '검색하기 →'
+              },
+              {
+                href: '/pet-talker',
+                grad: 'from-[#C084FC] to-[#A855F7]',
+                icon: '<circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>',
+                t: '펫토커',
+                d: '사진 한 장이면 우리 아이 마음이 보여요',
+                l: '해보기 →'
+              }
+            ].map((c, i) => (
+              <AnimateOnScroll key={c.t} animation="fade-up" delay={i * 100}>
+                <a href={c.href} className="flex flex-col rounded-3xl border border-[#F3F4F6] bg-[#F9FAFB] p-9 transition-all hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]">
+                  <div className={'mb-5 flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-gradient-to-br ' + c.grad}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: c.icon }} />
+                  </div>
+                  <h3 className="mb-2 text-xl font-bold text-[#0A0F1A]">{c.t}</h3>
+                  <p className="flex-1 text-sm leading-relaxed text-[#6B7280]">{c.d}</p>
+                  <span className="mt-5 text-sm font-bold text-[#48B8D0]">{c.l}</span>
+                </a>
+              </AnimateOnScroll>
+            ))}
           </div>
-          <h2 className="mb-2 text-2xl font-extrabold text-[#0B3041]">우리 아이 건강 기록, 앱으로 관리하세요</h2>
-          <p className="mb-8 text-sm text-[#6B7280]">진료 기록부터 건강 관리까지, PetHealth+ 앱이 곧 출시돼요</p>
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <button
-              disabled
-              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#0B3041] px-6 py-3.5 text-sm font-bold text-white opacity-80"
-            >
-              App Store 출시 예정
-            </button>
-            <button
-              disabled
-              className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[#0B3041] px-6 py-3.5 text-sm font-bold text-white opacity-80"
-            >
-              ▶ Google Play 출시 예정
-            </button>
+        </div>
+      </section>
+
+      <section className="bg-[#0A0F1A] px-4 py-28 md:py-36">
+        <div className="mx-auto max-w-[1100px]">
+          <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-2 md:gap-20">
+            <div>
+              <AnimateOnScroll animation="fade-up">
+                <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#48B8D0]">App</p>
+                <h2 className="mb-4 text-3xl font-extrabold leading-[1.2] tracking-tight text-white md:text-[2.75rem]">
+                  기록이 쌓일수록
+                  <br />AI가 더 똑똑해져요
+                </h2>
+              </AnimateOnScroll>
+              <AnimateOnScroll animation="fade-up" delay={100}>
+                <p className="mb-10 text-[17px] leading-relaxed text-white/50">
+                  웹은 맛보기. 앱은 풀기능.
+                  <br />
+                  진료 기록이 쌓일수록 AI가 더 정확하게 분석해요.
+                </p>
+              </AnimateOnScroll>
+              <div className="mb-10 flex flex-col gap-6">
+                {[
+                  {
+                    icon: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
+                    t: '영수증 촬영 → 자동 분류',
+                    d: 'AI가 항목별로 나눠서 기록'
+                  },
+                  {
+                    icon: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+                    t: '접종일 푸시 알림',
+                    d: '다시는 까먹지 않아요'
+                  },
+                  {
+                    icon: '<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>',
+                    t: '누적 데이터 → 맞춤 분석',
+                    d: '기록이 쌓일수록 AI가 정확해짐'
+                  }
+                ].map((item, i) => (
+                  <AnimateOnScroll key={item.t} animation="fade-up" delay={100 + i * 100}>
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-[#48B8D0]/15 bg-[#48B8D0]/10">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48B8D0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: item.icon }} />
+                      </div>
+                      <div>
+                        <h4 className="text-base font-bold text-white">{item.t}</h4>
+                        <p className="text-sm text-white/40">{item.d}</p>
+                      </div>
+                    </div>
+                  </AnimateOnScroll>
+                ))}
+              </div>
+              <AnimateOnScroll animation="fade-up" delay={400}>
+                <a href="https://apps.apple.com/app/id6504879567" className="inline-flex items-center gap-2 rounded-2xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-[#0A0F1A] shadow-[0_0_30px_rgba(72,184,208,0.4)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.5)]">
+                  앱 다운로드
+                </a>
+              </AnimateOnScroll>
+            </div>
+
+            <AnimateOnScroll animation="fade-up" delay={200}>
+              <div className="flex justify-center">
+                <div className="relative w-[280px] overflow-hidden rounded-[44px] border-4 border-white/10 bg-black shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_60px_rgba(72,184,208,0.1)]">
+                  <div className="absolute left-1/2 top-0 z-10 h-[30px] w-[110px] -translate-x-1/2 rounded-b-[18px] bg-black" />
+                  {hasToriImage ? (
+                    <Image src="/tori-hero.jpeg" alt="PetHealth+ 앱 화면" width={280} height={600} className="w-full rounded-[40px]" />
+                  ) : (
+                    <div className="flex h-[600px] w-full items-center justify-center rounded-[40px] bg-[#111827] text-sm font-semibold text-white/60">
+                      앱 화면 이미지 준비중
+                    </div>
+                  )}
+                </div>
+              </div>
+            </AnimateOnScroll>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-[#0A0F1A] px-4 py-28 md:py-36">
+        <div className="mx-auto max-w-[1100px]">
+          <AnimateOnScroll animation="fade-up">
+            <h2 className="mb-14 text-center text-3xl font-extrabold tracking-tight text-white md:text-[2.75rem]">숫자로 보는 PetHealth+</h2>
+          </AnimateOnScroll>
+          <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+            {[
+              { n: '200+', l: '진료 항목 데이터' },
+              { n: 'AI', l: '자동 영수증 분석' },
+              { n: 'iOS+AOS', l: 'App Store · Play 출시' },
+              { n: 'E2E', l: '암호화 보호' }
+            ].map((t, i) => (
+              <AnimateOnScroll key={t.l} animation="fade-up" delay={i * 100}>
+                <div className="rounded-3xl border border-white/[0.06] bg-[#111827] p-9 text-center">
+                  <p className="mb-2 bg-gradient-to-r from-[#48B8D0] to-[#C084FC] bg-clip-text text-[40px] font-extrabold text-transparent">{t.n}</p>
+                  <p className="text-sm text-white/40">{t.l}</p>
+                </div>
+              </AnimateOnScroll>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white px-4 py-28 md:py-36">
+        <div className="mx-auto max-w-[680px]">
+          <AnimateOnScroll animation="fade-up">
+            <h2 className="mb-10 text-3xl font-extrabold tracking-tight text-[#0A0F1A]">자주 묻는 질문</h2>
+          </AnimateOnScroll>
+          {FAQ_ITEMS.map((faq, i) => (
+            <AnimateOnScroll key={faq.question} animation="fade-up" delay={i * 80}>
+              <Accordion title={faq.question}>{faq.answer}</Accordion>
+            </AnimateOnScroll>
+          ))}
+        </div>
+      </section>
+
+      <section className="relative bg-[#0A0F1A] px-4 py-28 text-center md:py-36">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#48B8D0]/[0.08] blur-[120px]" />
+        </div>
+        <div className="relative z-10 mx-auto max-w-[1100px]">
+          <AnimateOnScroll animation="fade-up">
+            <h2 className="mb-4 text-3xl font-extrabold leading-[1.2] tracking-tight text-white md:text-[3rem]">
+              우리 아이 건강,
+              <br />오늘부터 기록하세요
+            </h2>
+          </AnimateOnScroll>
+          <AnimateOnScroll animation="fade-up" delay={100}>
+            <p className="mb-10 text-lg text-white/50">영수증 한 장이면 시작할 수 있어요.</p>
+          </AnimateOnScroll>
+          <AnimateOnScroll animation="fade-up" delay={200}>
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <a href="https://apps.apple.com/app/id6504879567" className="inline-flex items-center gap-2 rounded-2xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-[#0A0F1A] shadow-[0_0_30px_rgba(72,184,208,0.4)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.5)]">
+                앱 다운로드
+              </a>
+              <a href="/ai-care" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.06] px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10">
+                웹에서 먼저 체험
+              </a>
+            </div>
+          </AnimateOnScroll>
         </div>
       </section>
 
