@@ -252,7 +252,7 @@ export default function CostSearchClient() {
         {!searching && trimmedQuery.length === 0 && (
           <div className="mt-6 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 md:p-8">
             <div className="mb-6 rounded-2xl bg-[#48B8D0]/5 p-4 text-center">
-              <p className="text-sm font-medium text-[#48B8D0]">📊 전국 진료비 데이터를 수집하고 있어요 · 곧 비교 서비스가 열립니다</p>
+              <p className="text-sm font-medium text-[#48B8D0]">📊 일부 항목은 실데이터 공개 중이에요 · 지역별 세부 비교는 준비 중입니다</p>
             </div>
             <h3 className="mb-4 text-lg font-bold text-[#0B3041]">🔥 많이 검색하는 진료 항목</h3>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -281,9 +281,9 @@ export default function CostSearchClient() {
                   <path d="M12 20v-6M6 20V10M18 20V4" />
                 </svg>
               </div>
-              <p className="mb-2 text-lg font-bold text-[#0B3041]">현재 데이터를 수집하고 있어요</p>
-              <p className="mb-1 text-sm text-[#6B7280]">전국 동물병원의 실제 진료비를 모으고 있습니다.</p>
-              <p className="mb-6 text-sm text-[#6B7280]">곧 정확한 비교 데이터를 제공해드릴게요!</p>
+              <p className="mb-2 text-lg font-bold text-[#0B3041]">이 항목은 아직 데이터를 수집하고 있어요</p>
+              <p className="mb-1 text-sm text-[#6B7280]">예방접종·혈액검사·치과·수술 등은 이미 공개 중이에요!</p>
+              <p className="mb-6 text-sm text-[#6B7280]">아래 카테고리에서 확인해보세요.</p>
               <div className="flex flex-wrap justify-center gap-2">
                 <Link href="/ai-care" className="rounded-full bg-[#48B8D0] px-5 py-2.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5">
                   AI로 예상 진료비 보기
