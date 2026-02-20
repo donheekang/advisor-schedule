@@ -116,15 +116,15 @@ export default function CostSearchClient() {
   }, [topResult]);
 
   return (
-    <section className="w-full pb-10" aria-label="진료비 검색">
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#F5E5FC] via-[#F5E5FC] to-[#F5E5FC] pb-8 pt-24 md:pb-12 md:pt-32">
+    <section className="w-full bg-[#F8FAFB] pb-10" aria-label="진료비 검색">
+      <div className="relative overflow-hidden bg-[#F8FAFB] pb-8 pt-24 md:pb-12 md:pt-32">
         <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-[#48B8D0]/5 blur-3xl" />
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <AnimateOnScroll animation="fade-up">
             <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#48B8D0]/10 px-3 py-1 text-xs font-semibold text-[#48B8D0]">
               전국 평균 데이터와 비교
             </span>
-            <h1 className="mb-3 text-2xl font-extrabold text-[#1F2937] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
+            <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-[#0B3041] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
             <p className="text-sm text-[#6B7280] md:text-base">전국 평균 데이터와 비교해보세요</p>
           </AnimateOnScroll>
         </div>
@@ -132,7 +132,7 @@ export default function CostSearchClient() {
 
       <div className="mx-auto -mt-6 max-w-3xl px-4">
         <AnimateOnScroll animation="fade-up" delay={100}>
-          <div className="rounded-2xl bg-white p-6 shadow-xl shadow-[#1F2937]/5 md:p-8">
+          <div className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
             <form
               role="search"
               aria-label="진료비 검색 폼"
@@ -150,7 +150,7 @@ export default function CostSearchClient() {
                   onChange={(event) => setQuery(event.target.value)}
                   type="text"
                   placeholder="진료 항목을 검색해보세요 (예: 중성화, 슬개골)"
-                  className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-3.5 pl-12 pr-4 text-sm text-[#1F2937] placeholder-[#6B7280] transition-all duration-200 focus:border-[#48B8D0] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#48B8D0]/10"
+                  className="w-full rounded-2xl border border-[#0B3041]/10 bg-white py-3.5 pl-12 pr-4 text-sm text-[#0B3041] placeholder-[#6B7280] transition-all duration-200 focus:border-[#48B8D0] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#48B8D0]/20"
                 />
               </div>
 
@@ -158,7 +158,7 @@ export default function CostSearchClient() {
                 <select
                   value={animalType}
                   onChange={(event) => setAnimalType(event.target.value as (typeof animalTypes)[number])}
-                  className="flex-1 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1F2937] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-4 focus:ring-[#48B8D0]/10"
+                  className="flex-1 rounded-2xl border border-[#0B3041]/10 bg-white px-4 py-3 text-sm text-[#0B3041] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-2 focus:ring-[#48B8D0]/20"
                 >
                   {animalTypes.map((type) => (
                     <option key={type} value={type}>{type}</option>
@@ -167,7 +167,7 @@ export default function CostSearchClient() {
                 <select
                   value={region}
                   onChange={(event) => setRegion(event.target.value)}
-                  className="flex-1 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-sm text-[#1F2937] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-4 focus:ring-[#48B8D0]/10"
+                  className="flex-1 rounded-2xl border border-[#0B3041]/10 bg-white px-4 py-3 text-sm text-[#0B3041] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-2 focus:ring-[#48B8D0]/20"
                 >
                   {regions.map((area) => (
                     <option key={area} value={area}>{area}</option>
@@ -184,7 +184,7 @@ export default function CostSearchClient() {
                       setQuery(tag);
                       void runSearch(tag);
                     }}
-                    className="rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-medium text-[#6B7280] transition-all duration-200 hover:border-[#48B8D0] hover:bg-[#F5E5FC] hover:text-[#48B8D0]"
+                    className="rounded-full bg-[#48B8D0]/10 px-3 py-1.5 text-sm font-medium text-[#48B8D0] transition-all duration-200 hover:bg-[#48B8D0]/20"
                   >
                     {tag}
                   </button>
@@ -204,7 +204,7 @@ export default function CostSearchClient() {
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#48B8D0]/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
+                className="mt-6 w-full rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]"
               >
                 🔍 진료비 검색하기
               </button>
@@ -228,10 +228,10 @@ export default function CostSearchClient() {
             </div>
             {results.map((item, i) => (
               <AnimateOnScroll key={item.item} animation="fade-up" delay={i * 50}>
-                <div className="rounded-2xl border border-[#B28B84]/10 bg-white p-5 shadow-sm transition-all duration-200 hover:border-[#B28B84]/30 hover:shadow-md md:p-6">
+                <div className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-5 transition-all hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(11,48,65,0.08)] md:p-6">
                   <div className="mb-1 flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="font-semibold text-[#1F2937]">{item.item}</h3>
+                      <h3 className="font-semibold text-[#0B3041]">{item.item}</h3>
                       <p className="mt-0.5 text-xs text-[#6B7280]">{item.category}</p>
                     </div>
                     <p className="text-xl font-bold tracking-tight text-[#48B8D0] md:text-2xl">
@@ -262,11 +262,11 @@ export default function CostSearchClient() {
         {topResult ? (
           <div className="mt-6 space-y-6">
             <CareGuide keyword={topResult.item} categorySlug={matchedCategory?.slug} matchedTags={matchedTags} />
-            <article className="rounded-2xl border border-[#B28B84]/10 bg-white p-6 shadow-sm">
+            <article className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6">
               <div className="flex items-center justify-between gap-3">
                 <h2 className="flex items-center gap-2 text-lg font-bold text-[#1F2937]"><span>🩺</span>AI 비용 분석</h2>
                 {isPremiumUser ? (
-                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] px-4 py-2 text-sm font-semibold text-white">
+                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]">
                     이 가격이 궁금하세요?
                   </button>
                 ) : null}

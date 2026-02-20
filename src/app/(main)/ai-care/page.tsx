@@ -286,19 +286,19 @@ export default function AiCarePage() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 pb-20 pt-24 md:pt-28">
-      <section className="rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
+    <main className="mx-auto max-w-4xl bg-[#F8FAFB] px-4 pb-20 pt-24 md:pt-28">
+      <section className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
         <div className="mb-6 flex items-center gap-3">
           <span className="relative flex h-3 w-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#48B8D0] opacity-75" />
             <span className="relative inline-flex h-3 w-3 rounded-full bg-[#48B8D0]" />
           </span>
-          <h1 className="text-2xl font-extrabold text-[#1F2937] md:text-3xl">AI 진료비 견적서</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#0B3041] md:text-3xl">AI 진료비 견적서</h1>
         </div>
         <p className="text-sm text-[#6B7280] md:text-base">증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
       </section>
 
-      <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
+      <section className="mt-6 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
         {user && appPets.length > 0 && (
           <div className="mb-5 rounded-xl bg-[#48B8D0]/10 p-4">
             <div className="mb-2 flex items-center gap-2">
@@ -310,7 +310,7 @@ export default function AiCarePage() {
               <select
                 value={selectedAppPet?.id || ''}
                 onChange={(event) => void handleAppPetChange(event.target.value)}
-                className="mt-1 rounded-lg border border-[#48B8D0]/30 bg-white px-3 py-2 text-sm text-[#1F2937] outline-none"
+                className="mt-1 rounded-lg border border-[#48B8D0]/30 bg-white px-3 py-2 text-sm text-[#0B3041] outline-none"
               >
                 {appPets.map((pet) => (
                   <option key={pet.id} value={pet.id}>
@@ -332,12 +332,12 @@ export default function AiCarePage() {
         {!user && (
           <div className="mb-5 rounded-xl bg-[#F5E5FC]/50 p-4">
             <p className="text-sm text-[#1F2937]">
-              <a href="/login" className="font-bold text-[#48B8D0] underline">로그인</a>하면 앱에 등록된 반려동물 정보와 진료기록이 자동으로 반영돼요
+              <a href="/login" className="font-semibold text-[#48B8D0] transition-colors hover:text-[#3A9BB0]">로그인</a>하면 앱에 등록된 반려동물 정보와 진료기록이 자동으로 반영돼요
             </p>
           </div>
         )}
 
-        <h2 className="mb-5 text-lg font-bold text-[#1F2937]">1단계. 반려동물 정보</h2>
+        <h2 className="mb-5 text-3xl font-extrabold tracking-tight text-[#0B3041]">1단계. 반려동물 정보</h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2">
@@ -410,8 +410,8 @@ export default function AiCarePage() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
-        <h2 className="mb-5 text-lg font-bold text-[#1F2937]">2단계. 증상 입력</h2>
+      <section className="mt-6 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
+        <h2 className="mb-5 text-3xl font-extrabold tracking-tight text-[#0B3041]">2단계. 증상 입력</h2>
 
         <div className="mb-4 flex flex-wrap gap-2">
           {SYMPTOM_CHIPS.map((chip) => (
@@ -454,7 +454,7 @@ export default function AiCarePage() {
         ) : (
           <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
             <p className="text-sm font-medium text-[#0B3041]">
-              <a href="/login" className="text-[#48B8D0] underline">로그인</a>하면 앱 진료기록 기반으로 더 정확한 AI 분석을 받을 수 있어요
+              <a href="/login" className="font-semibold text-[#48B8D0] transition-colors hover:text-[#3A9BB0]">로그인</a>하면 앱 진료기록 기반으로 더 정확한 AI 분석을 받을 수 있어요
             </p>
           </div>
         )}
@@ -467,7 +467,7 @@ export default function AiCarePage() {
             'mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-4 text-sm font-bold text-white transition ' +
             (loading || !symptoms.trim()
               ? 'cursor-not-allowed bg-[#CBD5E1]'
-              : 'bg-gradient-to-r from-[#1F2937] to-[#1F2937] hover:opacity-95')
+              : 'bg-[#48B8D0] shadow-[0_0_30px_rgba(72,184,208,0.3)] hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]')
           }
         >
           {loading ? (
@@ -495,8 +495,8 @@ export default function AiCarePage() {
               <article
                 key={condition.name + '-' + index.toString()}
                 className={
-                  'rounded-2xl border p-5 ' +
-                  (index === 0 ? 'border-[#48B8D0]/30 bg-[#F5E5FC]' : 'border-[#E2E8F0] bg-white')
+                  'rounded-3xl border border-[#0B3041]/[0.06] bg-white p-5 ' +
+                  (index === 0 ? 'ring-1 ring-[#48B8D0]/20' : '')
                 }
               >
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -523,7 +523,7 @@ export default function AiCarePage() {
               </article>
             ))}
 
-            <article className="rounded-2xl bg-[#1F2937] p-5">
+            <article className="rounded-3xl bg-[#111827] p-5">
               <h3 className="mb-2 text-base font-bold text-white">수의사 상담 전 추천사항</h3>
               <p className="text-sm leading-relaxed text-slate-100">{result.recommendation}</p>
             </article>
