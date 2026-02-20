@@ -106,7 +106,7 @@ export default function HomePage() {
             </AnimateOnScroll>
 
             <AnimateOnScroll animation="fade-up" delay={200}>
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="flex flex-col gap-4">
                 <a
                   href="/ai-care"
                   className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-[#0A0F1A] shadow-[0_0_30px_rgba(72,184,208,0.4)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.5)]"
@@ -114,41 +114,33 @@ export default function HomePage() {
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></svg>
                   무료로 진료비 확인
                 </a>
-                <a
-                  href="https://apps.apple.com/app/id6504879567"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 rounded-xl bg-black px-5 py-3 transition-all hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
-                >
-                  <svg width="20" height="24" viewBox="0 0 814 1000" fill="white">
-                    <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.5-81.5-105.8-207.6-105.8-327.6 0-192.8 125.3-295.2 248.6-295.2 65.5 0 120.1 43 161.2 43s99.8-45.6 177.6-45.6c28.7 0 131.5 2.6 199.4 99.8zm-234-184.5c31.4-37.1 53.6-88.7 53.6-140.3 0-7.1-.6-14.3-1.9-20.1-51.1 1.9-111.9 34-148.4 76.5-27.5 31.4-55.2 83-55.2 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.9 0 103.7-30.7 140.4-71.1z" />
-                  </svg>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] leading-tight text-white/70">Download on the</span>
-                    <span className="text-sm font-bold leading-tight text-white">App Store</span>
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 rounded-xl bg-black px-5 py-3 transition-all hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
-                >
-                  <svg width="22" height="24" viewBox="0 0 512 512" fill="none">
-                    <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#FFD900" />
-                    <path d="M104.6 499l280.8-161.2-60.1-60.1" fill="#FF3333" />
-                    <path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256" fill="#5AC736" />
-                    <path d="M325.3 234.3L104.6 13l280.8 161.2" fill="#5AC736" />
-                    <path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z" fill="#4CAF50" />
-                    <path d="M325.3 277.7l-220.7 221.3 280.8-161.2" fill="#FF3333" />
-                    <path d="M472.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8z" fill="#FFD900" />
-                    <path d="M104.6 13l220.7 221.3 60.1-60.1L104.6 13z" fill="#00E5FF" />
-                  </svg>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] leading-tight text-white/70">GET IT ON</span>
-                    <span className="text-sm font-bold leading-tight text-white">Google Play</span>
-                  </div>
-                </a>
+                <div className="flex gap-3">
+                  <a
+                    href="https://apps.apple.com/app/id6504879567"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-black/80 px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 814 1000" fill="currentColor">
+                      <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.5-81.5-105.8-207.6-105.8-327.6 0-192.8 125.3-295.2 248.6-295.2 65.5 0 120.1 43 161.2 43s99.8-45.6 177.6-45.6c28.7 0 131.5 2.6 199.4 99.8zm-234-184.5c31.4-37.1 53.6-88.7 53.6-140.3 0-7.1-.6-14.3-1.9-20.1-51.1 1.9-111.9 34-148.4 76.5-27.5 31.4-55.2 83-55.2 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.9 0 103.7-30.7 140.4-71.1z" />
+                    </svg>
+                    App Store
+                  </a>
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-black/80 px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 512 512" fill="none">
+                      <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1z" fill="#FFD900" />
+                      <path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z" fill="#4CAF50" />
+                      <path d="M472.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8z" fill="#FFD900" />
+                      <path d="M104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#FF3333" />
+                    </svg>
+                    Google Play
+                  </a>
+                </div>
               </div>
             </AnimateOnScroll>
 
@@ -352,37 +344,27 @@ export default function HomePage() {
                     href="https://apps.apple.com/app/id6504879567"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 rounded-xl bg-black px-5 py-3 transition-all hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
+                    className="inline-flex items-center gap-2 rounded-xl bg-black/80 px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
                   >
-                    <svg width="20" height="24" viewBox="0 0 814 1000" fill="white">
+                    <svg width="18" height="18" viewBox="0 0 814 1000" fill="currentColor">
                       <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.5-81.5-105.8-207.6-105.8-327.6 0-192.8 125.3-295.2 248.6-295.2 65.5 0 120.1 43 161.2 43s99.8-45.6 177.6-45.6c28.7 0 131.5 2.6 199.4 99.8zm-234-184.5c31.4-37.1 53.6-88.7 53.6-140.3 0-7.1-.6-14.3-1.9-20.1-51.1 1.9-111.9 34-148.4 76.5-27.5 31.4-55.2 83-55.2 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.9 0 103.7-30.7 140.4-71.1z" />
                     </svg>
-                    <div className="flex flex-col">
-                      <span className="text-[10px] leading-tight text-white/70">Download on the</span>
-                      <span className="text-sm font-bold leading-tight text-white">App Store</span>
-                    </div>
+                    App Store
                   </a>
 
                   <a
                     href="#"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 rounded-xl bg-black px-5 py-3 transition-all hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
+                    className="inline-flex items-center gap-2 rounded-xl bg-black/80 px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
                   >
-                    <svg width="22" height="24" viewBox="0 0 512 512" fill="none">
-                      <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#FFD900" />
-                      <path d="M104.6 499l280.8-161.2-60.1-60.1" fill="#FF3333" />
-                      <path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256" fill="#5AC736" />
-                      <path d="M325.3 234.3L104.6 13l280.8 161.2" fill="#5AC736" />
+                    <svg width="18" height="18" viewBox="0 0 512 512" fill="none">
+                      <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1z" fill="#FFD900" />
                       <path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z" fill="#4CAF50" />
-                      <path d="M325.3 277.7l-220.7 221.3 280.8-161.2" fill="#FF3333" />
                       <path d="M472.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8z" fill="#FFD900" />
-                      <path d="M104.6 13l220.7 221.3 60.1-60.1L104.6 13z" fill="#00E5FF" />
+                      <path d="M104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#FF3333" />
                     </svg>
-                    <div className="flex flex-col">
-                      <span className="text-[10px] leading-tight text-white/70">GET IT ON</span>
-                      <span className="text-sm font-bold leading-tight text-white">Google Play</span>
-                    </div>
+                    Google Play
                   </a>
                 </div>
               </AnimateOnScroll>
@@ -462,36 +444,26 @@ export default function HomePage() {
                 href="https://apps.apple.com/app/id6504879567"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 rounded-xl bg-black px-5 py-3 transition-all hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
+                className="inline-flex items-center gap-2 rounded-xl bg-black/80 px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
               >
-                <svg width="20" height="24" viewBox="0 0 814 1000" fill="white">
+                <svg width="18" height="18" viewBox="0 0 814 1000" fill="currentColor">
                   <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.5-81.5-105.8-207.6-105.8-327.6 0-192.8 125.3-295.2 248.6-295.2 65.5 0 120.1 43 161.2 43s99.8-45.6 177.6-45.6c28.7 0 131.5 2.6 199.4 99.8zm-234-184.5c31.4-37.1 53.6-88.7 53.6-140.3 0-7.1-.6-14.3-1.9-20.1-51.1 1.9-111.9 34-148.4 76.5-27.5 31.4-55.2 83-55.2 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.9 0 103.7-30.7 140.4-71.1z" />
                 </svg>
-                <div className="flex flex-col">
-                  <span className="text-[10px] leading-tight text-white/70">Download on the</span>
-                  <span className="text-sm font-bold leading-tight text-white">App Store</span>
-                </div>
+                App Store
               </a>
               <a
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 rounded-xl bg-black px-5 py-3 transition-all hover:-translate-y-0.5 hover:bg-[#1a1a1a]"
+                className="inline-flex items-center gap-2 rounded-xl bg-black/80 px-5 py-3 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-black"
               >
-                <svg width="22" height="24" viewBox="0 0 512 512" fill="none">
-                  <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#FFD900" />
-                  <path d="M104.6 499l280.8-161.2-60.1-60.1" fill="#FF3333" />
-                  <path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256" fill="#5AC736" />
-                  <path d="M325.3 234.3L104.6 13l280.8 161.2" fill="#5AC736" />
+                <svg width="18" height="18" viewBox="0 0 512 512" fill="none">
+                  <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1z" fill="#FFD900" />
                   <path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z" fill="#4CAF50" />
-                  <path d="M325.3 277.7l-220.7 221.3 280.8-161.2" fill="#FF3333" />
                   <path d="M472.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8z" fill="#FFD900" />
-                  <path d="M104.6 13l220.7 221.3 60.1-60.1L104.6 13z" fill="#00E5FF" />
+                  <path d="M104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#FF3333" />
                 </svg>
-                <div className="flex flex-col">
-                  <span className="text-[10px] leading-tight text-white/70">GET IT ON</span>
-                  <span className="text-sm font-bold leading-tight text-white">Google Play</span>
-                </div>
+                Google Play
               </a>
               <a href="/ai-care" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.06] px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10">
                 웹에서 먼저 체험
