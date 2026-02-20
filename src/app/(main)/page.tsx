@@ -329,7 +329,7 @@ export default function HomePage() {
                 <div className="relative w-[280px] overflow-hidden rounded-[44px] border-4 border-white/10 bg-black shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_60px_rgba(72,184,208,0.1)]">
                   <div className="absolute left-1/2 top-0 z-10 h-[30px] w-[110px] -translate-x-1/2 rounded-b-[18px] bg-black" />
                   {hasToriImage ? (
-                    <Image src="/tori-hero.jpeg" alt="PetHealth+ 앱 화면" width={280} height={600} className="w-full rounded-[40px]" />
+                    <Image src="/app-screenshot.png" alt="PetHealth+ 앱 화면" width={280} height={600} className="w-full rounded-[40px]" />
                   ) : (
                     <div className="flex h-[600px] w-full items-center justify-center rounded-[40px] bg-[#111827] text-sm font-semibold text-white/60">
                       앱 화면 이미지 준비중
