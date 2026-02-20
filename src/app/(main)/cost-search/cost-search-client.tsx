@@ -35,12 +35,14 @@ type CostSearchListResponse = {
 };
 
 const popularTags = ['중성화', '슬개골', '스케일링', '혈액검사', '예방접종', '초음파', '피부', 'MRI'];
+const defaultPopularItems = ['진찰료', '예방접종', '중성화수술', '스케일링', '혈액검사', '엑스레이', '초음파', '슬개골탈구'];
+const emptyResultPopularItems = ['진찰료', '예방접종', '중성화수술', '스케일링', '혈액검사'];
 const animalTypes = ['강아지', '고양이'] as const;
 const regions = ['전국', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '경기', '강원'];
 
 export default function CostSearchClient() {
   const { user, loading } = useAuth();
-  const [query, setQuery] = useState('혈액검사');
+  const [query, setQuery] = useState('');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
   const [region, setRegion] = useState('전국');
   const [results, setResults] = useState<CostSearchListItem[]>([]);
@@ -103,6 +105,7 @@ export default function CostSearchClient() {
   }
 
   const topResult = results[0];
+  const trimmedQuery = query.trim();
   const matchedCategory = useMemo(() => {
     if (!topResult) return undefined;
     return FEE_CATEGORIES.find((category) =>
@@ -247,14 +250,47 @@ export default function CostSearchClient() {
           </div>
         )}
 
-        {!searching && results.length === 0 && hasSearched && query && (
+        {!searching && trimmedQuery.length === 0 && (
+          <div className="mt-6 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 md:p-8">
+            <h3 className="mb-4 text-lg font-bold text-[#0B3041]">🔥 많이 검색하는 진료 항목</h3>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+              {defaultPopularItems.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => {
+                    setQuery(item);
+                    void runSearch(item);
+                  }}
+                  className="rounded-2xl border border-[#0B3041]/[0.06] bg-white px-4 py-3 text-sm font-medium text-[#0B3041] transition-all hover:border-[#48B8D0] hover:bg-[#48B8D0]/5"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!searching && results.length === 0 && hasSearched && trimmedQuery.length > 0 && (
           <AnimateOnScroll animation="fade-in">
-            <div className="py-16 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#F5E5FC]">
-                <span className="text-3xl text-[#48B8D0]/50">🔎</span>
+            <div className="py-12 text-center">
+              <p className="mb-2 text-lg font-bold text-[#0B3041]">&quot;{trimmedQuery}&quot;에 대한 결과를 찾지 못했어요</p>
+              <p className="mb-6 text-sm text-[#6B7280]">다른 키워드로 검색하거나, 아래 인기 항목을 확인해보세요</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {emptyResultPopularItems.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => {
+                      setQuery(item);
+                      void runSearch(item);
+                    }}
+                    className="rounded-full bg-[#48B8D0]/10 px-4 py-2 text-sm font-medium text-[#48B8D0] transition-all hover:bg-[#48B8D0]/20"
+                  >
+                    {item}
+                  </button>
+                ))}
               </div>
-              <p className="mb-1 font-medium text-[#1F2937]">검색 결과가 없어요</p>
-              <p className="text-sm text-[#6B7280]">다른 키워드로 검색해보세요</p>
             </div>
           </AnimateOnScroll>
         )}
