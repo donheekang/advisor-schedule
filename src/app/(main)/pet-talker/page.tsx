@@ -405,6 +405,7 @@ export default function PetTalkerPage() {
       <section className="mx-auto flex w-full max-w-md flex-col gap-6">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#7C4A2D] shadow-sm">{usageText}</p>
+          <p className="text-xs text-[#9CA3AF]">로그인하면 하루 5회까지 사용할 수 있어요</p>
           <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#0B3041]">우리 아이가 말을 한다면 🐾</h1>
           <p className="text-sm leading-relaxed text-[#7C4A2D]">사진 한 장으로 우리 아이의 마음을 따뜻한 한마디로 들어보세요.</p>
         </header>
