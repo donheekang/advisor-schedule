@@ -192,6 +192,43 @@ export default function AiCareClient() {
             </div>
           </AnimateOnScroll>
 
+          {!hasResult ? (
+            <div className="mx-auto mt-8 max-w-2xl">
+              <div className="relative overflow-hidden rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm">
+                <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/60 backdrop-blur-[2px]">
+                  <div className="rounded-2xl bg-[#0B3041] px-6 py-3 text-sm font-bold text-white shadow-lg">
+                    ✦ 증상을 입력하면 이런 결과를 볼 수 있어요
+                  </div>
+                </div>
+
+                <div className="opacity-80">
+                  <p className="mb-1 text-xs font-semibold text-[#48B8D0]">AI 진료비 견적 · 예시</p>
+                  <h4 className="mb-4 text-lg font-bold text-[#0B3041]">슬개골 탈구 2기 · 소형견</h4>
+
+                  <div className="mb-4 grid grid-cols-3 gap-3">
+                    <div className="rounded-2xl bg-[#F8FAFB] p-3 text-center">
+                      <p className="text-xs text-[#6B7280]">최소</p>
+                      <p className="text-lg font-extrabold text-[#0B3041]">80만</p>
+                    </div>
+                    <div className="rounded-2xl bg-[#48B8D0]/10 p-3 text-center">
+                      <p className="text-xs text-[#48B8D0]">평균</p>
+                      <p className="text-lg font-extrabold text-[#48B8D0]">150만</p>
+                    </div>
+                    <div className="rounded-2xl bg-[#F8FAFB] p-3 text-center">
+                      <p className="text-xs text-[#6B7280]">최대</p>
+                      <p className="text-lg font-extrabold text-[#0B3041]">250만</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-sm text-[#6B7280]">• 자주 동반되는 검사: 혈액검사, X-ray</p>
+                    <p className="text-sm text-[#6B7280]">• 평균 입원 기간: 1~3일</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <AnimateOnScroll animation="fade-up">
             <section ref={resultRef} className="mt-6 rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm md:p-8">
               <h2 className="mb-2 text-lg font-bold text-[#4F2A1D]">STEP 2. 맞춤 분석 결과</h2>
