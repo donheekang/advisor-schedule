@@ -4,7 +4,6 @@ import { useAuth } from "@/components/auth-provider";
 import { ShareCard } from "@/components/share-card";
 import { apiClient, ApiError } from "@/lib/api-client";
 import Image from "next/image";
-import Link from "next/link";
 import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type RequestStatus = "idle" | "loading" | "success" | "error";
@@ -722,9 +721,7 @@ export default function PetTalkerPage() {
                 <div className="space-y-3">
                   <p>{errorMessage}</p>
                   {errorType === "usage_exceeded" ? (
-                    <Link href="https://apps.apple.com/" className="inline-flex rounded-lg bg-[#48B8D0] px-4 py-2 text-xs font-bold text-white">
-                      앱 다운로드
-                    </Link>
+                    <div className="inline-flex cursor-not-allowed select-none rounded-lg bg-white/10 px-4 py-2 text-xs font-bold text-white/40">앱 출시 예정</div>
                   ) : null}
                 </div>
               ) : (
@@ -742,7 +739,7 @@ export default function PetTalkerPage() {
         <section className="rounded-3xl bg-[#111827] p-6 text-center">
           <p className="text-sm font-semibold text-white">PetHealth+ 앱에서 더 많은 기능을 만나보세요</p>
           <button type="button" className="mt-3 w-full rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]">
-            앱 다운로드 (준비 중)
+            앱 출시 예정
           </button>
         </section>
 

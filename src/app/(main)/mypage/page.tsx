@@ -11,7 +11,6 @@ import {
   Dog, Cat, Camera, Bell, MapPin,
 } from 'lucide-react';
 
-const APPSTORE_URL = 'https://apps.apple.com/app/id6504879567';
 const currencyFormatter = new Intl.NumberFormat('ko-KR');
 
 type PetProfile = { id: string; name: string; species: string; breed: string | null; birth_date: string | null; weight_kg: number | null; allergy_tags?: string[]; gender?: string; neutered?: string };
@@ -220,7 +219,7 @@ export default function MyPage() {
           <div className="mt-4 rounded-xl bg-[#F8FAFC] p-6 text-center">
             <PawPrint size={32} className="mx-auto mb-3 text-[#CBD5E1]" />
             <p className="text-sm text-[#6B7280]">앱에서 반려동물을 등록해보세요</p>
-            <a href={APPSTORE_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#48B8D0] px-4 py-2 text-sm font-semibold text-white"><Download size={14} />앱 다운로드</a>
+            <div className="mt-3 inline-flex cursor-not-allowed select-none items-center gap-1.5 rounded-lg bg-[#0B3041]/5 px-4 py-2 text-sm font-semibold text-[#0B3041]/40"><Download size={14} />앱 출시 예정</div>
           </div>
         ) : (
           <>
@@ -315,7 +314,7 @@ export default function MyPage() {
           <AppFeatureRow icon={<FileText size={16} />} text="검사결과 PDF 클라우드 보관" />
           <AppFeatureRow icon={<MapPin size={16} />} text="내 근처 동물병원 찾기" />
         </div>
-        <a href={APPSTORE_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-[#0B3041] transition hover:bg-white/90"><Download size={16} />App Store에서 다운로드</a>
+        <div className="mt-5 inline-flex cursor-not-allowed select-none items-center gap-2 rounded-xl bg-white/60 px-5 py-2.5 text-sm font-bold text-[#0B3041]/40"><Download size={16} />앱 출시 예정</div>
       </section>
     </main>
   );

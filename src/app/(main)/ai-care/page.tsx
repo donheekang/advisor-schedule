@@ -449,7 +449,7 @@ export default function AiCarePage() {
         ) : user && appDataLoaded && appPets.length === 0 ? (
           <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
             <p className="text-sm font-medium text-[#0B3041]">앱에서 반려동물을 등록하면 더 정확한 견적을 받을 수 있어요</p>
-            <p className="mt-1 text-xs text-[#6B7280]">App Store / Google Play에서 PetHealth+ 검색</p>
+            <p className="mt-1 text-xs text-[#6B7280]">앱 출시 예정 · 곧 만나보실 수 있어요</p>
           </div>
         ) : (
           <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">

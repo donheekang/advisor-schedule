@@ -7,7 +7,6 @@ import { useAuth } from '@/components/auth-provider';
 import { CTABanner } from '@/components/cta-banner';
 import { apiClient } from '@/lib/api-client';
 
-const APPSTORE_URL = 'https://apps.apple.com/app/id6504879567';
 const PAGE_SIZE = 10;
 const currencyFormatter = new Intl.NumberFormat('ko-KR');
 
@@ -130,14 +129,7 @@ export default function MyPageRecordsPage() {
         <article className="rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
           <p className="text-4xl">📋</p>
           <p className="mt-2 text-sm text-[#7C4A2D]">앱에서 진료 영수증을 등록하면 여기에서 상세 목록을 볼 수 있어요.</p>
-          <a
-            href={APPSTORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white"
-          >
-            앱 다운로드
-          </a>
+          <div className="mt-4 inline-flex cursor-not-allowed select-none rounded-2xl bg-[#0B3041]/5 px-5 py-2.5 text-sm font-bold text-[#0B3041]/40">앱 출시 예정</div>
         </article>
       ) : null}
 
@@ -186,14 +178,7 @@ export default function MyPageRecordsPage() {
                 기록 상세 보기 →
               </Link>
             ) : null}
-            <a
-              href={APPSTORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-bold text-[#A36241] underline underline-offset-4"
-            >
-              앱에서 영수증 사진 보기
-            </a>
+            <div className="text-sm font-bold text-[#A36241]">앱 출시 예정</div>
           </div>
         </article>
       ))}

@@ -125,11 +125,11 @@ export default function CategoryPage({
             <Link
               key={c.slug}
               href={`/cost-search/${c.slug}`}
-              className={`rounded-full px-4 py-2 text-xs font-bold transition ${
+              className={'rounded-full px-4 py-2 text-xs font-bold transition ' + (
                 c.slug === cat.slug
                   ? 'bg-gradient-to-r from-[#F97316] to-[#FB923C] text-white shadow-md'
                   : 'border border-[#F8C79F] bg-white text-[#7C4A2D] hover:bg-[#FFF8F0]'
-              }`}
+              )}
             >
               {c.icon} {c.title}
             </Link>
@@ -257,14 +257,7 @@ export default function CategoryPage({
             >
               무료 AI 견적서 →
             </Link>
-            <a
-              href="https://apps.apple.com/app/id6504879567"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-2xl border border-[#F8C79F]/50 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
-            >
-              📱 앱 다운로드
-            </a>
+            <div className="rounded-2xl border border-[#F8C79F]/50 px-6 py-3 text-sm font-bold text-white/50">앱 출시 예정</div>
           </div>
         </article>
       </div>
