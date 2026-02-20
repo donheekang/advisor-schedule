@@ -8,7 +8,6 @@ import { useAuth } from '@/components/auth-provider';
 import { CTABanner } from '@/components/cta-banner';
 import { apiClient } from '@/lib/api-client';
 
-const APPSTORE_URL = 'https://apps.apple.com/app/id6504879567';
 const currencyFormatter = new Intl.NumberFormat('ko-KR');
 
 type RecordItem = {
@@ -165,14 +164,7 @@ export default function RecordDetailPage({ params }: RecordDetailPageProps) {
             ))}
           </div>
 
-          <a
-            href={APPSTORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex text-sm font-bold text-[#F97316] underline underline-offset-4"
-          >
-            앱에서 영수증 사진도 보기
-          </a>
+          <p className="mt-4 text-sm font-bold text-[#F97316]">앱 출시 예정</p>
         </article>
       ) : null}
 

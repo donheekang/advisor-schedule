@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, DragEvent, useMemo, useRef, useState } from "react";
 
+import { StoreComingSoonButtons } from "@/components/store-coming-soon-buttons";
+
 type RequestStatus = "idle" | "loading" | "success" | "error";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -245,12 +247,7 @@ export default function PetTalkerPage() {
                   <p className="mb-1 text-base font-bold text-[#0B3041]">우리 아이 기록, 앱에서 모아보세요</p>
                   <p className="text-sm text-[#6B7280]">진료 기록부터 체중 변화까지 — AI가 알아서 정리해줘요</p>
                 </div>
-                <a
-                  href="https://apps.apple.com/app/id6504879567"
-                  className="inline-flex items-center gap-2 rounded-2xl bg-[#48B8D0] px-6 py-3 text-sm font-bold text-white shadow-[0_0_20px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(72,184,208,0.4)]"
-                >
-                  앱 다운로드
-                </a>
+                <StoreComingSoonButtons tone="light" />
               </div>
             </div>
           </div>

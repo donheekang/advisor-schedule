@@ -4,6 +4,8 @@ import { findCareProductsByCategory, createCoupangSearchUrl, CARE_CATEGORY_LABEL
 import { findCostSeedMatches } from '@/lib/cost-search-seed';
 import Link from 'next/link';
 
+import { StoreComingSoonButtons } from '@/components/store-coming-soon-buttons';
+
 /* ─────────────────────────────────────────────────
  * 정적 경로 생성 (SSG)
  * ───────────────────────────────────────────────── */
@@ -257,14 +259,7 @@ export default function CategoryPage({
             >
               무료 AI 견적서 →
             </Link>
-            <a
-              href="https://apps.apple.com/app/id6504879567"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-2xl border border-[#F8C79F]/50 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
-            >
-              📱 앱 다운로드
-            </a>
+            <StoreComingSoonButtons tone="dark" />
           </div>
         </article>
       </div>

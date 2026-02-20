@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
+import { StoreComingSoonButtons } from '@/components/store-coming-soon-buttons';
+
 type FaqItem = {
   question: string;
   answer: string;
@@ -286,15 +288,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         <h2 className="text-2xl font-bold md:text-3xl">우리 아이 건강 관리, 지금 시작하세요 🐾</h2>
         <p className="mt-3 text-[#FFF3E6]">앱에서 진료 기록을 쌓을수록 우리 아이 맞춤 비교가 정교해집니다.</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Link href="https://apps.apple.com" className="rounded-xl bg-white px-5 py-3 font-bold text-[#C2410C] transition hover:bg-[#FFF7ED]">
-            App Store 다운로드
-          </Link>
-          <Link
-            href="https://play.google.com/store"
-            className="rounded-xl border border-white/60 px-5 py-3 font-bold text-white transition hover:bg-[#EA580C]"
-          >
-            Google Play 다운로드
-          </Link>
+          <StoreComingSoonButtons tone="light" />
         </div>
       </Section>
 

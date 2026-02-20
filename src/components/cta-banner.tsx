@@ -1,28 +1,21 @@
 import Link from 'next/link';
 
+import { StoreComingSoonButtons } from '@/components/store-coming-soon-buttons';
+
 type CTABannerProps = {
   variant: 'ai-care' | 'app-download' | 'cost-search';
   context?: string;
 };
 
-const APPSTORE_URL = 'https://apps.apple.com/app/id6504879567';
-
-const bannerConfig: Record<CTABannerProps['variant'], {
+const bannerConfig: Record<'ai-care' | 'cost-search', {
   title: string;
   href: string;
-  external?: boolean;
   className: string;
 }> = {
   'ai-care': {
     title: '✨ 우리 아이 맞춤 AI 견적서 분석 →',
     href: '/ai-care',
     className: 'bg-gradient-to-r from-[#F97316] to-[#FB923C] text-white'
-  },
-  'app-download': {
-    title: '📱 앱에서 더 자세히',
-    href: APPSTORE_URL,
-    external: true,
-    className: 'bg-[#3D2518] text-white'
   },
   'cost-search': {
     title: '💰 진료비도 확인해보세요',
@@ -32,27 +25,24 @@ const bannerConfig: Record<CTABannerProps['variant'], {
 };
 
 export function CTABanner({ variant, context }: CTABannerProps) {
-  const config = bannerConfig[variant];
-
-  if (config.external) {
+  if (variant === 'app-download') {
     return (
-      <a
-        href={config.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-context={context}
-        className={`inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 text-sm font-bold shadow-md transition hover:shadow-lg ${config.className}`}
-      >
-        {config.title}
-      </a>
+      <div data-context={context} className="w-full rounded-2xl bg-[#FFF1E4] px-5 py-4 ring-1 ring-[#F8C79F]/40">
+        <p className="mb-3 text-center text-sm font-bold text-[#7C4A2D]">앱 출시 예정</p>
+        <div className="flex justify-center">
+          <StoreComingSoonButtons tone="light" />
+        </div>
+      </div>
     );
   }
+
+  const config = bannerConfig[variant];
 
   return (
     <Link
       href={config.href}
       data-context={context}
-      className={`inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 text-sm font-bold shadow-md transition hover:shadow-lg ${config.className}`}
+      className={'inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 text-sm font-bold shadow-md transition hover:shadow-lg ' + config.className}
     >
       {config.title}
     </Link>
