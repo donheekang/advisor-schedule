@@ -66,22 +66,22 @@ export function Footer() {
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#B28B84]">가이드</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
+                <Link href="/cost-search" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   치과 진료비
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
+                <Link href="/cost-search" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   예방접종 비용
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
+                <Link href="/cost-search" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   수술 비용
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
+                <Link href="/cost-search" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
                   혈액검사 비용
                 </Link>
               </li>
