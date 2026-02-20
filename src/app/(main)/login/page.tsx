@@ -54,14 +54,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-[80vh] items-center justify-center px-4 py-20">
+    <div className="flex min-h-[80vh] items-center justify-center bg-[#F8FAFB] px-4 py-20">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Link href="/" className="mb-4 inline-block">
             <Image src="/logo.png" alt="PetHealth+" width={48} height={48} className="mx-auto rounded-xl" />
-            <h1 className="mt-3 text-xl font-bold text-[#1F2937]">PetHealth+</h1>
+            <h1 className="mt-3 text-xl font-bold text-[#0B3041]">PetHealth+</h1>
           </Link>
-          <h1 className="mb-2 text-xl font-bold text-[#1F2937]">로그인</h1>
+          <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-[#0B3041]">로그인</h1>
           <p className="text-sm text-[#6B7280]">우리 아이 건강 관리를 시작하세요</p>
         </div>
 
@@ -69,11 +69,11 @@ export default function LoginPage() {
           <div className="mb-4 rounded-xl bg-red-50 p-3 text-center text-sm text-red-600">{error}</div>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-3 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-5 shadow-sm">
           <button
             onClick={handleGoogle}
             disabled={loading !== ''}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-3.5 text-sm font-semibold text-[#1F2937] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-[#0B3041]/20 bg-white px-6 py-3 text-sm font-semibold text-[#0B3041] transition-all hover:bg-[#0B3041]/5 disabled:opacity-50"
           >
             {loading === 'google' ? (
               <svg className="h-5 w-5 animate-spin text-[#6B7280]" viewBox="0 0 24 24" fill="none">
@@ -117,7 +117,7 @@ export default function LoginPage() {
           <button
             onClick={handleKakao}
             disabled={loading !== ''}
-            className="flex w-full items-center justify-center gap-3 rounded-xl bg-[#FEE500] py-3.5 text-sm font-semibold text-[#191919] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-2xl border border-[#0B3041]/20 bg-white px-6 py-3 text-sm font-semibold text-[#0B3041] transition-all hover:bg-[#0B3041]/5 disabled:opacity-50"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="#191919">
               <path d="M12 3C6.477 3 2 6.463 2 10.691c0 2.69 1.794 5.055 4.508 6.398l-1.15 4.268a.5.5 0 00.77.528l5.022-3.348c.28.02.56.032.85.032 5.523 0 10-3.463 10-7.878S17.523 3 12 3z" />
@@ -128,7 +128,7 @@ export default function LoginPage() {
           <button
             onClick={handleApple}
             disabled={loading !== ''}
-            className="flex w-full items-center justify-center gap-3 rounded-xl bg-[#000000] py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)] disabled:opacity-50"
           >
             {loading === 'apple' ? (
               <svg className="h-5 w-5 animate-spin text-white/50" viewBox="0 0 24 24" fill="none">
@@ -163,14 +163,14 @@ export default function LoginPage() {
 
         <Link
           href="/"
-          className="block w-full rounded-xl border border-[#E2E8F0] bg-white py-3 text-center text-sm font-medium text-[#6B7280] transition-all duration-200 hover:bg-[#F8FAFC]"
+          className="block w-full rounded-2xl border border-[#0B3041]/20 bg-white px-6 py-3 text-center text-sm font-semibold text-[#0B3041] transition-all hover:bg-[#0B3041]/5"
         >
           로그인 없이 둘러보기
         </Link>
 
         <p className="mt-6 text-center text-xs text-[#6B7280]">
-          로그인 시 <Link href="/terms" className="text-[#48B8D0] underline">이용약관</Link> 및{' '}
-          <Link href="/privacy" className="text-[#48B8D0] underline">
+          로그인 시 <Link href="/terms" className="font-semibold text-[#48B8D0] transition-colors hover:text-[#3A9BB0]">이용약관</Link> 및{' '}
+          <Link href="/privacy" className="font-semibold text-[#48B8D0] transition-colors hover:text-[#3A9BB0]">
             개인정보처리방침
           </Link>
           에 동의합니다.

@@ -51,34 +51,34 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
   }
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full rounded-[2rem] bg-[#F8FAFB] px-5 py-10 md:px-8 md:py-12">
       <article className="mx-auto max-w-2xl space-y-8">
-        <header className="space-y-3 border-b border-[#F8C79F]/40 pb-6">
+        <header className="space-y-3 border-b border-[#0B3041]/10 pb-6">
           <Link
             href="/blog"
-            className="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-[#A36241] shadow-sm transition hover:bg-white"
+            className="inline-flex rounded-full border border-[#0B3041]/20 px-3 py-1 text-xs font-semibold text-[#0B3041] transition-all hover:bg-[#0B3041]/5"
           >
             ← 블로그 목록
           </Link>
-          <h1 className="text-3xl font-extrabold text-[#4F2A1D]">{post.title}</h1>
-          <p className="text-sm font-medium text-[#A36241]">
+          <h1 className="text-3xl font-extrabold tracking-tight text-[#0B3041]">{post.title}</h1>
+          <p className="text-sm text-[#9CA3AF]">
             {new Date(post.date).toLocaleDateString('ko-KR')}
           </p>
         </header>
 
         <section
-          className="prose prose-lg max-w-none leading-relaxed text-[#2D2D2D] prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D] prose-a:text-[#F97316] prose-a:no-underline hover:prose-a:underline prose-strong:text-[#4F2A1D]"
+          className="prose prose-lg max-w-none leading-relaxed text-[#2D2D2D] prose-headings:text-[#0B3041] prose-p:text-[#0B3041] prose-li:text-[#0B3041] prose-a:text-[#48B8D0] prose-a:no-underline hover:prose-a:text-[#3A9BB0] prose-strong:text-[#0B3041]"
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
 
-        <footer className="space-y-4 border-t border-[#F8C79F]/40 pt-6">
+        <footer className="space-y-4 border-t border-[#0B3041]/10 pt-6">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <CTABanner variant="ai-care" context="blog-post-bottom" />
             <CTABanner variant="cost-search" context="blog-post-bottom" />
           </div>
           <Link
             href="/blog"
-            className="inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
+            className="inline-flex rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]"
           >
             ← 다른 글 보기
           </Link>

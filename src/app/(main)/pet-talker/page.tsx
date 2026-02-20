@@ -401,16 +401,16 @@ export default function PetTalkerPage() {
   const emotionMeta = EMOTION_META[emotion];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#F5E5FC] to-[#FFF0E6] px-4 pt-24 pb-8 text-[#2D2D2D] md:pb-12">
+    <main className="min-h-screen bg-[#F8FAFB] px-4 pb-8 pt-24 text-[#0B3041] md:pb-12">
       <section className="mx-auto flex w-full max-w-md flex-col gap-6">
         <header className="space-y-3 text-center">
           <p className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#7C4A2D] shadow-sm">{usageText}</p>
-          <h1 className="text-3xl font-extrabold leading-tight text-[#4F2A1D]">우리 아이가 말을 한다면 🐾</h1>
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#0B3041]">우리 아이가 말을 한다면 🐾</h1>
           <p className="text-sm leading-relaxed text-[#7C4A2D]">사진 한 장으로 우리 아이의 마음을 따뜻한 한마디로 들어보세요.</p>
         </header>
 
         {user && pets.length > 0 ? (
-          <section className="rounded-2xl bg-white/95 p-4 shadow-sm">
+          <section className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-4 shadow-sm">
             <label htmlFor="pet-selector" className="mb-2 block text-sm font-semibold text-[#7C4A2D]">
               어떤 아이의 사진인가요?
             </label>
@@ -431,7 +431,7 @@ export default function PetTalkerPage() {
         ) : null}
 
         {showCallingPrompt ? (
-          <div className="space-y-5 rounded-3xl bg-white/95 p-8 text-center shadow-lg">
+          <div className="space-y-5 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-8 text-center shadow-sm">
             <p className="text-4xl">🐾</p>
             <h2 className="text-xl font-bold text-[#4F2A1D]">
               우리 아이가 나를
@@ -491,9 +491,10 @@ export default function PetTalkerPage() {
                 }}
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
-                className={`cursor-pointer rounded-3xl border bg-gradient-to-b from-white to-[#FFF6EE] p-6 shadow-lg transition ${
-                  isDragging ? "border-[#48B8D0]" : "border-[#F8C79F]"
-                }`}
+                className={
+                  "cursor-pointer rounded-3xl border-2 border-dashed bg-white p-6 transition " +
+                  (isDragging ? "border-[#48B8D0]/50" : "border-[#48B8D0]/30")
+                }
                 aria-label="사진 업로드"
               >
                 <input
@@ -539,9 +540,12 @@ export default function PetTalkerPage() {
                         key={quick}
                         type="button"
                         onClick={() => setUserMessage(quick)}
-                        className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                          userMessage === quick ? "bg-[#48B8D0] text-white shadow-md" : "bg-[#FFF0E6] text-[#7C4A2D] hover:bg-[#FFE0CC]"
-                        }`}
+                        className={
+                          "rounded-full px-3 py-1.5 text-xs font-semibold transition " +
+                          (userMessage === quick
+                            ? "bg-[#48B8D0]/10 text-[#48B8D0]"
+                            : "bg-[#0B3041]/5 text-[#6B7280] hover:bg-[#48B8D0]/10 hover:text-[#48B8D0]")
+                        }
                       >
                         {quick}
                       </button>
@@ -570,7 +574,7 @@ export default function PetTalkerPage() {
                 <button
                   type="button"
                   onClick={() => void generateSpeech()}
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] py-4 text-lg font-bold text-white shadow-lg transition active:scale-[0.98]"
+                  className="w-full rounded-2xl bg-[#48B8D0] px-8 py-4 text-lg font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]"
                 >
                   🐾 우리 아이의 반응 보기
                 </button>
@@ -590,7 +594,7 @@ export default function PetTalkerPage() {
           </>
         )}
 
-        <section className="rounded-3xl bg-white/80 p-5 shadow-sm">
+        <section className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-5 shadow-sm">
           {status === "loading" && (
             <div className="space-y-4 rounded-3xl bg-[#FFF5EB] p-4 motion-safe:animate-pulse">
               <div className="relative mx-auto aspect-square w-full overflow-hidden rounded-3xl shadow-xl">
@@ -600,7 +604,10 @@ export default function PetTalkerPage() {
                 <p className="text-base font-medium text-[#6B3D2A]">우리 아이가 생각하고 있어요...</p>
                 <div className="mt-2 inline-flex items-center gap-1">
                   {[1, 2, 3].map((dot) => (
-                    <span key={dot} className={`h-2 w-2 rounded-full bg-[#48B8D0] ${typingDots >= dot ? "opacity-100" : "opacity-25"}`} />
+                    <span
+                      key={dot}
+                      className={"h-2 w-2 rounded-full bg-[#48B8D0] " + (typingDots >= dot ? "opacity-100" : "opacity-25")}
+                    />
                   ))}
                 </div>
               </div>
@@ -617,7 +624,7 @@ export default function PetTalkerPage() {
                     alt="반려동물 결과 사진"
                     fill
                     unoptimized
-                    className={`object-cover ${emotionMeta.animationClassName}`}
+                    className={"object-cover " + emotionMeta.animationClassName}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
                 </div>
@@ -683,7 +690,7 @@ export default function PetTalkerPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="rounded-2xl border border-[#48B8D0] bg-white px-4 py-4 text-base font-bold text-[#C2410C]"
+                  className="rounded-2xl border border-[#0B3041]/20 bg-white px-6 py-3 text-base font-semibold text-[#0B3041] transition-all hover:bg-[#0B3041]/5"
                 >
                   다시 해보기
                 </button>
@@ -701,7 +708,7 @@ export default function PetTalkerPage() {
                     void navigator.clipboard.writeText(`${shareTitle}\n${shareText}\n${window.location.href}`);
                     setErrorMessage("공유 링크를 복사했어요. 원하는 앱에 붙여넣어 공유해 보세요!");
                   }}
-                  className="rounded-2xl bg-[#48B8D0] px-4 py-4 text-base font-bold text-white shadow-md"
+                  className="rounded-2xl bg-[#48B8D0] px-8 py-4 text-base font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]"
                 >
                   공유하기
                 </button>
@@ -732,9 +739,9 @@ export default function PetTalkerPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl bg-gradient-to-r from-[#48B8D0] to-[#B28B84] p-6 text-center shadow-lg">
+        <section className="rounded-3xl bg-[#111827] p-6 text-center">
           <p className="text-sm font-semibold text-white">PetHealth+ 앱에서 더 많은 기능을 만나보세요</p>
-          <button type="button" className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-bold text-[#3CA8BF] shadow-sm">
+          <button type="button" className="mt-3 w-full rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]">
             앱 다운로드 (준비 중)
           </button>
         </section>
