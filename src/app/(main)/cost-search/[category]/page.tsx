@@ -117,13 +117,19 @@ export default function CategoryPage({ params }: { params: { category: string } 
           ) : (
             <AnimateOnScroll animation="fade-in">
               <article className="rounded-2xl border border-[#F8C79F]/10 bg-white px-8 py-14 text-center">
-                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#FFF8F0]">
-                  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="h-10 w-10 text-[#D1B49A]">
-                    <path d="M21 21L15.8 15.8M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#48B8D0]/10">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#48B8D0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20v-6M6 20V10M18 20V4" />
                   </svg>
                 </div>
-                <p className="text-lg font-semibold text-[#8B6B4E]">검색 결과가 없어요</p>
-                <p className="mt-1 text-sm text-[#8B6B4E]">다른 키워드로 검색해보세요</p>
+                <p className="mb-2 text-lg font-bold text-[#0B3041]">현재 데이터를 수집하고 있어요</p>
+                <p className="mb-1 text-sm text-[#6B7280]">전국 동물병원의 실제 진료비를 모으고 있습니다.</p>
+                <p className="mb-6 text-sm text-[#6B7280]">곧 정확한 비교 데이터를 제공해드릴게요!</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  <Link href="/ai-care" className="rounded-full bg-[#48B8D0] px-5 py-2.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5">
+                    AI로 예상 진료비 보기
+                  </Link>
+                </div>
               </article>
             </AnimateOnScroll>
           )}
