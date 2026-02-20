@@ -345,7 +345,7 @@ export default function HomePage() {
             {[
               { n: '200+', l: '진료 항목 데이터' },
               { n: 'AI', l: '자동 영수증 분석' },
-              { n: 'iOS+AOS', l: '앱 출시 예정' },
+              { n: 'iOS+Android', l: '앱 출시 예정' },
               { n: '보안', l: '안전한 데이터 암호화' }
             ].map((t, i) => (
               <AnimateOnScroll key={t.l} animation="fade-up" delay={i * 100}>
