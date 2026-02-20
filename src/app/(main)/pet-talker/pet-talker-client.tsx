@@ -36,6 +36,7 @@ export default function PetTalkerPage() {
   const [usageCount, setUsageCount] = useState(0);
 
   const usageText = useMemo(() => `오늘 ${usageCount}/2회 사용`, [usageCount]);
+  const hasResult = status === "success" && Boolean(speech);
 
   const handleFileValidation = (file: File) => {
     if (!ACCEPTED_TYPES.includes(file.type)) {
@@ -236,15 +237,24 @@ export default function PetTalkerPage() {
           )}
         </section>
 
-        <section className="rounded-3xl bg-amber-50 p-5 text-center shadow-sm">
-          <p className="text-sm font-semibold text-[#1F2937]">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
-          <button
-            type="button"
-            className="mt-3 w-full rounded-xl bg-brand-secondary hover:bg-brand-ctaHover px-4 py-3 text-sm font-bold text-white shadow-sm"
-          >
-            앱 다운로드
-          </button>
-        </section>
+        {hasResult && (
+          <div className="mx-auto mt-6 w-full max-w-2xl">
+            <div className="rounded-3xl border border-[#48B8D0]/20 bg-gradient-to-r from-[#48B8D0]/5 to-[#C084FC]/5 p-6">
+              <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+                <div className="flex-1">
+                  <p className="mb-1 text-base font-bold text-[#0B3041]">우리 아이 기록, 앱에서 모아보세요</p>
+                  <p className="text-sm text-[#6B7280]">진료 기록부터 체중 변화까지 — AI가 알아서 정리해줘요</p>
+                </div>
+                <a
+                  href="https://apps.apple.com/app/id6504879567"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-[#48B8D0] px-6 py-3 text-sm font-bold text-white shadow-[0_0_20px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(72,184,208,0.4)]"
+                >
+                  앱 다운로드
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
 
         {status === "success" && (
           <section className="rounded-3xl bg-white p-5 text-center shadow-sm ring-1 ring-[#B28B84]/40">
