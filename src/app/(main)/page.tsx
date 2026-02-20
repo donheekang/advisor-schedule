@@ -148,7 +148,7 @@ export default function HomePage() {
                       width={400}
                       height={400}
                       className="h-full w-full object-cover"
-                      style={{ objectPosition: 'center 20%' }}
+                      style={{ objectPosition: 'center center' }}
                       priority
                     />
                   ) : (
