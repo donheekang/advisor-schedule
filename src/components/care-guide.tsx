@@ -78,7 +78,9 @@ export default function CareGuide({ keyword, categorySlug, matchedTags }: CareGu
         <section className="rounded-2xl border border-[#F8C79F]/10 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-3">
             <IconBadge icon={<span className="text-sm">🛍️</span>} color="orange" size="sm" />
-            <h3 className="text-lg font-bold text-[#4F2A1D]">추천 케어 제품</h3>
+            <h3 className="text-lg font-bold text-[#4F2A1D]">
+              추천 케어 제품 <span className="text-xs font-normal text-[#9CA3AF]">(광고/제휴)</span>
+            </h3>
           </div>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -95,6 +97,10 @@ export default function CareGuide({ keyword, categorySlug, matchedTags }: CareGu
               </a>
             ))}
           </div>
+
+          <p className="mt-3 text-xs text-[#9CA3AF]">
+            이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+          </p>
         </section>
       </AnimateOnScroll>
     </div>
