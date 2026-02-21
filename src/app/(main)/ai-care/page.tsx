@@ -74,6 +74,7 @@ export default function AiCarePage() {
   const [selectedAppPet, setSelectedAppPet] = useState<AppPet | null>(null);
   const [appRecords, setAppRecords] = useState<AppRecord[]>([]);
   const [appDataLoaded, setAppDataLoaded] = useState(false);
+  const [expandedConditionIndexes, setExpandedConditionIndexes] = useState<number[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
 
   const breedOptions = petType === 'dog' ? DOG_BREEDS : CAT_BREEDS;
@@ -180,16 +181,25 @@ export default function AiCarePage() {
     });
   };
 
-  const probabilityClassName = (probability: string) => {
-    if (probability === '높음') {
-      return 'bg-[#F5E5FC] text-[#48B8D0] border border-[#B28B84]';
+  useEffect(() => {
+    if (!result || result.conditions.length === 0) {
+      setExpandedConditionIndexes([]);
+      return;
     }
 
-    if (probability === '보통') {
-      return 'bg-[#EFF6FF] text-[#48B8D0] border border-[#B28B84]';
-    }
+    setExpandedConditionIndexes([0]);
+  }, [result]);
 
-    return 'bg-[#F8FAFC] text-[#6B7280] border border-[#E2E8F0]';
+  const isConditionExpanded = (index: number) => expandedConditionIndexes.includes(index);
+
+  const handleToggleCondition = (index: number) => {
+    setExpandedConditionIndexes((prev) => {
+      if (prev.includes(index)) {
+        return prev.filter((item) => item !== index);
+      }
+
+      return prev.concat(index);
+    });
   };
 
   const handleAnalyze = async () => {
@@ -486,47 +496,113 @@ export default function AiCarePage() {
 
       <section ref={resultRef} className="mt-6">
         {result ? (
-          <div className="space-y-4">
-            <div className="rounded-2xl border border-[#FED7AA] bg-[#F5E5FC] px-4 py-3 text-sm text-[#9A3412]">
-              본 결과는 참고용 정보이며 의료적 진단이 아닙니다. 정확한 진단과 치료는 반드시 동물병원 수의사 상담이 필요합니다.
+          <div className="overflow-hidden rounded-[24px] bg-white">
+            <div className="border-b border-[#F2F4F6] px-6 py-5">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#F04452]" />
+                <p className="text-[13px] font-semibold text-[#F04452]">참고용 정보이며 의료적 진단이 아닙니다</p>
+              </div>
+            </div>
+
+            <div className="border-b-8 border-[#F2F4F6] px-6 py-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#F2F4F6]">
+                  <span className={'h-3 w-3 rounded-full ' + (petType === 'dog' ? 'bg-[#48B8D0]' : 'bg-[#A78BFA]')} />
+                </div>
+                <div>
+                  <p className="text-[16px] font-bold tracking-tight text-[#191F28]">{breed || '품종 미입력'} · {age || '-'}살</p>
+                  <p className="mt-0.5 text-[13px] text-[#8B95A1]">{weight || '-'}kg · &quot;{symptoms.split('\n')[0] || '증상 미입력'}&quot;</p>
+                </div>
+              </div>
             </div>
 
             {result.conditions.map((condition, index) => (
-              <article
-                key={condition.name + '-' + index.toString()}
-                className={
-                  'rounded-3xl border border-[#0B3041]/[0.06] bg-white p-5 ' +
-                  (index === 0 ? 'ring-1 ring-[#48B8D0]/20' : '')
-                }
-              >
-                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-lg font-bold text-[#1F2937]">{condition.name}</h3>
-                  <span className={'rounded-full px-3 py-1 text-xs font-semibold ' + probabilityClassName(condition.probability)}>
+              <article key={condition.name + '-' + index.toString()} className="border-b-8 border-[#F2F4F6] px-6 py-6">
+                <div className="mb-4 flex items-center gap-2">
+                  <span
+                    className={
+                      'h-1.5 w-1.5 rounded-full ' +
+                      (condition.probability === '높음'
+                        ? 'bg-[#F04452]'
+                        : condition.probability === '보통'
+                          ? 'bg-[#FF8A3D]'
+                          : 'bg-[#06B56C]')
+                    }
+                  />
+                  <span
+                    className={
+                      'text-xs font-bold ' +
+                      (condition.probability === '높음'
+                        ? 'text-[#F04452]'
+                        : condition.probability === '보통'
+                          ? 'text-[#FF8A3D]'
+                          : 'text-[#06B56C]')
+                    }
+                  >
                     가능성 {condition.probability}
                   </span>
                 </div>
-                <p className="mb-4 text-sm leading-relaxed text-[#6B7280]">{condition.description}</p>
 
-                <div className="space-y-2 rounded-xl border border-[#E2E8F0] bg-white p-4">
-                  {condition.items.map((item, itemIndex) => (
-                    <div key={item.name + '-' + itemIndex.toString()} className="flex items-center justify-between gap-4 text-sm">
-                      <span className="font-medium text-[#334155]">{item.name}</span>
-                      <span className="text-[#6B7280]">
-                        {item.minPrice.toLocaleString()}원 ~ {item.maxPrice.toLocaleString()}원
-                      </span>
-                    </div>
-                  ))}
-                  <div className="mt-3 border-t border-[#E2E8F0] pt-3 text-right text-base font-extrabold text-[#48B8D0] md:text-lg">
-                    총 예상 {condition.totalMin.toLocaleString()}원 ~ {condition.totalMax.toLocaleString()}원
-                  </div>
+                <h3 className="mb-1 text-[17px] font-bold tracking-tight text-[#191F28]">{condition.name}</h3>
+
+                <div className="mb-3">
+                  <span className="text-[28px] font-extrabold tracking-tight text-[#191F28]" style={{ fontFeatureSettings: "'tnum'" }}>
+                    {condition.totalMin.toLocaleString()}
+                  </span>
+                  <span className="mx-1.5 text-base text-[#8B95A1]">~</span>
+                  <span className="text-[28px] font-extrabold tracking-tight text-[#191F28]" style={{ fontFeatureSettings: "'tnum'" }}>
+                    {condition.totalMax.toLocaleString()}
+                  </span>
+                  <span className="ml-0.5 text-base font-semibold text-[#8B95A1]">원</span>
                 </div>
+
+                <p className="text-sm leading-relaxed text-[#8B95A1]">{condition.description}</p>
+
+                {isConditionExpanded(index) ? (
+                  <div className="mt-5 space-y-0">
+                    {condition.items.map((item, itemIndex) => (
+                      <div
+                        key={item.name + '-' + itemIndex.toString()}
+                        className="flex items-center justify-between border-t border-[#F2F4F6] py-3.5"
+                      >
+                        <span className="text-sm font-medium text-[#4E5968]">{item.name}</span>
+                        <span className="text-sm font-semibold text-[#191F28]" style={{ fontFeatureSettings: "'tnum'" }}>
+                          {item.minPrice.toLocaleString()} ~ {item.maxPrice.toLocaleString()}원
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
+                <button type="button" onClick={() => handleToggleCondition(index)} className="mt-4 flex w-full items-center justify-center gap-1">
+                  <span className="text-[13px] font-medium text-[#B0B8C1]">{isConditionExpanded(index) ? '접기' : '상세 항목 보기'}</span>
+                  <svg
+                    className={'h-4 w-4 text-[#B0B8C1] transition-transform ' + (isConditionExpanded(index) ? 'rotate-180' : '')}
+                    fill="none"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
               </article>
             ))}
 
-            <article className="rounded-3xl bg-[#111827] p-5">
-              <h3 className="mb-2 text-base font-bold text-white">수의사 상담 전 추천사항</h3>
-              <p className="text-sm leading-relaxed text-slate-100">{result.recommendation}</p>
+            <article className="border-b-8 border-[#F2F4F6] px-6 py-7">
+              <h3 className="mb-3 text-[15px] font-bold text-[#191F28]">수의사 상담 전 추천</h3>
+              <p className="text-sm leading-[1.75] text-[#6B7684]">{result.recommendation}</p>
             </article>
+
+            <div className="flex flex-col gap-2.5 px-6 py-6">
+              <button type="button" onClick={() => setResult(null)} className="w-full rounded-[14px] bg-[#191F28] py-[17px] text-[15px] font-bold text-white">
+                다른 증상 분석하기
+              </button>
+              <a
+                href="/cost-search"
+                className="w-full rounded-[14px] bg-[#F2F4F6] py-[17px] text-center text-[15px] font-semibold text-[#4E5968]"
+              >
+                전국 평균 진료비 보기
+              </a>
+            </div>
           </div>
         ) : (
           <div className="rounded-3xl border border-dashed border-[#CBD5E1] bg-white px-6 py-14 text-center text-[#6B7280]">
