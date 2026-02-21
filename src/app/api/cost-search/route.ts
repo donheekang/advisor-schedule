@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     avg: item.avg,
     min: item.min,
     max: item.max,
-    count: 1,
+    count: item.count ?? 1,
     updatedAt: null,
   }));
 
