@@ -12,11 +12,6 @@ type PetTalkerRequestBody = {
   userMessage?: string;
 };
 
-type UsagePolicy = {
-  dailyLimit: number;
-  isMember: boolean;
-};
-
 type SupportedImageMediaType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
 
 const SYSTEM_PROMPT = `너는 이 사진 속 아이야. 진짜 이 아이가 돼서 말해.
@@ -62,8 +57,6 @@ emotionScore는 75~95 사이.`;
 
 const CLAUDE_MODEL = 'claude-sonnet-4-5-20250929';
 
-const usageStore = new Map<string, number>();
-
 function isSupportedMediaType(mediaType: string): mediaType is SupportedImageMediaType {
   return ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(mediaType);
 }
@@ -107,52 +100,6 @@ function serializeError(error: unknown): Record<string, unknown> {
   return {
     value: error
   };
-}
-
-function getUsageKey(identifier: string): string {
-  const dateKey = new Date().toISOString().slice(0, 10);
-  return `${dateKey}:${identifier}`;
-}
-
-function getUsagePolicy(isMember: boolean): UsagePolicy {
-  if (isMember) {
-    return { dailyLimit: 5, isMember: true };
-  }
-
-  return { dailyLimit: 2, isMember: false };
-}
-
-function getCurrentUsage(identifier: string): number {
-  const key = getUsageKey(identifier);
-  return usageStore.get(key) ?? 0;
-}
-
-function incrementUsage(identifier: string): number {
-  const key = getUsageKey(identifier);
-  const currentUsage = usageStore.get(key) ?? 0;
-  const nextUsage = currentUsage + 1;
-  usageStore.set(key, nextUsage);
-  return nextUsage;
-}
-
-function getClientIp(request: NextRequest): string {
-  const cookieIp = request.cookies.get('pet_talker_ip')?.value;
-  if (cookieIp) {
-    return cookieIp;
-  }
-
-  const connectingIp = request.headers.get('cf-connecting-ip');
-  if (connectingIp) {
-    return connectingIp.trim();
-  }
-
-  const forwardedFor = request.headers.get('x-forwarded-for');
-  if (forwardedFor) {
-    return forwardedFor.split(',')[0]?.trim() ?? 'unknown';
-  }
-
-  const realIp = request.headers.get('x-real-ip');
-  return realIp?.trim() || 'unknown';
 }
 
 function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo'], userMessage?: string): string {
@@ -281,23 +228,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const usagePolicy = getUsagePolicy(isMember);
-    const usageIdentifier = isMember ? `user:${userId}` : `ip:${getClientIp(request)}`;
-    const currentUsage = getCurrentUsage(usageIdentifier);
-
-    if (currentUsage >= usagePolicy.dailyLimit) {
-      return NextResponse.json(
-        {
-          error: 'limit_exceeded',
-          message: '오늘 사용 횟수를 다 썼어요',
-          limit: usagePolicy.dailyLimit,
-          used: currentUsage
-        },
-        { status: 429 }
-      );
-    }
-
-    incrementUsage(usageIdentifier);
+    void isMember;
+    void userId;
 
     const model = CLAUDE_MODEL;
     const userPrompt = buildUserPrompt(body.petInfo, body.userMessage);
