@@ -286,11 +286,6 @@ export default function PetTalkerPage() {
           return;
         }
 
-        if (response.status === 429 || errorData?.error === "limit_exceeded") {
-          setError("unknown");
-          return;
-        }
-
         if (response.status === 400) {
           setError("invalid_format");
           return;
@@ -510,7 +505,7 @@ export default function PetTalkerPage() {
 
             {showMessageInput && status === "idle" && previewUrl && (
               <div className="space-y-4">
-                <div className="relative overflow-hidden rounded-3xl shadow-xl">
+                <div className="relative overflow-hidden rounded-[14px]">
                   <div className="relative aspect-square w-full">
                     <Image src={previewUrl} alt="업로드한 사진" fill className="object-cover" unoptimized />
                   </div>
@@ -582,10 +577,10 @@ export default function PetTalkerPage() {
         <div className="py-5">
           {status === "loading" && (
             <div className="space-y-4 rounded-[14px] bg-[#F8FAFB] p-4 motion-safe:animate-pulse">
-              <div className="relative mx-auto aspect-square w-full overflow-hidden rounded-3xl shadow-xl">
+              <div className="relative mx-auto aspect-square w-full overflow-hidden rounded-[14px]">
                 {previewUrl ? <Image src={previewUrl} alt="분석 중인 반려동물 사진" fill className="object-cover" unoptimized /> : null}
               </div>
-              <div className="rounded-3xl bg-white p-6 shadow-lg">
+              <div className="rounded-[14px] bg-white p-6">
                 <p className="text-[15px] font-bold text-[#191F28]">우리 아이가 생각하고 있어요...</p>
                 <div className="mt-2 inline-flex items-center gap-1">
                   {[1, 2, 3].map((dot) => (
@@ -602,7 +597,7 @@ export default function PetTalkerPage() {
 
           {status === "success" && previewUrl && (
             <div className="space-y-5 opacity-0 motion-safe:animate-[fadeIn_0.5s_ease-out_forwards] motion-reduce:opacity-100">
-              <div className="relative overflow-hidden rounded-3xl shadow-xl">
+              <div className="relative overflow-hidden rounded-[14px]">
                 <div className="relative aspect-square w-full">
                   <Image
                     src={previewUrl}
@@ -617,7 +612,7 @@ export default function PetTalkerPage() {
 
               {userMessage && (
                 <div className="flex justify-end">
-                  <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-[#48B8D0] px-4 py-2.5 text-sm font-medium text-white shadow-md">
+                  <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-[#191F28] px-4 py-2.5 text-sm font-medium text-white">
                     {userMessage}
                   </div>
                 </div>
@@ -634,7 +629,7 @@ export default function PetTalkerPage() {
                 </span>
               </div>
 
-              <div className="relative rounded-[14px] bg-[#F8FAFB] p-5 text-base font-medium leading-relaxed text-[#191F28] shadow-lg opacity-0 motion-safe:animate-[fadeInUp_0.5s_ease-out_0.5s_forwards] motion-reduce:opacity-100">
+              <div className="relative rounded-[14px] bg-[#F8FAFB] p-5 text-base font-medium leading-relaxed text-[#191F28] opacity-0 motion-safe:animate-[fadeInUp_0.5s_ease-out_0.5s_forwards] motion-reduce:opacity-100">
                 <span className="absolute -top-2 left-9 h-5 w-5 rotate-45 bg-[#F8FAFB]" aria-hidden />
                 <p>{speech}</p>
                 <div className="mt-3 flex items-end justify-between">
