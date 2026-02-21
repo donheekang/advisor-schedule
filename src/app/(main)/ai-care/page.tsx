@@ -296,21 +296,18 @@ export default function AiCarePage() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl bg-[#F8FAFB] px-4 pb-20 pt-24 md:pt-28">
-      <section className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="relative flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#48B8D0] opacity-75" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-[#48B8D0]" />
-          </span>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#0B3041] md:text-3xl">AI 진료비 견적서</h1>
+    <main className="mx-auto max-w-lg bg-white px-5 pb-20 pt-24 md:pt-28">
+      <div className="pb-6">
+        <div className="mb-2 flex items-center gap-2.5">
+          <span className="h-2 w-2 rounded-full bg-[#48B8D0]" />
+          <h1 className="text-[22px] font-extrabold tracking-tight text-[#191F28]">AI 진료비 견적서</h1>
         </div>
-        <p className="text-sm text-[#6B7280] md:text-base">증상을 입력하면 AI가 예상 질환과 진료비 범위를 분석해드려요.</p>
-      </section>
+        <p className="pl-[18px] text-sm text-[#8B95A1]">증상을 입력하면 AI가 예상 질환과 진료비를 분석해요</p>
+      </div>
 
-      <section className="mt-6 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
+      <section className="border-b-8 border-[#F2F4F6] pb-7">
         {user && appPets.length > 0 && (
-          <div className="mb-5 rounded-xl bg-[#48B8D0]/10 p-4">
+          <div className="mb-5 rounded-[14px] bg-[#F8FAFB] p-4">
             <div className="mb-2 flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-green-400" />
               <span className="text-sm font-bold text-[#1F2937]">앱 데이터 연동됨</span>
@@ -340,14 +337,14 @@ export default function AiCarePage() {
         )}
 
         {!user && (
-          <div className="mb-5 rounded-xl bg-[#F5E5FC]/50 p-4">
+          <div className="mb-5 rounded-[14px] bg-[#F8FAFB] p-4">
             <p className="text-sm text-[#1F2937]">
               <a href="/login" className="font-semibold text-[#48B8D0] transition-colors hover:text-[#3A9BB0]">로그인</a>하면 앱에 등록된 반려동물 정보와 진료기록이 자동으로 반영돼요
             </p>
           </div>
         )}
 
-        <h2 className="mb-5 text-3xl font-extrabold tracking-tight text-[#0B3041]">1단계. 반려동물 정보</h2>
+        <h2 className="mb-5 text-[17px] font-bold tracking-tight text-[#191F28]">반려동물 정보</h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2">
@@ -357,10 +354,10 @@ export default function AiCarePage() {
                 type="button"
                 onClick={() => setPetType('dog')}
                 className={
-                  'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
+                  'flex items-center justify-center gap-2 rounded-xl border px-4 py-4 text-base font-semibold transition ' +
                   (petType === 'dog'
-                    ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
-                    : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
+                    ? 'border-[#191F28] bg-[#191F28] text-white'
+                    : 'border-[#E5E8EB] bg-white text-[#8B95A1] hover:border-[#CBD5E1]')
                 }
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75Z"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a13 13 0 0 0-.493-3.309m-9.243-6.082A8.8 8.8 0 0 1 12 5c.78 0 1.5.108 2.161.306"/></svg>
@@ -370,10 +367,10 @@ export default function AiCarePage() {
                 type="button"
                 onClick={() => setPetType('cat')}
                 className={
-                  'flex items-center justify-center gap-2 rounded-2xl border px-4 py-4 text-base font-semibold transition ' +
+                  'flex items-center justify-center gap-2 rounded-xl border px-4 py-4 text-base font-semibold transition ' +
                   (petType === 'cat'
-                    ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
-                    : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
+                    ? 'border-[#191F28] bg-[#191F28] text-white'
+                    : 'border-[#E5E8EB] bg-white text-[#8B95A1] hover:border-[#CBD5E1]')
                 }
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.2 6.71-.56 2.09 2.04 1.95 5.4-.31 7.28l-.29.26c.52 1.39.8 2.88.8 4.42 0 3.28-2.73 5.34-6.5 5.34h-4.82C5.73 22 3 19.94 3 16.66c0-1.54.28-3.03.8-4.42l-.29-.26C1.23 10.1 1.09 6.74 3.18 4.7 4.86 3.06 8.11 3.26 9.89 5.26c.65-.17 1.34-.26 2.11-.26Z"/><path d="M10 14L8 18"/><path d="M14 14l2 4"/></svg>
@@ -420,8 +417,8 @@ export default function AiCarePage() {
         </div>
       </section>
 
-      <section className="mt-6 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
-        <h2 className="mb-5 text-3xl font-extrabold tracking-tight text-[#0B3041]">2단계. 증상 입력</h2>
+      <section className="border-b-8 border-[#F2F4F6] pb-7 pt-7">
+        <h2 className="mb-4 text-[17px] font-bold tracking-tight text-[#191F28]">증상 입력</h2>
 
         <div className="mb-4 flex flex-wrap gap-2">
           {SYMPTOM_CHIPS.map((chip) => (
@@ -430,13 +427,12 @@ export default function AiCarePage() {
               type="button"
               onClick={() => handleChipToggle(chip.label)}
               className={
-                'rounded-full border px-3 py-2 text-xs font-medium transition ' +
+                'rounded-full border px-3.5 py-2 text-[13px] font-medium transition ' +
                 (isChipSelected(chip.label)
-                  ? 'border-[#48B8D0] bg-[#F5E5FC] text-[#48B8D0]'
-                  : 'border-[#E2E8F0] bg-white text-[#6B7280] hover:border-[#CBD5E1]')
+                  ? 'border-[#191F28] bg-[#191F28] text-white'
+                  : 'border-[#E5E8EB] bg-white text-[#4E5968] hover:border-[#CBD5E1]')
               }
             >
-              <span className="mr-1">{chip.emoji}</span>
               {chip.label}
             </button>
           ))}
@@ -453,16 +449,16 @@ export default function AiCarePage() {
         {error ? <p className="mt-3 rounded-xl bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#DC2626]">{error}</p> : null}
 
         {user && appPets.length > 0 ? (
-          <div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-4 text-center">
-            <p className="text-sm font-medium text-green-800">✅ {selectedAppPet?.name || '우리 아이'}의 진료기록 {appRecords.length}건이 AI 분석에 반영됩니다</p>
+          <div className="mt-5 rounded-[14px] bg-[#F8FAFB] p-4 text-center">
+            <p className="text-sm font-medium text-[#191F28]"><span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[#06B56C]" />{selectedAppPet?.name || '우리 아이'}의 진료기록 {appRecords.length}건이 AI 분석에 반영됩니다</p>
           </div>
         ) : user && appDataLoaded && appPets.length === 0 ? (
-          <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
+          <div className="mt-5 rounded-[14px] bg-[#F8FAFB] p-4 text-center">
             <p className="text-sm font-medium text-[#0B3041]">앱에서 반려동물을 등록하면 더 정확한 견적을 받을 수 있어요</p>
             <p className="mt-1 text-xs text-[#6B7280]">앱 출시 예정</p>
           </div>
         ) : (
-          <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
+          <div className="mt-5 rounded-[14px] bg-[#F8FAFB] p-4 text-center">
             <p className="text-sm font-medium text-[#0B3041]">
               <a href="/login" className="font-semibold text-[#48B8D0] transition-colors hover:text-[#3A9BB0]">로그인</a>하면 앱 진료기록 기반으로 더 정확한 AI 분석을 받을 수 있어요
             </p>
@@ -474,10 +470,10 @@ export default function AiCarePage() {
           onClick={handleAnalyze}
           disabled={loading || !symptoms.trim()}
           className={
-            'mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-4 text-sm font-bold text-white transition ' +
+            'mt-4 flex w-full items-center justify-center gap-2 rounded-[14px] px-4 py-[17px] text-[15px] font-bold text-white transition ' +
             (loading || !symptoms.trim()
-              ? 'cursor-not-allowed bg-[#CBD5E1]'
-              : 'bg-[#48B8D0] shadow-[0_0_30px_rgba(72,184,208,0.3)] hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]')
+              ? 'cursor-not-allowed bg-[#E5E8EB] text-[#8B95A1]'
+              : 'bg-[#191F28] hover:bg-[#333D4B]')
           }
         >
           {loading ? (
@@ -605,9 +601,8 @@ export default function AiCarePage() {
             </div>
           </div>
         ) : (
-          <div className="rounded-3xl border border-dashed border-[#CBD5E1] bg-white px-6 py-14 text-center text-[#6B7280]">
-            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#5CC4D8] to-[#48B8D0]"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/><path d="M8 9h2"/></svg></div>
-            <p className="text-sm md:text-base">증상을 입력하면 AI가 예상 진료비 견적서를 작성해드려요</p>
+          <div className="py-12 text-center">
+            <p className="text-sm text-[#B0B8C1]">증상을 입력하면 AI가 예상 진료비 견적서를 작성해드려요</p>
           </div>
         )}
       </section>
