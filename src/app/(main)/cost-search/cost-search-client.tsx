@@ -33,8 +33,8 @@ type CostSearchListResponse = {
   error?: string;
 };
 
-const popularTags = ['중성화', '슬개골', '스케일링', '혈액검사', '예방접종', '초음파', '피부', 'MRI'];
-const defaultPopularItems = ['진찰료', '예방접종', '중성화수술', '스케일링', '혈액검사', '엑스레이', '초음파', '슬개골탈구'];
+const popularTags = ['중성화', '슬개골', '스케일링', '혈액검사', '예방접종', '초음파', '피부검사', 'MRI'];
+const defaultPopularItems = ['초진 진찰료', '종합백신', '중성화 수컷', '스케일링', '혈액검사', '엑스레이', '초음파', '슬개골수술'];
 const animalTypes = ['강아지', '고양이'] as const;
 const regions = ['전국', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '경기', '강원'];
 
@@ -206,6 +206,12 @@ export default function CostSearchClient() {
           <div className="mt-6">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-[15px] font-semibold text-[#8B95A1]">검색 결과 · {results.length}건</span>
+              {source === 'seed' && (
+                <span className="flex items-center gap-1 text-xs font-semibold text-[#4E5968]">
+                  <span className="h-[5px] w-[5px] rounded-full bg-[#4E5968]" />
+                  2024 공시 데이터
+                </span>
+              )}
               {source === 'live' && (
                 <span className="flex items-center gap-1 text-xs font-semibold text-[#06B56C]">
                   <span className="h-[5px] w-[5px] rounded-full bg-[#06B56C]" />
