@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
-import { TrackPageView } from '@/components/analytics/track-page-view';
 import { GuideCtaButtons } from '@/components/analytics/guide-cta-buttons';
-import { getAllGuides, getGuideBySlug, getGuidesByCategory, guideCategoryLabels } from '@/lib/guides';
+import { TrackPageView } from '@/components/analytics/track-page-view';
+import {
+  getAllGuides,
+  getGuideBySlug,
+  getGuidesByCategory,
+  guideCategoryLabels,
+} from '@/lib/guides';
 
 type GuidePageProps = {
-  params: {
-    slug: string;
-  };
+  params: { slug: string };
 };
 
 export async function generateStaticParams() {
@@ -19,37 +21,31 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: GuidePageProps): Promise<Metadata> {
   const guide = await getGuideBySlug(params.slug);
-
   if (!guide) {
     return {
       title: '가이드를 찾을 수 없어요 | PetHealth+',
-      description: '요청하신 가이드를 찾을 수 없어요.'
+      description: '요청하신 가이드를 찾을 수 없어요.',
     };
   }
-
   const ogTitle = encodeURIComponent(guide.title);
-
   return {
     title: `${guide.title} | 반려동물 진료비 가이드`,
     description: guide.description,
     keywords: guide.keywords,
-    alternates: {
-      canonical: `/guides/${guide.slug}`
-    },
+    alternates: { canonical: `/guides/${guide.slug}` },
     openGraph: {
       title: guide.title,
       description: guide.description,
       url: `https://pethealthplus.kr/guides/${guide.slug}`,
       locale: 'ko_KR',
       type: 'article',
-      images: [`/api/og?title=${ogTitle}&category=${guide.category}`]
-    }
+      images: [`/api/og?title=${ogTitle}&category=${guide.category}`],
+    },
   };
 }
 
 export default async function GuidePage({ params }: GuidePageProps) {
   const guide = await getGuideBySlug(params.slug);
-
   if (!guide) {
     notFound();
   }
@@ -57,43 +53,57 @@ export default async function GuidePage({ params }: GuidePageProps) {
   const relatedGuides = await getGuidesByCategory(guide.category, guide.slug);
 
   return (
-    <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+    <section className="w-full bg-white px-5 pb-10 pt-24 md:pt-28">
       <TrackPageView eventName="guide_view" params={{ guide_slug: guide.slug }} />
-      <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_280px]">
-        <article className="rounded-3xl bg-white/90 p-6 shadow-lg ring-1 ring-[#F8C79F]/30 md:p-8">
-          <header className="space-y-4 border-b border-[#F8C79F]/30 pb-6">
-            <Link href="/guides" className="inline-flex text-sm font-medium text-[#A36241] hover:text-[#F97316]">
-              ← 가이드 목록으로
-            </Link>
-            <span className="inline-flex rounded-full bg-[#FFF0E6] px-3 py-1 text-xs font-bold text-[#7C4A2D]">
-              {guideCategoryLabels[guide.category]}
-            </span>
-            <h1 className="text-3xl font-extrabold text-[#4F2A1D]">{guide.title}</h1>
-            <p className="text-sm text-[#7C4A2D]">{guide.description}</p>
+
+      <div className="mx-auto w-full max-w-lg">
+        <article>
+          <header className="border-b-8 border-[#F2F4F6] pb-6">
+            <div className="flex items-center gap-2">
+              <Link
+                href="/guides"
+                className="text-sm font-medium text-[#8B95A1] transition hover:text-[#191F28]"
+              >
+                ← 가이드 목록으로
+              </Link>
+              <span className="rounded-full bg-[#F2F4F6] px-2.5 py-0.5 text-xs font-semibold text-[#4E5968]">
+                {guideCategoryLabels[guide.category]}
+              </span>
+            </div>
+            <h1 className="mt-3 text-[22px] font-extrabold tracking-tight text-[#191F28]">
+              {guide.title}
+            </h1>
+            <p className="mt-1 text-sm text-[#8B95A1]">{guide.description}</p>
           </header>
 
           <section
-            className="prose prose-lg mt-8 max-w-none prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D]"
+            className="prose prose-lg max-w-none py-6 leading-relaxed text-[#4E5968] prose-headings:text-[#191F28] prose-p:text-[#4E5968] prose-li:text-[#4E5968] prose-a:text-[#191F28] prose-a:underline hover:prose-a:text-[#4E5968] prose-strong:text-[#191F28]"
             dangerouslySetInnerHTML={{ __html: guide.html }}
           />
 
-          <footer className="mt-10 space-y-3 border-t border-[#F8C79F]/30 pt-6">
-            <h2 className="text-lg font-extrabold text-[#4F2A1D]">다음 단계로 바로 이어가세요</h2>
-<GuideCtaButtons sourcePage={`guide_${guide.slug}`} />
+          <footer className="space-y-4 border-t-8 border-[#F2F4F6] pt-6">
+            <h2 className="text-[15px] font-bold text-[#191F28]">다음 단계로 바로 이어가세요</h2>
+            <GuideCtaButtons sourcePage={'guide_' + guide.slug} />
           </footer>
         </article>
 
-        <aside className="space-y-4 rounded-3xl bg-white/90 p-6 shadow-lg ring-1 ring-[#F8C79F]/30">
-          <h2 className="text-sm font-extrabold text-[#4F2A1D]">같은 카테고리의 다른 가이드</h2>
-          <div className="space-y-3">
-            {relatedGuides.slice(0, 8).map((item) => (
-              <Link key={item.slug} href={`/guides/${item.slug}`} className="block rounded-2xl bg-[#FFF8F0] p-3 text-sm text-[#7C4A2D] hover:bg-[#FFF0E6]">
-                <p className="font-semibold text-[#4F2A1D]">{item.title}</p>
-                <p className="mt-1 line-clamp-2 text-xs text-[#A36241]">{item.description}</p>
-              </Link>
-            ))}
+        {relatedGuides.length > 0 && (
+          <div className="mt-8 border-t-8 border-[#F2F4F6] pt-6">
+            <h2 className="mb-4 text-[15px] font-bold text-[#191F28]">같은 카테고리의 다른 가이드</h2>
+            <div className="space-y-3">
+              {relatedGuides.slice(0, 5).map((item) => (
+                <Link
+                  key={item.slug}
+                  href={'/guides/' + item.slug}
+                  className="block rounded-[14px] border-[1.5px] border-[#E5E8EB] p-4 transition hover:border-[#CBD5E1]"
+                >
+                  <p className="text-sm font-bold text-[#191F28]">{item.title}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-[#8B95A1]">{item.description}</p>
+                </Link>
+              ))}
+            </div>
           </div>
-        </aside>
+        )}
       </div>
     </section>
   );
