@@ -1,5 +1,4 @@
 import Link from 'next/link';
-
 import { StoreComingSoonButtons } from '@/components/store-coming-soon-buttons';
 
 type CTABannerProps = {
@@ -7,28 +6,27 @@ type CTABannerProps = {
   context?: string;
 };
 
-const bannerConfig: Record<'ai-care' | 'cost-search', {
-  title: string;
-  href: string;
-  className: string;
-}> = {
+const bannerConfig: Record<
+  'ai-care' | 'cost-search',
+  { title: string; href: string; className: string }
+> = {
   'ai-care': {
-    title: '✨ 우리 아이 맞춤 AI 견적서 분석 →',
+    title: 'AI 견적서 분석 →',
     href: '/ai-care',
-    className: 'bg-gradient-to-r from-[#F97316] to-[#FB923C] text-white'
+    className: 'bg-[#191F28] text-white hover:bg-[#333D4B]',
   },
   'cost-search': {
-    title: '💰 진료비도 확인해보세요',
+    title: '진료비 검색 →',
     href: '/cost-search',
-    className: 'bg-[#FFF1E4] text-[#4F2A1D] ring-1 ring-[#F8C79F]/40'
-  }
+    className: 'border-[1.5px] border-[#E5E8EB] bg-white text-[#191F28] hover:border-[#CBD5E1]',
+  },
 };
 
 export function CTABanner({ variant, context }: CTABannerProps) {
   if (variant === 'app-download') {
     return (
-      <div data-context={context} className="w-full rounded-2xl bg-[#FFF1E4] px-5 py-4 ring-1 ring-[#F8C79F]/40">
-        <p className="mb-3 text-center text-sm font-bold text-[#7C4A2D]">앱 출시 예정</p>
+      <div data-context={context} className="w-full rounded-[14px] bg-[#F8FAFB] px-5 py-4">
+        <p className="mb-3 text-center text-sm font-bold text-[#191F28]">앱 출시 예정</p>
         <div className="flex justify-center">
           <StoreComingSoonButtons tone="light" />
         </div>
@@ -42,7 +40,10 @@ export function CTABanner({ variant, context }: CTABannerProps) {
     <Link
       href={config.href}
       data-context={context}
-      className={'inline-flex w-full items-center justify-center rounded-2xl px-5 py-4 text-sm font-bold shadow-md transition hover:shadow-lg ' + config.className}
+      className={
+        'inline-flex w-full items-center justify-center rounded-[14px] px-5 py-[17px] text-[15px] font-bold transition ' +
+        config.className
+      }
     >
       {config.title}
     </Link>
