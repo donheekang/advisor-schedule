@@ -7,7 +7,6 @@ import CareGuide from '@/components/care-guide';
 import CostChat from '@/components/cost-chat';
 import Paywall from '@/components/paywall';
 import {
-  AnimateOnScroll,
   PriceBar,
   ResultSkeleton,
 } from '@/components/ui';
@@ -118,23 +117,16 @@ export default function CostSearchClient() {
   }, [topResult]);
 
   return (
-    <section className="w-full bg-[#F8FAFB] pb-10" aria-label="진료비 검색">
-      <div className="relative overflow-hidden bg-[#F8FAFB] pb-8 pt-24 md:pb-12 md:pt-32">
-        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-[#48B8D0]/5 blur-3xl" />
-        <div className="relative mx-auto max-w-4xl px-4 text-center">
-          <AnimateOnScroll animation="fade-up">
-            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#48B8D0]/10 px-3 py-1 text-xs font-semibold text-[#48B8D0]">
-              전국 평균 데이터와 비교
-            </span>
-            <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-[#0B3041] md:text-4xl">우리 아이 진료비, 비싼 걸까?</h1>
-            <p className="text-sm text-[#6B7280] md:text-base">전국 평균 데이터와 비교해보세요</p>
-          </AnimateOnScroll>
+    <section className="w-full bg-white pb-10" aria-label="진료비 검색">
+      <div className="pb-0 pt-24 md:pt-28">
+        <div className="mx-auto max-w-lg px-5">
+          <h1 className="mb-1 text-[22px] font-extrabold tracking-tight text-[#191F28]">진료비 검색</h1>
+          <p className="text-sm text-[#8B95A1]">전국 평균 데이터와 비교해보세요</p>
         </div>
       </div>
 
-      <div className="mx-auto -mt-6 max-w-3xl px-4">
-        <AnimateOnScroll animation="fade-up" delay={100}>
-          <div className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 shadow-sm md:p-8">
+      <div className="mx-auto max-w-lg px-5">
+        <div className="border-b-8 border-[#F2F4F6] pb-7 pt-5">
             <form
               role="search"
               aria-label="진료비 검색 폼"
@@ -152,7 +144,7 @@ export default function CostSearchClient() {
                   onChange={(event) => setQuery(event.target.value)}
                   type="text"
                   placeholder="진료 항목을 검색해보세요 (예: 중성화, 슬개골)"
-                  className="w-full rounded-2xl border border-[#0B3041]/10 bg-white py-3.5 pl-12 pr-4 text-sm text-[#0B3041] placeholder-[#6B7280] transition-all duration-200 focus:border-[#48B8D0] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#48B8D0]/20"
+                  className="w-full rounded-[14px] border-[1.5px] border-[#E5E8EB] bg-white py-3.5 pl-11 pr-4 text-sm text-[#191F28] placeholder-[#8B95A1] transition focus:border-[#191F28] focus:outline-none"
                 />
               </div>
 
@@ -160,7 +152,7 @@ export default function CostSearchClient() {
                 <select
                   value={animalType}
                   onChange={(event) => setAnimalType(event.target.value as (typeof animalTypes)[number])}
-                  className="flex-1 rounded-2xl border border-[#0B3041]/10 bg-white px-4 py-3 text-sm text-[#0B3041] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-2 focus:ring-[#48B8D0]/20"
+                  className="flex-1 rounded-xl border-[1.5px] border-[#E5E8EB] bg-white px-3 py-3 text-sm text-[#191F28] transition focus:border-[#191F28] focus:outline-none"
                 >
                   {animalTypes.map((type) => (
                     <option key={type} value={type}>{type}</option>
@@ -169,7 +161,7 @@ export default function CostSearchClient() {
                 <select
                   value={region}
                   onChange={(event) => setRegion(event.target.value)}
-                  className="flex-1 rounded-2xl border border-[#0B3041]/10 bg-white px-4 py-3 text-sm text-[#0B3041] transition-all duration-200 focus:border-[#48B8D0] focus:outline-none focus:ring-2 focus:ring-[#48B8D0]/20"
+                  className="flex-1 rounded-xl border-[1.5px] border-[#E5E8EB] bg-white px-3 py-3 text-sm text-[#191F28] transition focus:border-[#191F28] focus:outline-none"
                 >
                   {regions.map((area) => (
                     <option key={area} value={area}>{area}</option>
@@ -186,75 +178,65 @@ export default function CostSearchClient() {
                       setQuery(tag);
                       void runSearch(tag);
                     }}
-                    className="rounded-full bg-[#48B8D0]/10 px-3 py-1.5 text-sm font-medium text-[#48B8D0] transition-all duration-200 hover:bg-[#48B8D0]/20"
+                    className="rounded-full border-[1.5px] border-[#E5E8EB] bg-white px-3.5 py-1.5 text-[13px] font-medium text-[#4E5968] transition hover:border-[#CBD5E1]"
                   >
                     {tag}
                   </button>
                 ))}
               </div>
 
-              <div className="mt-6 grid grid-cols-4 gap-3 border-t border-[#F1F5F9] pt-6 md:grid-cols-7">
-                {FEE_CATEGORIES.slice(0, 7).map((cat) => (
-                  <Link key={cat.slug} href={'/cost-search/' + cat.slug} className="flex flex-col items-center gap-2 rounded-xl p-3 transition-all duration-200 hover:bg-[#F5E5FC]">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F8FAFC] text-lg">
-                      {cat.icon}
-                    </div>
-                    <span className="text-center text-xs font-medium text-[#6B7280]">{cat.title}</span>
-                  </Link>
-                ))}
-              </div>
-
               <button
                 type="submit"
-                className="mt-6 w-full rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]"
+                className="mt-5 w-full rounded-[14px] bg-[#191F28] py-[17px] text-[15px] font-bold text-white transition hover:bg-[#333D4B]"
               >
-                🔍 진료비 검색하기
+                진료비 검색하기
               </button>
 
-              <div className="mt-6 rounded-xl bg-[#F5E5FC]/50 p-4 text-center">
-                <p className="text-sm font-medium text-[#0B3041]">📱 앱에서 진료 기록을 관리하면 비용 비교가 더 쉬워져요</p>
+              <div className="mt-5 rounded-[14px] bg-[#F8FAFB] p-4 text-center">
+                <p className="text-sm font-medium text-[#191F28]">앱에서 진료 기록을 관리하면 비용 비교가 더 쉬워져요</p>
                 <p className="mt-1 text-xs text-[#6B7280]">앱 출시 예정</p>
               </div>
             </form>
           </div>
-        </AnimateOnScroll>
 
         {searchError ? <p className="mt-4 text-sm font-medium text-rose-500">{searchError}</p> : null}
         {searching && <ResultSkeleton />}
 
         {results.length > 0 && (
-          <div className="mt-6 space-y-3">
+          <div className="mt-6">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm text-[#6B7280]">검색 결과 {results.length}건</span>
-              {source === 'live' && <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600">✅ 실시간 데이터</span>}
+              <span className="text-[15px] font-semibold text-[#8B95A1]">검색 결과 · {results.length}건</span>
+              {source === 'live' && (
+                <span className="flex items-center gap-1 text-xs font-semibold text-[#06B56C]">
+                  <span className="h-[5px] w-[5px] rounded-full bg-[#06B56C]" />
+                  실시간 데이터
+                </span>
+              )}
             </div>
-            {results.map((item, i) => (
-              <AnimateOnScroll key={item.item} animation="fade-up" delay={i * 50}>
-                <div className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-5 transition-all hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(11,48,65,0.08)] md:p-6">
-                  <div className="mb-1 flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="font-semibold text-[#0B3041]">{item.item}</h3>
-                      <p className="mt-0.5 text-xs text-[#6B7280]">{item.category}</p>
-                    </div>
-                    <p className="text-xl font-bold tracking-tight text-[#48B8D0] md:text-2xl">
-                      {item.avg.toLocaleString('ko-KR')}<span className="text-sm font-normal">원</span>
-                    </p>
-                  </div>
-                  <div className="mt-4">
-                    <PriceBar min={item.min} avg={item.avg} max={item.max} />
+            {results.map((item) => (
+              <div key={item.item} className="border-b-8 border-[#F2F4F6] py-6">
+                <h3 className="text-[16px] font-bold text-[#191F28]">{item.item}</h3>
+                <p className="mt-0.5 text-xs text-[#8B95A1]">{item.category} · 데이터 {item.count.toLocaleString()}건</p>
+                <div className="mt-3">
+                  <span className="text-[13px] font-medium text-[#8B95A1]">평균</span>
+                  <div>
+                    <span className="text-[28px] font-extrabold tracking-tight text-[#191F28]" style={{ fontFeatureSettings: "'tnum'" }}>
+                      {item.avg.toLocaleString('ko-KR')}
+                    </span>
+                    <span className="ml-0.5 text-base font-semibold text-[#8B95A1]">원</span>
                   </div>
                 </div>
-              </AnimateOnScroll>
+                <div className="mt-2">
+                  <PriceBar min={item.min} avg={item.avg} max={item.max} />
+                </div>
+              </div>
             ))}
           </div>
         )}
 
         {!searching && trimmedQuery.length === 0 && (
-          <div className="mt-6 rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6 md:p-8">
-            <div className="mb-6 rounded-2xl bg-[#48B8D0]/5 p-4 text-center">
-              <p className="text-sm font-medium text-[#48B8D0]">📊 일부 항목은 실데이터 공개 중이에요 · 지역별 세부 비교는 준비 중입니다</p>
-            </div>
-            <h3 className="mb-4 text-lg font-bold text-[#0B3041]">🔥 많이 검색하는 진료 항목</h3>
+          <div className="py-7">
+            <h3 className="mb-4 text-[15px] font-bold text-[#191F28]">많이 검색하는 진료 항목</h3>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
               {defaultPopularItems.map((item) => (
                 <button
@@ -264,7 +246,7 @@ export default function CostSearchClient() {
                     setQuery(item);
                     void runSearch(item);
                   }}
-                  className="rounded-2xl border border-[#0B3041]/[0.06] bg-white px-4 py-3 text-sm font-medium text-[#0B3041] transition-all hover:border-[#48B8D0] hover:bg-[#48B8D0]/5"
+                  className="rounded-xl border-[1.5px] border-[#E5E8EB] bg-white px-3 py-3.5 text-[13px] font-medium text-[#4E5968] transition hover:border-[#CBD5E1]"
                 >
                   {item}
                 </button>
@@ -274,23 +256,15 @@ export default function CostSearchClient() {
         )}
 
         {!searching && results.length === 0 && hasSearched && trimmedQuery.length > 0 && (
-          <AnimateOnScroll animation="fade-in">
-            <div className="py-12 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#48B8D0]/10">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#48B8D0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 20v-6M6 20V10M18 20V4" />
-                </svg>
-              </div>
-              <p className="mb-2 text-lg font-bold text-[#0B3041]">이 항목은 아직 데이터를 수집하고 있어요</p>
-              <p className="mb-1 text-sm text-[#6B7280]">예방접종·혈액검사·치과·수술 등은 이미 공개 중이에요!</p>
-              <p className="mb-6 text-sm text-[#6B7280]">아래 카테고리에서 확인해보세요.</p>
-              <div className="flex flex-wrap justify-center gap-2">
-                <Link href="/ai-care" className="rounded-full bg-[#48B8D0] px-5 py-2.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5">
-                  AI로 예상 진료비 보기
-                </Link>
-              </div>
+          <div className="py-12 text-center">
+            <p className="mb-2 text-[16px] font-bold text-[#191F28]">이 항목은 아직 데이터를 수집 중이에요</p>
+            <p className="text-sm text-[#8B95A1]">예방접종·혈액검사·치과·수술 등은 이미 공개 중이에요</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+              <Link href="/ai-care" className="rounded-[14px] bg-[#191F28] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#333D4B]">
+                AI로 예상 진료비 보기
+              </Link>
             </div>
-          </AnimateOnScroll>
+          </div>
         )}
 
         {topResult ? (
@@ -298,9 +272,9 @@ export default function CostSearchClient() {
             <CareGuide keyword={topResult.item} categorySlug={matchedCategory?.slug} matchedTags={matchedTags} />
             <article className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6">
               <div className="flex items-center justify-between gap-3">
-                <h2 className="flex items-center gap-2 text-lg font-bold text-[#1F2937]"><span>🩺</span>AI 비용 분석</h2>
+                <h2 className="text-[15px] font-bold text-[#191F28]">AI 비용 분석</h2>
                 {isPremiumUser ? (
-                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-2xl bg-[#48B8D0] px-8 py-4 text-sm font-bold text-white shadow-[0_0_30px_rgba(72,184,208,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(72,184,208,0.4)]">
+                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-[14px] bg-[#191F28] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#333D4B]">
                     이 가격이 궁금하세요?
                   </button>
                 ) : null}
@@ -308,7 +282,7 @@ export default function CostSearchClient() {
               {loading ? (
                 <p className="mt-3 text-sm text-[#6B7280]">구독 상태를 확인 중입니다...</p>
               ) : isPremiumUser && isChatOpen ? (
-                <p className="mt-3 rounded-xl bg-[#F5E5FC] p-4 text-sm text-[#1F2937]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
+                <p className="mt-3 rounded-[14px] bg-[#F8FAFB] p-4 text-sm text-[#1F2937]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
               ) : !isPremiumUser ? (
                 <div className="mt-4">
                   <Paywall title="AI 비용 분석은 프리미엄 전용 기능입니다" description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한 제공돼요." featureName="AI 비용 분석" />
