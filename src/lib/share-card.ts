@@ -1,9 +1,9 @@
 export const SHARE_CARD_WIDTH = 1080;
-export const SHARE_CARD_HEIGHT = 1080;
+export const SHARE_CARD_HEIGHT = 1200;
 
-const CREAM_BACKGROUND = '#FFF8F0';
+const CREAM_BACKGROUND = '#F8FAFB';
 const BUBBLE_BACKGROUND = '#FFFFFF';
-const TEXT_COLOR = '#5A3325';
+const TEXT_COLOR = '#191F28';
 
 export type ShareCardPayload = {
   petImageUrl: string;
@@ -120,8 +120,8 @@ export const renderShareCard = async (payload: ShareCardPayload): Promise<ShareC
   context.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
 
   const warmGradient = context.createLinearGradient(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
-  warmGradient.addColorStop(0, '#FFF8F0');
-  warmGradient.addColorStop(1, '#FFEBD8');
+  warmGradient.addColorStop(0, '#F8FAFB');
+  warmGradient.addColorStop(1, '#F2F4F6');
   context.fillStyle = warmGradient;
   context.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
 
@@ -149,7 +149,7 @@ export const renderShareCard = async (payload: ShareCardPayload): Promise<ShareC
   context.stroke();
 
   const bubbleTop = imageY + imageSize + 78;
-  const bubbleHeight = 410;
+  const bubbleHeight = 520;
   const bubbleX = 76;
   const bubbleWidth = SHARE_CARD_WIDTH - bubbleX * 2;
 
@@ -182,15 +182,15 @@ export const renderShareCard = async (payload: ShareCardPayload): Promise<ShareC
   context.fillStyle = TEXT_COLOR;
   context.fillText(`${emotionMeta.emoji} ${emotionMeta.label} ${payload.emotionScore}점`, bubbleX + 72, bubbleTop + 137);
 
-  context.font = '500 44px Pretendard, Apple SD Gothic Neo, sans-serif';
+  context.font = '500 36px Pretendard, Apple SD Gothic Neo, sans-serif';
   const textMaxWidth = bubbleWidth - 96;
-  const lines = wrapText(context, payload.dialogue, textMaxWidth, 3);
+  const lines = wrapText(context, payload.dialogue, textMaxWidth, 6);
   lines.forEach((line, index) => {
-    context.fillText(line, bubbleX + 48, bubbleTop + 222 + index * 58);
+    context.fillText(line, bubbleX + 48, bubbleTop + 210 + index * 48);
   });
 
   context.font = '500 28px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.fillStyle = '#9CA3AF';
+  context.fillStyle = '#8B95A1';
   context.fillText(`— ${payload.petName || '우리 아이'}`, bubbleX + 48, bubbleTop + bubbleHeight - 56);
 
   context.fillStyle = '#FFFFFF';
@@ -201,13 +201,13 @@ export const renderShareCard = async (payload: ShareCardPayload): Promise<ShareC
   context.globalAlpha = 1;
 
   context.font = '700 36px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.fillStyle = '#F97316';
+  context.fillStyle = '#191F28';
   context.textAlign = 'left';
   context.textBaseline = 'alphabetic';
-  context.fillText('🐾 PetHealth+', 118, SHARE_CARD_HEIGHT - 112);
+  context.fillText('PetHealth+', 118, SHARE_CARD_HEIGHT - 112);
 
   context.font = '600 24px Pretendard, Apple SD Gothic Neo, sans-serif';
-  context.fillStyle = '#7C4A2D';
+  context.fillStyle = '#8B95A1';
   const dateText = new Date().toLocaleDateString('ko-KR');
   context.fillText(dateText, 338, SHARE_CARD_HEIGHT - 112);
 
