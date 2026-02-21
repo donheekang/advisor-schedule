@@ -1,16 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/components/auth-provider';
 import CareGuide from '@/components/care-guide';
 import CostChat from '@/components/cost-chat';
-import Paywall from '@/components/paywall';
 import {
   PriceBar,
   ResultSkeleton,
 } from '@/components/ui';
-import { isPremium } from '@/lib/subscription';
 import { FEE_CATEGORIES } from '@/lib/fee-categories';
 import { findCareTagsByKeyword } from '@/lib/care-product-map';
 
@@ -39,7 +36,6 @@ const animalTypes = ['강아지', '고양이'] as const;
 const regions = ['전국', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '경기', '강원'];
 
 export default function CostSearchClient() {
-  const { user, loading } = useAuth();
   const [query, setQuery] = useState('');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
   const [region, setRegion] = useState('전국');
@@ -49,25 +45,6 @@ export default function CostSearchClient() {
   const [searchError, setSearchError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isPremiumUser, setIsPremiumUser] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    async function checkPremium() {
-      if (!user?.uid) {
-        if (isMounted) setIsPremiumUser(false);
-        return;
-      }
-      const premiumStatus = await isPremium(user.uid);
-      if (isMounted) setIsPremiumUser(premiumStatus);
-    }
-    if (!loading) {
-      void checkPremium();
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [loading, user?.uid]);
 
   async function runSearch(searchQuery: string) {
     const trimmed = searchQuery.trim();
@@ -276,24 +253,22 @@ export default function CostSearchClient() {
         {topResult ? (
           <div className="mt-6 space-y-6">
             <CareGuide keyword={topResult.item} categorySlug={matchedCategory?.slug} matchedTags={matchedTags} />
-            <article className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-6">
+            <article className="border-b-8 border-[#F2F4F6] py-6">
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-[15px] font-bold text-[#191F28]">AI 비용 분석</h2>
-                {isPremiumUser ? (
-                  <button type="button" onClick={() => setIsChatOpen((prev) => !prev)} className="rounded-[14px] bg-[#191F28] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#333D4B]">
-                    이 가격이 궁금하세요?
-                  </button>
-                ) : null}
+                <button
+                  type="button"
+                  onClick={() => setIsChatOpen((prev) => !prev)}
+                  className="rounded-[14px] bg-[#191F28] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#333D4B]"
+                >
+                  {isChatOpen ? '닫기' : '이 가격이 궁금하세요?'}
+                </button>
               </div>
-              {loading ? (
-                <p className="mt-3 text-sm text-[#6B7280]">구독 상태를 확인 중입니다...</p>
-              ) : isPremiumUser && isChatOpen ? (
-                <p className="mt-3 rounded-[14px] bg-[#F8FAFB] p-4 text-sm text-[#1F2937]">의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.</p>
-              ) : !isPremiumUser ? (
-                <div className="mt-4">
-                  <Paywall title="AI 비용 분석은 프리미엄 전용 기능입니다" description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한 제공돼요." featureName="AI 비용 분석" />
-                </div>
-              ) : null}
+              {isChatOpen && (
+                <p className="mt-3 rounded-[14px] bg-[#F8FAFB] p-4 text-sm text-[#4E5968]">
+                  의료적 판단 없이 가격 비교와 항목 설명 중심으로 AI 분석을 제공합니다.
+                </p>
+              )}
             </article>
 
             <CostChat
