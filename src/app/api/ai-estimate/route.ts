@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       '2. 가능성 높은 질환을 1~3개 제시하세요.\n' +
       '3. 각 질환별 예상 진료 항목과 비용 범위(원)를 위 가격 기준표를 참고하여 제시하세요.\n' +
       '4. totalMin은 items의 minPrice 합, totalMax는 items의 maxPrice 합이어야 합니다.\n' +
-      '5. recommendation에는 보호자가 바로 할 수 있는 조치를 포함하세요.\n\n' +
+      '5. recommendation에는 보호자가 바로 할 수 있는 조치를 포함하세요.\n' +
       '6. 반려동물의 체중/크기에 따라 가격이 달라질 수 있음을 고려하세요.\n' +
       '7. 위 가격 기준표에 없는 항목은 유사 항목을 참고하여 합리적으로 추정하세요.\n\n' +
       'JSON 형식:\n' +
@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-haiku-3-5-20241022',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 2000,
         system: systemPrompt,
         messages: [{ role: 'user', content: userMessage }],
