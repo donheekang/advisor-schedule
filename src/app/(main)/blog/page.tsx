@@ -1,57 +1,53 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-
 import { getAllBlogPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: '블로그 | PetHealth+',
-  description: '반려동물 진료비 비교와 보험, 검사 항목에 대한 실전 가이드를 확인하세요.'
+  description: '반려동물 진료비 비교와 보험, 검사 항목에 대한 실전 가이드를 확인하세요.',
 };
 
 export default async function BlogListPage() {
   const posts = await getAllBlogPosts();
 
   return (
-    <section className="w-full rounded-[2rem] bg-[#F8FAFB] px-5 pb-10 pt-24 md:px-8 md:pb-12">
-      <div className="mx-auto w-full max-w-5xl space-y-8">
-        <header className="space-y-3 text-center">
-          <p className="inline-flex rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-[#6B7280] shadow-sm">
-            📖 보호자를 위한 가이드
-          </p>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[#0B3041] md:text-4xl">
-            반려동물 건강 가이드
+    <section className="w-full bg-white pb-10 pt-24 md:pt-28">
+      <div className="mx-auto w-full max-w-lg px-5">
+        <header className="border-b-8 border-[#F2F4F6] pb-6">
+          <h1 className="mb-1 text-[22px] font-extrabold tracking-tight text-[#191F28]">
+            블로그
           </h1>
-          <p className="text-sm text-[#6B7280]">보호자가 알아야 할 건강 정보를 모았어요</p>
+          <p className="text-sm text-[#8B95A1]">
+            보호자가 알아야 할 건강 정보를 모았어요
+          </p>
         </header>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="divide-y-0">
           {posts.map((post) => (
-            <article
-              key={post.slug}
-              className="group overflow-hidden rounded-3xl border border-[#0B3041]/[0.06] bg-white transition-all hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(11,48,65,0.08)]"
-            >
-              <div className="space-y-3 p-7">
-                <p className="rounded-full bg-[#48B8D0]/10 px-3 py-1 text-xs font-semibold text-[#48B8D0]">{post.date}</p>
-                <h2 className="text-xl font-bold text-[#0B3041] group-hover:text-[#48B8D0]">
+            <article key={post.slug} className="border-b-8 border-[#F2F4F6] py-6">
+              <p className="text-xs font-medium text-[#8B95A1]">{post.date}</p>
+              <h2 className="mt-1 text-[17px] font-bold text-[#191F28]">
+                <Link href={'/blog/' + post.slug} className="transition hover:text-[#4E5968]">
                   {post.title}
-                </h2>
-                <p className="text-sm leading-relaxed text-[#6B7280]">{post.description}</p>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="inline-flex text-sm font-semibold text-[#48B8D0] transition-colors hover:text-[#3A9BB0]"
-                >
-                  읽어보기 →
                 </Link>
-              </div>
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-[#4E5968]">
+                {post.description}
+              </p>
+              <Link
+                href={'/blog/' + post.slug}
+                className="mt-3 inline-flex text-sm font-semibold text-[#191F28] transition hover:text-[#4E5968]"
+              >
+                읽어보기 →
+              </Link>
             </article>
           ))}
         </div>
 
         {posts.length === 0 ? (
-          <div className="rounded-3xl border border-[#0B3041]/[0.06] bg-white p-10 text-center">
-            <p className="text-5xl">📝</p>
-            <p className="mt-4 text-lg font-bold text-[#0B3041]">아직 작성된 글이 없어요</p>
-            <p className="mt-2 text-sm text-[#6B7280]">곧 유용한 가이드가 올라올 예정이에요!</p>
+          <div className="py-12 text-center">
+            <p className="text-[16px] font-bold text-[#191F28]">아직 작성된 글이 없어요</p>
+            <p className="mt-2 text-sm text-[#8B95A1]">곧 유용한 가이드가 올라올 예정이에요</p>
           </div>
         ) : null}
       </div>
