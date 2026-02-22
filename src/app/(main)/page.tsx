@@ -339,14 +339,14 @@ export default function HomePage() {
       <section className="bg-[#0A0F1A] px-4 py-28 md:py-36">
         <div className="mx-auto max-w-[1100px]">
           <AnimateOnScroll animation="fade-up">
-            <h2 className="mb-14 text-center text-3xl font-extrabold tracking-tight text-white md:text-[2.75rem]">숫자로 보는 PetHealth+</h2>
+            <h2 className="mb-14 text-center text-3xl font-extrabold tracking-tight text-white md:text-[2.75rem]">펫헬스플러스를 선택하는 이유</h2>
           </AnimateOnScroll>
           <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
             {[
               { n: '200+', l: '진료 항목 데이터' },
-              { n: 'AI', l: '자동 영수증 분석' },
-              { n: 'iOS+Android', l: '앱 출시 예정' },
-              { n: '보안', l: '안전한 데이터 암호화' }
+              { n: '30초', l: 'AI 진료비 분석' },
+              { n: '100%', l: '완전 무료' },
+              { n: '전국', l: '동물병원 비교' }
             ].map((t, i) => (
               <AnimateOnScroll key={t.l} animation="fade-up" delay={i * 100}>
                 <div className="rounded-3xl border border-white/[0.06] bg-[#111827] p-9 text-center">
