@@ -23,7 +23,7 @@ const FAQ_ITEMS = [
   }
 ] as const;
 
-const pageTitle = 'PetHealth+ - 반려동물 진료비 비교 | 강아지 고양이 진료비 적정가 검색';
+const pageTitle = 'PetHealth+ 펫헬스플러스 | 반려동물 진료비 비교';
 const pageDescription =
   '강아지·고양이 진료비를 전국 평균 데이터와 비교하고, 영수증 기반 AI 분석으로 우리 아이 진료비의 적정가를 확인해보세요.';
 

@@ -133,13 +133,13 @@ export function Navbar() {
       <div className={mobilePanelClassName}>
         <div className="flex h-full flex-col px-6 pb-8 pt-5">
           <div className="mb-8 flex items-center justify-between">
-            <Link href="/" className="text-lg font-bold text-[#1F2937]">
+            <Link href="/" className="text-lg font-bold text-[#191F28]">
               PetHealth+
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="rounded-lg p-2 text-[#1F2937] transition-all duration-300 hover:bg-[#F2F4F6]"
+              className="rounded-lg p-2 text-[#191F28] transition-all duration-300 hover:bg-[#F2F4F6]"
               aria-label="메뉴 닫기"
             >
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
