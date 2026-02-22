@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="bg-[#1F2937]">
+    <footer className="bg-[#191F28]">
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-16 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           <div className="col-span-2 md:col-span-1">
@@ -37,7 +37,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#B28B84]">서비스</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#8B95A1]">서비스</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/pet-talker" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
@@ -63,7 +63,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#B28B84]">가이드</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#8B95A1]">가이드</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/cost-search/dental" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
@@ -89,7 +89,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#B28B84]">회사</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#8B95A1]">회사</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/about" className="text-sm text-gray-400 transition-colors duration-200 hover:text-white">
@@ -110,7 +110,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 md:flex-row">
           <p className="text-xs text-gray-500">&copy; 2026 PetHealth+. All rights reserved.</p>
           <p className="text-xs text-gray-500">본 서비스는 의료 진단을 대체하지 않습니다</p>
         </div>
