@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/auth-context';
 
 const NAV_ITEMS = [
   { href: '/', label: '홈' },
-  { href: '/ai-care', label: 'AI 견적서' },
+  { href: '/ai-care', label: 'AI 진료비' },
   { href: '/cost-search', label: '진료비 검색' },
   { href: '/pet-talker', label: '펫토커' },
   { href: '/blog', label: '블로그' }
@@ -49,17 +49,11 @@ export function Navbar() {
 
   const navClassName =
     'fixed top-0 z-50 w-full transition-all duration-300 ' +
-    (scrolled ? 'bg-[#0B3041] shadow-lg' : 'bg-white border-b border-gray-100');
+    (scrolled ? 'bg-white shadow-[0_1px_0_0_#F2F4F6]' : 'bg-white border-b border-[#F2F4F6]');
 
   const desktopLinkClassName = (active: boolean) =>
     'px-3 py-1 text-sm font-medium transition-colors duration-300 ' +
-    (active
-      ? scrolled
-        ? 'text-white'
-        : 'text-[#48B8D0]'
-      : scrolled
-        ? 'text-white/80 hover:text-white'
-        : 'text-gray-600 hover:text-[#48B8D0]');
+    (active ? 'text-[#191F28] font-semibold' : 'text-[#8B95A1] hover:text-[#191F28]');
 
   const mobilePanelClassName =
     'fixed inset-0 z-[60] bg-white transition-all duration-300 md:hidden ' +
@@ -67,13 +61,11 @@ export function Navbar() {
 
   const mobileItemClassName = (active: boolean) =>
     'block border-b border-gray-100 py-3 text-lg font-medium transition-all duration-300 ' +
-    (active ? 'text-[#48B8D0]' : 'text-[#6B7280] hover:text-[#48B8D0]');
+    (active ? 'text-[#191F28] font-bold' : 'text-[#8B95A1] hover:text-[#191F28]');
 
-  const logoClassName =
-    'text-xl font-extrabold tracking-tight transition-colors duration-300 ' + (scrolled ? 'text-white' : 'text-[#0B3041]');
+  const logoClassName = 'text-xl font-extrabold tracking-tight text-[#191F28]';
 
-  const menuButtonClassName =
-    'rounded-lg p-2 transition-colors duration-300 hover:bg-[#F5E5FC] md:hidden ' + (scrolled ? 'text-white' : 'text-gray-800');
+  const menuButtonClassName = 'rounded-lg p-2 text-[#191F28] transition-colors duration-300 hover:bg-[#F2F4F6] md:hidden';
 
   return (
     <>
@@ -85,7 +77,7 @@ export function Navbar() {
               alt="PetHealth+"
               width={32}
               height={32}
-              className={'rounded-lg transition-all duration-300 ' + (scrolled ? 'brightness-0 invert' : '')}
+              className="rounded-lg transition-all duration-300"
             />
             <span className={logoClassName}>PetHealth+</span>
           </Link>
@@ -100,7 +92,7 @@ export function Navbar() {
                     {item.label}
                   </Link>
                   {active && (
-                    <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#48B8D0]" />
+                    <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#191F28]" />
                   )}
                 </div>
               );
@@ -110,14 +102,14 @@ export function Navbar() {
           <div className="hidden md:block">
             {user ? (
               <Link href="/mypage" className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#48B8D0] text-xs font-bold text-white transition hover:bg-[#3CA8BF]">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#191F28] text-xs font-bold text-white transition hover:bg-[#333D4B]">
                   {user.displayName?.[0] || user.email?.[0] || '?'}
                 </div>
               </Link>
             ) : (
               <Link
                 href="/login"
-                className="rounded-lg bg-[#48B8D0] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#3CA8BF]"
+                className="rounded-lg bg-[#191F28] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#333D4B]"
               >
                 로그인
               </Link>
@@ -142,12 +134,12 @@ export function Navbar() {
         <div className="flex h-full flex-col px-6 pb-8 pt-5">
           <div className="mb-8 flex items-center justify-between">
             <Link href="/" className="text-lg font-bold text-[#1F2937]">
-              🐾 PetHealth+
+              PetHealth+
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="rounded-lg p-2 text-[#1F2937] transition-all duration-300 hover:bg-[#F5E5FC]"
+              className="rounded-lg p-2 text-[#1F2937] transition-all duration-300 hover:bg-[#F2F4F6]"
               aria-label="메뉴 닫기"
             >
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
@@ -171,9 +163,9 @@ export function Navbar() {
           {user ? (
             <Link
               href="/mypage"
-              className="mt-8 flex items-center justify-center gap-2 rounded-lg border border-[#48B8D0]/30 bg-[#F5E5FC] px-4 py-2 text-sm font-semibold text-[#0B3041] transition hover:bg-[#F5E5FC]/70"
+              className="mt-8 flex items-center justify-center gap-2 rounded-lg border border-[#E5E8EB] bg-[#F8FAFB] px-4 py-2 text-sm font-semibold text-[#191F28] transition hover:bg-[#F2F4F6]"
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#48B8D0] text-xs font-bold text-white">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#191F28] text-xs font-bold text-white">
                 {user.displayName?.[0] || user.email?.[0] || '?'}
               </span>
               마이페이지
@@ -181,7 +173,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="mt-8 rounded-lg bg-[#48B8D0] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#3CA8BF]"
+              className="mt-8 rounded-lg bg-[#191F28] px-4 py-2 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-[#333D4B]"
             >
               로그인
             </Link>
