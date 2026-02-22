@@ -358,9 +358,7 @@ export function findCareProductsByCategory(categoryTags: string[]): CareProduct[
 /**
  * 쿠팡 파트너스 검색 URL 생성
  */
-export function createCoupangSearchUrl(keyword: string): string {
-  const partnerId = process.env.NEXT_PUBLIC_COUPANG_PARTNER_ID;
-  const searchUrl = `https://www.coupang.com/np/search?component=&q=${encodeURIComponent(keyword)}&channel=user`;
-  if (!partnerId) return searchUrl;
-  return `${searchUrl}&subid=${encodeURIComponent(partnerId)}`;
+export function createCoupangSearchUrl(_keyword: string): string {
+  void _keyword;
+  return 'https://link.coupang.com/a/dQ6w5N';
 }
