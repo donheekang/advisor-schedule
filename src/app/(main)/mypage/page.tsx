@@ -36,7 +36,7 @@ function SpeciesIcon({ species, size = 20 }: { species: string; size?: number })
 
   if (l === 'dog' || l.includes('강아지')) {
     return (
-      <div className={'flex items-center justify-center bg-gradient-to-br from-[#48B8D0] to-[#3A9BB0] ' + boxSize + ' ' + radius}>
+      <div className={'flex items-center justify-center bg-[#3182F6] ' + boxSize + ' ' + radius}>
         <Dog size={iconSize} className="text-white" />
       </div>
     );
@@ -44,14 +44,14 @@ function SpeciesIcon({ species, size = 20 }: { species: string; size?: number })
 
   if (l === 'cat' || l.includes('고양이')) {
     return (
-      <div className={'flex items-center justify-center bg-gradient-to-br from-[#C084FC] to-[#A855F7] ' + boxSize + ' ' + radius}>
+      <div className={'flex items-center justify-center bg-[#8B5CF6] ' + boxSize + ' ' + radius}>
         <Cat size={iconSize} className="text-white" />
       </div>
     );
   }
 
   return (
-    <div className={'flex items-center justify-center bg-gradient-to-br from-[#5CC4D8] to-[#48B8D0] ' + boxSize + ' ' + radius}>
+    <div className={'flex items-center justify-center bg-[#8B95A1] ' + boxSize + ' ' + radius}>
       <PawPrint size={iconSize} className="text-white" />
     </div>
   );
@@ -100,7 +100,7 @@ function formatBytes(bytes?: number): string {
 
 function SummaryCard({ icon, label, value, unit }: { icon: React.ReactNode; label: string; value: string; unit: string }) {
   return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4">
+    <div className="rounded-2xl border border-[#E5E8EB] bg-white p-4">
       <div className="flex items-center gap-1.5 text-[#6B7280]">{icon}<p className="text-xs">{label}</p></div>
       <p className="mt-1.5 text-xl font-bold text-[#1F2937]">{value}{unit && <span className="text-sm font-normal text-[#6B7280]">{' '}{unit}</span>}</p>
     </div>
@@ -108,13 +108,13 @@ function SummaryCard({ icon, label, value, unit }: { icon: React.ReactNode; labe
 }
 
 function InfoChip({ label }: { label: string }) {
-  return <span className="rounded-full bg-[#F8FAFC] border border-[#E2E8F0] px-2.5 py-0.5 text-xs text-[#6B7280]">{label}</span>;
+  return <span className="rounded-full bg-[#F2F4F6] border border-[#E5E8EB] px-2.5 py-0.5 text-xs text-[#6B7280]">{label}</span>;
 }
 
 function AppFeatureRow({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
     <div className="flex items-center gap-2.5 text-sm text-white/80">
-      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">{icon}</span>
+      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.08]">{icon}</span>
       {text}
     </div>
   );
@@ -182,25 +182,25 @@ export default function MyPage() {
   if (!user) {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-[#F5E5FC]">
-          <PawPrint size={36} className="text-[#48B8D0]" />
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-[#F2F4F6]">
+          <PawPrint size={36} className="text-[#191F28]" />
         </div>
         <h2 className="mb-2 text-xl font-bold text-[#1F2937]">로그인하면 우리 아이 진료 기록을<br />관리할 수 있어요</h2>
         <p className="mb-8 text-sm text-[#6B7280]">앱에서 기록한 데이터가 웹에서도 연동됩니다</p>
-        <Link href="/login" className="inline-flex items-center gap-2 rounded-xl bg-[#48B8D0] px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-[#3CA8BF]">로그인</Link>
-        <p className="mt-4"><Link href="/ai-care" className="text-sm font-medium text-[#48B8D0] hover:underline">또는 무료 AI 견적서부터 시작해보세요</Link></p>
+        <Link href="/login" className="inline-flex items-center gap-2 rounded-xl bg-[#191F28] px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-[#333D4B]">로그인</Link>
+        <p className="mt-4"><Link href="/ai-care" className="text-sm font-medium text-[#191F28] underline">또는 무료 AI 견적서부터 시작해보세요</Link></p>
       </div>
     );
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 pb-20 pt-24 md:pt-28">
+    <main className="mx-auto max-w-lg px-4 pb-20 pt-24 md:pt-28">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#1F2937]">마이페이지</h1>
           <p className="mt-1 text-sm text-[#6B7280]">{user.displayName || user.email || '보호자'}님의 건강 관리 현황</p>
         </div>
-        <button type="button" onClick={() => { void signOut(); }} className="flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] px-4 py-2 text-sm text-[#6B7280] transition hover:bg-[#F8FAFC]"><LogOut size={14} />로그아웃</button>
+        <button type="button" onClick={() => { void signOut(); }} className="flex items-center gap-1.5 rounded-lg border border-[#E5E8EB] px-4 py-2 text-sm text-[#6B7280] transition hover:bg-[#F2F4F6]"><LogOut size={14} />로그아웃</button>
       </div>
 
       {errorMessage && <div className="mb-4 rounded-xl bg-red-50 p-4 text-sm text-red-600">{errorMessage}</div>}
@@ -214,11 +214,11 @@ export default function MyPage() {
         </div>
       )}
 
-      <section className="mb-6 rounded-2xl border border-[#E2E8F0] bg-white p-6">
-        <div className="flex items-center gap-2"><PawPrint size={20} className="text-[#48B8D0]" /><h2 className="text-lg font-bold text-[#1F2937]">우리 아이들</h2></div>
+      <section className="mb-6 rounded-[14px] border-[1.5px] border-[#E5E8EB] bg-white p-6">
+        <div className="flex items-center gap-2"><PawPrint size={20} className="text-[#191F28]" /><h2 className="text-lg font-bold text-[#1F2937]">우리 아이들</h2></div>
         {pets.length === 0 ? (
           <div className="mt-4 rounded-xl bg-[#F8FAFC] p-6 text-center">
-            <PawPrint size={32} className="mx-auto mb-3 text-[#CBD5E1]" />
+            <PawPrint size={32} className="mx-auto mb-3 text-[#8B95A1]" />
             <p className="text-sm text-[#6B7280]">앱에서 반려동물을 등록해보세요</p>
             <div className="mt-3 flex justify-center"><StoreComingSoonButtons tone="light" /></div>
           </div>
@@ -228,7 +228,7 @@ export default function MyPage() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {pets.map((pet) => (
                   <button key={pet.id} type="button" onClick={() => setSelectedPetId(pet.id)}
-                    className={'flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ' + (pet.id === selectedPetId ? 'bg-[#48B8D0] text-white' : 'bg-[#F8FAFC] text-[#6B7280] border border-[#E2E8F0] hover:border-[#48B8D0]')}>
+                    className={'flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ' + (pet.id === selectedPetId ? 'bg-[#191F28] text-white' : 'bg-white text-[#4E5968] border border-[#E5E8EB] hover:border-[#CBD5E1]')}>
                     <SpeciesIcon species={pet.species} size={14} />{pet.name}
                   </button>
                 ))}
@@ -236,7 +236,7 @@ export default function MyPage() {
             )}
             <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
               {pets.map((pet) => (
-                <div key={pet.id} className={'rounded-xl border p-4 transition cursor-pointer ' + (pet.id === selectedPetId ? 'border-[#48B8D0] bg-[#48B8D0]/5' : 'border-[#E2E8F0] bg-white hover:border-[#48B8D0]/50')} onClick={() => setSelectedPetId(pet.id)}>
+                <div key={pet.id} className={'rounded-xl border p-4 transition cursor-pointer ' + (pet.id === selectedPetId ? 'border-[#191F28] bg-[#F8FAFB]' : 'border-[#E5E8EB] bg-white hover:border-[#CBD5E1]')} onClick={() => setSelectedPetId(pet.id)}>
                   <div className="flex items-center gap-3">
                     <SpeciesIcon species={pet.species} size={22} />
                     <div>
@@ -257,18 +257,18 @@ export default function MyPage() {
         )}
       </section>
 
-      <section className="mb-6 rounded-2xl border border-[#E2E8F0] bg-white p-6">
-        <div className="flex items-center gap-2"><Sparkles size={20} className="text-[#48B8D0]" /><h2 className="text-lg font-bold text-[#1F2937]">AI 건강 인사이트</h2></div>
+      <section className="mb-6 rounded-[14px] border-[1.5px] border-[#E5E8EB] bg-white p-6">
+        <div className="flex items-center gap-2"><Sparkles size={20} className="text-[#191F28]" /><h2 className="text-lg font-bold text-[#1F2937]">AI 건강 인사이트</h2></div>
         {!selectedPet ? (<p className="mt-3 text-sm text-[#6B7280]">분석할 반려동물을 선택해주세요</p>
         ) : insight && insight.summary ? (
           <div className="mt-4">
-            <div className="rounded-xl bg-[#F5E5FC]/30 p-4 text-sm leading-relaxed text-[#1F2937]">{insight.summary}</div>
+            <div className="rounded-xl bg-[#F2F4F6] p-4 text-sm leading-relaxed text-[#1F2937]">{insight.summary}</div>
             {insight.tags && insight.tags.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">
                 {insight.tags.map((t, i) => {
                   const lbl = typeof t === 'string' ? tagLabel(t) : (t.label || tagLabel(t.tag));
                   const k = typeof t === 'string' ? t : t.tag;
-                  return <span key={k + '-' + String(i)} className="rounded-full bg-[#48B8D0]/10 px-3 py-1 text-xs font-medium text-[#48B8D0]">{lbl}</span>;
+                  return <span key={k + '-' + String(i)} className="rounded-full bg-[#F2F4F6] px-3 py-1 text-xs font-medium text-[#4E5968]">{lbl}</span>;
                 })}
               </div>
             )}
@@ -276,16 +276,16 @@ export default function MyPage() {
         ) : (<p className="mt-3 text-sm text-[#6B7280]">{isFetching ? 'AI 인사이트를 불러오는 중...' : '아직 분석 데이터가 없어요. 앱에서 진료 기록을 등록해보세요.'}</p>)}
       </section>
 
-      <section className="mb-6 rounded-2xl border border-[#E2E8F0] bg-white p-6">
-        <div className="flex items-center gap-2"><Stethoscope size={20} className="text-[#48B8D0]" /><h2 className="text-lg font-bold text-[#1F2937]">최근 진료 기록</h2></div>
+      <section className="mb-6 rounded-[14px] border-[1.5px] border-[#E5E8EB] bg-white p-6">
+        <div className="flex items-center gap-2"><Stethoscope size={20} className="text-[#191F28]" /><h2 className="text-lg font-bold text-[#1F2937]">최근 진료 기록</h2></div>
         <div className="mt-4 space-y-3">
           {records.length === 0 ? (
-            <div className="rounded-xl bg-[#F8FAFC] p-6 text-center"><FileText size={28} className="mx-auto mb-2 text-[#CBD5E1]" /><p className="text-sm text-[#6B7280]">최근 진료 기록이 없어요</p></div>
+            <div className="rounded-xl bg-[#F8FAFC] p-6 text-center"><FileText size={28} className="mx-auto mb-2 text-[#8B95A1]" /><p className="text-sm text-[#6B7280]">최근 진료 기록이 없어요</p></div>
           ) : records.map((record, index) => (
-            <div key={record.id ?? 'record-' + String(index)} className="rounded-xl border border-[#E2E8F0] p-4 transition hover:border-[#48B8D0]/30">
+            <div key={record.id ?? 'record-' + String(index)} className="rounded-xl border border-[#E2E8F0] p-4 transition hover:border-[#CBD5E1]">
               <div className="flex items-center justify-between">
                 <div><p className="text-sm font-semibold text-[#1F2937]">{record.hospital_name || '병원 정보 없음'}</p><p className="text-xs text-[#6B7280]">{formatVisitDate(record.visit_date)}</p></div>
-                <p className="text-base font-bold text-[#48B8D0]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
+                <p className="text-base font-bold text-[#191F28]">{currencyFormatter.format(record.total_amount ?? 0)}원</p>
               </div>
               {(record.items ?? []).length > 0 && (
                 <div className="mt-2 space-y-1 border-t border-[#F1F5F9] pt-2">
@@ -299,7 +299,7 @@ export default function MyPage() {
               )}
               {(record.tags ?? []).length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">
-                  {(record.tags ?? []).map((tag) => (<span key={tag} className="rounded-full bg-[#F5E5FC]/50 px-2 py-0.5 text-[11px] text-[#48B8D0]">{tagLabel(tag)}</span>))}
+                  {(record.tags ?? []).map((tag) => (<span key={tag} className="rounded-full bg-[#F2F4F6] px-2 py-0.5 text-[11px] text-[#4E5968]">{tagLabel(tag)}</span>))}
                 </div>
               )}
             </div>
@@ -307,7 +307,7 @@ export default function MyPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl bg-[#0B3041] p-6 text-white">
+      <section className="rounded-2xl bg-[#191F28] p-6 text-white">
         <div className="flex items-center gap-2"><Smartphone size={20} /><h2 className="text-lg font-bold">앱에서 더 많은 기능을 사용하세요</h2></div>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <AppFeatureRow icon={<Camera size={16} />} text="영수증 촬영하면 자동 분류" />
