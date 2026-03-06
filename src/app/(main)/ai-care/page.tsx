@@ -433,33 +433,12 @@ export default function AiCarePage() {
 
         {error ? <p className="mt-3 rounded-xl bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#DC2626]">{error}</p> : null}
 
-        {user && appDataLoaded && appPets.length === 0 ? (
-          <div className="mt-5 rounded-3xl bg-[#fff8f5] p-4 text-center ring-1 ring-[#ff7a45]/10">
-            <p className="text-sm font-medium text-[#17191f]">앱에서 반려동물을 등록하면 AI 분석을 이용할 수 있어요</p>
-            <a
-              href="https://apps.apple.com/app/id6744428830"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-[#ff7a45] underline decoration-[#ff7a45]/30 underline-offset-2"
-            >
-              앱 다운로드하기
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
-            </a>
-          </div>
-        ) : (
-          <div className="mt-5 rounded-3xl bg-[#fff8f5] p-4 text-center ring-1 ring-[#ff7a45]/10">
-            <p className="text-sm text-[#697182]">
-              증상을 입력하고 <button type="button" onClick={() => setShowLoginModal(true)} className="font-bold text-[#ff7a45] underline decoration-[#ff7a45]/30 underline-offset-2 transition-colors hover:text-[#e46333]">로그인</button>하면 우리 아이 맞춤 분석 결과를 받아볼 수 있어요
-            </p>
-          </div>
-        )}
-
         <button
           type="button"
           onClick={handleAnalyze}
           disabled={loading || !symptoms.trim()}
           className={
-            'mt-4 flex w-full items-center justify-center gap-2 rounded-3xl px-4 py-[17px] text-[15px] font-bold text-white transition ' +
+            'mt-5 flex w-full items-center justify-center gap-2 rounded-3xl px-4 py-[17px] text-[15px] font-bold text-white transition ' +
             (loading || !symptoms.trim()
               ? 'cursor-not-allowed bg-[#e5e8eb] text-[#8B95A1]'
               : 'bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] hover:opacity-90')
@@ -473,10 +452,6 @@ export default function AiCarePage() {
               </svg>
               AI가 분석 중이에요...
             </>
-          ) : !user ? (
-            '로그인하고 AI 분석하기'
-          ) : appDataLoaded && appPets.length === 0 ? (
-            '앱에서 아이 등록 후 이용 가능'
           ) : (
             'AI 진료비 분석하기'
           )}
