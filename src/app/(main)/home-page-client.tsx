@@ -307,10 +307,10 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             <br className="hidden md:block" />
             도와드릴게요.
           </p>
-          <div className="mt-9 flex flex-col gap-3">
+          <div className="mt-9 inline-flex flex-col items-center gap-4 rounded-[1.25rem] bg-white/60 px-6 py-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04] backdrop-blur-sm">
             <Link
               href="/ai-care"
-              className="group inline-flex w-fit items-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98]"
+              className="group inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98]"
             >
               AI 진료비 확인하기
               <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
@@ -318,13 +318,13 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             <div className="flex gap-3">
               <Link
                 href="/cost-search"
-                className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
+                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
               >
                 진료비 비교
               </Link>
               <Link
                 href="/pet-talker"
-                className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
+                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
               >
                 펫토커
               </Link>
