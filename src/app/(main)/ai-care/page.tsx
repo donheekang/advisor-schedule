@@ -232,75 +232,19 @@ export default function AiCarePage() {
     };
 
     try {
-      if (user && selectedAppPet) {
-        const profile = {
-          name: selectedAppPet.name || '우리 아이',
-          species: selectedAppPet.species || (petType === 'cat' ? 'cat' : 'dog'),
-          breed: selectedAppPet.breed || breed || '믹스',
-          age_text: age ? age + '살' : '미입력',
-          weight_current: selectedAppPet.weight_kg || weight || 0,
-          allergies: selectedAppPet.allergy_tags || [],
-          symptoms_text: symptoms,
-        };
+      const res = await fetch('/api/ai-estimate', {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ petType, breed, age, weight, symptoms }),
+      });
 
-        const medicalHistory = appRecords.map((record) => ({
-          visit_date: record.visit_date,
-          clinic_name: record.hospital_name || '',
-          item_count: record.items?.length || 0,
-          total_amount: record.total_amount || 0,
-          tags: record.tags || [],
-        }));
-
-        const analyzeResult = await apiClient.analyzeAiCare({
-          profile,
-          medicalHistory,
-          forceRefresh: false,
-        });
-
-        const summary = (analyzeResult.summary as string | undefined) || '';
-
-        if (Array.isArray(analyzeResult.conditions)) {
-          setResult(analyzeResult as unknown as AnalysisResult);
-        } else {
-          const estimateRes = await fetch('/api/ai-estimate', {
-            method: 'POST',
-            headers: authHeaders,
-            body: JSON.stringify({ petType, breed, age, weight, symptoms }),
-          });
-
-          if (!estimateRes.ok) {
-            const estimateError = await estimateRes.json();
-            throw new Error((estimateError as { error?: string; message?: string }).message || (estimateError as { error?: string }).error || 'AI 분석 실패');
-          }
-
-          const estimateData = (await estimateRes.json()) as AnalysisResult;
-
-          if (summary) {
-            estimateData.recommendation = summary + '\n\n' + (estimateData.recommendation || '');
-          }
-
-          if (appRecords.length > 0) {
-            estimateData.recommendation += '\n\n앱 진료기록 ' + appRecords.length + '건이 분석에 반영되었습니다.';
-          }
-
-          setResult(estimateData);
-        }
-      } else {
-        const res = await fetch('/api/ai-estimate', {
-          method: 'POST',
-          headers: authHeaders,
-          body: JSON.stringify({ petType, breed, age, weight, symptoms }),
-        });
-
-        if (!res.ok) {
-          const data = await res.json();
-          throw new Error((data as { error?: string; message?: string }).message || (data as { error?: string }).error || 'AI 분석 실패');
-        }
-
-        const data = (await res.json()) as AnalysisResult;
-
-        setResult(data);
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error((data as { error?: string; message?: string }).message || (data as { error?: string }).error || 'AI 분석 실패');
       }
+
+      const data = (await res.json()) as AnalysisResult;
+      setResult(data);
 
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -489,11 +433,7 @@ export default function AiCarePage() {
 
         {error ? <p className="mt-3 rounded-xl bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#DC2626]">{error}</p> : null}
 
-        {user && appPets.length > 0 ? (
-          <div className="mt-5 rounded-3xl bg-white p-4 text-center ring-1 ring-black/5">
-            <p className="text-sm font-medium text-[#17191f]"><span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[#06B56C]" />{selectedAppPet?.name || '우리 아이'}의 진료기록 {appRecords.length}건이 AI 분석에 반영됩니다</p>
-          </div>
-        ) : user && appDataLoaded && appPets.length === 0 ? (
+        {user && appDataLoaded && appPets.length === 0 ? (
           <div className="mt-5 rounded-3xl bg-[#fff8f5] p-4 text-center ring-1 ring-[#ff7a45]/10">
             <p className="text-sm font-medium text-[#17191f]">앱에서 반려동물을 등록하면 AI 분석을 이용할 수 있어요</p>
             <a
