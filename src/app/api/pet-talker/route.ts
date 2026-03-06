@@ -12,10 +12,6 @@ type PetTalkerRequestBody = {
   userMessage?: string;
 };
 
-type UsagePolicy = {
-  dailyLimit: number;
-  isMember: boolean;
-};
 
 type SupportedImageMediaType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
 type LlmProvider = 'anthropic' | 'openai';
@@ -64,7 +60,6 @@ emotionScore는 75~95 사이.`;
 const DEFAULT_ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001';
 const DEFAULT_OPENAI_MODEL = 'gpt-5-mini';
 
-const usageStore = new Map<string, number>();
 
 function resolvePetTalkerProvider(): LlmProvider {
   const rawProvider = process.env.PET_TALKER_LLM_PROVIDER?.trim().toLowerCase();
@@ -126,51 +121,6 @@ function serializeError(error: unknown): Record<string, unknown> {
   };
 }
 
-function getUsageKey(identifier: string): string {
-  const dateKey = new Date().toISOString().slice(0, 10);
-  return `${dateKey}:${identifier}`;
-}
-
-function _getUsagePolicy(isMember: boolean): UsagePolicy {
-  if (isMember) {
-    return { dailyLimit: 5, isMember: true };
-  }
-
-  return { dailyLimit: 2, isMember: false };
-}
-
-function _getCurrentUsage(identifier: string): number {
-  const key = getUsageKey(identifier);
-  return usageStore.get(key) ?? 0;
-}
-
-function _incrementUsage(identifier: string): number {
-  const key = getUsageKey(identifier);
-  const currentUsage = usageStore.get(key) ?? 0;
-  const nextUsage = currentUsage + 1;
-  usageStore.set(key, nextUsage);
-  return nextUsage;
-}
-
-function _getClientIp(request: NextRequest): string {
-  const cookieIp = request.cookies.get('pet_talker_ip')?.value;
-  if (cookieIp) {
-    return cookieIp;
-  }
-
-  const connectingIp = request.headers.get('cf-connecting-ip');
-  if (connectingIp) {
-    return connectingIp.trim();
-  }
-
-  const forwardedFor = request.headers.get('x-forwarded-for');
-  if (forwardedFor) {
-    return forwardedFor.split(',')[0]?.trim() ?? 'unknown';
-  }
-
-  const realIp = request.headers.get('x-real-ip');
-  return realIp?.trim() || 'unknown';
-}
 
 function buildUserPrompt(petInfo?: PetTalkerRequestBody['petInfo'], userMessage?: string): string {
   let prompt = '이 사진 속 아이가 돼서 한마디 해줘.';
