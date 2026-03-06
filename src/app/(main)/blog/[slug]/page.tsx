@@ -37,7 +37,14 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       url: `https://pethealthplus.kr/blog/${post.slug}`,
       siteName: 'PetHealth+',
       locale: 'ko_KR',
-      type: 'article'
+      type: 'article',
+      publishedTime: post.date,
+      authors: ['PetHealth+']
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description
     }
   };
 }
@@ -49,8 +56,36 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
     notFound();
   }
 
+  const blogPostingJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      '@type': 'Organization',
+      name: 'PetHealth+',
+      url: 'https://pethealthplus.kr'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'PetHealth+',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://pethealthplus.kr/og/default.png'
+      }
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://pethealthplus.kr/blog/${post.slug}`
+    },
+    inLanguage: 'ko-KR'
+  };
+
   return (
     <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }} />
       <article className="mx-auto max-w-2xl space-y-8">
         <header className="space-y-3 border-b border-[#fff0ea]/40 pb-6">
           <Link
