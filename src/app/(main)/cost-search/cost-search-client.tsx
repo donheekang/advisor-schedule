@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/components/auth-provider';
 import CareGuide from '@/components/care-guide';
 import { apiClient } from '@/lib/api-client';
@@ -139,8 +139,6 @@ export default function CostSearchClient() {
   const [searchError, setSearchError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [myComparison, setMyComparison] = useState<MyPriceComparison | null>(null);
-  const [comparingMine, setComparingMine] = useState(false);
-
   async function runSearch(searchQuery: string) {
     const trimmed = searchQuery.trim();
     if (!trimmed) {
@@ -197,35 +195,6 @@ export default function CostSearchClient() {
       return '0%';
     }
     return `${Math.max(8, (value / maxChartValue) * 100)}%`;
-  }
-
-  async function handleCompareMine() {
-    if (!user || !costResult || !token) {
-      return;
-    }
-
-    setComparingMine(true);
-    try {
-      apiClient.setToken(token);
-      const records = await apiClient.listRecords(undefined, true);
-      const prices = extractMyItemPrices(records, costResult.query);
-      if (prices.length === 0) {
-        setMyComparison(null);
-        return;
-      }
-
-      const myAverage = prices.reduce((sum, value) => sum + value, 0) / prices.length;
-      const diffPercent = ((myAverage - costResult.priceStats.avg) / costResult.priceStats.avg) * 100;
-      setMyComparison({
-        item: costResult.matchedItem,
-        average: myAverage,
-        diffPercent,
-        isHigher: diffPercent >= 0,
-        sampleSize: prices.length
-      });
-    } finally {
-      setComparingMine(false);
-    }
   }
 
   return (
