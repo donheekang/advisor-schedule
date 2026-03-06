@@ -382,10 +382,10 @@ export default function PetTalkerClient() {
         <header className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(160deg,#ffffff_0%,#fff8f8_62%,#fff6f6_100%)] px-6 py-9 text-center shadow-[0_24px_64px_rgba(14,31,53,0.09)] ring-1 ring-black/5 md:px-10">
           <div className="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-[#ff7a45]/10 blur-3xl" />
           <div className="pointer-events-none absolute -left-14 bottom-0 h-40 w-40 rounded-full bg-[#f3caa8]/10 blur-3xl" />
-          <p className="inline-flex rounded-full bg-[#fff0e5] px-4 py-1.5 text-xs font-semibold text-[#ff7a45]">무료</p>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#17191f] md:text-4xl">펫토커</h1>
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#0B3041]">PET TALKER</p>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#17191f] md:text-4xl">사진 한 장으로 듣는<br />우리 아이 속마음</h1>
           <p className="mt-3 text-sm leading-relaxed text-[#4f5868] md:text-base">
-            사진 한 장과 짧은 메시지로 우리 아이의 반응을 생성합니다. 결과는 공유 카드로 저장할 수 있어요.
+            지금 무슨 생각을 하고 있을까? 사진을 올리면 우리 아이가 직접 말해줘요.
           </p>
         </header>
 
@@ -693,16 +693,6 @@ export default function PetTalkerClient() {
               )}
             </div>
           ) : null}
-        </section>
-
-        <section className="rounded-3xl bg-[linear-gradient(135deg,#2a1c16_0%,#3a261d_55%,#4b3125_120%)] p-6 text-center text-white">
-          <p className="text-sm font-medium text-white/85">앱 기록과 연결하면 더 정확한 개인화 경험을 제공할 수 있어요.</p>
-          <button
-            type="button"
-            className="mt-3 w-full rounded-full bg-white px-4 py-3 text-sm font-semibold text-[#17191f] transition hover:bg-[#f2f2f2]"
-          >
-            앱 다운로드
-          </button>
         </section>
 
         {errorMessage && status !== 'error' ? (

@@ -413,8 +413,8 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
           </article>
           <article className="rounded-3xl bg-[linear-gradient(150deg,#2a1c16_0%,#3f2a20_62%,#4b3125_100%)] p-8 text-white">
             <p className="text-xs font-medium text-white/70">비교 가능 카테고리</p>
-            <p className="mt-2 text-xl font-semibold leading-relaxed">증상 · 검사 · 수술 · 약 · 보험</p>
-            <p className="mt-3 text-xs leading-relaxed text-white/50">5가지 카테고리 완벽 지원</p>
+            <p className="mt-2 text-xl font-semibold leading-relaxed">진찰 · 검사 · 수술</p>
+            <p className="mt-3 text-xs leading-relaxed text-white/50">핵심 진료 항목을 한눈에 비교</p>
           </article>
         </div>
       </Section>

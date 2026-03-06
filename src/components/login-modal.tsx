@@ -179,6 +179,38 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
           >
             로그인 없이 둘러보기
           </button>
+
+          <div className="mt-3 rounded-2xl bg-[#fffaf5] p-3.5 text-center ring-1 ring-black/5">
+            <p className="text-[13px] font-semibold text-[#17191f]">앱에서 더 많은 기능을 만나보세요</p>
+            <p className="mt-0.5 text-[11px] text-[#697182]">진료 기록 관리부터 맞춤 건강 분석까지</p>
+            <div className="mt-2.5 flex items-center justify-center gap-2">
+              <a
+                href="https://apps.apple.com/app/id6744428830"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#0B3041] px-3.5 py-2 text-[11px] font-semibold text-white transition hover:bg-[#0d3a4f]"
+              >
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="white">
+                  <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+                </svg>
+                App Store
+              </a>
+              <a
+                href="https://play.google.com/store"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3.5 py-2 text-[11px] font-semibold text-[#17191f] transition hover:bg-[#f8f4ef]"
+              >
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                  <path d="M3.61 1.814L13.793 12 3.61 22.186a.996.996 0 01-.61-.92V2.734c0-.384.22-.72.61-.92z" fill="#4285F4"/>
+                  <path d="M17.12 8.57L5.07.844 13.793 12 17.12 8.57z" fill="#EA4335"/>
+                  <path d="M17.12 15.43L13.793 12 5.07 23.156 17.12 15.43z" fill="#34A853"/>
+                  <path d="M20.54 10.88l-3.42-1.91L13.793 12l3.327 3.03 3.42-1.91c.94-.52.94-1.72 0-2.24z" fill="#FBBC05"/>
+                </svg>
+                Google Play
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

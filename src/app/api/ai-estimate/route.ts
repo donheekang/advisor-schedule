@@ -1,70 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyBearerToken } from '@/lib/auth-server';
 
-// ── 월간 사용량 추적 (userId → { count, monthKey }) ──
-const monthlyUsage = new Map<string, { count: number; monthKey: string }>();
-const FREE_MONTHLY_LIMIT = 10;
-
-function getCurrentMonthKey(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-}
-
-function getMonthlyCount(userId: string): number {
-  const record = monthlyUsage.get(userId);
-  const currentMonth = getCurrentMonthKey();
-
-  if (!record || record.monthKey !== currentMonth) {
-    return 0;
-  }
-
-  return record.count;
-}
-
-function incrementMonthlyUsage(userId: string): number {
-  const currentMonth = getCurrentMonthKey();
-  const record = monthlyUsage.get(userId);
-
-  if (!record || record.monthKey !== currentMonth) {
-    monthlyUsage.set(userId, { count: 1, monthKey: currentMonth });
-    return 1;
-  }
-
-  record.count += 1;
-  return record.count;
-}
-
-// ── 사용량 조회 API (GET) ──
-export async function GET(req: NextRequest) {
-  const authorizationHeader = req.headers.get('authorization') ?? undefined;
-
-  if (!authorizationHeader) {
-    return NextResponse.json(
-      { error: 'login_required', message: '로그인 후 이용할 수 있어요.' },
-      { status: 401 }
-    );
-  }
-
-  try {
-    const decoded = await verifyBearerToken(authorizationHeader);
-
-    const usageCount = getMonthlyCount(decoded.uid);
-
-    return NextResponse.json({
-      usageCount,
-      usageLimit: FREE_MONTHLY_LIMIT,
-      remaining: Math.max(0, FREE_MONTHLY_LIMIT - usageCount),
-      monthKey: getCurrentMonthKey(),
-    });
-  } catch {
-    return NextResponse.json(
-      { error: 'login_required', message: '로그인 후 이용할 수 있어요.' },
-      { status: 401 }
-    );
-  }
-}
-
-// ── AI 분석 API (POST) ──
+// ── AI 분석 API (POST) — 무제한 ──
 export async function POST(req: NextRequest) {
   // ── 1. 인증 확인 ──
   const authorizationHeader = req.headers.get('authorization') ?? undefined;
@@ -76,10 +13,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let userId: string;
   try {
-    const decoded = await verifyBearerToken(authorizationHeader);
-    userId = decoded.uid;
+    await verifyBearerToken(authorizationHeader);
   } catch {
     return NextResponse.json(
       { error: 'login_required', message: '로그인 후 이용할 수 있어요.' },
@@ -87,21 +22,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // ── 2. 월간 사용량 확인 ──
-  const currentUsage = getMonthlyCount(userId);
-
-  if (currentUsage >= FREE_MONTHLY_LIMIT) {
-    return NextResponse.json(
-      {
-        error: 'MONTHLY_LIMIT_EXCEEDED',
-        message: `이번 달 무료 분석 ${FREE_MONTHLY_LIMIT}회를 모두 사용했어요.`,
-        usageCount: currentUsage,
-        usageLimit: FREE_MONTHLY_LIMIT,
-      },
-      { status: 429 }
-    );
-  }
-
+  // ── 2. AI 분석 실행 ──
   try {
     const { petType, breed, age, weight, symptoms } = await req.json();
 
@@ -232,15 +153,7 @@ export async function POST(req: NextRequest) {
     const cleanJson = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const result = JSON.parse(cleanJson);
 
-    // ── 성공 시 사용량 증가 ──
-    const newCount = incrementMonthlyUsage(userId);
-
-    return NextResponse.json({
-      ...result,
-      usageCount: newCount,
-      usageLimit: FREE_MONTHLY_LIMIT,
-      remaining: Math.max(0, FREE_MONTHLY_LIMIT - newCount),
-    });
+    return NextResponse.json(result);
   } catch (error) {
     console.error('AI estimate error:', error);
     return NextResponse.json({ error: 'AI 분석 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' }, { status: 500 });

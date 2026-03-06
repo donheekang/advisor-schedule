@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/components/auth-provider';
 import { LoginModal } from '@/components/login-modal';
@@ -78,31 +78,8 @@ export default function AiCarePage() {
   const [appDataLoaded, setAppDataLoaded] = useState(false);
   const [expandedConditionIndexes, setExpandedConditionIndexes] = useState<number[]>([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [usageCount, setUsageCount] = useState(0);
-  const [usageLimit] = useState(10);
-  const [showLimitExceeded, setShowLimitExceeded] = useState(false);
   const [showPetRequired, setShowPetRequired] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
-
-  // ── 월간 사용량 조회 ──
-  const fetchUsage = useCallback(async () => {
-    if (!token) return;
-    try {
-      const res = await fetch('/api/ai-estimate', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setUsageCount(data.usageCount ?? 0);
-      }
-    } catch {
-      // ignore
-    }
-  }, [token]);
-
-  useEffect(() => {
-    void fetchUsage();
-  }, [fetchUsage]);
 
   const breedOptions = petType === 'dog' ? DOG_BREEDS : CAT_BREEDS;
 
@@ -245,16 +222,9 @@ export default function AiCarePage() {
       return;
     }
 
-    // 한도 초과 체크
-    if (usageCount >= usageLimit) {
-      setShowLimitExceeded(true);
-      return;
-    }
-
     setLoading(true);
     setError('');
     setResult(null);
-    setShowLimitExceeded(false);
 
     const authHeaders = {
       'Content-Type': 'application/json',
@@ -298,23 +268,12 @@ export default function AiCarePage() {
             body: JSON.stringify({ petType, breed, age, weight, symptoms }),
           });
 
-          if (estimateRes.status === 429) {
-            const limitData = await estimateRes.json();
-            setUsageCount(limitData.usageCount ?? usageLimit);
-            setShowLimitExceeded(true);
-            return;
-          }
-
           if (!estimateRes.ok) {
             const estimateError = await estimateRes.json();
             throw new Error((estimateError as { error?: string; message?: string }).message || (estimateError as { error?: string }).error || 'AI 분석 실패');
           }
 
-          const estimateData = (await estimateRes.json()) as AnalysisResult & { usageCount?: number };
-
-          if (estimateData.usageCount !== undefined) {
-            setUsageCount(estimateData.usageCount);
-          }
+          const estimateData = (await estimateRes.json()) as AnalysisResult;
 
           if (summary) {
             estimateData.recommendation = summary + '\n\n' + (estimateData.recommendation || '');
@@ -333,23 +292,12 @@ export default function AiCarePage() {
           body: JSON.stringify({ petType, breed, age, weight, symptoms }),
         });
 
-        if (res.status === 429) {
-          const limitData = await res.json();
-          setUsageCount(limitData.usageCount ?? usageLimit);
-          setShowLimitExceeded(true);
-          return;
-        }
-
         if (!res.ok) {
           const data = await res.json();
           throw new Error((data as { error?: string; message?: string }).message || (data as { error?: string }).error || 'AI 분석 실패');
         }
 
-        const data = (await res.json()) as AnalysisResult & { usageCount?: number };
-
-        if (data.usageCount !== undefined) {
-          setUsageCount(data.usageCount);
-        }
+        const data = (await res.json()) as AnalysisResult;
 
         setResult(data);
       }
@@ -374,22 +322,14 @@ export default function AiCarePage() {
         <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#ff7a45]/10 blur-3xl" />
         <div className="pointer-events-none absolute -left-14 bottom-0 h-48 w-48 rounded-full bg-[#f3caa8]/10 blur-3xl" />
         <div className="relative space-y-4">
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-semibold tracking-[0.2em] text-[#ff7a45]">AI CARE</p>
-            {user && (
-              <span className="rounded-full bg-[#ff7a45]/10 px-2.5 py-0.5 text-xs font-bold text-[#ff7a45]">
-                이번 달 {usageCount}/{usageLimit}회
-              </span>
-            )}
-          </div>
-          <p className="text-sm font-medium text-[#697182]">우리 아이 맞춤 비용 분석</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-[#17191f] md:text-4xl">
-            AI가 품종·나이·증상을 분석해
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#0B3041]">COST ESTIMATE</p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[#17191f] md:text-4xl">
+            우리 아이가 아플 때,
             <br />
-            예상 진료비를 알려드려요
+            비용 걱정부터 덜어줄게요
           </h1>
           <p className="max-w-3xl text-sm leading-relaxed text-[#4f5868] md:text-base">
-            우리 아이 정보를 입력하면, 예상 비용과 케어 포인트를 한눈에 정리해드려요.
+            증상만 알려주세요. 예상 진료비를 바로 확인할 수 있어요.
           </p>
           <div className="flex flex-wrap gap-2">
             <Link
@@ -597,57 +537,13 @@ export default function AiCarePage() {
             '로그인하고 AI 분석하기'
           ) : appDataLoaded && appPets.length === 0 ? (
             '앱에서 아이 등록 후 이용 가능'
-          ) : usageCount >= usageLimit ? (
-            '이번 달 무료 분석을 모두 사용했어요'
           ) : (
-            `AI 분석하기 (${usageLimit - usageCount}회 남음)`
+            'AI 진료비 분석하기'
           )}
         </button>
 
         {/* 로그인 모달 */}
         <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
-
-        {/* 한도 초과 모달 */}
-        {showLimitExceeded && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5">
-            <div className="w-full max-w-sm rounded-3xl bg-white p-7 text-center shadow-xl">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff7a45]/10 to-[#ff9b5e]/10">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff7a45" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-                  <path d="M12 8v4" />
-                  <path d="M12 16h.01" />
-                </svg>
-              </div>
-              <p className="mt-4 text-lg font-bold text-[#17191f]">이번 달 무료 분석을 모두 사용했어요</p>
-              <p className="mt-2 text-sm leading-relaxed text-[#697182]">
-                매월 {usageLimit}회 무료 AI 분석이 제공돼요.<br />
-                다음 달 1일에 자동으로 초기화됩니다.
-              </p>
-              <div className="mt-3 rounded-xl bg-[#fff8f5] px-4 py-3">
-                <p className="text-xs font-semibold text-[#ff7a45]">Pro 구독 시 무제한 이용 가능</p>
-                <p className="mt-0.5 text-xs text-[#697182]">월 4,900원 · 앱에서 구독할 수 있어요</p>
-              </div>
-              <div className="mt-5 flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowLimitExceeded(false)}
-                  className="flex-1 rounded-xl border border-black/10 py-3 text-sm font-bold text-[#4f5868] transition hover:bg-[#f8f4ef]"
-                >
-                  닫기
-                </button>
-                <a
-                  href="https://apps.apple.com/app/id6744428830"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] py-3 text-sm font-bold text-white transition hover:opacity-90"
-                >
-                  앱에서 Pro 구독
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* 아이 등록 필요 모달 */}
         {showPetRequired && (

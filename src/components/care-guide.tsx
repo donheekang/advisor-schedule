@@ -1,111 +1,102 @@
 'use client';
 
+import { useMemo } from 'react';
 import {
-  findCareProductsByKeyword,
   createCoupangSearchUrl,
-  CARE_CATEGORY_LABELS,
-  type CareProduct,
-  type CareCategory,
+  SEARCH_KEYWORD_TO_CARE_TAGS,
 } from '@/lib/care-product-map';
+import {
+  getRecommendedProducts,
+  groupProductsByCategory,
+  type Product,
+  type ProductCategory,
+} from '@/lib/product-recommender';
 
 type CareGuideProps = {
-  /** 진료비 검색 결과의 matchedItem */
-  itemName: string;
+  /** 진료비 검색 결과의 matchedItem (예: "혈액검사") */
+  keyword: string;
+  categorySlug?: string;
+  matchedTags?: string[];
 };
 
-export default function CareGuide({ itemName }: CareGuideProps) {
-  const products = findCareProductsByKeyword(itemName);
+const CATEGORY_EMOJI: Record<ProductCategory, string> = {
+  구강케어: '🦷',
+  '피부/알러지': '🧴',
+  관절: '🦴',
+  소화: '🥣',
+  '영양/면역': '💊',
+  예방: '🛡️',
+};
+
+function resolveTagsFromKeyword(keyword: string): string[] {
+  const normalizedKeyword = keyword.trim().replace(/\s+/g, '').toLowerCase();
+  const tags = new Set<string>();
+
+  for (const [key, keyTags] of Object.entries(SEARCH_KEYWORD_TO_CARE_TAGS)) {
+    const normalizedKey = key.replace(/\s+/g, '').toLowerCase();
+    if (normalizedKeyword.includes(normalizedKey) || normalizedKey.includes(normalizedKeyword)) {
+      keyTags.forEach((tag) => tags.add(tag));
+    }
+  }
+
+  return [...tags];
+}
+
+export default function CareGuide({ keyword, matchedTags }: CareGuideProps) {
+  const tags = useMemo(() => {
+    if (matchedTags && matchedTags.length > 0) return matchedTags;
+    return resolveTagsFromKeyword(keyword);
+  }, [keyword, matchedTags]);
+
+  const products = useMemo(() => getRecommendedProducts(tags), [tags]);
+  const grouped = useMemo(() => groupProductsByCategory(products), [products]);
 
   if (products.length === 0) return null;
 
-  // 카테고리별 그룹핑
-  const grouped = products.reduce<Record<CareCategory, CareProduct[]>>(
-    (acc, product) => {
-      if (!acc[product.category]) acc[product.category] = [];
-      acc[product.category].push(product);
-      return acc;
-    },
-    {} as Record<CareCategory, CareProduct[]>,
+  const nonEmptyCategories = (Object.entries(grouped) as [ProductCategory, Product[]][]).filter(
+    ([, items]) => items.length > 0,
   );
 
   return (
-    <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#fff0ea]/20">
-      {/* 헤더 */}
+    <article className="rounded-3xl bg-white p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)] ring-1 ring-black/5">
       <div className="space-y-2">
         <h2 className="text-lg font-extrabold text-[#17191f]">
-          {itemName} 후, 이런 케어가 도움이 돼요
+          {keyword} 후, 이런 케어가 도움이 돼요
         </h2>
-        <p className="text-sm text-[#ff9b5e]">
-          진료 기록과 AI 분석을 참고해서 정리한 케어 포인트예요.
+        <p className="text-sm text-[#697182]">
+          진료 기록을 참고해서 정리한 추천 케어 제품이에요.
         </p>
       </div>
 
-      {/* 카테고리별 상품 */}
       <div className="mt-5 space-y-5">
-        {(Object.entries(grouped) as [CareCategory, CareProduct[]][]).map(
-          ([category, categoryProducts]) => (
-            <div key={category} className="space-y-3">
-              <h3 className="text-sm font-bold text-[#ff7a45]">
-                {CARE_CATEGORY_LABELS[category]}
-              </h3>
+        {nonEmptyCategories.map(([category, categoryProducts]) => (
+          <div key={category} className="space-y-3">
+            <h3 className="text-sm font-bold text-[#ff7a45]">
+              {CATEGORY_EMOJI[category]} {category}
+            </h3>
 
-              <div className="space-y-3">
-                {categoryProducts.map((product) => (
-                  <div
-                    key={product.name}
-                    className="rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-4 ring-1 ring-[#fff0ea]/30"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 space-y-1">
-                        <p className="text-sm font-bold text-[#17191f]">{product.name}</p>
-                        <p className="text-xs text-[#ff9b5e]">{product.description}</p>
-                        <p className="text-xs text-[#ff7a45] italic">&quot;{product.reason}&quot;</p>
-                      </div>
-                      <a
-                        href={createCoupangSearchUrl(product.coupangKeyword)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="shrink-0 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"
-                      >
-                        쿠팡에서 보기
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {categoryProducts.slice(0, 4).map((product) => (
+                <a
+                  key={product.name}
+                  href={createCoupangSearchUrl(product.coupangKeyword)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-2xl border border-black/10 bg-[#fffaf5] p-4 transition hover:border-[#ff7a45]/40 hover:shadow-md"
+                >
+                  <p className="text-sm font-semibold text-[#17191f]">{product.name}</p>
+                  <p className="mt-1 text-xs text-[#697182]">{product.reason}</p>
+                  {product.caution && (
+                    <p className="mt-1 text-[11px] font-medium text-rose-500">{product.caution}</p>
+                  )}
+                </a>
+              ))}
             </div>
-          ),
-        )}
+          </div>
+        ))}
       </div>
 
-      {/* AI 체험 CTA */}
-      <div className="mt-6 rounded-2xl bg-[#FFF8F0] p-5 text-center ring-1 ring-[#fff0ea]/20">
-        <p className="text-sm font-bold text-[#17191f]">
-          우리 아이 맞춤으로 더 정확하게 알고 싶다면?
-        </p>
-        <p className="mt-1 text-xs text-[#ff9b5e]">
-          알러지, 체중, 진료 이력을 입력하면 AI가 맞춤 케어를 분석해줘요.
-        </p>
-        <div className="mt-3 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
-          <a
-            href="/ai-care"
-            className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg"
-          >
-            무료 AI 케어 체험 →
-          </a>
-          <a
-            href="https://apps.apple.com/app/id6504879567"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-2xl border border-[#fff0ea] bg-white px-6 py-2.5 text-sm font-bold text-[#17191f] transition hover:bg-[#FFF8F0]"
-          >
-            앱 다운로드
-          </a>
-        </div>
-      </div>
-
-      {/* 쿠팡 파트너스 고지 */}
-      <p className="mt-4 text-center text-xs text-[#ff9b5e]">
+      <p className="mt-4 text-center text-[11px] text-[#aeb5bc]">
         이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
       </p>
     </article>

@@ -15,8 +15,9 @@ export default async function BlogListPage() {
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 pb-20 md:px-6">
       <header className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(160deg,#ffffff_0%,#fff8f5_40%,#fff0ea_100%)] px-6 py-9 shadow-[0_24px_64px_rgba(14,31,53,0.09)] ring-1 ring-black/5 md:px-10 md:py-12">
         <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[#ff7a45]/10 blur-3xl" />
-        <h1 className="text-2xl font-bold tracking-tight text-[#17191f] md:text-3xl">블로그</h1>
-        <p className="mt-2 text-sm text-[#697182]">보호자가 알아야 할 건강 정보를 모았어요</p>
+        <p className="text-xs font-semibold tracking-[0.2em] text-[#0B3041]">BLOG</p>
+        <h1 className="mt-3 text-2xl font-bold tracking-tight text-[#17191f] md:text-3xl">우리 아이와 더 오래, 더 건강하게</h1>
+        <p className="mt-2 text-sm text-[#697182]">함께하는 시간이 더 행복해지는 이야기를 모았어요.</p>
       </header>
 
       <div className="space-y-5">

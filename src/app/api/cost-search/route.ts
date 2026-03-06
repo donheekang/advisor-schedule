@@ -200,7 +200,7 @@ export async function GET(request: NextRequest) {
         max: Math.max(...seedPrices),
         avg: Number(average(seedMatches.map((s) => s.avg)).toFixed(0)),
         median: Number(median(seedMatches.map((s) => s.avg)).toFixed(0)),
-        sampleSize: seedPrices.length,
+        sampleSize: seedMatches.reduce((sum, s) => sum + (s.count ?? 0), 0) || seedPrices.length,
         source: 'seed_data',
       },
       nationalAvg: Number(average(seedMatches.map((s) => s.avg)).toFixed(0)),
