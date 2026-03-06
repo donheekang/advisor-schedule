@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { signInWithApple, signInWithGoogle, signInWithKakao } from '@/lib/auth';
+import { signInWithApple, signInWithGoogle, redirectToKakaoLogin } from '@/lib/auth';
 import { apiClient } from '@/lib/api-client';
 
 export default function LoginPage() {
@@ -49,20 +49,13 @@ export default function LoginPage() {
     }
   };
 
-  const handleKakao = async () => {
+  const handleKakao = () => {
     setLoading('kakao');
     setError('');
     try {
-      const result = await signInWithKakao();
-      const idToken = await result.user.getIdToken();
-      apiClient.setToken(idToken);
-      try {
-        await apiClient.upsertUser();
-      } catch {}
-      router.push('/');
+      redirectToKakaoLogin();
     } catch {
-      setError('로그인에 실패했어요. 다시 시도해주세요.');
-    } finally {
+      setError('카카오 로그인 페이지로 이동할 수 없어요.');
       setLoading('');
     }
   };

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signInWithGoogle, signInWithApple, signInWithKakao } from '@/lib/auth';
+import { signInWithGoogle, signInWithApple, redirectToKakaoLogin } from '@/lib/auth';
 import { apiClient } from '@/lib/api-client';
 
 type LoginModalProps = {
@@ -32,14 +32,19 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setErrorMessage(null);
     setLoading(provider);
 
-    try {
-      const signInFn =
-        provider === 'google'
-          ? signInWithGoogle
-          : provider === 'apple'
-            ? signInWithApple
-            : signInWithKakao;
+    // 카카오는 리다이렉트 방식
+    if (provider === 'kakao') {
+      try {
+        redirectToKakaoLogin();
+      } catch {
+        setErrorMessage('카카오 로그인 페이지로 이동할 수 없어요.');
+        setLoading('');
+      }
+      return;
+    }
 
+    try {
+      const signInFn = provider === 'google' ? signInWithGoogle : signInWithApple;
       const result = await signInFn();
       const idToken = await result.user.getIdToken();
       apiClient.setToken(idToken);
