@@ -17,13 +17,6 @@ export type ShareCardRenderResult = {
   dataUrl: string;
 };
 
-const createCanvas = () => {
-  const canvas = document.createElement('canvas');
-  canvas.width = SHARE_CARD_WIDTH;
-  canvas.height = SHARE_CARD_HEIGHT;
-  return canvas;
-};
-
 const EMOTION_TEXT: Record<ShareCardPayload['emotion'], { label: string; background: string }> = {
   happy: { label: '신남', background: '#eaf2ff' },
   peaceful: { label: '평화', background: '#ecfdf3' },
