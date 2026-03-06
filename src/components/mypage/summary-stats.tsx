@@ -24,8 +24,11 @@ function StatIcon({ type }: { type: 'pet' | 'record' | 'doc' | 'ai' }) {
     case 'pet':
       return (
         <svg viewBox="0 0 24 24" className={cls} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="8" r="3.5" />
-          <path d="M4.5 19a7.5 7.5 0 0 1 15 0" />
+          <path d="M4.5 11.5c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5Z" />
+          <path d="M9.5 8c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5Z" />
+          <path d="M15.5 11.5c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5Z" />
+          <path d="M3.5 17c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5Z" />
+          <path d="M10 21.5c-1.5 0-3-1.5-3-3.5s1.5-4 3.5-4h3c2 0 3.5 2 3.5 4s-1.5 3.5-3 3.5h-4Z" />
         </svg>
       );
     case 'record':
