@@ -131,7 +131,7 @@ function getUsageKey(identifier: string): string {
   return `${dateKey}:${identifier}`;
 }
 
-function getUsagePolicy(isMember: boolean): UsagePolicy {
+function _getUsagePolicy(isMember: boolean): UsagePolicy {
   if (isMember) {
     return { dailyLimit: 5, isMember: true };
   }
@@ -139,12 +139,12 @@ function getUsagePolicy(isMember: boolean): UsagePolicy {
   return { dailyLimit: 2, isMember: false };
 }
 
-function getCurrentUsage(identifier: string): number {
+function _getCurrentUsage(identifier: string): number {
   const key = getUsageKey(identifier);
   return usageStore.get(key) ?? 0;
 }
 
-function incrementUsage(identifier: string): number {
+function _incrementUsage(identifier: string): number {
   const key = getUsageKey(identifier);
   const currentUsage = usageStore.get(key) ?? 0;
   const nextUsage = currentUsage + 1;
@@ -152,7 +152,7 @@ function incrementUsage(identifier: string): number {
   return nextUsage;
 }
 
-function getClientIp(request: NextRequest): string {
+function _getClientIp(request: NextRequest): string {
   const cookieIp = request.cookies.get('pet_talker_ip')?.value;
   if (cookieIp) {
     return cookieIp;
@@ -416,10 +416,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let userId: string | null = null;
     try {
-      const decoded = await verifyBearerToken(authorizationHeader);
-      userId = decoded.uid;
+      await verifyBearerToken(authorizationHeader);
     } catch {
       return NextResponse.json(
         { error: 'login_required', message: '로그인 후 이용할 수 있어요.' },
