@@ -18,7 +18,7 @@ const ARTICLES = [
         <p>본 약관에서 사용하는 주요 용어의 정의는 다음과 같습니다.</p>
         <p className="mt-2"><span className="font-semibold">&quot;서비스&quot;</span>: 회사가 PetHealth+ 브랜드로 제공하는 웹 서비스 및 모바일 애플리케이션 일체</p>
         <p><span className="font-semibold">&quot;이용자&quot;</span>: 본 약관에 동의하고 서비스를 이용하는 자</p>
-        <p><span className="font-semibold">&quot;계정&quot;</span>: 서비스 이용을 위해 이용자에게 부여되는 고유 식별 수단(Apple, Google 로그인 등)</p>
+        <p><span className="font-semibold">&quot;계정&quot;</span>: 서비스 이용을 위해 이용자에게 부여되는 고유 식별 수단(Apple, Google, Kakao 로그인 등)</p>
         <p><span className="font-semibold">&quot;유료 서비스&quot;</span>: 서비스 내에서 별도의 결제를 통해 이용할 수 있는 구독 상품 및 부가 기능</p>
         <p><span className="font-semibold">&quot;콘텐츠&quot;</span>: 이용자가 서비스에 업로드하거나 입력한 텍스트, 이미지, 파일 등 일체의 정보</p>
       </>
@@ -43,7 +43,7 @@ const ARTICLES = [
   {
     title: '제5조 (이용 계정)',
     content:
-      '서비스 이용을 위해서는 Apple, Google 등 소셜 로그인을 통한 계정 생성이 필요합니다. 이용자는 자신의 계정 정보를 안전하게 관리할 책임이 있으며, 제3자에게 계정을 양도하거나 공유할 수 없습니다. 계정 관련 문제가 발생한 경우 즉시 회사에 통보하여야 합니다.',
+      '서비스 이용을 위해서는 Apple, Google, Kakao 등 소셜 로그인을 통한 계정 생성이 필요합니다. 이용자는 자신의 계정 정보를 안전하게 관리할 책임이 있으며, 제3자에게 계정을 양도하거나 공유할 수 없습니다. 계정 관련 문제가 발생한 경우 즉시 회사에 통보하여야 합니다.',
   },
   {
     title: '제6조 (유료 서비스 및 구독)',
