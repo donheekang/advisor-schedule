@@ -1,7 +1,6 @@
 export const SHARE_CARD_WIDTH = 1080;
 export const SHARE_CARD_HEIGHT = 1080; // 기본값, 실제 렌더링 시 동적 조절
 
-const CREAM_BACKGROUND = '#f3f5f9';
 const BUBBLE_BACKGROUND = '#FFFFFF';
 const TEXT_COLOR = '#17191f';
 

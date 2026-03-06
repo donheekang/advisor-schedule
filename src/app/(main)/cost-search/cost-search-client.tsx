@@ -78,56 +78,6 @@ function toWon(value: number): string {
   return `${Math.round(value).toLocaleString('ko-KR')}원`;
 }
 
-function normalize(text: string): string {
-  return text.trim().replace(/\s+/g, '').toLowerCase();
-}
-
-function _extractMyItemPrices(records: unknown, keyword: string): number[] {
-  if (!Array.isArray(records)) {
-    return [];
-  }
-  const normalizedKeyword = normalize(keyword);
-  const prices = records.flatMap((record) => {
-    if (!record || typeof record !== 'object') {
-      return [];
-    }
-    const typedRecord = record as Record<string, unknown>;
-    const candidates = [typedRecord.items, typedRecord.health_items, typedRecord.healthItems].find(
-      (value) => Array.isArray(value)
-    );
-    if (!Array.isArray(candidates)) {
-      return [];
-    }
-
-    return candidates
-      .map((item) => {
-        if (!item || typeof item !== 'object') {
-          return null;
-        }
-        const typedItem = item as Record<string, unknown>;
-        const itemName =
-          typeof typedItem.item_name === 'string'
-            ? typedItem.item_name
-            : typeof typedItem.itemName === 'string'
-              ? typedItem.itemName
-              : '';
-        const rawPrice =
-          typeof typedItem.price === 'number' || typeof typedItem.price === 'string'
-            ? Number(typedItem.price)
-            : typeof typedItem.amount === 'number' || typeof typedItem.amount === 'string'
-              ? Number(typedItem.amount)
-              : NaN;
-        if (!itemName || !Number.isFinite(rawPrice)) {
-          return null;
-        }
-        return normalize(itemName).includes(normalizedKeyword) ? rawPrice : null;
-      })
-      .filter((value): value is number => value !== null);
-  });
-
-  return prices;
-}
-
 export default function CostSearchClient() {
   const { user } = useAuth();
   const [query, setQuery] = useState('혈액검사');
