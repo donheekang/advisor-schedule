@@ -111,7 +111,6 @@ export default function PetTalkerClient() {
   const [pets, setPets] = useState<PetInfo[]>([]);
   const [selectedPetId, setSelectedPetId] = useState<string>('');
   const [typingDots, setTypingDots] = useState(1);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [userMessage, setUserMessage] = useState('');
   const [showMessageInput, setShowMessageInput] = useState(false);
   const [callingName, setCallingName] = useState('보호자');
@@ -123,9 +122,6 @@ export default function PetTalkerClient() {
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
-      }
-      if (typeof window !== 'undefined') {
-        window.speechSynthesis.cancel();
       }
     };
   }, [previewUrl]);
@@ -214,28 +210,6 @@ export default function PetTalkerClient() {
     return true;
   };
 
-  const handleSpeechPlayback = () => {
-    if (typeof window === 'undefined' || !speech) {
-      return;
-    }
-
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(speech);
-    utterance.lang = 'ko-KR';
-    utterance.rate = 0.9;
-    utterance.pitch = 1.1;
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    setIsSpeaking(true);
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  };
-
   const processFile = async (file: File) => {
     setErrorType(null);
     setErrorMessage('');
@@ -254,10 +228,6 @@ export default function PetTalkerClient() {
     setStatus('idle');
     setSpeech('');
     setUserMessage('');
-    setIsSpeaking(false);
-    if (typeof window !== 'undefined') {
-      window.speechSynthesis.cancel();
-    }
   };
 
   const generateSpeech = async () => {
@@ -267,10 +237,6 @@ export default function PetTalkerClient() {
 
     setStatus('loading');
     setShowMessageInput(false);
-    setIsSpeaking(false);
-    if (typeof window !== 'undefined') {
-      window.speechSynthesis.cancel();
-    }
 
     try {
       const blob = await fetch(previewUrl).then((response) => response.blob());
@@ -390,12 +356,8 @@ export default function PetTalkerClient() {
     setSpeech('');
     setErrorMessage('');
     setErrorType(null);
-    setIsSpeaking(false);
     setShowMessageInput(false);
     setUserMessage('');
-    if (typeof window !== 'undefined') {
-      window.speechSynthesis.cancel();
-    }
   };
 
   const handleCallingSelect = (value: string) => {
@@ -670,29 +632,7 @@ export default function PetTalkerClient() {
               <div className="relative rounded-3xl bg-[#fffaf5] p-6 text-base font-medium leading-relaxed text-[#17191f] ring-1 ring-black/5">
                 <span className="absolute -top-2 left-9 h-5 w-5 rotate-45 bg-[#fffaf5] ring-1 ring-black/5" aria-hidden />
                 <p>{speech}</p>
-                <div className="mt-4 flex items-end justify-between">
-                  <p className="text-sm text-[#697182]">— {selectedPet?.name ?? '우리 아이'}</p>
-                  <button
-                    type="button"
-                    onClick={handleSpeechPlayback}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#17191f] transition hover:bg-black/5"
-                    aria-label="대사 음성 재생"
-                  >
-                    {isSpeaking ? (
-                      <span className="inline-flex items-end gap-0.5">
-                        <span className="h-2 w-1 rounded-full bg-current animate-pulse" />
-                        <span className="h-3 w-1 rounded-full bg-current animate-pulse" />
-                        <span className="h-2 w-1 rounded-full bg-current animate-pulse" />
-                      </span>
-                    ) : (
-                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-                        <path d="M5 9v6h3l4 3V6L8 9z" />
-                        <path d="M16 9.5a3 3 0 0 1 0 5" />
-                        <path d="M18.5 7a6 6 0 0 1 0 10" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
+                <p className="mt-4 text-sm text-[#697182]">— {selectedPet?.name ?? '우리 아이'}</p>
               </div>
 
               <ShareCard
