@@ -54,7 +54,7 @@ export async function signInWithKakaoCode(code: string) {
   const serverUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pethealthplus.onrender.com';
   const redirectUri = `${window.location.origin}/auth/kakao/callback`;
 
-  const response = await fetch(`${serverUrl}/auth/kakao`, {
+  const response = await fetch(`${serverUrl}/auth/kakao/code`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code, redirect_uri: redirectUri }),
@@ -62,11 +62,11 @@ export async function signInWithKakaoCode(code: string) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || '카카오 로그인에 실패했습니다.');
+    throw new Error(errorData.detail || errorData.message || '카카오 로그인에 실패했습니다.');
   }
 
   const data = await response.json();
-  const firebaseToken = data.firebase_token || data.firebaseToken || data.custom_token;
+  const firebaseToken = data.firebaseCustomToken || data.firebase_token || data.firebaseToken || data.custom_token;
 
   if (!firebaseToken) {
     throw new Error('서버에서 Firebase 토큰을 받지 못했습니다.');
