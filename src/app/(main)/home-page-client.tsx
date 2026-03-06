@@ -40,11 +40,12 @@ function useFadeInSection() {
 }
 
 function useStaggerCards() {
-  const ref = useRef<HTMLDivElement | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ref = useRef<any>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const node = ref.current;
+    const node = ref.current as HTMLElement | null;
     if (!node) return;
 
     const observer = new IntersectionObserver(
