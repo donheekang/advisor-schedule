@@ -124,7 +124,7 @@ export default function AiCareClient() {
       <div className="mx-auto w-full max-w-4xl">
         <section className="py-12 md:py-16">
           <AnimateOnScroll animation="fade-up">
-            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#FFF3E6] px-3 py-1.5 text-xs font-semibold text-[#F97316]">30초 무료 AI 진료비 분석</span>
+            <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-[#FFF3E6] px-3 py-1.5 text-xs font-semibold text-[#F97316]">30초 무료 진료비 분석</span>
             <h1 className="mb-3 text-2xl font-bold tracking-tight text-[#17191f] md:text-4xl">우리 아이 맞춤 케어,<br />지금 바로 확인하세요</h1>
             <p className="text-sm text-[#ff7a45]">로그인 없이 간단한 정보만 입력하면 맞춤 관리 포인트와 케어 추천을 보여드려요.</p>
           </AnimateOnScroll>
@@ -202,7 +202,7 @@ export default function AiCareClient() {
                 </div>
 
                 <div className="opacity-80">
-                  <p className="mb-1 text-xs font-semibold text-[#48B8D0]">AI 진료비 · 예시</p>
+                  <p className="mb-1 text-xs font-semibold text-[#48B8D0]">진료비 · 예시</p>
                   <h4 className="mb-4 text-lg font-bold text-[#0B3041]">슬개골 탈구 2기 · 소형견</h4>
 
                   <div className="mb-4 grid grid-cols-3 gap-3">

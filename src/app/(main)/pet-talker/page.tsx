@@ -421,7 +421,7 @@ export default function PetTalkerPage() {
           <div className="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-[#ff7a45]/10 blur-3xl" />
           <div className="pointer-events-none absolute -left-14 bottom-0 h-40 w-40 rounded-full bg-[#f3caa8]/10 blur-3xl" />
           <p className="inline-flex rounded-full bg-[#fff0e5] px-4 py-1.5 text-xs font-semibold text-[#ff7a45]">무료</p>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#17191f] md:text-4xl">AI 펫토커</h1>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#17191f] md:text-4xl">펫토커</h1>
           <p className="mt-3 text-sm leading-relaxed text-[#4f5868] md:text-base">
             사진 한 장과 짧은 메시지로 우리 아이의 반응을 생성합니다. 결과는 공유 카드로 저장할 수 있어요.
           </p>

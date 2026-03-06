@@ -26,7 +26,7 @@ export function GuideCtaButtons({ sourcePage }: GuideCtaButtonsProps) {
         }
         className="flex items-center justify-center rounded-[14px] border-[1.5px] border-[#E5E8EB] bg-white px-4 py-[17px] text-[15px] font-bold text-[#191F28] transition hover:border-[#CBD5E1]"
       >
-        AI 진료비 →
+        진료비 →
       </Link>
     </div>
   );

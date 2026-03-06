@@ -402,7 +402,7 @@ export default function AiCarePage() {
               href="/pet-talker"
               className="rounded-full border border-black/15 bg-white px-4 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
             >
-              AI 펫토커 열기
+              펫토커 열기
             </Link>
             <Link
               href="/mypage"
