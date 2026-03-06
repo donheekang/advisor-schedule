@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/components/auth-provider';
 import { LoginModal } from '@/components/login-modal';
 import { apiClient } from '@/lib/api-client';
@@ -124,8 +123,6 @@ export default function MyPageClient() {
     };
   }, [user]);
 
-  const isPremium = useMemo(() => summary?.effective_tier === 'premium', [summary]);
-
   if (loading) {
     return (
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 pb-20 md:px-6">
@@ -174,21 +171,9 @@ export default function MyPageClient() {
             </div>
             <div className="space-y-1">
               <h1 className="text-2xl font-bold tracking-tight text-[#17191f] md:text-3xl">
-                {user.displayName ?? '보호자'}님
+                {user.displayName ?? '보호자'}
               </h1>
               <p className="text-sm text-[#697182]">{user.email}</p>
-              {isPremium ? (
-                <span className="mt-1 inline-flex rounded-full bg-[#ff7a45] px-3 py-1 text-xs font-bold text-white">
-                  프리미엄
-                </span>
-              ) : (
-                <Link
-                  href="/premium"
-                  className="mt-1 inline-flex rounded-full bg-[#fff0ea] px-3 py-1 text-xs font-bold text-[#ff7a45] ring-1 ring-[#ff7a45]/10 transition hover:bg-[#ffe8dd]"
-                >
-                  프리미엄으로 업그레이드
-                </Link>
-              )}
             </div>
           </div>
         </header>
