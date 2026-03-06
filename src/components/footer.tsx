@@ -21,7 +21,7 @@ export default function Footer() {
         {/* 상단: 로고 + 간단 소개 */}
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div>
-            <Link href="/" className="text-lg font-bold text-[#17191f] transition hover:text-[#ff7a45]">
+            <Link href="/" style={{ fontFamily: 'Poppins, sans-serif' }} className="text-lg font-extrabold tracking-tight text-[#0B3041] transition hover:text-[#0B3041]">
               PetHealth+
             </Link>
             <p className="mt-0.5 text-[0.7rem] font-medium text-[#8a92a3]">펫헬스플러스</p>

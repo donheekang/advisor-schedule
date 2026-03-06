@@ -42,8 +42,8 @@ export default function Header() {
           <Link href="/" className="group flex shrink-0 items-center gap-2 transition">
             <Image src="/logo.jpeg" alt="PetHealth+" width={28} height={28} className="rounded-[6px] transition group-hover:scale-110" />
             <span className="flex flex-col leading-none">
-              <span style={{ fontFamily: 'Poppins, sans-serif' }} className="text-[1.15rem] font-extrabold tracking-tight text-[#17191f] transition group-hover:text-[#17191f]">
-                PetHealth<span className="text-[#ff7a45]">+</span>
+              <span style={{ fontFamily: 'Poppins, sans-serif' }} className="text-[1.15rem] font-extrabold tracking-tight text-[#0B3041] transition group-hover:text-[#0B3041]">
+                PetHealth+
               </span>
               <span className="mt-[1px] text-[0.55rem] font-semibold tracking-[0.04em] text-[#8a92a3]">펫헬스플러스</span>
             </span>
