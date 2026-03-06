@@ -83,7 +83,11 @@ export function SummaryStats({ summary }: SummaryStatsProps) {
           <StatIcon type="ai" />
           <p className="mt-2 text-xs font-medium text-[#697182]">AI 사용량</p>
           <p className="mt-0.5 text-xl font-bold text-[#17191f]">
-            {summary.ai_usage_count}<span className="text-sm font-medium text-[#697182]">/{summary.ai_usage_limit}</span>
+            {summary.ai_usage_limit == null ? (
+              <><span className="text-sm font-medium text-[#697182]">무제한</span></>
+            ) : (
+              <>{summary.ai_usage_count}<span className="text-sm font-medium text-[#697182]">/{summary.ai_usage_limit}</span></>
+            )}
           </p>
         </article>
       </div>
