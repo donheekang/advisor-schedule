@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
@@ -146,11 +146,13 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
   };
 
   return (
-    <section className="space-y-4 rounded-3xl bg-[#faf6f1] p-6 ring-1 ring-black/10">
-      <h2 className="text-xl font-semibold text-[#17191f]">SNS 공유 카드</h2>
-      <p className="text-sm text-[#697182]">이미지 다운로드, 카카오톡 공유, 링크 복사를 한 번에 진행할 수 있어요.</p>
+    <section className="space-y-5 rounded-[2rem] bg-[linear-gradient(160deg,#fff8f5_0%,#fff0ea_50%,#ffe8d6_100%)] p-6 ring-1 ring-black/5 sm:p-7">
+      <div>
+        <h2 className="text-lg font-bold text-[#17191f]">SNS 공유 카드</h2>
+        <p className="mt-1 text-sm text-[#697182]">이미지 다운로드, 카카오톡 공유, 링크 복사를 한 번에 진행할 수 있어요.</p>
+      </div>
 
-      <div className="overflow-hidden rounded-2xl bg-white shadow-md">
+      <div className="overflow-hidden rounded-2xl bg-white shadow-[0_8px_32px_rgba(0,0,0,0.08)] ring-1 ring-black/5">
         {card ? (
           <Image
             alt="펫토커 공유 카드 미리보기"
@@ -162,44 +164,64 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
           />
         ) : (
           <div className="flex aspect-square items-center justify-center text-sm text-[#697182]">
-            {isGenerating ? '카드를 생성하고 있어요...' : '공유 카드를 생성하지 못했어요.'}
+            {isGenerating ? (
+              <div className="flex flex-col items-center gap-3">
+                <svg className="h-8 w-8 animate-spin text-[#ff7a45]" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-90" d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+                </svg>
+                <span>카드를 생성하고 있어요...</span>
+              </div>
+            ) : '공유 카드를 생성하지 못했어요.'}
           </div>
         )}
       </div>
 
       {errorMessage ? <p className="text-sm text-rose-500">{errorMessage}</p> : null}
-      {toastMessage ? <p className="text-sm font-semibold text-[#ff7a45]">{toastMessage}</p> : null}
+      {toastMessage ? (
+        <div className="rounded-xl bg-[#0B3041] px-4 py-2.5 text-center text-sm font-semibold text-white">
+          {toastMessage}
+        </div>
+      ) : null}
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2.5">
         <button
-          className="rounded-2xl bg-[#eaf2ff] px-3 py-3 text-xs font-semibold text-[#a85a35] disabled:opacity-60"
+          className="flex items-center justify-center gap-1.5 rounded-2xl bg-white px-3 py-3.5 text-xs font-bold text-[#4f5868] ring-1 ring-black/5 transition hover:bg-[#f8f4ef] disabled:opacity-50"
           disabled={isGenerating}
           onClick={() => void handleDownload()}
           type="button"
         >
-          이미지 다운로드
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          이미지
         </button>
         <button
-          className="rounded-2xl bg-[#FEE500] px-3 py-3 text-xs font-semibold text-[#3C1E1E] disabled:opacity-60"
+          className="flex items-center justify-center gap-1.5 rounded-2xl bg-[#FEE500] px-3 py-3.5 text-xs font-bold text-[#3C1E1E] transition hover:bg-[#FFEB33] disabled:opacity-50"
           disabled={isGenerating || !kakaoJavaScriptKey}
           onClick={() => void handleKakaoShare()}
           type="button"
         >
-          카카오톡 공유
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="#3C1E1E">
+            <path d="M12 3C6.477 3 2 6.463 2 10.691c0 2.69 1.794 5.055 4.508 6.398l-1.15 4.268a.5.5 0 00.77.528l5.022-3.348c.28.02.56.032.85.032 5.523 0 10-3.463 10-7.878S17.523 3 12 3z" />
+          </svg>
+          카카오톡
         </button>
         <button
-          className="rounded-2xl bg-[#ededf0] px-3 py-3 text-xs font-semibold text-[#4f5868] disabled:opacity-60"
+          className="flex items-center justify-center gap-1.5 rounded-2xl bg-white px-3 py-3.5 text-xs font-bold text-[#4f5868] ring-1 ring-black/5 transition hover:bg-[#f8f4ef] disabled:opacity-50"
           disabled={isGenerating}
           onClick={() => void handleCopyLink()}
           type="button"
         >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+          </svg>
           링크 복사
         </button>
       </div>
     </section>
   );
 }
-
-
-
-
