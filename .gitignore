@@ -36,3 +36,8 @@ tsconfig.tsbuildinfo
 
 # vercel
 .vercel
+
+# duplicate nested folder
+advisor-schedule-main/
+README.md
+logo.jpeg
