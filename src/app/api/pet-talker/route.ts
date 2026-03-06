@@ -18,6 +18,7 @@ type UsagePolicy = {
 };
 
 type SupportedImageMediaType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
+type LlmProvider = 'anthropic' | 'openai';
 
 const SYSTEM_PROMPT = `너는 이 사진 속 아이야. 진짜 이 아이가 돼서 말해.
 
@@ -60,9 +61,25 @@ happy(신남), peaceful(평화), curious(호기심), grumpy(투정), proud(도�
 {"speech":"대사","emotion":"감정코드","emotionScore":숫자}
 emotionScore는 75~95 사이.`;
 
-const CLAUDE_MODEL = 'claude-sonnet-4-5-20250929';
+const DEFAULT_ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001';
+const DEFAULT_OPENAI_MODEL = 'gpt-5-mini';
 
 const usageStore = new Map<string, number>();
+
+function resolvePetTalkerProvider(): LlmProvider {
+  const rawProvider = process.env.PET_TALKER_LLM_PROVIDER?.trim().toLowerCase();
+  if (rawProvider === 'openai') {
+    return 'openai';
+  }
+  return 'anthropic';
+}
+
+function resolvePetTalkerModel(provider: LlmProvider): string {
+  if (provider === 'openai') {
+    return process.env.PET_TALKER_OPENAI_MODEL?.trim() || DEFAULT_OPENAI_MODEL;
+  }
+  return process.env.PET_TALKER_ANTHROPIC_MODEL?.trim() || DEFAULT_ANTHROPIC_MODEL;
+}
 
 function isSupportedMediaType(mediaType: string): mediaType is SupportedImageMediaType {
   return ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(mediaType);
@@ -238,12 +255,135 @@ async function createAnthropicMessage(params: {
   throw lastError;
 }
 
+function extractOpenAiText(payload: unknown): string {
+  if (!payload || typeof payload !== 'object') {
+    return '';
+  }
+
+  const record = payload as Record<string, unknown>;
+  if (typeof record.output_text === 'string' && record.output_text.trim()) {
+    return record.output_text;
+  }
+
+  const output = record.output;
+  if (Array.isArray(output)) {
+    for (const item of output) {
+      if (!item || typeof item !== 'object') {
+        continue;
+      }
+      const content = (item as Record<string, unknown>).content;
+      if (!Array.isArray(content)) {
+        continue;
+      }
+
+      for (const block of content) {
+        if (!block || typeof block !== 'object') {
+          continue;
+        }
+        const blockRecord = block as Record<string, unknown>;
+        if (typeof blockRecord.text === 'string' && blockRecord.text.trim()) {
+          return blockRecord.text;
+        }
+      }
+    }
+  }
+
+  const choices = record.choices;
+  if (Array.isArray(choices)) {
+    const firstChoice = choices[0];
+    if (firstChoice && typeof firstChoice === 'object') {
+      const message = (firstChoice as Record<string, unknown>).message;
+      if (message && typeof message === 'object') {
+        const content = (message as Record<string, unknown>).content;
+        if (typeof content === 'string') {
+          return content;
+        }
+      }
+    }
+  }
+
+  return '';
+}
+
+async function createOpenAiMessage(params: {
+  apiKey: string;
+  imageData: string;
+  mediaType: SupportedImageMediaType;
+  model: string;
+  userPrompt: string;
+}): Promise<string> {
+  const dataUrl = `data:${params.mediaType};base64,${params.imageData}`;
+  const response = await fetch('https://api.openai.com/v1/responses', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${params.apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: params.model,
+      instructions: SYSTEM_PROMPT,
+      max_output_tokens: 500,
+      temperature: 0.9,
+      text: {
+        format: {
+          type: 'json_object'
+        }
+      },
+      input: [
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'input_text',
+              text: params.userPrompt
+            },
+            {
+              type: 'input_image',
+              image_url: dataUrl
+            }
+          ]
+        }
+      ]
+    })
+  });
+
+  const payload = (await response.json().catch(() => null)) as unknown;
+  if (!response.ok) {
+    console.error('[pet-talker] OpenAI API request failed', {
+      model: params.model,
+      mediaType: params.mediaType,
+      imageLength: params.imageData.length,
+      status: response.status,
+      payload
+    });
+    throw new Error('OPENAI_API_ERROR');
+  }
+
+  const text = extractOpenAiText(payload);
+  if (!text) {
+    throw new Error('EMPTY_MODEL_RESPONSE');
+  }
+
+  return text;
+}
+
 export async function POST(request: NextRequest) {
+  const provider = resolvePetTalkerProvider();
+  const model = resolvePetTalkerModel(provider);
   const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-  if (!anthropicApiKey) {
+  const openAiApiKey = process.env.OPENAI_API_KEY;
+
+  if (provider === 'anthropic' && !anthropicApiKey) {
     console.error('[pet-talker] Missing ANTHROPIC_API_KEY');
     return NextResponse.json(
       { error: '서비스 준비 중', message: 'ANTHROPIC_API_KEY가 설정되지 않았습니다.' },
+      { status: 503 }
+    );
+  }
+  if (provider === 'openai' && !openAiApiKey) {
+    console.error('[pet-talker] Missing OPENAI_API_KEY');
+    return NextResponse.json(
+      { error: '서비스 준비 중', message: 'OPENAI_API_KEY가 설정되지 않았습니다.' },
       { status: 503 }
     );
   }
@@ -269,49 +409,47 @@ export async function POST(request: NextRequest) {
 
     const authorizationHeader = request.headers.get('authorization') ?? undefined;
 
-    let isMember = false;
-    let userId: string | null = null;
-    if (authorizationHeader) {
-      try {
-        const decoded = await verifyBearerToken(authorizationHeader);
-        userId = decoded.uid;
-        isMember = true;
-      } catch {
-        isMember = false;
-      }
-    }
-
-    const usagePolicy = getUsagePolicy(isMember);
-    const usageIdentifier = isMember ? `user:${userId}` : `ip:${getClientIp(request)}`;
-    const currentUsage = getCurrentUsage(usageIdentifier);
-
-    if (currentUsage >= usagePolicy.dailyLimit) {
+    if (!authorizationHeader) {
       return NextResponse.json(
-        {
-          error: 'limit_exceeded',
-          message: '오늘 사용 횟수를 다 썼어요',
-          limit: usagePolicy.dailyLimit,
-          used: currentUsage
-        },
-        { status: 429 }
+        { error: 'login_required', message: '로그인 후 이용할 수 있어요.' },
+        { status: 401 }
       );
     }
 
-    incrementUsage(usageIdentifier);
+    let userId: string | null = null;
+    try {
+      const decoded = await verifyBearerToken(authorizationHeader);
+      userId = decoded.uid;
+    } catch {
+      return NextResponse.json(
+        { error: 'login_required', message: '로그인 후 이용할 수 있어요.' },
+        { status: 401 }
+      );
+    }
 
-    const model = CLAUDE_MODEL;
     const userPrompt = buildUserPrompt(body.petInfo, body.userMessage);
+    let rawText = '';
 
-    const anthropicClient = new Anthropic({ apiKey: anthropicApiKey });
-    const claudeMessage = await createAnthropicMessage({
-      client: anthropicClient,
-      imageData: image.data,
-      mediaType: image.mediaType,
-      model,
-      userPrompt
-    });
+    if (provider === 'openai') {
+      rawText = await createOpenAiMessage({
+        apiKey: openAiApiKey as string,
+        imageData: image.data,
+        mediaType: image.mediaType,
+        model,
+        userPrompt
+      });
+    } else {
+      const anthropicClient = new Anthropic({ apiKey: anthropicApiKey as string });
+      const claudeMessage = await createAnthropicMessage({
+        client: anthropicClient,
+        imageData: image.data,
+        mediaType: image.mediaType,
+        model,
+        userPrompt
+      });
+      rawText = claudeMessage.content[0]?.type === 'text' ? claudeMessage.content[0].text : '';
+    }
 
-    const rawText = claudeMessage.content[0]?.type === 'text' ? claudeMessage.content[0].text : '';
     let speech = rawText;
     let emotion = 'happy';
     let emotionScore = 85;

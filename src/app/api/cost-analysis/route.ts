@@ -51,8 +51,12 @@ type PetContext = {
   age: number | null;
 };
 
-const MODEL = 'claude-sonnet-4-5-20250929';
+type LlmProvider = 'anthropic' | 'openai';
+
+const DEFAULT_ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001';
+const DEFAULT_OPENAI_MODEL = 'gpt-5-mini';
 const MAX_TURNS = 10;
+const DISCLAIMER_TEXT = '※ 이 정보는 참고용이며 의료 판단이 아닙니다.';
 
 const SYSTEM_PROMPT = `당신은 반려동물 진료비 분석 전문가입니다.
 역할: 진료비 가격 정보 제공 및 영수증 항목 설명
@@ -60,9 +64,87 @@ const SYSTEM_PROMPT = `당신은 반려동물 진료비 분석 전문가입니�
 - 의료 판단 절대 금지 (진단, 처방, 치료 권유 안 함)
 - '이 병원이 좋다/나쁘다' 평가 금지
 - 가격 비교, 항목 설명, 비용 절약 팁만 제공
-- 모든 응답 끝에 면책 조항 포함: '※ 이 정보는 참고용이며 의료 판단이 아닙니다.'
+- 모든 응답 끝에 면책 조항 포함: '${DISCLAIMER_TEXT}'
 - 데이터 출처를 명시 (평균 가격 언급 시)
 - 친근하고 이해하기 쉬운 한국어로 설명`;
+
+function resolveCostAnalysisProvider(): LlmProvider {
+  const rawProvider = process.env.COST_ANALYSIS_LLM_PROVIDER?.trim().toLowerCase();
+  if (rawProvider === 'anthropic') {
+    return 'anthropic';
+  }
+  if (rawProvider === 'openai') {
+    return 'openai';
+  }
+  return process.env.OPENAI_API_KEY ? 'openai' : 'anthropic';
+}
+
+function resolveCostAnalysisModel(provider: LlmProvider): string {
+  if (provider === 'openai') {
+    return process.env.COST_ANALYSIS_OPENAI_MODEL?.trim() || DEFAULT_OPENAI_MODEL;
+  }
+  return process.env.COST_ANALYSIS_ANTHROPIC_MODEL?.trim() || DEFAULT_ANTHROPIC_MODEL;
+}
+
+function ensureDisclaimer(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) {
+    return DISCLAIMER_TEXT;
+  }
+  if (trimmed.includes(DISCLAIMER_TEXT)) {
+    return trimmed;
+  }
+  return `${trimmed}\n\n${DISCLAIMER_TEXT}`;
+}
+
+function extractOpenAiText(payload: unknown): string {
+  if (!payload || typeof payload !== 'object') {
+    return '';
+  }
+
+  const record = payload as Record<string, unknown>;
+  if (typeof record.output_text === 'string' && record.output_text.trim()) {
+    return record.output_text;
+  }
+
+  const output = record.output;
+  if (Array.isArray(output)) {
+    for (const item of output) {
+      if (!item || typeof item !== 'object') {
+        continue;
+      }
+      const content = (item as Record<string, unknown>).content;
+      if (!Array.isArray(content)) {
+        continue;
+      }
+      for (const block of content) {
+        if (!block || typeof block !== 'object') {
+          continue;
+        }
+        const text = (block as Record<string, unknown>).text;
+        if (typeof text === 'string' && text.trim()) {
+          return text;
+        }
+      }
+    }
+  }
+
+  const choices = record.choices;
+  if (Array.isArray(choices)) {
+    const firstChoice = choices[0];
+    if (firstChoice && typeof firstChoice === 'object') {
+      const message = (firstChoice as Record<string, unknown>).message;
+      if (message && typeof message === 'object') {
+        const content = (message as Record<string, unknown>).content;
+        if (typeof content === 'string' && content.trim()) {
+          return content;
+        }
+      }
+    }
+  }
+
+  return '';
+}
 
 function getSupabaseServerClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -255,9 +337,63 @@ export async function POST(request: NextRequest) {
       searchContext?.itemName ? getItemStats(searchContext.itemName) : Promise.resolve(null)
     ]);
 
+    const provider = resolveCostAnalysisProvider();
+    const model = resolveCostAnalysisModel(provider);
+    const contextPrompt = buildContextPrompt({ searchContext, petContext, dbStats });
+    if (provider === 'openai') {
+      const openAiApiKey = process.env.OPENAI_API_KEY;
+      if (!openAiApiKey) {
+        return NextResponse.json({ error: 'OPENAI_API_KEY가 설정되지 않았습니다.' }, { status: 500 });
+      }
+
+      const response = await fetch('https://api.openai.com/v1/responses', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${openAiApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model,
+          instructions: SYSTEM_PROMPT,
+          max_output_tokens: 800,
+          input: [
+            ...history.map((chat) => ({
+              role: chat.role,
+              content: chat.content
+            })),
+            {
+              role: 'user',
+              content: `${contextPrompt}\n\n사용자 질문: ${message}`
+            }
+          ]
+        })
+      });
+
+      const payload = (await response.json().catch(() => null)) as unknown;
+      if (!response.ok) {
+        return NextResponse.json(
+          {
+            error: `OpenAI 응답 오류가 발생했습니다. (status: ${response.status})`
+          },
+          { status: 500 }
+        );
+      }
+
+      const aiText = extractOpenAiText(payload);
+      const finalizedText = ensureDisclaimer(aiText);
+
+      return new Response(finalizedText, {
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-cache, no-transform',
+          Connection: 'keep-alive'
+        }
+      });
+    }
+
     const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
     if (!anthropicApiKey) {
-      return NextResponse.json({ error: 'LLM API 키가 설정되지 않았습니다.' }, { status: 500 });
+      return NextResponse.json({ error: 'ANTHROPIC_API_KEY가 설정되지 않았습니다.' }, { status: 500 });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -266,10 +402,8 @@ export async function POST(request: NextRequest) {
     };
 
     const anthropic = new Anthropic({ apiKey: anthropicApiKey });
-    const contextPrompt = buildContextPrompt({ searchContext, petContext, dbStats });
-
     const stream = await anthropic.messages.create({
-      model: MODEL,
+      model,
       max_tokens: 800,
       system: SYSTEM_PROMPT,
       stream: true,
@@ -283,7 +417,6 @@ export async function POST(request: NextRequest) {
     });
 
     const encoder = new TextEncoder();
-
     const readableStream = new ReadableStream<Uint8Array>({
       async start(controller) {
         try {

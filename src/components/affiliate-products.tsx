@@ -28,10 +28,10 @@ export default function AffiliateProducts({ itemName }: AffiliateProductsProps) 
   }
 
   return (
-    <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#F8C79F]/20">
-      <h2 className="text-lg font-extrabold text-[#4F2A1D]">🛒 관련 제품 추천</h2>
-      <div className="mt-4 rounded-2xl bg-gradient-to-b from-[#FFF8F0] to-[#FFEDD5] p-5 ring-1 ring-[#F8C79F]/30">
-        <p className="text-sm font-bold text-[#4F2A1D]">{matchedProduct.productName}</p>
+    <article className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-[#fff0ea]/20">
+      <h2 className="text-lg font-extrabold text-[#17191f]">관련 제품 추천</h2>
+      <div className="mt-4 rounded-2xl bg-gradient-to-b from-[#fff0ea] to-[#fff0ea] p-5 ring-1 ring-[#fff0ea]/30">
+        <p className="text-sm font-bold text-[#17191f]">{matchedProduct.productName}</p>
         <a
           href={createCoupangLink(matchedProduct.productName)}
           target="_blank"
@@ -41,7 +41,7 @@ export default function AffiliateProducts({ itemName }: AffiliateProductsProps) 
           쿠팡에서 보기
         </a>
       </div>
-      <p className="mt-3 text-xs text-[#A36241]">
+      <p className="mt-3 text-xs text-[#ff9b5e]">
         이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
       </p>
     </article>

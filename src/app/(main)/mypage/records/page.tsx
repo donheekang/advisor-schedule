@@ -129,22 +129,26 @@ export default function MyPageRecordsPage() {
 
   if (loading) {
     return (
-      <p className="mx-auto w-full max-w-3xl text-sm text-[#A36241]">로그인 상태를 확인 중이에요...</p>
+      <div className="mx-auto max-w-2xl space-y-4 pt-4">
+        <div className="h-6 w-40 animate-pulse rounded-lg bg-black/5" />
+        <div className="h-32 animate-pulse rounded-3xl bg-black/5" />
+        <div className="h-32 animate-pulse rounded-3xl bg-black/5" />
+      </div>
     );
   }
 
   if (!user) {
     return (
-      <section className="mx-auto w-full max-w-3xl rounded-3xl bg-white p-8 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
-        <p className="text-4xl">🔒</p>
-        <h1 className="mt-3 text-xl font-extrabold text-[#4F2A1D]">로그인이 필요해요</h1>
-        <p className="mt-2 text-sm text-[#7C4A2D]">진료 기록은 로그인 후 확인할 수 있어요.</p>
+      <section className="mx-auto w-full max-w-2xl rounded-3xl bg-white p-10 text-center ring-1 ring-black/5">
+        <div className="mx-auto w-fit"><svg className="h-12 w-12 text-[#ff7a45]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg></div>
+        <h1 className="mt-3 text-xl font-bold text-[#17191f]">로그인이 필요해요</h1>
+        <p className="mt-2 text-sm text-[#697182]">진료 기록은 로그인 후 확인할 수 있어요.</p>
         <button
           type="button"
           onClick={() => {
             void signIn();
           }}
-          className="mt-5 rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
+          className="mt-5 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-6 py-3 text-sm font-bold text-white shadow-[0_8px_20px_rgba(255,122,69,0.25)] transition hover:brightness-95 active:scale-[0.98]"
         >
           로그인하기
         </button>
@@ -154,37 +158,41 @@ export default function MyPageRecordsPage() {
 
   return (
     <section
-      className="mx-auto flex w-full max-w-3xl flex-col gap-4 rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] p-5 sm:p-8"
+      className="mx-auto flex w-full max-w-2xl flex-col gap-4"
       aria-label="진료 기록 목록"
     >
       <header>
-        <h1 className="text-xl font-extrabold text-[#4F2A1D]">{heading}</h1>
-        <p className="mt-1 text-sm text-[#7C4A2D]">앱에 등록한 진료 영수증을 최신순으로 보여드려요.</p>
+        <Link href="/mypage" className="inline-flex items-center gap-1 text-sm font-medium text-[#697182] transition hover:text-[#ff7a45]">
+          <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 4L6 8l4 4" /></svg>
+          마이페이지
+        </Link>
+        <h1 className="mt-2 text-2xl font-bold text-[#17191f]">{heading}</h1>
+        <p className="mt-1 text-sm text-[#697182]">앱에 등록한 진료 영수증을 최신순으로 보여드려요.</p>
       </header>
 
       {errorMessage ? (
-        <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">{errorMessage}</p>
+        <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600 ring-1 ring-red-100">{errorMessage}</p>
       ) : null}
 
-      {isFetching ? <p className="text-sm text-[#A36241]">진료 기록을 불러오는 중이에요...</p> : null}
+      {isFetching ? (
+        <div className="space-y-4">
+          <div className="h-32 animate-pulse rounded-3xl bg-black/5" />
+          <div className="h-32 animate-pulse rounded-3xl bg-black/5" />
+        </div>
+      ) : null}
 
       {!isFetching && records.length === 0 ? (
-        <article className="rounded-3xl bg-white p-10 text-center shadow-lg ring-1 ring-[#F8C79F]/20">
-          <p className="text-5xl">📋</p>
-          <h2 className="mt-3 text-lg font-extrabold text-[#4F2A1D]">아직 진료 기록이 없어요</h2>
-          <p className="mt-2 text-sm text-[#7C4A2D]">앱에서 영수증을 등록하면 여기서도 볼 수 있어요</p>
-          <Link
-            href="/app-download"
-            className="mt-5 inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl active:scale-[0.98]"
-          >
-            앱 다운로드
-          </Link>
+        <article className="rounded-3xl bg-[linear-gradient(180deg,#fff_0%,#fffaf7_100%)] p-10 text-center ring-1 ring-black/5">
+          <div className="mx-auto w-fit"><svg className="h-12 w-12 text-[#ff7a45]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg></div>
+          <h2 className="mt-3 text-lg font-bold text-[#17191f]">아직 진료 기록이 없어요</h2>
+          <p className="mt-2 text-sm text-[#697182]">앱에서 영수증을 등록하면 여기서도 볼 수 있어요</p>
         </article>
       ) : null}
 
       {records.map((record) => (
         <RecordCard
           key={record.id}
+          id={record.id}
           visitDate={record.visitDate}
           hospitalName={record.hospitalName}
           totalAmount={record.totalAmount}

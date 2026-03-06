@@ -8,4 +8,11 @@ export type AppEnv = {
   FIREBASE_ADMIN_CLIENT_EMAIL: string;
   FIREBASE_ADMIN_PRIVATE_KEY: string;
   ANTHROPIC_API_KEY: string;
+  OPENAI_API_KEY: string;
+  PET_TALKER_LLM_PROVIDER: 'anthropic' | 'openai';
+  PET_TALKER_ANTHROPIC_MODEL: string;
+  PET_TALKER_OPENAI_MODEL: string;
+  COST_ANALYSIS_LLM_PROVIDER: 'anthropic' | 'openai';
+  COST_ANALYSIS_ANTHROPIC_MODEL: string;
+  COST_ANALYSIS_OPENAI_MODEL: string;
 };

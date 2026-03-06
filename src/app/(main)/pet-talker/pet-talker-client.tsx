@@ -125,18 +125,29 @@ export default function PetTalkerPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F8FAFB] px-4 py-8 text-[#1B3A4B] md:py-12">
-      <section className="mx-auto flex w-full max-w-md flex-col gap-6">
-        <header className="space-y-3 text-center">
-          <p className="inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#1B3A4B] shadow-sm">
-            {usageText}
+    <main className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 pb-20 md:px-6">
+      <header className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(160deg,#ffffff_0%,#fff8f8_62%,#fff6f6_100%)] px-6 py-9 shadow-[0_24px_64px_rgba(14,31,53,0.09)] ring-1 ring-black/5 md:px-10 md:py-12">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#ff7a45]/10 blur-3xl" />
+        <div className="pointer-events-none absolute -left-14 bottom-0 h-48 w-48 rounded-full bg-[#f3caa8]/10 blur-3xl" />
+        <div className="relative space-y-4">
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-semibold tracking-[0.2em] text-[#ff7a45]">PET TALKER</p>
+            <span className="rounded-full bg-[#ff7a45]/10 px-2.5 py-1 text-[10px] font-semibold text-[#ff7a45]">
+              {usageText}
+            </span>
+          </div>
+          <h1 className="text-3xl font-semibold tracking-tight text-[#17191f] md:text-4xl">
+            오늘, 우리 아이는
+            <br />
+            무슨 말을 하고 싶을까요?
+          </h1>
+          <p className="max-w-3xl text-sm leading-relaxed text-[#4f5868] md:text-base">
+            사진 한 장이면 충분해요. 우리 아이의 표정을 읽고, 마음을 대신 전해드릴게요.
           </p>
-          <h1 className="text-3xl font-extrabold leading-tight">우리 아이가 말을 한다면 🐾</h1>
-          <p className="text-sm leading-relaxed text-[#1B3A4B]">
-            사진 한 장으로 우리 아이 시점의 귀여운 한마디를 만들어 보세요. SNS에 바로 공유할 수 있는 정사각형
-            카드로 보여드려요.
-          </p>
-        </header>
+        </div>
+      </header>
+
+      <section className="mx-auto flex w-full max-w-lg flex-col gap-6">
 
         <div
           role="button"
@@ -155,7 +166,7 @@ export default function PetTalkerPage() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           className={`cursor-pointer rounded-3xl border-2 border-dashed bg-white p-5 shadow-sm transition ${
-            isDragging ? "border-[#2A9D8F]" : "border-[#1B3A4B]/20"
+            isDragging ? "border-[#ff7a45]" : "border-black/15"
           }`}
           aria-label="사진 업로드"
         >
@@ -169,16 +180,15 @@ export default function PetTalkerPage() {
 
           {previewUrl ? (
             <div className="space-y-3">
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#E8EEF1]">
+              <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#fff0ea]">
                 <Image src={previewUrl} alt="업로드한 반려동물 사진 미리보기" fill className="object-cover" unoptimized />
               </div>
-              <p className="text-center text-xs text-[#1B3A4B]">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
+              <p className="text-center text-xs text-[#17191f]">이미지를 다시 누르면 다른 사진으로 변경할 수 있어요.</p>
             </div>
           ) : (
-            <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl bg-[#E8EEF1]/60 text-center">
-              <span className="text-4xl">📷</span>
+            <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl bg-[#fff0ea]/60 text-center">
               <p className="text-base font-bold">드래그하거나 눌러서 사진 올리기</p>
-              <p className="text-xs text-[#1B3A4B]">최대 5MB · jpg/png/webp</p>
+              <p className="text-xs text-[#17191f]">최대 5MB · jpg/png/webp</p>
             </div>
           )}
         </div>
@@ -186,22 +196,22 @@ export default function PetTalkerPage() {
         <section className="rounded-3xl bg-white p-5 shadow-sm">
           {status === "loading" && (
             <div className="animate-pulse space-y-4">
-              <div className="h-56 rounded-2xl bg-[#E8EEF1]" />
-              <div className="h-4 w-4/5 rounded-full bg-[#E8EEF1]" />
-              <div className="h-4 w-3/5 rounded-full bg-[#E8EEF1]" />
+              <div className="h-56 rounded-2xl bg-[#fff0ea]" />
+              <div className="h-4 w-4/5 rounded-full bg-[#fff0ea]" />
+              <div className="h-4 w-3/5 rounded-full bg-[#fff0ea]" />
             </div>
           )}
 
           {status === "success" && previewUrl && (
             <div className="space-y-4">
-              <div className="rounded-2xl bg-[#E8EEF1] p-3">
-                <p className="mb-3 text-center text-xs font-semibold text-[#1B3A4B]">
+              <div className="rounded-2xl bg-[#fff0ea] p-3">
+                <p className="mb-3 text-center text-xs font-semibold text-[#17191f]">
                   감정: {emotion} · 공감도 {emotionScore}
                 </p>
                 <div className="relative mx-auto aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl border-4 border-white shadow-sm">
                   <Image src={previewUrl} alt="반려동물 공유 카드" fill className="object-cover" unoptimized />
                 </div>
-                <div className="relative mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold leading-relaxed text-[#1B3A4B] shadow-sm">
+                <div className="relative mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold leading-relaxed text-[#17191f] shadow-sm">
                   <span className="absolute -top-2 left-5 h-4 w-4 rotate-45 bg-white" aria-hidden />
                   “{speech}”
                 </div>
@@ -211,7 +221,7 @@ export default function PetTalkerPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="rounded-xl border border-[#1B3A4B]/20 bg-white px-3 py-2 text-sm font-semibold text-[#1B3A4B]"
+                  className="rounded-xl border border-black/15 bg-white px-3 py-2 text-sm font-semibold text-[#17191f]"
                 >
                   다시 해보기
                 </button>
@@ -226,7 +236,7 @@ export default function PetTalkerPage() {
           )}
 
           {(status === "idle" || status === "error") && (
-            <div className="rounded-2xl border border-[#1B3A4B]/10 bg-[#F8FAFB] p-4 text-center text-sm text-[#1B3A4B]">
+            <div className="rounded-2xl border border-[#1B3A4B]/10 bg-[#F8FAFB] p-4 text-center text-sm text-[#17191f]">
               {status === "error"
                 ? errorMessage
                 : "사진을 업로드하면 여기에 우리 아이의 1인칭 대사가 나타나요!"}
@@ -235,7 +245,7 @@ export default function PetTalkerPage() {
         </section>
 
         <section className="rounded-3xl bg-amber-50 p-5 text-center shadow-sm">
-          <p className="text-sm font-semibold text-[#1B3A4B]">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
+          <p className="text-sm font-semibold text-[#17191f]">앱에서 기록하면 우리 아이를 더 잘 아는 AI가 돼요</p>
           <button
             type="button"
             className="mt-3 w-full rounded-xl bg-brand-secondary hover:bg-brand-ctaHover px-4 py-3 text-sm font-bold text-white shadow-sm"

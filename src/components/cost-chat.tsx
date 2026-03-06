@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useMemo, useState } from 'react';
 
@@ -125,18 +125,18 @@ export default function CostChat({ itemName, region, stats, seedRange }: CostCha
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 mx-auto w-full max-w-4xl px-4">
-      <div className="pointer-events-auto ml-auto w-full max-w-xl rounded-2xl border border-slate-200 bg-white shadow-xl">
+      <div className="pointer-events-auto ml-auto w-full max-w-xl rounded-2xl border border-black/10 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.14)]">
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
           className="flex w-full items-center justify-between px-4 py-3 text-left"
         >
-          <span className="text-sm font-bold text-[#1B3A4B]">진료비 AI 분석 채팅</span>
-          <span className="text-xs font-medium text-slate-500">{isOpen ? '접기' : '열기'}</span>
+          <span className="text-sm font-semibold text-[#17191f]">진료비 AI 분석 채팅</span>
+          <span className="text-xs font-medium text-[#697182]">{isOpen ? '접기' : '열기'}</span>
         </button>
 
         {isOpen ? (
-          <div className="border-t border-slate-100 p-4">
+          <div className="border-t border-black/10 p-4">
             <div className="mb-3 flex flex-wrap gap-2">
               {SUGGESTED_QUESTIONS.map((question) => (
                 <button
@@ -144,19 +144,21 @@ export default function CostChat({ itemName, region, stats, seedRange }: CostCha
                   type="button"
                   onClick={() => sendMessage(question)}
                   disabled={isLoading}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="rounded-full border border-black/10 bg-[#faf6f1] px-3 py-1.5 text-xs font-medium text-[#4f5868] transition hover:bg-[#f1eae2] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {question}
                 </button>
               ))}
             </div>
 
-            <div className="max-h-72 space-y-2 overflow-y-auto rounded-xl bg-slate-50 p-3">
+            <div className="max-h-72 space-y-2 overflow-y-auto rounded-xl bg-[#faf6f1] p-3">
               {messages.map((message, index) => (
                 <div
                   key={`${message.role}-${index}`}
                   className={`rounded-xl px-3 py-2 text-sm whitespace-pre-wrap ${
-                    message.role === 'user' ? 'ml-auto max-w-[85%] bg-blue-600 text-white' : 'max-w-[90%] bg-white text-slate-800'
+                    message.role === 'user'
+                      ? 'ml-auto max-w-[85%] bg-[#ff7a45] text-white'
+                      : 'max-w-[90%] bg-white text-[#17191f]'
                   }`}
                 >
                   {message.content || (isLoading && message.role === 'assistant' ? '분석 중...' : '')}
@@ -170,13 +172,13 @@ export default function CostChat({ itemName, region, stats, seedRange }: CostCha
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="진료비에 대해 궁금한 점을 입력해주세요"
                 rows={2}
-                className="min-h-[56px] flex-1 resize-none rounded-xl border border-slate-200 px-3 py-2 text-sm text-[#1B3A4B] outline-none ring-[#2A9D8F]/40 transition focus:ring"
+                className="min-h-[56px] flex-1 resize-none rounded-xl border border-black/10 px-3 py-2 text-sm text-[#17191f] outline-none ring-[#ff7a45]/30 transition focus:ring"
               />
               <button
                 type="button"
                 onClick={() => sendMessage(input)}
                 disabled={isLoading || !input.trim()}
-                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-xl bg-[#ff7a45] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#e46333] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 전송
               </button>
@@ -187,3 +189,7 @@ export default function CostChat({ itemName, region, stats, seedRange }: CostCha
     </div>
   );
 }
+
+
+
+

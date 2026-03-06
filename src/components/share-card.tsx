@@ -1,6 +1,7 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import { downloadShareCard, renderShareCard, type ShareCardRenderResult } from '@/lib/share-card';
 
 type ShareCardProps = {
@@ -119,7 +120,7 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: `우리 ${titlePetName} 이렇게 말한대 🐾`,
+        title: `우리 ${titlePetName} 이렇게 말해요`,
         description: dialogue,
         imageUrl: currentCard.dataUrl,
         link: {
@@ -145,31 +146,38 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
   };
 
   return (
-    <section className="space-y-4 rounded-3xl bg-[#FFF8F0] p-6">
-      <h2 className="text-xl font-bold text-[#5A3325]">SNS 공유 카드</h2>
-      <p className="text-sm text-[#8B5A3C]">이미지 다운로드, 카카오톡 공유, 링크 복사를 한 번에 할 수 있어요.</p>
+    <section className="space-y-4 rounded-3xl bg-[#faf6f1] p-6 ring-1 ring-black/10">
+      <h2 className="text-xl font-semibold text-[#17191f]">SNS 공유 카드</h2>
+      <p className="text-sm text-[#697182]">이미지 다운로드, 카카오톡 공유, 링크 복사를 한 번에 진행할 수 있어요.</p>
 
       <div className="overflow-hidden rounded-2xl bg-white shadow-md">
         {card ? (
-          <img alt="펫토커 공유 카드 미리보기" className="h-auto w-full" src={card.dataUrl} />
+          <Image
+            alt="펫토커 공유 카드 미리보기"
+            className="h-auto w-full"
+            height={1080}
+            src={card.dataUrl}
+            unoptimized
+            width={1080}
+          />
         ) : (
-          <div className="flex aspect-square items-center justify-center text-sm text-[#8B5A3C]">
+          <div className="flex aspect-square items-center justify-center text-sm text-[#697182]">
             {isGenerating ? '카드를 생성하고 있어요...' : '공유 카드를 생성하지 못했어요.'}
           </div>
         )}
       </div>
 
       {errorMessage ? <p className="text-sm text-rose-500">{errorMessage}</p> : null}
-      {toastMessage ? <p className="text-sm font-semibold text-[#C2410C]">{toastMessage}</p> : null}
+      {toastMessage ? <p className="text-sm font-semibold text-[#ff7a45]">{toastMessage}</p> : null}
 
       <div className="grid grid-cols-3 gap-3">
         <button
-          className="rounded-2xl bg-[#DBEAFE] px-3 py-3 text-xs font-semibold text-[#1E3A8A] disabled:opacity-60"
+          className="rounded-2xl bg-[#eaf2ff] px-3 py-3 text-xs font-semibold text-[#a85a35] disabled:opacity-60"
           disabled={isGenerating}
           onClick={() => void handleDownload()}
           type="button"
         >
-          ⬇️ 이미지 다운로드
+          이미지 다운로드
         </button>
         <button
           className="rounded-2xl bg-[#FEE500] px-3 py-3 text-xs font-semibold text-[#3C1E1E] disabled:opacity-60"
@@ -177,17 +185,21 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
           onClick={() => void handleKakaoShare()}
           type="button"
         >
-          💬 카카오톡 공유
+          카카오톡 공유
         </button>
         <button
-          className="rounded-2xl bg-[#F3F4F6] px-3 py-3 text-xs font-semibold text-[#374151] disabled:opacity-60"
+          className="rounded-2xl bg-[#ededf0] px-3 py-3 text-xs font-semibold text-[#4f5868] disabled:opacity-60"
           disabled={isGenerating}
           onClick={() => void handleCopyLink()}
           type="button"
         >
-          🔗 링크 복사
+          링크 복사
         </button>
       </div>
     </section>
   );
 }
+
+
+
+

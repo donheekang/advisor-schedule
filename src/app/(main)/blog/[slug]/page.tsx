@@ -52,25 +52,25 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
   return (
     <section className="w-full rounded-[2rem] bg-gradient-to-b from-[#FFF8F0] to-[#FFF0E6] px-5 py-10 md:px-8 md:py-12">
       <article className="mx-auto max-w-2xl space-y-8">
-        <header className="space-y-3 border-b border-[#F8C79F]/40 pb-6">
+        <header className="space-y-3 border-b border-[#fff0ea]/40 pb-6">
           <Link
             href="/blog"
-            className="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-[#A36241] shadow-sm transition hover:bg-white"
+            className="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-bold text-[#ff9b5e] shadow-sm transition hover:bg-white"
           >
             ← 블로그 목록
           </Link>
-          <h1 className="text-3xl font-extrabold text-[#4F2A1D]">{post.title}</h1>
-          <p className="text-sm font-medium text-[#A36241]">
+          <h1 className="text-3xl font-extrabold text-[#17191f]">{post.title}</h1>
+          <p className="text-sm font-medium text-[#ff9b5e]">
             {new Date(post.date).toLocaleDateString('ko-KR')}
           </p>
         </header>
 
         <section
-          className="prose prose-lg max-w-none leading-relaxed text-[#2D2D2D] prose-headings:text-[#4F2A1D] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D] prose-a:text-[#F97316] prose-a:no-underline hover:prose-a:underline prose-strong:text-[#4F2A1D]"
+          className="prose prose-lg max-w-none leading-relaxed text-[#2D2D2D] prose-headings:text-[#17191f] prose-p:text-[#2D2D2D] prose-li:text-[#2D2D2D] prose-a:text-[#F97316] prose-a:no-underline hover:prose-a:underline prose-strong:text-[#17191f]"
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
 
-        <footer className="border-t border-[#F8C79F]/40 pt-6">
+        <footer className="border-t border-[#fff0ea]/40 pt-6">
           <Link
             href="/blog"
             className="inline-flex rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg active:scale-[0.98]"

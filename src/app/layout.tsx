@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: '%s | 펫헬스플러스'
   },
   description: siteDescription,
-  keywords: ['반려동물', '진료비', '동물병원', '가격비교', '펫헬스플러스'],
+  keywords: ['반려동물', '진료비', '동물병원', '진료비비교', '펫헬스플러스'],
   alternates: {
     canonical: '/'
   },
@@ -50,7 +50,7 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
-      <body className="min-h-screen bg-[#F8FAFB] text-[#1B3A4B] antialiased">
+      <body className="min-h-screen bg-transparent text-[#17191f] antialiased">
         <AuthProvider>{children}</AuthProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </body>

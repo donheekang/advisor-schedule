@@ -92,7 +92,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
     if (trimmed.startsWith('```')) {
       if (isCodeBlockOpen) {
         html.push(
-          `<pre class="mt-6 overflow-x-auto rounded-2xl bg-[#FFF5E9] p-4 text-sm leading-7 text-[#5C4033]"><code>${escapeHtml(codeBlock.join('\n'))}</code></pre>`
+          `<pre class="mt-6 overflow-x-auto rounded-2xl bg-[#fff0ea] p-4 text-sm leading-7 text-[#17191f]"><code>${escapeHtml(codeBlock.join('\n'))}</code></pre>`
         );
         codeBlock.length = 0;
         isCodeBlockOpen = false;
@@ -124,7 +124,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
         html.push('</ul>');
         isListOpen = false;
       }
-      html.push(`<h3 class="mt-8 text-xl font-bold text-[#4F2A1D]">${renderInlineMarkdown(trimmed.slice(4))}</h3>`);
+      html.push(`<h3 class="mt-8 text-xl font-bold text-[#17191f]">${renderInlineMarkdown(trimmed.slice(4))}</h3>`);
       return;
     }
 
@@ -133,7 +133,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
         html.push('</ul>');
         isListOpen = false;
       }
-      html.push(`<h2 class="mt-10 text-2xl font-bold text-[#4F2A1D]">${renderInlineMarkdown(trimmed.slice(3))}</h2>`);
+      html.push(`<h2 class="mt-10 text-2xl font-bold text-[#17191f]">${renderInlineMarkdown(trimmed.slice(3))}</h2>`);
       return;
     }
 
@@ -142,7 +142,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
         html.push('</ul>');
         isListOpen = false;
       }
-      html.push(`<h1 class="mt-10 text-3xl font-bold text-[#4F2A1D]">${renderInlineMarkdown(trimmed.slice(2))}</h1>`);
+      html.push(`<h1 class="mt-10 text-3xl font-bold text-[#17191f]">${renderInlineMarkdown(trimmed.slice(2))}</h1>`);
       return;
     }
 
@@ -161,7 +161,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
         isListOpen = false;
       }
       html.push(
-        `<blockquote class="mt-6 rounded-2xl border-l-4 border-[#E8B788] bg-[#FFF5E9] px-4 py-3 text-[#5C4033]">${renderInlineMarkdown(trimmed.slice(2))}</blockquote>`
+        `<blockquote class="mt-6 rounded-2xl border-l-4 border-[#ff7a45] bg-[#fff0ea] px-4 py-3 text-[#17191f]">${renderInlineMarkdown(trimmed.slice(2))}</blockquote>`
       );
       return;
     }
@@ -180,7 +180,7 @@ const renderMarkdownToHtml = (markdown: string): string => {
 
   if (isCodeBlockOpen && codeBlock.length > 0) {
     html.push(
-      `<pre class="mt-6 overflow-x-auto rounded-2xl bg-[#FFF5E9] p-4 text-sm leading-7 text-[#5C4033]"><code>${escapeHtml(codeBlock.join('\n'))}</code></pre>`
+      `<pre class="mt-6 overflow-x-auto rounded-2xl bg-[#fff0ea] p-4 text-sm leading-7 text-[#17191f]"><code>${escapeHtml(codeBlock.join('\n'))}</code></pre>`
     );
   }
 
