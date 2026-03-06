@@ -307,26 +307,28 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             <br className="hidden md:block" />
             도와드릴게요.
           </p>
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href="/ai-care"
-              className="group inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98]"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98] sm:w-auto sm:justify-start"
             >
               AI 진료비 확인하기
               <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
             </Link>
-            <Link
-              href="/cost-search"
-              className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
-            >
-              진료비 비교
-            </Link>
-            <Link
-              href="/pet-talker"
-              className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
-            >
-              펫토커
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href="/cost-search"
+                className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5] sm:flex-none"
+              >
+                진료비 비교
+              </Link>
+              <Link
+                href="/pet-talker"
+                className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5] sm:flex-none"
+              >
+                펫토커
+              </Link>
+            </div>
           </div>
           <p className="mt-5 text-xs font-medium text-[#8a92a3]">* 의료 진단이 아닌 진료비 비교 및 정보 제공 목적의 서비스입니다</p>
         </div>
