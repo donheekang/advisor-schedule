@@ -11,7 +11,7 @@ const bannerConfig: Record<
   { title: string; href: string; className: string }
 > = {
   'ai-care': {
-    title: '진료비 분석 →',
+    title: 'AI 진료비 분석 →',
     href: '/ai-care',
     className: 'bg-[#191F28] text-white hover:bg-[#333D4B]',
   },

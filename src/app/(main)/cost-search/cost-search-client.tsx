@@ -410,7 +410,7 @@ export default function CostSearchClient() {
             disabled={searching}
             className="w-full rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-4 py-3.5 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(255,122,69,0.23)] transition hover:brightness-95 disabled:opacity-60"
           >
-            {searching ? '검색 중...' : '진료비 검색하기'}
+            {searching ? '검색 중...' : 'AI 진료비 검색하기'}
           </button>
         </form>
       </article>
@@ -586,7 +586,7 @@ export default function CostSearchClient() {
 
       <article id="ai-analysis" className="rounded-3xl bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-[#17191f]">진료비 분석</h2>
+          <h2 className="text-lg font-semibold text-[#17191f]">AI 진료비 분석</h2>
           {costResult && isPremiumUser ? (
               <button
                 type="button"
@@ -619,9 +619,9 @@ export default function CostSearchClient() {
         ) : !isPremiumUser ? (
           <div className="mt-4">
             <Paywall
-              title="진료비 분석은 프리미엄 전용 기능입니다"
+              title="AI 진료비 분석은 프리미엄 전용 기능입니다"
               description="무료 플랜에서는 월 3회까지 검색만 가능하며, AI 분석은 프리미엄에서 무제한으로 제공돼요."
-              featureName="진료비 분석"
+              featureName="AI 진료비 분석"
             />
           </div>
         ) : (

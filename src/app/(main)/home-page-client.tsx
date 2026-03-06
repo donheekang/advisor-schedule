@@ -227,10 +227,10 @@ const painPoints = [
 const features = [
   {
     icon: IconSparkle,
-    title: '진료비',
+    title: 'AI 진료비',
     description: '우리 아이 상태에 맞는 예상 비용, 미리 알면 마음이 놓여요.',
     href: '/ai-care',
-    cta: '진료비 확인하기'
+    cta: 'AI 진료비 확인하기'
   },
   {
     icon: IconSearch,
@@ -312,7 +312,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
               href="/ai-care"
               className="group inline-flex w-fit items-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98]"
             >
-              진료비 확인하기
+              AI 진료비 확인하기
               <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
             </Link>
             <div className="flex gap-3">
@@ -585,7 +585,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             href="/ai-care"
             className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-bold text-[#ff7a45] shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition hover:scale-[1.02] hover:bg-[#fff8f5] active:scale-[0.98]"
           >
-            진료비 확인하기
+            AI 진료비 확인하기
             <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
           </Link>
           <Link

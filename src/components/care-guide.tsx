@@ -91,7 +91,7 @@ export default function CareGuide({ itemName }: CareGuideProps) {
             href="/ai-care"
             className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg"
           >
-            무료 케어 체험 →
+            무료 AI 케어 체험 →
           </a>
           <a
             href="https://apps.apple.com/app/id6504879567"
