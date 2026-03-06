@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/components/auth-provider';
 import CareGuide from '@/components/care-guide';
-import { apiClient } from '@/lib/api-client';
 
 type ApiCostSearchResult = {
   query: string;
@@ -83,7 +82,7 @@ function normalize(text: string): string {
   return text.trim().replace(/\s+/g, '').toLowerCase();
 }
 
-function extractMyItemPrices(records: unknown, keyword: string): number[] {
+function _extractMyItemPrices(records: unknown, keyword: string): number[] {
   if (!Array.isArray(records)) {
     return [];
   }
@@ -130,7 +129,7 @@ function extractMyItemPrices(records: unknown, keyword: string): number[] {
 }
 
 export default function CostSearchClient() {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const [query, setQuery] = useState('혈액검사');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
   const [region, setRegion] = useState('전국');
