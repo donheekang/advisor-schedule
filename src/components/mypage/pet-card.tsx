@@ -44,18 +44,16 @@ function PetIcon({ species }: { species: string }) {
   const isCat = normalized.includes('cat') || normalized.includes('고양');
 
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#ff7a45]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#ff7a45]" fill="currentColor" stroke="none">
       {isCat ? (
         <>
           <path d="M12 20c-4 0-7-2.5-7-6 0-2.5 1.5-5 3-6.5L10 4l1 3h2l1-3 2 3.5c1.5 1.5 3 4 3 6.5 0 3.5-3 6-7 6Z" />
-          <circle cx="9.5" cy="13" r="0.5" fill="currentColor" />
-          <circle cx="14.5" cy="13" r="0.5" fill="currentColor" />
+          <circle cx="9.5" cy="13" r="1" fill="white" />
+          <circle cx="14.5" cy="13" r="1" fill="white" />
+          <ellipse cx="12" cy="15" rx="1" ry="0.6" fill="white" />
         </>
       ) : (
-        <>
-          <circle cx="12" cy="8" r="3.5" />
-          <path d="M4.5 19a7.5 7.5 0 0 1 15 0" />
-        </>
+        <path d="M8.35 3C6.97 3 5.85 4.35 5.85 6s1.12 3 2.5 3 2.5-1.35 2.5-3-1.12-3-2.5-3Zm7.3 0c-1.38 0-2.5 1.35-2.5 3s1.12 3 2.5 3 2.5-1.35 2.5-3-1.12-3-2.5-3ZM4.5 10c-1.38 0-2.5 1.35-2.5 3s1.12 3 2.5 3 2.5-1.35 2.5-3-1.12-3-2.5-3Zm15 0c-1.38 0-2.5 1.35-2.5 3s1.12 3 2.5 3 2.5-1.35 2.5-3-1.12-3-2.5-3ZM12 13.5c-2.33 0-4.3 1.45-5.08 3.5C6.26 18.8 7.73 21 10 21h4c2.27 0 3.74-2.2 3.08-4-.78-2.05-2.75-3.5-5.08-3.5Z" />
       )}
     </svg>
   );
@@ -72,7 +70,7 @@ export function PetCard({ pet }: PetCardProps) {
           <div>
             <h3 className="text-lg font-bold text-[#17191f]">{pet.name}</h3>
             <p className="text-sm text-[#697182]">
-              {pet.species}
+              {pet.species === 'dog' ? '강아지' : pet.species === 'cat' ? '고양이' : pet.species}
               {pet.breed ? ` · ${pet.breed}` : ''}
             </p>
           </div>
