@@ -112,7 +112,7 @@ export default function TermsPage() {
         <div className="mx-auto max-w-[1100px]">
           <p className="mb-3 text-sm font-semibold tracking-widest text-[#ff7a45]">TERMS OF SERVICE</p>
           <h1 className="text-[2rem] font-extrabold tracking-tight text-[#17191f] md:text-4xl">이용약관</h1>
-          <p className="mt-3 text-sm text-[#697182]">최종 수정일: 2026년 2월 25일 · (주)플러스랩코리아</p>
+          <p className="mt-3 text-sm text-[#697182]">최종 수정일: 2026년 3월 6일 · (주)플러스랩코리아</p>
         </div>
       </section>
 
@@ -142,7 +142,7 @@ export default function TermsPage() {
         </div>
 
         <p className="mt-8 text-center text-xs text-[#697182]">
-          본 약관은 2026년 2월 25일부터 시행됩니다.
+          본 약관은 2026년 3월 6일부터 시행됩니다.
         </p>
       </div>
     </div>
