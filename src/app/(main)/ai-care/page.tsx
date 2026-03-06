@@ -275,24 +275,24 @@ export default function AiCarePage() {
           <p className="max-w-3xl text-sm leading-relaxed text-[#4f5868] md:text-base">
             증상만 알려주세요. 예상 진료비를 바로 확인할 수 있어요.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2">
             <Link
               href="/cost-search"
-              className="rounded-full border border-black/15 bg-white px-4 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
+              className="rounded-full border border-black/15 bg-white px-3.5 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
             >
-              전국 진료비 비교
+              진료비 비교
             </Link>
             <Link
               href="/pet-talker"
-              className="rounded-full border border-black/15 bg-white px-4 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
+              className="rounded-full border border-black/15 bg-white px-3.5 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
             >
-              펫토커 열기
+              펫토커
             </Link>
             <Link
               href="/mypage"
-              className="rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_20px_rgba(255,122,69,0.24)] transition hover:brightness-95"
+              className="rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-3.5 py-2 text-xs font-semibold text-white shadow-[0_8px_20px_rgba(255,122,69,0.24)] transition hover:brightness-95"
             >
-              앱 기록 연동
+              앱 연동
             </Link>
           </div>
         </div>
