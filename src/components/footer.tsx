@@ -77,8 +77,19 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 하단: 카피라이트 */}
+        {/* 하단: 사업자 정보 + 카피라이트 */}
         <div className="border-t border-black/5 pt-5">
+          <div className="mb-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-[#b0b8c1]">
+            <span>(주)플러스랩코리아</span>
+            <span className="hidden md:inline">|</span>
+            <span>대표자 강돈희</span>
+            <span className="hidden md:inline">|</span>
+            <span>사업자등록번호 143-87-03402</span>
+            <span className="hidden md:inline">|</span>
+            <span>경기도 고양시 덕양구 토당로</span>
+            <span className="hidden md:inline">|</span>
+            <span>문의 support@pluslabkorea.com</span>
+          </div>
           <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
             <p className="text-xs text-[#8a92a3]">
               © 2026 (주)플러스랩코리아 · PetHealth+ (펫헬스플러스)
