@@ -196,10 +196,10 @@ export default function RecordDetailPage() {
             진료비 비교하기 →
           </Link>
           <Link
-            href="/ai-care"
+            href="/pet-talker"
             className="rounded-full border border-[#ff7a45]/20 bg-white px-5 py-2.5 text-xs font-semibold text-[#ff7a45] transition hover:bg-[#fff8f5]"
           >
-            AI 진료비 확인하기
+            펫토커 체험하기
           </Link>
         </div>
       </article>

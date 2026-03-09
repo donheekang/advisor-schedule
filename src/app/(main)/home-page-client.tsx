@@ -226,13 +226,6 @@ const painPoints = [
 
 const features = [
   {
-    icon: IconSparkle,
-    title: 'AI 진료비',
-    description: '우리 아이 상태에 맞는 예상 비용, 미리 알면 마음이 놓여요.',
-    href: '/ai-care',
-    cta: 'AI 진료비 확인하기'
-  },
-  {
     icon: IconSearch,
     title: '진료비 비교',
     description: '전국 데이터로 확인하면, 병원 앞에서의 불안이 줄어들어요.',
@@ -309,10 +302,10 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
-              href="/ai-care"
+              href="/cost-search"
               className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98] sm:w-auto sm:justify-start"
             >
-              AI 진료비 확인하기
+              진료비 비교하기
               <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
             </Link>
             <div className="flex gap-3">
@@ -578,14 +571,14 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         <p className="text-sm font-semibold text-white/70">우리 아이를 위한 작은 시작</p>
         <h2 className="mt-3 text-2xl font-bold tracking-tight md:text-4xl">진료비 걱정 대신,<br className="md:hidden" /> 건강에 집중하는 하루</h2>
         <p className="mx-auto mt-4 max-w-lg text-sm leading-[1.8] text-white/80">
-          전국 데이터 기반 비교부터 AI 맞춤 진료비 분석까지, 진료비 고민 여기서 끝.
+          전국 데이터 기반 진료비 비교부터 펫토커까지, 반려동물 건강 고민 여기서 끝.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/ai-care"
+            href="/cost-search"
             className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-bold text-[#ff7a45] shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition hover:scale-[1.02] hover:bg-[#fff8f5] active:scale-[0.98]"
           >
-            AI 진료비 확인하기
+            진료비 비교하기
             <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
           </Link>
           <Link

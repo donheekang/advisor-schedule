@@ -3,7 +3,6 @@ import Link from 'next/link';
 const serviceLinks = [
   { href: '/pet-talker', label: '펫토커' },
   { href: '/cost-search', label: '진료비 비교' },
-  { href: '/ai-care', label: 'AI 진료비' },
   { href: '/guides', label: '가이드' },
   { href: '/blog', label: '블로그' }
 ];
@@ -29,16 +28,16 @@ export default function Footer() {
           </div>
           <div className="flex gap-3">
             <Link
-              href="/ai-care"
+              href="/cost-search"
               className="rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-5 py-2 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(255,122,69,0.2)] transition hover:brightness-95"
             >
-              AI 진료비 확인하기 →
+              진료비 비교하기 →
             </Link>
             <Link
-              href="/cost-search"
+              href="/pet-talker"
               className="rounded-full border border-black/10 bg-white px-5 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
             >
-              진료비 비교
+              펫토커
             </Link>
           </div>
         </div>

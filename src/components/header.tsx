@@ -22,7 +22,6 @@ export default function Header() {
 
   const navigationItems = useMemo<NavigationItem[]>(() => {
     const items: NavigationItem[] = [
-      { href: '/ai-care', label: 'AI 진료비' },
       { href: '/cost-search', label: '진료비 비교' },
       { href: '/pet-talker', label: '펫토커' },
       { href: '/blog', label: '블로그' }

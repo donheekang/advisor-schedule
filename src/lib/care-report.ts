@@ -221,7 +221,7 @@ export function buildShareText(report: CareReport, breed: string, conditionLabel
     '',
     topRecommendations,
     '',
-    '자세히 보기: https://advisor-schedule-fawn.vercel.app/ai-care'
+    '자세히 보기: https://advisor-schedule-fawn.vercel.app/cost-search'
   ].join('\n');
 }
 

@@ -11,9 +11,9 @@ type TabItem = {
 
 const tabs: TabItem[] = [
   { href: '/', label: '홈', icon: 'home' },
-  { href: '/ai-care', label: 'AI진료비', icon: 'sparkle' },
   { href: '/cost-search', label: '진료비비교', icon: 'search' },
   { href: '/pet-talker', label: '펫토커', icon: 'chat' },
+  { href: '/blog', label: '블로그', icon: 'sparkle' },
   { href: '/mypage', label: '마이', icon: 'user' }
 ];
 
@@ -71,7 +71,7 @@ export default function MobileNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-black/[0.06] bg-white/[0.97] pb-safe backdrop-blur-2xl md:hidden">
-      <ul className="mx-auto grid w-full max-w-md grid-cols-5">
+      <ul className="mx-auto grid w-full max-w-md grid-cols-5" role="tablist">
         {tabs.map((tab) => {
           const isActive = tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
 

@@ -84,17 +84,6 @@ class ApiClient {
     return this.request('GET', `/api/schedules/list${params}`);
   }
 
-  async getAiCare(petId: string) {
-    return this.request('GET', `/api/ai/care?petId=${encodeURIComponent(petId)}`);
-  }
-
-  async analyzeAiCare(data: {
-    profile: Record<string, unknown>;
-    medicalHistory: Record<string, unknown>[];
-    forceRefresh?: boolean;
-  }) {
-    return this.request<Record<string, unknown>>('POST', '/api/ai/care/analyze', data);
-  }
 }
 
 class ApiError extends Error {

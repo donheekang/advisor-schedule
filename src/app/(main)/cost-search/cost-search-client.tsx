@@ -170,10 +170,10 @@ export default function CostSearchClient() {
               펫토커 열기
             </Link>
             <Link
-              href="/ai-care"
+              href="/blog"
               className="rounded-full border border-black/15 bg-white px-4 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
             >
-              예상 진료비
+              블로그
             </Link>
             <Link
               href="/mypage"

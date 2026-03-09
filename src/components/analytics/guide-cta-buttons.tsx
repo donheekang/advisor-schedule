@@ -20,13 +20,13 @@ export function GuideCtaButtons({ sourcePage }: GuideCtaButtonsProps) {
         진료비 비교 →
       </Link>
       <Link
-        href="/ai-care"
+        href="/pet-talker"
         onClick={() =>
-          trackEvent('app_cta_click', { source_page: sourcePage, cta_type: 'ai_care' })
+          trackEvent('app_cta_click', { source_page: sourcePage, cta_type: 'pet_talker' })
         }
         className="flex items-center justify-center rounded-[14px] border-[1.5px] border-[#E5E8EB] bg-white px-4 py-[17px] text-[15px] font-bold text-[#191F28] transition hover:border-[#CBD5E1]"
       >
-        진료비 →
+        펫토커 →
       </Link>
     </div>
   );

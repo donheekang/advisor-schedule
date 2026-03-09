@@ -242,17 +242,17 @@ export default function CategoryPage({
         {/* AI 체험 CTA */}
         <article className="rounded-3xl bg-gradient-to-r from-[#17191f] to-[#ff7a45] p-6 text-center shadow-lg">
           <h2 className="mt-3 text-lg font-extrabold text-white">
-            우리 아이 맞춤 케어, 30초면 알 수 있어요
+            우리 아이 마음, 사진 한 장으로 알 수 있어요
           </h2>
           <p className="mt-2 text-sm text-[#fff0ea]">
-            알러지, 체중, 진료 이력을 입력하면 AI가 맞춤 케어를 분석해줘요.
+            반려동물 사진을 올리면 펫토커가 마음을 읽어줘요.
           </p>
           <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
             <Link
-              href="/ai-care"
+              href="/pet-talker"
               className="rounded-2xl bg-gradient-to-r from-[#F97316] to-[#FB923C] px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-xl"
             >
-              무료 AI 케어 체험 →
+              펫토커 체험하기 →
             </Link>
             <a
               href="https://apps.apple.com/app/id6504879567"

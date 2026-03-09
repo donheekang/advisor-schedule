@@ -2,22 +2,22 @@ import Link from 'next/link';
 import { StoreComingSoonButtons } from '@/components/store-coming-soon-buttons';
 
 type CTABannerProps = {
-  variant: 'ai-care' | 'app-download' | 'cost-search';
+  variant: 'app-download' | 'cost-search' | 'pet-talker';
   context?: string;
 };
 
 const bannerConfig: Record<
-  'ai-care' | 'cost-search',
+  'cost-search' | 'pet-talker',
   { title: string; href: string; className: string }
 > = {
-  'ai-care': {
-    title: 'AI 진료비 분석 →',
-    href: '/ai-care',
-    className: 'bg-[#191F28] text-white hover:bg-[#333D4B]',
-  },
   'cost-search': {
     title: '진료비 비교 →',
     href: '/cost-search',
+    className: 'bg-[#191F28] text-white hover:bg-[#333D4B]',
+  },
+  'pet-talker': {
+    title: '펫토커 →',
+    href: '/pet-talker',
     className: 'border-[1.5px] border-[#E5E8EB] bg-white text-[#191F28] hover:border-[#CBD5E1]',
   },
 };
