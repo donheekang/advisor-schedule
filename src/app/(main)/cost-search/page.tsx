@@ -32,20 +32,11 @@ export const metadata: Metadata = {
     siteName: 'PetHealth+',
     locale: 'ko_KR',
     type: 'website',
-    images: [
-      {
-        url: '/og/default.png',
-        width: 1200,
-        height: 630,
-        alt: '반려동물 진료비 검색 및 비교 서비스'
-      }
-    ]
   },
   twitter: {
     card: 'summary_large_image',
     title: pageTitle,
     description: pageDescription,
-    images: ['/og/default.png']
   }
 };
 

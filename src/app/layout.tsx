@@ -32,20 +32,11 @@ export const metadata: Metadata = {
     siteName,
     locale: 'ko_KR',
     type: 'website',
-    images: [
-      {
-        url: '/og/default.png',
-        width: 1200,
-        height: 630,
-        alt: '펫헬스플러스 반려동물 진료비 데이터 플랫폼'
-      }
-    ]
   },
   twitter: {
     card: 'summary_large_image',
     title: '펫헬스플러스 | 우리 아이 진료비 비교 & 건강 관리',
     description: siteDescription,
-    images: ['/og/default.png']
   },
   verification: {
     google: 'GOOGLE_SITE_VERIFICATION_CODE'

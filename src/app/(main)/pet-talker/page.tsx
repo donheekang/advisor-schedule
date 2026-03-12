@@ -19,20 +19,11 @@ export const metadata: Metadata = {
     siteName: 'PetHealth+',
     locale: 'ko_KR',
     type: 'website',
-    images: [
-      {
-        url: '/og/default.png',
-        width: 1200,
-        height: 630,
-        alt: '펫토커 - AI 반려동물 감정 분석 서비스'
-      }
-    ]
   },
   twitter: {
     card: 'summary_large_image',
     title: pageTitle,
     description: pageDescription,
-    images: ['/og/default.png']
   }
 };
 
