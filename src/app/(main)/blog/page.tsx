@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { getAllBlogPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: '블로그 | PetHealth+',
-  description: '반려동물 진료비 비교와 보험, 검사 항목에 대한 실전 가이드를 확인하세요.'
+  title: '블로그 | 우리 아이 건강을 위한 가이드',
+  description: '진료비 절약 팁부터 건강 관리 노하우까지, 보호자라면 알아두면 좋은 이야기를 모았어요.'
 };
 
 export default async function BlogListPage() {

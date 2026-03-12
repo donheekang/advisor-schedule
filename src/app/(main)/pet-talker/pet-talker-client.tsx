@@ -396,8 +396,8 @@ export default function PetTalkerClient() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>
             </div>
-            <h2 className="text-xl font-semibold text-[#17191f]">로그인하고 무료로 이용하세요</h2>
-            <p className="text-sm text-[#697182]">회원가입 후 펫토커를 무제한 무료로 사용할 수 있어요.</p>
+            <h2 className="text-xl font-semibold text-[#17191f]">로그인하고 이용해 보세요</h2>
+            <p className="text-sm text-[#697182]">간단한 회원가입 후 바로 펫토커를 사용할 수 있어요.</p>
             <button
               type="button"
               onClick={() => setShowLoginModal(true)}

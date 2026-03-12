@@ -3,7 +3,7 @@ import '@/app/globals.css';
 import { AuthProvider } from '@/components/auth-provider';
 
 const siteName = 'PetHealth+';
-const siteDescription = '반려동물 진료비 데이터를 검색하고 비교해 합리적인 의료비 결정을 돕는 데이터 플랫폼입니다.';
+const siteDescription = '우리 아이 진료비가 적정한지 궁금하셨나요? 전국 실제 데이터로 비교하고, 앱으로 건강 기록까지 한 번에 관리하세요.';
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -17,17 +17,17 @@ const organizationJsonLd = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://pethealthplus.kr'),
   title: {
-    default: '펫헬스플러스 | 반려동물 진료비 데이터 플랫폼',
+    default: '펫헬스플러스 | 우리 아이 진료비 비교 & 건강 관리',
     template: '%s | 펫헬스플러스'
   },
   description: siteDescription,
-  keywords: ['반려동물', '진료비', '동물병원', '진료비비교', '펫헬스플러스', '강아지 진료비', '고양이 진료비', '동물병원 비용', 'AI 펫토커'],
+  keywords: ['반려동물', '진료비', '동물병원', '진료비비교', '펫헬스플러스', '강아지 진료비', '고양이 진료비', '동물병원 비용', 'AI 펫토커', '반려동물 건강관리', '동물병원 영수증', '반려동물 보험'],
   alternates: {
     canonical: '/'
   },
   openGraph: {
-    title: '펫헬스플러스 | 반려동물 진료비 데이터 플랫폼',
-    description: '앱에서 기록한 반려동물 진료 데이터를 기반으로 진료비 정보를 검색하고 비교할 수 있습니다.',
+    title: '펫헬스플러스 | 우리 아이 진료비 비교 & 건강 관리',
+    description: '우리 아이 진료비가 적정한지 궁금하셨나요? 전국 실제 데이터로 비교하고, 앱으로 건강 기록까지 한 번에 관리하세요.',
     url: 'https://pethealthplus.kr',
     siteName,
     locale: 'ko_KR',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '펫헬스플러스 | 반려동물 진료비 데이터 플랫폼',
+    title: '펫헬스플러스 | 우리 아이 진료비 비교 & 건강 관리',
     description: siteDescription,
     images: ['/og/default.png']
   },

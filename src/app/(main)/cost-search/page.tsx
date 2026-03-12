@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 
 import CostSearchClient from '@/app/(main)/cost-search/cost-search-client';
 
-const pageTitle = '진료비 비교 | 반려동물 진료 항목별 진료비 비교';
+const pageTitle = '진료비 비교 | 우리 아이 진료비, 적정한 걸까요?';
 const pageDescription =
-  '강아지·고양이 진료 항목별 가격 범위와 지역 평균을 확인하고 AI 비용 분석으로 우리 아이 진료비를 합리적으로 비교해보세요.';
+  '강아지·고양이 진료 항목별 전국 평균 비용을 확인하세요. 실제 보호자들의 데이터로 병원 비용이 적정한지 한눈에 비교할 수 있어요.';
 
 const websiteJsonLd = {
   '@context': 'https://schema.org',

@@ -238,20 +238,56 @@ const features = [
     description: '오늘 우리 아이 표정, 어떤 마음일까요? 사진 한 장이면 알 수 있어요.',
     href: '/pet-talker',
     cta: '펫토커 해보기'
+  },
+  {
+    icon: IconReceipt,
+    title: '블로그',
+    description: '진료비 절약 팁부터 건강 관리까지, 보호자를 위한 이야기를 모았어요.',
+    href: '/blog',
+    cta: '블로그 보기'
   }
 ] as const;
 
 const steps = [
-  { step: '01', title: '비용부터 확인', description: '진료 항목을 검색하면 전국 평균 가격을 바로 보여드려요.', icon: IconSearch },
-  { step: '02', title: 'AI가 분석', description: '품종·나이·증상을 입력하면 예상 비용과 케어 포인트를 정리해줘요.', icon: IconSparkle },
-  { step: '03', title: '기록은 앱으로', description: '영수증만 찍으면 자동 정리. 다음 진료 때 비교 데이터가 돼요.', icon: IconCamera }
+  { step: '01', title: '영수증 찍기', description: '앱에서 영수증을 촬영하면 항목별 비용이 자동으로 정리돼요.', icon: IconCamera },
+  { step: '02', title: '데이터가 쌓임', description: '보호자들이 등록할수록 전국 진료비 데이터가 더 정확해져요.', icon: IconReceipt },
+  { step: '03', title: '진료비 비교', description: '쌓인 실제 데이터로 우리 아이 진료비가 적정한지 바로 확인!', icon: IconSearch }
 ] as const;
 
 const appFeatures = [
   { icon: IconReceipt, title: '영수증 OCR', description: '촬영만 하면 항목별 비용이 자동 정리' },
+  { icon: IconSparkle, title: 'AI 케어 분석', description: '진료 기록 기반 맞춤 건강 편지' },
   { icon: IconCalendar, title: '접종 스케줄', description: '예방접종·건강검진 일정 알림' },
-  { icon: IconScale, title: '체중 기록', description: '성장 추이를 그래프로 한눈에' },
-  { icon: IconLink, title: '기록함', description: '검사결과·증명서를 한 곳에 보관' }
+  { icon: IconLink, title: '보험 청구 패키지', description: '영수증+진단서 → PDF 한 번에' }
+] as const;
+
+const AppFeatureIcon = ({ type }: { type: string }) => {
+  const cls = "h-10 w-10 rounded-2xl flex items-center justify-center";
+  switch (type) {
+    case 'receipt':
+      return (<div className={`${cls} bg-[#fff3ec]`}><svg className="h-5 w-5 text-[#ff7a45]" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" /></svg></div>);
+    case 'care':
+      return (<div className={`${cls} bg-[#eef4ff]`}><svg className="h-5 w-5 text-[#5b8def]" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg></div>);
+    case 'map':
+      return (<div className={`${cls} bg-[#ecfaf0]`}><svg className="h-5 w-5 text-[#34b563]" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg></div>);
+    case 'insurance':
+      return (<div className={`${cls} bg-[#f3f0ff]`}><svg className="h-5 w-5 text-[#7c5cfc]" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" /></svg></div>);
+    case 'weight':
+      return (<div className={`${cls} bg-[#fff8ec]`}><svg className="h-5 w-5 text-[#e5a030]" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg></div>);
+    case 'archive':
+      return (<div className={`${cls} bg-[#fef2f2]`}><svg className="h-5 w-5 text-[#e55b5b]" fill="none" viewBox="0 0 24 24" strokeWidth={1.6} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg></div>);
+    default:
+      return null;
+  }
+};
+
+const appFeaturesExtended = [
+  { iconType: 'receipt', title: '영수증 촬영', description: '병원 영수증을 촬영하면 AI가 항목별로 자동 분류해요.' },
+  { iconType: 'care', title: 'AI 케어 분석', description: '우리 아이 진료 기록을 바탕으로 건강 상태를 분석하고 케어 방향을 제안해요.' },
+  { iconType: 'map', title: '내 근처 동물병원', description: '가까운 동물병원을 지도에서 바로 찾고 길안내까지 받을 수 있어요.' },
+  { iconType: 'insurance', title: '보험 청구 패키지', description: '진료 영수증과 진단서를 선택하면 보험 청구용 PDF를 자동으로 만들어줘요.' },
+  { iconType: 'weight', title: '체중 기록', description: '우리 아이 체중 변화를 기록하고 성장 그래프로 한눈에 확인해요.' },
+  { iconType: 'archive', title: '기록함', description: '검사결과, 접종증명서, 진단서를 사진으로 찍어 한 곳에 보관해요.' },
 ] as const;
 
 const reviews = [
@@ -281,6 +317,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
   const featureStagger = useStaggerCards();
   const stepStagger = useStaggerCards();
   const reviewStagger = useStaggerCards();
+  const appFeatureStagger = useStaggerCards();
 
   return (
     <div className="space-y-20 md:space-y-24">
@@ -296,9 +333,9 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             <span className="bg-[linear-gradient(135deg,#ff7a45,#e85d26)] bg-clip-text text-transparent">가장 먼저 드는 생각</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-[1.8] text-[#4f5868] md:text-lg">
-            비용 걱정은 줄이고, 건강엔 더 집중할 수 있도록
+            비용 걱정은 줄이고, 건강엔 더 집중할 수 있도록.
             <br className="hidden md:block" />
-            도와드릴게요.
+            보호자들이 함께 만들어가는 진료비 데이터로 도와드릴게요.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
@@ -310,16 +347,16 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             </Link>
             <div className="flex gap-3">
               <Link
-                href="/cost-search"
-                className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5] sm:flex-none"
-              >
-                진료비 비교
-              </Link>
-              <Link
                 href="/pet-talker"
                 className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5] sm:flex-none"
               >
                 펫토커
+              </Link>
+              <Link
+                href="https://apps.apple.com/app/id6504879567"
+                className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5] sm:flex-none"
+              >
+                앱 다운로드
               </Link>
             </div>
           </div>
@@ -518,18 +555,46 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         </div>
       </Section>
 
-      {/* App Features — 앱으로 기록하세요 */}
-      <Section delay={170}>
+      {/* App Features — 앱에서 할 수 있는 모든 것 */}
+      <Section delay={165}>
+        <div className="text-center">
+          <p className="text-sm font-semibold text-[#ff7a45]">앱에서 더 많은 것을</p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-[#17191f] md:text-4xl">
+            건강 기록부터 보험 청구까지,<br className="md:hidden" /> 한 앱에서
+          </h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-[1.8] text-[#697182]">
+            웹에서 비교하고, 앱에서 기록하세요. 우리 아이 건강의 모든 것을 한 곳에서 관리할 수 있어요.
+          </p>
+        </div>
+        <div ref={appFeatureStagger.ref} className="mt-10 grid gap-4 md:grid-cols-3">
+          {appFeaturesExtended.map((feat, idx) => (
+            <article
+              key={feat.title}
+              style={{ animationDelay: appFeatureStagger.isVisible ? `${idx * 100}ms` : '0ms' }}
+              className={`rounded-3xl border border-black/[0.04] bg-gradient-to-br from-white to-[#fff9f5] p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${appFeatureStagger.isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}
+            >
+              <AppFeatureIcon type={feat.iconType} />
+              <p className="mt-3 text-base font-bold text-[#17191f]">{feat.title}</p>
+              <p className="mt-1.5 text-sm leading-[1.7] text-[#697182]">{feat.description}</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      {/* App Download CTA */}
+      <Section delay={175}>
         <div className="overflow-hidden rounded-[2rem] bg-[linear-gradient(160deg,#1a1a2e_0%,#2d2b55_60%,#352f5b_100%)] px-6 py-14 md:px-10 md:py-18">
           <div className="text-center">
             <p className="inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-white/80">PetHealth+ App</p>
             <h2 className="mt-4 text-2xl font-bold tracking-tight text-white md:text-3xl">
-              웹에서 비교하고,
+              사진 한 장이면,
               <br />
-              <span className="bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] bg-clip-text text-transparent">앱으로 기록</span>하세요
+              <span className="bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] bg-clip-text text-transparent">기록이 시작</span>돼요
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-sm leading-[1.8] text-white/60">
-              우리 아이 건강 기록 사진 한 장이면 끝
+              영수증 촬영 한 번이면 항목별 비용이 자동 정리되고,
+              <br className="hidden md:block" />
+              전국 보호자들의 데이터와 비교할 수 있어요.
             </p>
           </div>
 
@@ -549,7 +614,7 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="https://apps.apple.com"
+              href="https://apps.apple.com/app/id6744428830"
               className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-[#1a1a2e] shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition hover:bg-[#fff8f5] active:scale-[0.98]"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
@@ -571,14 +636,14 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         <p className="text-sm font-semibold text-white/70">우리 아이를 위한 작은 시작</p>
         <h2 className="mt-3 text-2xl font-bold tracking-tight md:text-4xl">진료비 걱정 대신,<br className="md:hidden" /> 건강에 집중하는 하루</h2>
         <p className="mx-auto mt-4 max-w-lg text-sm leading-[1.8] text-white/80">
-          전국 데이터 기반 진료비 비교부터 펫토커까지, 반려동물 건강 고민 여기서 끝.
+          영수증 한 장이 모두의 데이터가 됩니다. 앱에서 등록하면 자동으로 정리되고, 전국 비교가 시작돼요.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/cost-search"
+            href="https://apps.apple.com/app/id6504879567"
             className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-bold text-[#ff7a45] shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition hover:scale-[1.02] hover:bg-[#fff8f5] active:scale-[0.98]"
           >
-            진료비 비교하기
+            앱 다운로드
             <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
           </Link>
           <Link

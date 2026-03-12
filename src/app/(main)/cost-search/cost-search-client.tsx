@@ -167,19 +167,13 @@ export default function CostSearchClient() {
               href="/pet-talker"
               className="rounded-full border border-black/15 bg-white px-4 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
             >
-              펫토커 열기
-            </Link>
-            <Link
-              href="/blog"
-              className="rounded-full border border-black/15 bg-white px-4 py-2 text-xs font-semibold text-[#17191f] transition hover:bg-black/5"
-            >
-              블로그
+              펫토커
             </Link>
             <Link
               href="/mypage"
               className="rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_20px_rgba(255,122,69,0.24)] transition hover:brightness-95"
             >
-              앱 기록 연동
+              앱 연동
             </Link>
           </div>
         </div>
@@ -284,96 +278,103 @@ export default function CostSearchClient() {
 
       {!hasSearched ? (
         <article className="rounded-3xl bg-white p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.04)] ring-1 ring-black/5">
-          <p className="text-lg font-semibold text-[#17191f]">진료 항목을 검색해보세요</p>
-          <p className="mt-2 text-sm text-[#697182]">최저/중앙/최고 비용, 지역, 최근 업데이트 일자를 제공합니다.</p>
+          <p className="text-lg font-semibold text-[#17191f]">어떤 진료비가 궁금하세요?</p>
+          <p className="mt-2 text-sm text-[#697182]">항목을 검색하면 전국 비용 범위를 바로 확인할 수 있어요.</p>
         </article>
       ) : null}
 
       {searchError && !costResult ? (
         <article className="rounded-3xl bg-white p-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.04)] ring-1 ring-black/5">
-          <p className="text-lg font-semibold text-[#17191f]">해당 항목의 데이터가 아직 충분하지 않아요</p>
+          <p className="text-lg font-semibold text-[#17191f]">아직 데이터가 충분하지 않아요</p>
           <p className="mt-2 text-sm text-[#697182]">{searchError}</p>
+          <p className="mt-1 text-xs text-[#8a92a3]">다른 항목으로 검색해보세요.</p>
         </article>
       ) : null}
 
       {costResult ? (
-        <article className="space-y-5 rounded-3xl bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight text-[#17191f]">{costResult.matchedItem}</h2>
-              <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                <span className="rounded-full bg-[#f3f5f9] px-3 py-1 font-medium text-[#4f5868]">지역: {regionLabel}</span>
-                <span className="rounded-full bg-[#f3f5f9] px-3 py-1 font-medium text-[#4f5868]">
-                  최근 업데이트: {latestUpdatedLabel}
-                </span>
-                <span className="rounded-full bg-[#f3f5f9] px-3 py-1 font-medium text-[#4f5868]">
-                  표본: {costResult.priceStats.sampleSize.toLocaleString('ko-KR')}건
-                </span>
+        <article className="overflow-hidden rounded-3xl bg-white shadow-[0_10px_40px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
+          {/* 헤더 — 항목명 + 배지 */}
+          <div className="border-b border-black/5 px-6 py-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-2xl font-bold tracking-tight text-[#17191f]">{costResult.matchedItem}</h2>
+              {priceBadge ? <span className={`rounded-full px-4 py-1.5 text-xs font-semibold ${priceBadge.className}`}>{priceBadge.label}</span> : null}
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#8a92a3]">
+              <span>{regionLabel}</span>
+              <span className="text-black/20">·</span>
+              <span>표본 {costResult.priceStats.sampleSize.toLocaleString('ko-KR')}건</span>
+              {costResult.dataInfo?.latestDate ? (
+                <>
+                  <span className="text-black/20">·</span>
+                  <span>{latestUpdatedLabel}</span>
+                </>
+              ) : null}
+            </div>
+          </div>
+
+          {/* 핵심 가격 — 중앙값 크게, 범위는 서브 */}
+          <div className="px-6 py-6">
+            <p className="text-xs font-medium text-[#697182]">대부분 이 정도 비용이에요</p>
+            <p className="mt-1 text-[2.5rem] font-extrabold tracking-tight text-[#ff7a45]" style={{ fontFeatureSettings: "'tnum'" }}>
+              {toWon(costResult.priceStats.median)}
+            </p>
+
+            {/* 범위 바 */}
+            <div className="mt-5">
+              <div className="relative h-3 w-full rounded-full bg-gradient-to-r from-[#e5e7eb] via-[#ffd6bf] to-[#e5e7eb]">
+                {/* 중앙값 마커 */}
+                <div
+                  className="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white bg-[#ff7a45] shadow-[0_2px_8px_rgba(255,122,69,0.4)]"
+                  style={{ left: getChartWidth(costResult.priceStats.median) }}
+                />
+              </div>
+              <div className="mt-2 flex items-center justify-between text-xs text-[#8a92a3]">
+                <span>최저 {toWon(costResult.priceStats.min)}</span>
+                <span>최고 {toWon(costResult.priceStats.max)}</span>
               </div>
             </div>
-            {priceBadge ? <span className={`rounded-full px-4 py-1.5 text-xs font-semibold ${priceBadge.className}`}>{priceBadge.label}</span> : null}
-          </div>
 
-          {costResult.dataInfo && costResult.dataInfo.totalRecords > 0 ? (
-            <div className="rounded-2xl bg-[#fff0e5] px-4 py-3 text-xs text-[#a85a35] ring-1 ring-[#ffd6bf]">
-              실제 진료 기록 {costResult.dataInfo.totalRecords.toLocaleString('ko-KR')}건 기반 데이터입니다.
-            </div>
-          ) : (
-            <div className="rounded-2xl bg-[#faf6f1] px-4 py-3 text-xs text-[#697182] ring-1 ring-black/10">
-              공공데이터 기준 참고 범위로 제공됩니다.
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-black/10 bg-[#fffaf5] p-4">
-              <p className="text-xs font-medium text-[#697182]">최저</p>
-              <p className="mt-1 text-2xl font-semibold text-[#17191f]">{toWon(costResult.priceStats.min)}</p>
-            </div>
-            <div className="rounded-2xl border border-[#ff7a45]/20 bg-[#fff0e5] p-4">
-              <p className="text-xs font-medium text-[#d87b49]">중앙값</p>
-              <p className="mt-1 text-2xl font-semibold text-[#ff7a45]">{toWon(costResult.priceStats.median)}</p>
-            </div>
-            <div className="rounded-2xl border border-black/10 bg-[#fffaf5] p-4">
-              <p className="text-xs font-medium text-[#697182]">최고</p>
-              <p className="mt-1 text-2xl font-semibold text-[#17191f]">{toWon(costResult.priceStats.max)}</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-black/10 bg-[#fffaf5] p-4">
-              <p className="text-xs font-medium text-[#697182]">전국 평균</p>
-              <p className="mt-1 text-lg font-semibold text-[#17191f]">{toWon(costResult.nationalAvg)}</p>
-            </div>
-            <div className="rounded-2xl border border-black/10 bg-[#fffaf5] p-4">
-              <p className="text-xs font-medium text-[#697182]">{regionLabel} 평균</p>
-              <p className="mt-1 text-lg font-semibold text-[#17191f]">{toWon(costResult.regionalAvg)}</p>
-            </div>
-          </div>
-
-          <div className="space-y-3 rounded-2xl bg-[#faf6f1] p-5 ring-1 ring-black/5">
-            <h3 className="text-sm font-semibold text-[#17191f]">비용 분포</h3>
-            {[
-              { label: '최저', value: costResult.priceStats.min, color: 'bg-[#9ca3af]' },
-              { label: '중앙값', value: costResult.priceStats.median, color: 'bg-[#ff7a45]' },
-              { label: '최고', value: costResult.priceStats.max, color: 'bg-[#374151]' }
-            ].map((item) => (
-              <div key={item.label} className="space-y-1">
-                <div className="flex items-center justify-between text-xs font-medium text-[#4f5868]">
-                  <span>{item.label}</span>
-                  <span className="font-semibold">{toWon(item.value)}</span>
-                </div>
-                <div className="h-2.5 w-full rounded-full bg-[#e5e7eb]">
-                  <div className={`h-2.5 rounded-full ${item.color}`} style={{ width: getChartWidth(item.value) }} />
-                </div>
+            {/* 평균 비교 — 전국 vs 지역 (지역이 전국과 다를 때만 둘 다 표시) */}
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="flex items-center justify-between rounded-2xl bg-[#faf6f1] px-4 py-3">
+                <span className="text-sm text-[#697182]">전국 평균</span>
+                <span className="text-sm font-bold text-[#17191f]">{toWon(costResult.nationalAvg)}</span>
               </div>
-            ))}
+              {regionLabel !== '전국' ? (
+                <div className="flex items-center justify-between rounded-2xl bg-[#faf6f1] px-4 py-3">
+                  <span className="text-sm text-[#697182]">{regionLabel} 평균</span>
+                  <span className="text-sm font-bold text-[#17191f]">{toWon(costResult.regionalAvg)}</span>
+                </div>
+              ) : null}
+            </div>
           </div>
 
-          {costResult.relatedItems.length > 0 ? (
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-[#697182]">연관 항목</p>
-              <div className="flex flex-wrap gap-2">
-                {costResult.relatedItems.slice(0, 8).map((item) => (
+          {/* 데이터 출처 */}
+          <div className="border-t border-black/5 px-6 py-4">
+            {costResult.dataInfo && costResult.dataInfo.totalRecords > 0 ? (
+              <p className="text-xs text-[#a85a35]">
+                실제 진료 기록 {costResult.dataInfo.totalRecords.toLocaleString('ko-KR')}건 기반
+              </p>
+            ) : (
+              <p className="text-xs text-[#8a92a3]">공공데이터 기준 참고 범위</p>
+            )}
+            {costResult.sources.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {costResult.sources.map((source) => (
+                  <span key={source} className="rounded-full bg-[#f3f5f9] px-2.5 py-1 text-[11px] font-medium text-[#8a92a3]">
+                    {source}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          {/* 연관 항목 */}
+          {costResult.relatedItems.filter((item) => item !== costResult.matchedItem).length > 0 ? (
+            <div className="border-t border-black/5 px-6 py-4">
+              <p className="text-xs font-semibold text-[#697182]">이것도 궁금하지 않으세요?</p>
+              <div className="mt-2.5 flex flex-wrap gap-2">
+                {costResult.relatedItems.filter((item) => item !== costResult.matchedItem).slice(0, 8).map((item) => (
                   <button
                     key={item}
                     type="button"
@@ -381,7 +382,7 @@ export default function CostSearchClient() {
                       setQuery(item);
                       void runSearch(item);
                     }}
-                    className="rounded-full border border-black/10 bg-[#fffaf5] px-3 py-1.5 text-xs font-medium text-[#4f5868] transition hover:border-[#ff7a45]/40 hover:text-[#ff7a45]"
+                    className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium text-[#4f5868] transition hover:border-[#ff7a45]/40 hover:text-[#ff7a45]"
                   >
                     {item}
                   </button>
@@ -389,30 +390,22 @@ export default function CostSearchClient() {
               </div>
             </div>
           ) : null}
-
-          <div className="flex flex-wrap gap-2">
-            {costResult.sources.map((source) => (
-              <span key={source} className="rounded-full bg-[#f3f5f9] px-3 py-1.5 text-xs font-medium text-[#697182]">
-                {source}
-              </span>
-            ))}
-          </div>
         </article>
       ) : null}
 
       {user && myComparison ? (
-        <article className="rounded-3xl border border-[#cfe2ff] bg-[#fff0e5] p-5">
-          <p className="text-sm font-semibold text-[#a85a35]">내 기록 비교 결과</p>
-          <p className="mt-2 text-sm text-[#a85a35]">
-            내 평균은 <span className="font-semibold">{toWon(myComparison.average)}</span>이며, 전체 평균보다{' '}
-            <span className="font-semibold">{Math.abs(myComparison.diffPercent).toFixed(1)}%</span>{' '}
-            {myComparison.isHigher ? '높아요.' : '낮아요.'}
+        <article className="rounded-3xl border border-[#ff7a45]/20 bg-[#fff9f5] p-5">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 rounded-full bg-[#ff7a45]" />
+            <p className="text-sm font-bold text-[#17191f]">내 진료비 비교</p>
+          </div>
+          <p className="mt-2 text-sm text-[#4f5868]">
+            내 평균 <span className="font-bold text-[#17191f]">{toWon(myComparison.average)}</span> — 전체 평균보다{' '}
+            <span className={`font-bold ${myComparison.isHigher ? 'text-[#F04452]' : 'text-[#06B56C]'}`}>
+              {Math.abs(myComparison.diffPercent).toFixed(1)}% {myComparison.isHigher ? '높아요' : '낮아요'}
+            </span>
           </p>
-          <p className="mt-1 text-xs text-[#d87b49]">내 기록 표본 {myComparison.sampleSize}건 기준</p>
-        </article>
-      ) : user && costResult ? (
-        <article className="rounded-3xl border border-black/10 bg-white p-4 text-xs text-[#697182]">
-          앱 기록과 비교하려면 위의 고정 CTA에서 &apos;지금 내 기록과 비교&apos;를 눌러주세요.
+          <p className="mt-1 text-xs text-[#8a92a3]">내 기록 {myComparison.sampleSize}건 기준</p>
         </article>
       ) : null}
 

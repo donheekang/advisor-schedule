@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 
 import PetTalkerClient from '@/app/(main)/pet-talker/pet-talker-client';
 
-const pageTitle = '펫토커 - AI가 읽어주는 우리 아이 마음';
+const pageTitle = '펫토커 | 우리 아이 마음을 읽어주는 AI';
 const pageDescription =
-  '반려동물 사진 한 장으로 AI가 우리 아이의 감정을 분석하고, 1인칭 대사로 마음을 전해드려요. 강아지, 고양이 모두 가능!';
+  '사진 한 장이면 우리 아이의 감정을 알 수 있어요. AI가 표정을 분석하고, 우리 아이의 마음을 1인칭 대사로 전해드려요.';
 
 export const metadata: Metadata = {
   title: pageTitle,
