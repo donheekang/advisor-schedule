@@ -33,11 +33,24 @@ type KakaoSharePayload = {
   }>;
 };
 
+type KakaoImageUploadResult = {
+  infos: {
+    original: {
+      url: string;
+      length: number;
+      content_type: string;
+      width: number;
+      height: number;
+    };
+  };
+};
+
 type KakaoApi = {
   isInitialized: () => boolean;
   init: (appKey: string) => void;
   Share: {
     sendDefault: (payload: KakaoSharePayload) => void;
+    uploadImage: (settings: { file: File[] }) => Promise<KakaoImageUploadResult>;
   };
 };
 
@@ -117,14 +130,22 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
 
     const titlePetName = petName ? `${petName}이(가)` : '우리 아이가';
 
-    const ogImageUrl = `${window.location.origin}/og/default.png`;
+    let imageUrl = `${window.location.origin}/og/default.png`;
+
+    try {
+      const file = new File([currentCard.blob], 'pet-talker-card.png', { type: 'image/png' });
+      const uploadResult = await window.Kakao.Share.uploadImage({ file: [file] });
+      imageUrl = uploadResult.infos.original.url;
+    } catch {
+      // 업로드 실패 시 기본 OG 이미지로 폴백
+    }
 
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
         title: `${titlePetName} 이렇게 말해요`,
         description: dialogue.length > 100 ? `${dialogue.slice(0, 100)}…` : dialogue,
-        imageUrl: ogImageUrl,
+        imageUrl,
         link: {
           mobileWebUrl: resultUrl,
           webUrl: resultUrl
