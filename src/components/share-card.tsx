@@ -117,12 +117,14 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
 
     const titlePetName = petName ? `${petName}이(가)` : '우리 아이가';
 
+    const ogImageUrl = `${window.location.origin}/og/default.png`;
+
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: `우리 ${titlePetName} 이렇게 말해요`,
-        description: dialogue,
-        imageUrl: currentCard.dataUrl,
+        title: `${titlePetName} 이렇게 말해요`,
+        description: dialogue.length > 100 ? `${dialogue.slice(0, 100)}…` : dialogue,
+        imageUrl: ogImageUrl,
         link: {
           mobileWebUrl: resultUrl,
           webUrl: resultUrl

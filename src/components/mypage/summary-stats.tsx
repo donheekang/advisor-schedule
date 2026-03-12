@@ -66,8 +66,8 @@ export function SummaryStats({ summary }: SummaryStatsProps) {
       <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <article className="rounded-2xl bg-[#fff8f5] p-4">
           <StatIcon type="pet" />
-          <p className="mt-2 text-xs font-medium text-[#697182]">반려동물</p>
-          <p className="mt-0.5 text-xl font-bold text-[#17191f]">{summary.pet_count}<span className="text-sm font-medium text-[#697182]">마리</span></p>
+          <p className="mt-2 text-xs font-medium text-[#697182]">우리 아이</p>
+          <p className="mt-0.5 text-xl font-bold text-[#17191f]">{summary.pet_count}<span className="text-sm font-medium text-[#697182]">아이 등록</span></p>
         </article>
         <article className="rounded-2xl bg-[#fff8f5] p-4">
           <StatIcon type="record" />
