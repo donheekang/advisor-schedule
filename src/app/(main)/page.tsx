@@ -68,11 +68,13 @@ export const metadata: Metadata = {
     siteName: 'PetHealth+',
     locale: 'ko_KR',
     type: 'website',
+    images: [{ url: '/og/default.png', width: 1200, height: 630, alt: '펫헬스플러스 - 우리 아이 건강 기록, 사진 한 장이면 끝.' }]
   },
   twitter: {
     card: 'summary_large_image',
     title: pageTitle,
     description: pageDescription,
+    images: ['/og/default.png']
   }
 };
 
