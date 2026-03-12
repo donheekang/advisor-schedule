@@ -80,7 +80,7 @@ function toWon(value: number): string {
 
 export default function CostSearchClient() {
   const { user } = useAuth();
-  const [query, setQuery] = useState('혈액검사');
+  const [query, setQuery] = useState('');
   const [animalType, setAnimalType] = useState<(typeof animalTypes)[number]>('강아지');
   const [region, setRegion] = useState('전국');
   const [costResult, setCostResult] = useState<ApiCostSearchResult | null>(null);
