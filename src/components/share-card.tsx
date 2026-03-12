@@ -130,7 +130,7 @@ export function ShareCard({ petImageUrl, dialogue, petName, emotion, emotionScor
 
     const titlePetName = petName ? `${petName}이(가)` : '우리 아이가';
 
-    let imageUrl = `${window.location.origin}/og/default.png`;
+    let imageUrl = `${window.location.origin}/pet-talker/opengraph-image`;
 
     try {
       const file = new File([currentCard.blob], 'pet-talker-card.png', { type: 'image/png' });
