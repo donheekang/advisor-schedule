@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import '@/app/globals.css';
 import { AuthProvider } from '@/components/auth-provider';
+
+const GA_MEASUREMENT_ID = 'G-T62VFQEHJH';
 
 const siteName = 'PetHealth+';
 const siteDescription = '우리 아이 진료비가 적정한지 궁금하셨나요? 전국 실제 데이터로 비교하고, 앱으로 건강 기록까지 한 번에 관리하세요.';
@@ -62,6 +65,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-screen bg-transparent text-[#17191f] antialiased">
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
         <AuthProvider>{children}</AuthProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </body>
