@@ -79,52 +79,6 @@ function Section({ children, className = '', delay = 0 }: { children: React.Reac
   );
 }
 
-function CountUpNumber({ target, suffix = '' }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef<HTMLParagraphElement | null>(null);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStarted(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.4 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!started) return;
-
-    const duration = 1400;
-    const startTime = performance.now();
-
-    const frame = (time: number) => {
-      const progress = Math.min((time - startTime) / duration, 1);
-      const eased = 1 - (1 - progress) ** 3;
-      setCount(Math.floor(target * eased));
-      if (progress < 1) requestAnimationFrame(frame);
-    };
-
-    requestAnimationFrame(frame);
-  }, [started, target]);
-
-  return (
-    <p ref={ref} className="mt-2 text-4xl font-semibold tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,122,69,0.3)] md:text-5xl">
-      {count.toLocaleString('ko-KR')}{suffix}
-    </p>
-  );
-}
-
 /* ───────── SVG icons ───────── */
 
 function IconReceipt({ className = 'h-6 w-6' }: { className?: string }) {
@@ -419,33 +373,6 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
               </article>
             </Link>
           ))}
-        </div>
-      </Section>
-
-      {/* Trust Data */}
-      <Section aria-labelledby="data-heading" delay={100}>
-        <div className="text-center">
-          <p className="text-sm font-semibold text-[#ff7a45]">함께하는 보호자들</p>
-          <h2 id="data-heading" className="mt-2 text-3xl font-bold tracking-tight text-[#17191f] md:text-4xl">
-            많은 보호자들이 함께하고 있어요
-          </h2>
-        </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          <article className="rounded-3xl bg-[linear-gradient(150deg,#2a1c16_0%,#3f2a20_62%,#4b3125_100%)] p-8 text-white">
-            <p className="text-xs font-medium text-white/70">누적 진료 기록</p>
-            <CountUpNumber target={128540} suffix="+" />
-            <p className="mt-3 text-xs leading-relaxed text-white/50">보호자들이 함께 쌓아온 진료 기록</p>
-          </article>
-          <article className="rounded-3xl bg-[linear-gradient(150deg,#2a1c16_0%,#3f2a20_62%,#4b3125_100%)] p-8 text-white">
-            <p className="text-xs font-medium text-white/70">평균 업데이트 주기</p>
-            <p className="mt-2 text-4xl font-semibold drop-shadow-[0_0_20px_rgba(255,122,69,0.3)] md:text-5xl">주 1회</p>
-            <p className="mt-3 text-xs leading-relaxed text-white/50">항상 최신 가격 데이터 유지</p>
-          </article>
-          <article className="rounded-3xl bg-[linear-gradient(150deg,#2a1c16_0%,#3f2a20_62%,#4b3125_100%)] p-8 text-white">
-            <p className="text-xs font-medium text-white/70">비교 가능 카테고리</p>
-            <p className="mt-2 text-xl font-semibold leading-relaxed">진찰 · 검사 · 수술</p>
-            <p className="mt-3 text-xs leading-relaxed text-white/50">핵심 진료 항목을 한눈에 비교</p>
-          </article>
         </div>
       </Section>
 
