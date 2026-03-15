@@ -4,7 +4,7 @@ type StoreButtonsProps = {
 };
 
 const APP_STORE_URL = 'https://apps.apple.com/kr/app/pethealth-%ED%8E%AB%ED%97%AC%EC%8A%A4%ED%94%8C%EB%9F%AC%EC%8A%A4/id6758932727';
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.pluslabkorea.pethealth&hl=ko';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.pluslabkorea.pethealth';
 
 export function StoreComingSoonButtons({ tone = 'light', className }: StoreButtonsProps) {
   const buttonClassName =

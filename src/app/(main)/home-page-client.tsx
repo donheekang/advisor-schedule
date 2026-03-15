@@ -291,27 +291,41 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
             <br className="hidden md:block" />
             보호자들이 함께 만들어가는 진료비 데이터로 도와드릴게요.
           </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Link
-              href="/cost-search"
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98] sm:w-auto sm:justify-start"
-            >
-              진료비 비교하기
-              <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-            </Link>
-            <div className="flex gap-3">
+          <div className="mt-9 flex flex-col gap-3">
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/cost-search"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(255,122,69,0.3)] transition hover:scale-[1.02] hover:shadow-[0_16px_36px_rgba(255,122,69,0.35)] hover:brightness-[1.03] active:scale-[0.98]"
+              >
+                진료비 비교하기
+                <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+              </Link>
               <Link
                 href="/pet-talker"
-                className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5] sm:flex-none"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
               >
                 펫토커
               </Link>
-              <Link
-                href="https://apps.apple.com/app/id6504879567"
-                className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5] sm:flex-none"
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="https://apps.apple.com/kr/app/pethealth-%ED%8E%AB%ED%97%AC%EC%8A%A4%ED%94%8C%EB%9F%AC%EC%8A%A4/id6758932727"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-5 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
               >
-                앱 다운로드
-              </Link>
+                <svg width="14" height="14" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57.8-155.5-127.4c-58.5-81.5-105.8-207.6-105.8-327.6 0-192.8 125.3-295.2 248.6-295.2 65.5 0 120.1 43 161.2 43s99.8-45.6 177.6-45.6c28.7 0 131.5 2.6 199.4 99.8zm-234-184.5c31.4-37.1 53.6-88.7 53.6-140.3 0-7.1-.6-14.3-1.9-20.1-51.1 1.9-111.9 34-148.4 76.5-27.5 31.4-55.2 83-55.2 135.5 0 7.8.6 15.6 1.3 18.2 2.6.6 6.4 1.3 10.2 1.3 45.9 0 103.7-30.7 140.4-71.1z" /></svg>
+                App Store
+              </a>
+              <a
+                href="https://play.google.com/store/apps/details?id=com.pluslabkorea.pethealth"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-black/15 bg-white px-5 py-3.5 text-sm font-semibold text-[#17191f] transition hover:border-[#ff7a45]/30 hover:bg-[#fff8f5]"
+              >
+                <svg width="14" height="14" viewBox="0 0 512 512" fill="none"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1z" fill="#FFD900" /><path d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z" fill="#4CAF50" /><path d="M472.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8z" fill="#FFD900" /><path d="M104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#FF3333" /></svg>
+                Google Play
+              </a>
             </div>
           </div>
           <p className="mt-5 text-xs font-medium text-[#8a92a3]">* 의료 진단이 아닌 진료비 비교 및 정보 제공 목적의 서비스입니다</p>
@@ -567,17 +581,11 @@ export default function HomePageClient({ faqItems }: HomePageClientProps) {
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="https://apps.apple.com/app/id6504879567"
+            href="/cost-search"
             className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-bold text-[#ff7a45] shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition hover:scale-[1.02] hover:bg-[#fff8f5] active:scale-[0.98]"
           >
-            앱 다운로드
-            <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-          </Link>
-          <Link
-            href="/cost-search"
-            className="inline-flex items-center gap-2 rounded-full border border-white/40 px-7 py-4 text-sm font-bold text-white transition hover:bg-white/10 active:scale-[0.98]"
-          >
             진료비 비교하기
+            <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
           </Link>
         </div>
       </Section>

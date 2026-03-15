@@ -680,12 +680,24 @@ export default function PetTalkerClient() {
                 <div className="space-y-3">
                   <p>{errorMessage}</p>
                   {errorType === 'usage_exceeded' ? (
-                    <Link
-                      href="https://apps.apple.com/"
-                      className="inline-flex rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-4 py-2 text-xs font-semibold text-white"
-                    >
-                      앱 다운로드
-                    </Link>
+                    <div className="flex items-center justify-center gap-2">
+                      <a
+                        href="https://apps.apple.com/kr/app/pethealth-%ED%8E%AB%ED%97%AC%EC%8A%A4%ED%94%8C%EB%9F%AC%EC%8A%A4/id6758932727"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-4 py-2 text-xs font-semibold text-white"
+                      >
+                        App Store
+                      </a>
+                      <a
+                        href="https://play.google.com/store/apps/details?id=com.pluslabkorea.pethealth"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex rounded-full bg-[linear-gradient(135deg,#ff7a45,#ff9b5e)] px-4 py-2 text-xs font-semibold text-white"
+                      >
+                        Google Play
+                      </a>
+                    </div>
                   ) : null}
                 </div>
               ) : (

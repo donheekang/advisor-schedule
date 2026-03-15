@@ -255,12 +255,20 @@ export default function CategoryPage({
               펫토커 체험하기 →
             </Link>
             <a
-              href="https://apps.apple.com/app/id6504879567"
+              href="https://apps.apple.com/kr/app/pethealth-%ED%8E%AB%ED%97%AC%EC%8A%A4%ED%94%8C%EB%9F%AC%EC%8A%A4/id6758932727"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-2xl border border-[#fff0ea]/50 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
             >
-              앱 다운로드
+              App Store
+            </a>
+            <a
+              href="https://play.google.com/store/apps/details?id=com.pluslabkorea.pethealth"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl border border-[#fff0ea]/50 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
+            >
+              Google Play
             </a>
           </div>
         </article>
