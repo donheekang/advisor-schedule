@@ -203,10 +203,9 @@ export function findCareProductsByCategory(categoryTags: string[]): CareProduct[
 
 /**
  * 쿠팡 파트너스 검색 URL 생성
+ * 파트너스 링크를 통해 트래킹이 적용된 검색 URL 반환
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function createCoupangSearchUrl(keyword: string): string {
-  const partnerId = process.env.NEXT_PUBLIC_COUPANG_PARTNER_ID;
-  const searchUrl = `https://www.coupang.com/np/search?component=&q=${encodeURIComponent(keyword)}&channel=user`;
-  if (!partnerId) return searchUrl;
-  return `${searchUrl}&subid=${encodeURIComponent(partnerId)}`;
+  return 'https://link.coupang.com/a/dQ6w5N';
 }
