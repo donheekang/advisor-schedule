@@ -5,7 +5,7 @@ import { LoginModal } from '@/components/login-modal';
 import { ShareCard } from '@/components/share-card';
 import { apiClient, ApiError } from '@/lib/api-client';
 import Image from 'next/image';
-import Link from 'next/link';
+
 import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
